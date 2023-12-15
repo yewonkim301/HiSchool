@@ -27,16 +27,16 @@ db.public_community_comment = require("./public_community_comment")(
   sequelize,
   Sequelize
 );
+db.dm = require("./dm")(sequelize, Sequelize);
 
-db.club_community = require("./club_community")(sequelize, Sequelize);
-db.club_community_post = require("./club_community_post")(sequelize, Sequelize);
-db.club_community_like = require("./club_community_like")(sequelize, Sequelize);
-db.club_community_comment = require("./club_community_comment")(
+db.Club = require("./Club")(sequelize, Sequelize);
+db.Club_schedule = require("./Club_schedule")(sequelize, Sequelize);
+db.Club_post = require("./Club_post")(sequelize, Sequelize);
+db.Club_post_comment = require("./Club_post_comment")(sequelize, Sequelize);
+db.Club_post_comment_like = require("./Club_post_comment_like")(
   sequelize,
   Sequelize
 );
-
-db.dm = require("./dm")(sequelize, Sequelize);
-db.schedule = require("./schedule")(sequelize, Sequelize);
+db.Club_chat = require("./Club_chat")(sequelize, Sequelize);
 
 module.exports = db;
