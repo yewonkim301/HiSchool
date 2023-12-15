@@ -8,15 +8,15 @@ const PublicPostComment = (Sequelize, DataTypes) => {
                 primaryKey: true,
             },
             comment:{
-                type: DataTypes.VARCHAR(200),
+                type: DataTypes.STRING(200),
                 allowNull: false,
             },
             data:{
-                type: DataTypes.VARCHAR(20),
+                type: DataTypes.STRING(20),
                 allowNull: false,
             },
             like_num:{
-                type: DataTypes.VARCHAR(20),
+                type: DataTypes.STRING(20),
                 allowNull: false,
             }
         },

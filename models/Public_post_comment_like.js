@@ -11,7 +11,8 @@ const PublicPostCommentLike = (Sequelize, DataTypes) => {
             freezeTableName: true,
             timestamp: false,
         }
-    );
+    )
+    return model;
 };
 
 module.exports = PublicPostCommentLike;
