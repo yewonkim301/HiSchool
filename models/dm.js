@@ -34,3 +34,4 @@ const Dm = (Sequelize, DataTypes) => {
 };
 
 module.exports = Dm;
+
