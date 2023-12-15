@@ -1,9 +1,0 @@
-{
-    "development" : {
-        "username" : "admin",
-        "password" : "20231214",
-        "database" : "hischool",
-        "host" : "3.36.128.106:22",
-        "dialect": "mysql"
-    }
-}
