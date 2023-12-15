@@ -4,7 +4,7 @@ const express = require("express");
 const app = express();
 const path = require("path");
 
-const db = require("./models/index");
+const db = require("./models/Index");
 const dotenv = require("dotenv");
 
 const PORT = 8000;
