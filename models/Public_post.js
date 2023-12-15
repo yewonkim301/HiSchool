@@ -8,19 +8,19 @@ const PublicPost = (Sequelize, DataTypes) => {
                 autoIncrement: true
             },
             date:{
-                type: DateTypes.VARCHAR(20),
+                type: DateTypes.STRING(20),
                 allowNull: false,
             },
             title: {
-                type: DataTypes.VARCHAR(100),
+                type: DataTypes.STRING(100),
                 allowNull: false,
             },
             content:{
-                type: DataTypes.VARCHAR(200),
+                type: DataTypes.STRING(200),
                 allowNull: false,
             },
             image :{
-                type: DataTypes.VARCHAR(100),
+                type: DataTypes.STRING(100),
                 allowNull: true,
             },
             views: {
