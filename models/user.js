@@ -1,0 +1,3 @@
+const User = (Sequelize, DataTypes) => {
+
+}

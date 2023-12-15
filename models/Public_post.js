@@ -1,11 +1,15 @@
-const Public_community = (Sequelize, DataTypes) => {
+const PublicPost = (Sequelize, DataTypes) => {
     const model = Sequelize.define(
-        'public_community',{
+        'publicPost',{
             post_id: {
                 type: DataTypes.INTEGER,
-                autoIncrement:true,
                 primaryKey:true,
-                allowNull: false
+                allowNull: false,
+                autoIncrement: true
+            },
+            date:{
+                type: DateTypes.VARCHAR(20),
+                allowNull: false,
             },
             title: {
                 type: DataTypes.VARCHAR(100),
@@ -19,7 +23,7 @@ const Public_community = (Sequelize, DataTypes) => {
                 type: DataTypes.VARCHAR(100),
                 allowNull: true,
             },
-            serch: {
+            views: {
                 type: DataTypes.INTEGER,
                 allowNull: false,
             }
@@ -31,4 +35,4 @@ const Public_community = (Sequelize, DataTypes) => {
     return model;
 }
 
-module.exports = Public_community;
+module.exports = PublicPost;

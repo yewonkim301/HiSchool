@@ -13,8 +13,8 @@ const sequelize = new Sequelize(
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-db.user = require("./user")(sequelize, Sequelize);
-db.public_community = require("./public-community")(sequelize, Sequelize);
+db.user = require("./User")(sequelize, Sequelize);
+db.public_post = require("./Public_post")(sequelize, Sequelize);
 db.public_community_post = require("./public_community_post")(
   sequelize,
   Sequelize
