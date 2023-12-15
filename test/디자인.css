@@ -83,18 +83,18 @@
   align-items: flex-start;
   gap: 7px;
   border-radius: 4px;
-  border: 1px solid var(--color-border-list);
+  border: 1px solid #EAEAEA;
 
   /* default_shadow */
-  box-shadow: 0px 1px 8px 0px var(--color-border-shadow);
+  box-shadow: 0px 1px 8px 0px rgba(19, 19, 19, 0.10);
 }
 .list-title {
-  font-size: var(--spacing-1);
-  color: var(--color-font-list-1);
+  font-size: var(--spacing-2);
+  color: var(--color-gray-600);
 }
 .list-content {
-  font-size: var(--spacing-2);
-  color: var(--color-font-list-2);
+  font-size: var(--spacing-3);
+  color: var(--color-gray-400);
 }
 .list-additional {
   display: flex;
@@ -103,7 +103,7 @@
   align-items: center;
   gap: 16px;
 
-  border-bottom: 1px solid var(--color-border-list);
+  border-bottom: 1px solid #EAEAEA;
 }
 .list-additional-main {
   display: flex;
@@ -114,16 +114,16 @@
 }
 .list-additional-title {
   align-self: stretch;
-  font-size: var(--spacing-1);
-  color: var(--color-font-list-1);
+  font-size: var(--spacing-2);
+  color: var(--color-gray-600);
 }
 .list-additional-content {
   align-self: stretch;
-  font-size: var(--spacing-2);
-  color: var(--color-font-list-2);
+  font-size: 14px;
+  color: var(--color-gray-400);
 }
 .additional-info {
-  font-size: 14px;
+  font-size: var(--spacing-3);
   font-style: normal;
   font-weight: 500;
   line-height: normal;
