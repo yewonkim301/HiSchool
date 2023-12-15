@@ -35,3 +35,22 @@ body {
    border: none;
    border-radius: 8px;
 }
+/* 헤더 CSS */
+.header {
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   padding: 10px;
+   background-color: #fff;
+ }
+ 
+ .navbar {
+   display: flex;
+   width: 100%;
+   justify-content: space-between;
+ }
+ 
+ .menu-icon,
+ .settings-icon {
+   cursor: pointer;
+ }
