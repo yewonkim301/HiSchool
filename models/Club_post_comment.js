@@ -10,21 +10,12 @@ const ClubPostComment = (Sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
       },
-
-      date: {
-        type: DataTypes.STRING(20),
-        allowNull: false,
-      },
-      comment_userid: {
-        type: DataTypes.STRING(200),
+      comment_name: {
+        type: DataTypes.STRING(100),
         allowNull: false,
       },
       content: {
         type: DataTypes.STRING(200),
-        allowNull: false,
-      },
-      like_num: {
-        type: DataTypes.INTEGER,
         allowNull: false,
       },
     },

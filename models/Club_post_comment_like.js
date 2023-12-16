@@ -2,8 +2,8 @@ const ClubPostCommentLike = (Sequelize, DataTypes) => {
   return Sequelize.define(
     "clubPostCommentLike",
     {
-      is_like: {
-        type: DataTypes.STRING(10),
+      like_id: {
+        type: DataTypes.STRING(20),
         allowNull: false,
       },
     },

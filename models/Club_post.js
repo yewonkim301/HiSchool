@@ -9,14 +9,6 @@ const ClubPost = (Sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      post_userid: {
-        type: DataTypes.STRING(100),
-        allowNull: false,
-      },
-      date: {
-        type: DataTypes.STRING(20),
-        allowNull: false,
-      },
       title: {
         type: DataTypes.STRING(100),
         allowNull: false,
@@ -26,8 +18,9 @@ const ClubPost = (Sequelize, DataTypes) => {
         allowNull: false,
       },
       image: {
-        type: DataTypes.STRING(200),
-        allowNull: false,
+        // 최대 5개
+        type: DataTypes.JSON,
+        allowNull: true,
       },
     },
     {

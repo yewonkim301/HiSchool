@@ -17,7 +17,7 @@ const ClubSchedule = (Sequelize, DataTypes) => {
         allowNull: false,
       },
       title: {
-        type: DataTypes.STRING(100),
+        type: DataTypes.STRING(50),
         allowNull: false,
       },
       content: {
