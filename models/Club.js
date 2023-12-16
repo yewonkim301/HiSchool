@@ -10,9 +10,13 @@ const Club = (Sequelize, DataTypes) => {
         allowNull: false,
         primaryKey: true,
         autoIncrement: true,
-      },
+      }, // 생성한 유저아이디를 저장해놓고 변경하면 userid 값을 변경 (User의 userid)
       club_name: {
-        type: DataTypes.STRING(200),
+        type: DataTypes.STRING(50),
+        allowNull: false,
+      },
+      leader_id: {
+        type: DataTypes.STRING(50),
         allowNull: false,
       },
       limit: {
@@ -20,15 +24,15 @@ const Club = (Sequelize, DataTypes) => {
         allowNull: false,
       },
       location: {
-        type: DataTypes.STRING(100),
+        type: DataTypes.STRING(200),
         allowNull: false,
       },
       field: {
-        type: DataTypes.STRING(100),
+        type: DataTypes.STRING(35),
         allowNull: false,
       },
       keyword: {
-        type: DataTypes.STRING(200),
+        type: DataTypes.JSON,
         allowNull: false,
       },
     },
