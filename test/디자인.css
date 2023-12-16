@@ -96,6 +96,10 @@
   font-size: var(--spacing-3);
   color: var(--color-gray-400);
 }
+
+
+
+/* //////////////// */
 .list-additional {
   display: flex;
   width: 360px;
@@ -129,6 +133,8 @@
   line-height: normal;
   color: #6b7280;
 }
+
+/*  */
 
 .list {
   display: flex;
