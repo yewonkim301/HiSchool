@@ -8,16 +8,8 @@ const Dm = (Sequelize, DataTypes) => {
                 autoIncrement: true,
                 primaryKey:true,
             },
-            from_id:{
-                type: DataTypes.STRING(30),
-                allowNull: false,
-            },
-            to_id:{
-                type: DataTypes.STRING(30),
-                allowNull: false,
-            },
-            dm_date:{
-                type: Sequelize.DATE,
+            to_nickname:{
+                type: DataTypes.STRING(50),
                 allowNull: false,
             },
             dm_content:{

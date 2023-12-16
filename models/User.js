@@ -1,18 +1,22 @@
 const User = (Sequelize, DataTypes) => {
     const model = Sequelize.define(
         'user',{
-            userid:{
+            userid_num:{
                 type: DataTypes.INTEGER,
                 allowNull: false,
                 primaryKey:true,
                 autoIncrement: true
             },
+            userid:{
+                type: DataTypes.STRING(20),
+                allowNull: false,
+            },
             password:{
-                type: DataTypes.STRING(50),
+                type: DataTypes.STRING(200),
                 allowNull: false,
             },
             location:{
-                type: DataTypes.STRING(100),
+                type: DataTypes.STRING(200),
                 allowNull: false,
             },
             phone: {
@@ -24,15 +28,15 @@ const User = (Sequelize, DataTypes) => {
                 allowNull: false,
             },
             nickname:{
-                type: DataTypes.STRING(30),
+                type: DataTypes.STRING(50),
                 allowNull: false,
             },
             birthday:{
-                type : DataTypes.STRING(20),
+                type : DataTypes.STRING(10),
                 allowNull:false,
             },
             name:{
-                type : DataTypes.STRING(15),
+                type : DataTypes.STRING(100),
                 allowNull:false,
             }
         },{

@@ -11,12 +11,8 @@ const PublicPostComment = (Sequelize, DataTypes) => {
                 type: DataTypes.STRING(200),
                 allowNull: false,
             },
-            data:{
-                type: DataTypes.STRING(20),
-                allowNull: false,
-            },
-            like_num:{
-                type: DataTypes.STRING(20),
+            comment_nickname:{
+                type: DataTypes.STRING(50),
                 allowNull: false,
             }
         },
