@@ -3,7 +3,7 @@ const ClubSchedule = (Sequelize, DataTypes) => {
     "clubSchedule",
     {
       schedule_id: {
-        type: Datatypes.INTEGER,
+        type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true,

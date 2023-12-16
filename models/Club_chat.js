@@ -3,7 +3,7 @@ const ClubChat = (Sequelize, DataTypes) => {
     "clubChat",
     {
       chats_id: {
-        type: Datatypes.INTEGER,
+        type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true,

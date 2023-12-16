@@ -4,7 +4,7 @@ const ClubPost = (Sequelize, DataTypes) => {
     {
       post_id: {
         // clubPostComment 테이블과 1:다 연결 -> 게시글 하나에 댓글 여러개
-        type: Datatypes.INTEGER,
+        type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true,
