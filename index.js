@@ -7,7 +7,7 @@ const path = require("path");
 const db = require("./models/Index");
 const dotenv = require("dotenv");
 
-const PORT = 7000;
+const PORT = 8000;
 
 app.set("view engine", "ejs");
 app.set("views", "views");
@@ -21,6 +21,11 @@ app.use(express.json());
 
 app.get("/", (req, res) => {
   res.render("index");
+});
+
+
+app.get("/clubSchedule", (req, res) => {
+  res.render("clubSchedule");
 });
 
 // db.sequelize.sync({force: false}).then(() => {
