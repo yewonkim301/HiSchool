@@ -7,26 +7,18 @@ const PublicPost = (Sequelize, DataTypes) => {
                 allowNull: false,
                 autoIncrement: true
             },
-            date:{
-                type: DateTypes.STRING(20),
-                allowNull: false,
-            },
             title: {
                 type: DataTypes.STRING(100),
                 allowNull: false,
             },
             content:{
-                type: DataTypes.STRING(200),
+                type: DataTypes.TEXT,
                 allowNull: false,
             },
             image :{
-                type: DataTypes.STRING(100),
+                type: DataTypes.JSON,
                 allowNull: true,
             },
-            views: {
-                type: DataTypes.INTEGER,
-                allowNull: false,
-            }
         },{
             freezeTableName: true,
             timestamps: false

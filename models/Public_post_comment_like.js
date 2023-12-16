@@ -2,8 +2,8 @@ const PublicPostCommentLike = (Sequelize, DataTypes) => {
     const model = Sequelize.define(
         "publicPostCommentLike",
         {
-            is_like: {
-                type: DataTypes.STRING(10),
+            like_id: {
+                type: DataTypes.STRING(20),
                 allowNull: false,
             },
         },
