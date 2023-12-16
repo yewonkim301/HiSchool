@@ -6,7 +6,7 @@ const Club = (Sequelize, DataTypes) => {
         // clubPost 테이블과 1:다 연결 -> 동아리 하나에 게시글 여러 개
         // clubSchedule 테이블과 1:다 연결 -> 동아리 하나에 일정 여러 개
         // clubChat 테이블과 1:다 연결 -> 동아리 하나에 채팅글 여러 개
-        type: Datatypes.INTEGER,
+        type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true,
