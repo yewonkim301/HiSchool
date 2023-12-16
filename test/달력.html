@@ -6,11 +6,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Custom Calendar</title>
   <link rel="stylesheet" href="./달력.css">
-  <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-    integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 </head>
+<style>
+
+</style>
 
 <body>
+
+  <header class="header">
+    <nav class="navbar">
+      <div class="menu-icon">☰</div>
+      <h1 class="logo">일정</h1>
+      <div class="settings-icon">⚙</div>
+    </nav>
+  </header>
+
   <div class="sec_cal">
     <div class="cal_nav">
       <a href="javascript:;" class="nav-btn go-prev">prev</a>
@@ -28,104 +38,174 @@
         <div class="day">SUN</div>
       </div>
       <div class="dates"></div>
+
+      <!-- 하단 작성 내용추가 -->
+      <div class="databox">
+      </div>
     </div>
   </div>
+
+  <!-- 전체 화면 모달 창 -->
+  <div class="fullscreen-modal">
+    <div class="fullscreen-modal-content">
+      <span class="close-fullscreen-modal">×</span>
+      <div class="list">
+        <div class="list-title">제목</div>
+        <input type="text" class="dateInput-title" placeholder="날짜를 입력하세요">
+        <div class="list-content">내용</div>
+        <input type="text" class="dateInput-content" placeholder="날짜를 입력하세요">
+      </div>
+      <button id="submitDate">확인</button>
+    </div>
   </div>
-</body>
 
-<script>
-  $(document).ready(function () {
+
+  <script>
+    const fullscreenModal = document.querySelector('.fullscreen-modal');
+    const dateInputTitle = document.querySelector('.dateInput-title');
+    const dateInputContent = document.querySelector('.dateInput-content');
+    const databox = document.querySelector('.databox');
+    let thisMonth;
+    let selectedDate;
+
+    // 더블 클릭 이벤트 처리
+    document.querySelector('.dates').addEventListener('dblclick', function (e) {
+      if (e.target.classList.contains('current')) {
+        const clickedDate = e.target.textContent;
+
+        // 더블 클릭 시 전체 화면 모달 열기
+        fullscreenModal.style.display = 'flex';
+
+        // 모달 창에 선택한 날짜 표시
+        // dateInputTitle.value = clickedDate;
+      }
+    });
+
+
+
+    document.querySelector('.dates').addEventListener('click', function (e) {
+      if (e.target.classList.contains('current')) {
+        // 선택된 날짜가 이미 있으면 그 날짜의 선택을 해제
+        if (selectedDate) {
+          selectedDate.classList.remove('selected');
+        }
+
+        // 새로 클릭한 날짜를 선택
+        selectedDate = e.target;
+        selectedDate.classList.add('selected');
+      }
+    });
+
+
+    // 전체 화면 모달 창 닫기
+    document.querySelector('.close-fullscreen-modal').addEventListener('click', function () {
+      fullscreenModal.style.display = 'none';
+    });
+
+
+
+
+    // 확인 버튼 클릭 시 ㅎㅇ 영역에 날짜 출력
+    document.getElementById('submitDate').addEventListener('click', function () {
+      const dateValue = dateInputTitle.value;
+      const contentValue = dateInputContent.value; // 모달 창 내용
+
+      if (dateValue && contentValue) {
+        fullscreenModal.style.display = 'none';
+
+        // databox에 추가
+        let newDiv = document.createElement('h2');
+        newDiv.setAttribute('class', 'title');
+        let pContent = document.createElement('p');
+        pContent.setAttribute('class', 'content');
+        newDiv.textContent = `${dateValue}`;
+        pContent.textContent = `${contentValue}`;
+        databox.appendChild(newDiv);
+        databox.appendChild(pContent);
+
+        // 모달 창 내용 초기화
+        dateInputTitle.value = '';
+        dateInputContent.value = '';
+      } else {
+        alert('제목과 내용을 입력하세요.');
+      }
+    });
+
+
+    // 페이지 로드 시 달력 초기화
     calendarInit();
-  });
-  /*
-      달력 렌더링 할 때 필요한 정보 목록 
-  
-      현재 월(초기값 : 현재 시간)
-      금월 마지막일 날짜와 요일
-      전월 마지막일 날짜와 요일
-  */
 
-  function calendarInit() {
+    function calendarInit() {
+      // 날짜 정보 가져오기
+      const date = new Date(); // 현재 날짜(로컬 기준) 가져오기
+      const utc = date.getTime() + (date.getTimezoneOffset() * 60 * 1000); // uct 표준시 도출
+      const kstGap = 9 * 60 * 60 * 1000; // 한국 kst 기준시간 더하기
+      const today = new Date(utc + kstGap); // 한국 시간으로 date 객체 만들기(오늘)
 
-    // 날짜 정보 가져오기
-    var date = new Date(); // 현재 날짜(로컬 기준) 가져오기
-    var utc = date.getTime() + (date.getTimezoneOffset() * 60 * 1000); // uct 표준시 도출
-    var kstGap = 9 * 60 * 60 * 1000; // 한국 kst 기준시간 더하기
-    var today = new Date(utc + kstGap); // 한국 시간으로 date 객체 만들기(오늘)
+      thisMonth = new Date(today.getFullYear(), today.getMonth(), today.getDate()); // 달력에서 표기하는 날짜 객체
 
-    var thisMonth = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    // 달력에서 표기하는 날짜 객체
+      // 캘린더 렌더링
+      renderCalendar(thisMonth);
 
+      function renderCalendar(thisMonth) {
+        // 렌더링을 위한 데이터 정리
 
-    var currentYear = thisMonth.getFullYear(); // 달력에서 표기하는 연
-    var currentMonth = thisMonth.getMonth(); // 달력에서 표기하는 월
-    var currentDate = thisMonth.getDate(); // 달력에서 표기하는 일
+        // 이전 달의 마지막 날 날짜와 요일 구하기
+        const startDay = new Date(thisMonth.getFullYear(), thisMonth.getMonth(), 0);
+        const prevDate = startDay.getDate();
+        const prevDay = startDay.getDay();
 
-    // kst 기준 현재시간
-    // console.log(thisMonth);
+        // 이번 달의 마지막날 날짜와 요일 구하기
+        const endDay = new Date(thisMonth.getFullYear(), thisMonth.getMonth() + 1, 0);
+        const nextDate = endDay.getDate();
+        const nextDay = endDay.getDay();
 
-    // 캘린더 렌더링
-    renderCalender(thisMonth);
+        // 현재 월 표기
+        document.querySelector('.year-month').textContent = `${thisMonth.getFullYear()}.${thisMonth.getMonth() + 1}`;
 
-    function renderCalender(thisMonth) {
+        // 렌더링 html 요소 생성
+        const calendar = document.querySelector('.dates');
+        calendar.innerHTML = '';
 
-      // 렌더링을 위한 데이터 정리
-      currentYear = thisMonth.getFullYear();
-      currentMonth = thisMonth.getMonth();
-      currentDate = thisMonth.getDate();
+        // 지난달
+        for (let i = prevDate - prevDay + 1; i <= prevDate; i++) {
+          calendar.innerHTML += `<div class="day prev disable">${i}</div>`;
+        }
+        // 이번달
+        for (let i = 1; i <= nextDate; i++) {
+          calendar.innerHTML += `<div class="day current">${i}</div>`;
+        }
+        // 다음달
+        for (let i = 1; i <= (7 - nextDay == 7 ? 0 : 7 - nextDay); i++) {
+          calendar.innerHTML += `<div class="day next disable">${i}</div>`;
+        }
 
-      // 이전 달의 마지막 날 날짜와 요일 구하기
-      var startDay = new Date(currentYear, currentMonth, 0);
-      var prevDate = startDay.getDate();
-      var prevDay = startDay.getDay();
-
-      // 이번 달의 마지막날 날짜와 요일 구하기
-      var endDay = new Date(currentYear, currentMonth + 1, 0);
-      var nextDate = endDay.getDate();
-      var nextDay = endDay.getDay();
-
-      // console.log(prevDate, prevDay, nextDate, nextDay);
-
-      // 현재 월 표기
-      $('.year-month').text(currentYear + '.' + (currentMonth + 1));
-
-      // 렌더링 html 요소 생성
-      calendar = document.querySelector('.dates');
-      calendar.innerHTML = '';
-
-      // 지난달
-      for (var i = prevDate - prevDay + 1; i <= prevDate; i++) {
-        calendar.innerHTML = calendar.innerHTML + '<div class="day prev disable">' + i + '</div>';
-      }
-      // 이번달
-      for (var i = 1; i <= nextDate; i++) {
-        calendar.innerHTML = calendar.innerHTML + '<div class="day current">' + i + '</div>';
-      }
-      // 다음달
-      for (var i = 1; i <= (7 - nextDay == 7 ? 0 : 7 - nextDay); i++) {
-        calendar.innerHTML = calendar.innerHTML + '<div class="day next disable">' + i + '</div>';
+        // 오늘 날짜 표기
+        if (today.getMonth() === thisMonth.getMonth()) {
+          const todayDate = today.getDate();
+          const currentMonthDate = document.querySelectorAll('.dates .current');
+          currentMonthDate[todayDate - 1].classList.add('today');
+        }
       }
 
-      // 오늘 날짜 표기
-      if (today.getMonth() == currentMonth) {
-        todayDate = today.getDate();
-        var currentMonthDate = document.querySelectorAll('.dates .current');
-        currentMonthDate[todayDate - 1].classList.add('today');
-      }
+      // 이전달로 이동
+      document.querySelector('.go-prev').addEventListener('click', function () {
+        thisMonth.setMonth(thisMonth.getMonth() - 1);
+        renderCalendar(thisMonth);
+        // 선택된 날짜 초기화
+        selectedDate = null;
+      });
+
+
+      // 다음달로 이동
+      document.querySelector('.go-next').addEventListener('click', function () {
+        thisMonth.setMonth(thisMonth.getMonth() + 1);
+        renderCalendar(thisMonth);
+        // 선택된 날짜 초기화
+        selectedDate = null;
+      });
     }
-
-    // 이전달로 이동
-    $('.go-prev').on('click', function () {
-      thisMonth = new Date(currentYear, currentMonth - 1, 1);
-      renderCalender(thisMonth);
-    });
-
-    // 다음달로 이동
-    $('.go-next').on('click', function () {
-      thisMonth = new Date(currentYear, currentMonth + 1, 1);
-      renderCalender(thisMonth);
-    });
-  }
-</script>
+  </script>
+</body>
 
 </html>
