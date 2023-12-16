@@ -40,10 +40,23 @@
       <div class="dates"></div>
 
       <!-- 하단 작성 내용추가 -->
-      <div class="databox">
+
+      <div class="schdules-box">
+        <button id="openBtn" class="btn">일정보기</button>
+        <div class="list-additional">
+          <div class="list-additional-main"> </div>
+        </div>
+        <button id="closeBtn" class="btn">닫기</button>
       </div>
+
+
     </div>
   </div>
+
+
+
+
+
 
   <!-- 전체 화면 모달 창 -->
   <div class="fullscreen-modal">
@@ -51,9 +64,9 @@
       <span class="close-fullscreen-modal">×</span>
       <div class="list">
         <div class="list-title">제목</div>
-        <input type="text" class="dateInput-title" placeholder="날짜를 입력하세요">
+        <input type="text" class="dateInput-title" placeholder="제목을 입력하세요">
         <div class="list-content">내용</div>
-        <input type="text" class="dateInput-content" placeholder="날짜를 입력하세요">
+        <input type="text" class="dateInput-content" placeholder="내용을 입력하세요">
       </div>
       <button id="submitDate">확인</button>
     </div>
@@ -64,9 +77,35 @@
     const fullscreenModal = document.querySelector('.fullscreen-modal');
     const dateInputTitle = document.querySelector('.dateInput-title');
     const dateInputContent = document.querySelector('.dateInput-content');
-    const databox = document.querySelector('.databox');
+
+
     let thisMonth;
     let selectedDate;
+    let schedules = []; // 일정을 저장할 배열
+
+
+    function toggleSchedulesBox(displayStyle) {
+      const listAdditional = document.querySelector('.list-additional');
+      listAdditional.style.display = displayStyle;
+    }
+
+    // "open" 버튼 이벤트 리스너
+    // "오픈" 버튼 이벤트 리스너
+    document.getElementById('openBtn').addEventListener('click', function () {
+
+      document.querySelector('.list-additional').style.display = 'grid'; // 그리드로 표시
+      document.getElementById('closeBtn').style.display = 'block'; // "클로즈" 버튼을 보이게 함
+    });
+
+    // "클로즈" 버튼 이벤트 리스너
+    document.getElementById('closeBtn').addEventListener('click', function () {
+      document.querySelector('.list-additional').style.display = 'none'; // 숨김
+      this.style.display = 'none'; // "클로즈" 버튼도 숨김
+    });
+
+
+
+
 
     // 더블 클릭 이벤트 처리
     document.querySelector('.dates').addEventListener('dblclick', function (e) {
@@ -82,6 +121,7 @@
     });
 
 
+    let selectedDateString; // 선택된 날짜를 저장할 전역 변수
 
     document.querySelector('.dates').addEventListener('click', function (e) {
       if (e.target.classList.contains('current')) {
@@ -93,8 +133,13 @@
         // 새로 클릭한 날짜를 선택
         selectedDate = e.target;
         selectedDate.classList.add('selected');
+
+        // 모달에 날짜 표시
+        const selectedDateString = `${thisMonth.getFullYear()}-${thisMonth.getMonth() + 1}-${selectedDate.textContent}`;
       }
     });
+
+
 
 
     // 전체 화면 모달 창 닫기
@@ -105,31 +150,50 @@
 
 
 
-    // 확인 버튼 클릭 시 ㅎㅇ 영역에 날짜 출력
+    // 확인 버튼 클릭 하단 영역에 제목 내용 출력
     document.getElementById('submitDate').addEventListener('click', function () {
-      const dateValue = dateInputTitle.value;
-      const contentValue = dateInputContent.value; // 모달 창 내용
+      const title = dateInputTitle.value;
+      const content = dateInputContent.value;
 
-      if (dateValue && contentValue) {
+      if (title && content) {
+        schedules.push({ date: title, title, content });
+        updateScheduleList();
+
         fullscreenModal.style.display = 'none';
-
-        // databox에 추가
-        let newDiv = document.createElement('h2');
-        newDiv.setAttribute('class', 'title');
-        let pContent = document.createElement('p');
-        pContent.setAttribute('class', 'content');
-        newDiv.textContent = `${dateValue}`;
-        pContent.textContent = `${contentValue}`;
-        databox.appendChild(newDiv);
-        databox.appendChild(pContent);
-
-        // 모달 창 내용 초기화
         dateInputTitle.value = '';
         dateInputContent.value = '';
       } else {
-        alert('제목과 내용을 입력하세요.');
+        alert('제목, 내용, 날짜를 모두 입력하세요.');
       }
     });
+
+    // 일정 목록 업데이트 함수
+    function updateScheduleList() {
+      const listAdditional = document.querySelector('.list-additional');
+      listAdditional.innerHTML = ''; // 기존 목록 초기화
+
+      schedules.forEach(schedule => {
+        let divMain = document.createElement('div');
+        divMain.className = 'list-additional-main';
+
+        let divTitle = document.createElement('div');
+        divTitle.className = 'list-additional-title';
+        divTitle.textContent = schedule.title;
+
+        let divContent = document.createElement('div');
+        divContent.className = 'list-additional-content';
+        divContent.textContent = schedule.content;
+
+        let divinfo = document.createElement('div');
+        divinfo.className = 'additional-info';
+        divinfo.textContent = `날짜`; // 저장된 날짜 표시
+
+        divMain.appendChild(divTitle);
+        divMain.appendChild(divContent);
+        divMain.appendChild(divinfo); // divinfo를 divMain 안에 추가
+        listAdditional.appendChild(divMain);
+      });
+    }
 
 
     // 페이지 로드 시 달력 초기화
