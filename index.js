@@ -6,22 +6,24 @@ const path = require("path");
 
 const db = require("./models/Index");
 const dotenv = require("dotenv");
+dotenv.config();
 
-const PORT = 8000;
+const PORT = process.env.PORT;
+
 
 app.set("view engine", "ejs");
-app.set("views", "views");
+app.set("views", "./views");
 
 app.use(express.static(path.join(__dirname, "static")));
-
-const indexRouter = require("./routes/index");
-app.use("/", indexRouter);
-
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.get("/", (req, res) => {
-  res.render("index");
-});
+const indexRouter = require("./routes");
+app.use("/", indexRouter);
+
+app.get("*", (req, res) => {
+  console.log("error");
+}); // error 페이지 ?
 
 // db.sequelize.sync({force: false}).then(() => {
 app.listen(PORT, () => {

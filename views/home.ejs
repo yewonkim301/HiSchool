@@ -1,11 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
+
 <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>하이스쿨 - 홈</title>
+  <meta charset="UTF-8">
+  <title>홈 화면</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/home.css">
 </head>
+
 <body>
-<h1>홈</h1>
+    <%- include('./component/header')%>
+
+  <main class="content">
+    <section class="card">
+      <h2>내 동아리 목록</h2>
+      <div class="card-item">과학 동아리
+        <p>설명ㅇㅇㅇㅇㅇㅇㅇㅇ</p>
+      </div>
+      <div class="card-item">과학 동아리
+        <p>설명ㅇㅇㅇㅇㅇㅇㅇㅇ</p>
+      </div>
+    </section>
+    <section class="card">
+      <h2>전체 일정</h2>
+      <div class="card-item">스터디
+        <p>지구과학 스터디입니다.</p>
+      </div>
+      <div class="card-item">스터디
+        <p>지구과학 스터디입니다.</p>
+      </div>
+      <div class="card-item">과제 동아리</div>
+      <div class="card-item">과제 동아리</div>
+    </section>
+
+    <section class="card">
+      <h2>전체 동아리</h2>
+      <div class="card-item">스터디
+        <p>설명설명~~~.</p>
+      </div>
+      <div class="card-item">스터디
+        <p>설명설명~~~.</p>
+      </div>
+      <a href="/club">전체보기</a>
+    </section>
+  </main>
 </body>
+
 </html>
