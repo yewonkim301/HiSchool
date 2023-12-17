@@ -28,7 +28,7 @@ const ClubSchedule = (Sequelize, DataTypes) => {
     {
       tableName: "clubSchedule",
       freezeTableName: true,
-      timestamp: false,
+      timestamps: false,
     }
   );
 };

@@ -20,7 +20,7 @@ const ClubChat = (Sequelize, DataTypes) => {
     {
       tableName: "clubChat",
       freezeTableName: true,
-      timestamp: false,
+      timestamps: true,
     }
   );
 };
