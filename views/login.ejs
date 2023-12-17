@@ -4,8 +4,38 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>하이스쿨 - 로그인</title>
+   <link rel="stylesheet" href="/style.css">
+   <script src="https://unpkg.com/feather-icons"></script>
+   <style>
+
+      .logo {
+         font-size: 32px;
+         font-weight: 700;
+         text-align: center;
+         height: 100px;
+         line-height: 100px;
+         color: var(--color-primary-500)
+      }
+
+   </style>
 </head>
 <body>
-   <h1>로그인</h1>
+   <div class="container">
+      <h1 class="logo">하이스쿨</h1>
+      <form name="login">
+         <div class="input">
+            <label for="userid">아이디</label>
+            <input type="text" id="userid" class="textField">
+         </div>
+         <div class="input">
+            <label for="password">비밀번호</label>
+            <input type="password" id="password" class="textField">
+         </div>
+      </form>
+      
+      <div class="cta">
+         <button type="button" class="btn btn-primary">로그인</button>
+      </div>
+   </div>
 </body>
 </html>
