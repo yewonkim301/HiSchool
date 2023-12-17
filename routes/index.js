@@ -52,9 +52,7 @@ router.get("/clubRegister", (req, res) => {
 //   res.render("clubSchedule");
 // });
 
-router.get("/clubSchedule", (req, res) => {
-  res.render("./myclub/myclubSchedule");
-});
+
 
 // clubAdmin
 router.get("/clubAdminMain", (req, res) => {
@@ -77,6 +75,25 @@ router.get("/clubAdminMemberDetail", (req, res) => {
 });
 router.get("/clubAdminTransfer", (req, res) => {
   res.render("clubAdmin/clubAdminTransfer");
+});
+
+// myclub
+
+router.get("/clubSchedule", (req, res) => {
+  res.render("./myclub/myclubSchedule");
+});
+
+
+router.get("/myclubPostMain", (req, res) => {
+  res.render("./myclub/myclubPostMain");
+});
+
+// mypage
+router.get("/mypageMain", (req, res) => {
+  res.render("./mypage/mypageMain");
+});
+router.get("/mypageProfile", (req, res) => {
+  res.render("./mypage/mypageProfile");
 });
 
 module.exports = router;

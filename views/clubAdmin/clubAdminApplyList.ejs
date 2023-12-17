@@ -9,27 +9,27 @@
 </head>
 
 <body>
-   <%- include('../component/header')%>
+  <%- include('../component/header')%>
 
-  <main class="request-list">
-    <!-- 가입 요청 목록 -->
-    <div class="request" >
-      <div class="request-info">
-        <p class="requester-name">홍길동</p>
-        <p class="request-text">열심히 할게요</p>
+    <main class="request-list">
+      <!-- 가입 요청 목록 -->
+      <div class="request">
+        <div class="request-info">
+          <p class="requester-name">홍길동</p>
+          <p class="request-text">열심히 할게요</p>
+        </div>
+        <button class="btn-confirm" onclick="showApplyDetail()">확인</button>
       </div>
-      <button class="btn-confirm" onclick="showApplyDetail()">확인</button>
-    </div>
-    <!-- 추가 요청들을 여기에 반복 -->
-  </main>
+      <!-- 추가 요청들을 여기에 반복 -->
+    </main>
 
-  <script>
-   function showApplyDetail(){
-      window.location.href="/clubAdminApplyDetail"
-   }
+    <script>
+      function showApplyDetail() {
+        window.location.href = "/clubAdminApplyDetail";
+      }
 
-    // 여기에 가입 요청을 승인하는 JavaScript 코드가 들어갈 수 있습니다.
-  </script>
+      // 여기에 가입 요청을 승인하는 JavaScript 코드가 들어갈 수 있습니다.
+    </script>
 </body>
 
 </html>
