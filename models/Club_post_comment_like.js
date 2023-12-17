@@ -10,7 +10,7 @@ const ClubPostCommentLike = (Sequelize, DataTypes) => {
     {
       tableName: "clubPostCommentLike",
       freezeTableName: true,
-      timestamp: false,
+      timestamps: false,
     }
   );
 };

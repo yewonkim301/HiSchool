@@ -39,7 +39,7 @@ const Club = (Sequelize, DataTypes) => {
     {
       tableName: "club",
       freezeTableName: true,
-      timestamp: false,
+      timestamps: false,
     }
   );
 };

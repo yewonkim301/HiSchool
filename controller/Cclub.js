@@ -287,3 +287,96 @@ exports.createClubPost = async (req, res) => {
     res.send("Internal Server Error!");
   }
 };
+
+// Club_schedule
+// GET /clubSchedules/:club_id : 동아리 일정 전체 조회
+exports.getClubSchedules = async (req, res) => {
+  try {
+    const { club_id } = req.params.club_id;
+    const clubSchedules = await Club_schedule.findAll({
+      where: { club_id: club_id },
+    });
+    res.send(clubSchedules);
+  } catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+};
+
+// GET /clubSchedules/:club_id/:date : 특정 날짜 동아리 일정 조회
+exports.getClubSchedule = async (req, res) => {
+  try {
+    const { club_id, date } = req.params;
+    const clubSchedule = await Club_schedule.findAll({
+      where: { club_id: club_id, date: date },
+    });
+    res.send(clubSchedule);
+  } catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+};
+
+// POST /clubSchedule/:club_id/:date : 특정 날짜에 동아리 일정 추가
+exports.postClubSchedule = async (req, res) => {
+  try {
+    const { date } = req.params.date;
+    const newClubSchedule = await Club_schedule.create({
+      date: date,
+      time: time,
+      title: title,
+      content: content,
+    });
+    res.send(newClubSchedule);
+  } catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+};
+
+// PATCH /clubSchedule/:club_id/:date/:schedule_id : 동아리 일정 수정
+exports.patchClubSchedule = async (req, res) => {
+  try {
+    const { club_id, date, schedule_id } = req.params;
+    const { newDate, time, title, content } = req.body; // newDate -> 일정의 날짜도 변경이 가능할 경우 필요
+    const clubSchedule = await Club_schedule.upadate(
+      {
+        date: newDate,
+        time: time,
+        title: title,
+        content: content,
+      },
+      {
+        where: {
+          club_id: club_id,
+          date: date,
+          schedule_id: schedule_id,
+        },
+      }
+    );
+    res.send(clubSchedule);
+  } catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+};
+
+// DELETE /clubSchedule/:club_id/:date/:schedule_id : 동아리 일정 삭제
+exports.deleteClubSchedule = async (req, res) => {
+  try {
+    const clubSchedule = await Club_schedule.destroy({
+      where: {
+        club_id: club_id,
+        date: date,
+        schedule_id: schedule_id,
+      },
+    });
+    res.send(clubSchedule);
+  } catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+};
+
+// Club_chat
+// GET /clubChat : 동아리 채팅방 조회
