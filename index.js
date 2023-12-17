@@ -7,7 +7,7 @@ const path = require("path");
 const db = require("./models/Index");
 const dotenv = require("dotenv");
 
-const PORT = 7000;
+const PORT = 8000;
 
 app.set("view engine", "ejs");
 app.set("views", "views");
