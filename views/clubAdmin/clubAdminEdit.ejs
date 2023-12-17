@@ -1,11 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
+
 <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>하이스쿨 - 동아리 정보 관리</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>동아리 정보 관리</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/clubAdminEdit.css">
+  <style>
+
+  </style>
 </head>
+
+
 <body>
-   <h1>동아리 정보 관리</h1>
+   <%- include('../component/header')%>
+  <div class="content">
+    <div class="group">
+      <h2>동아리 이름</h2>
+      <p> 동아리 </p>
+    </div>
+    <div class="group">
+      <h2>동아리 설명</h2>
+      <p> ~~~ </p>
+    </div>
+    <div class="group">
+      <h2>관리자</h2>
+      <p>홍길동</p>
+      <button onclick="trasferLeader()">동아리장 위임</button>
+    </div>
+    <div class="group">
+      <h2>회원수</h2>
+      <p>50명</p>
+    </div>
+  </div>
+
+  <script>
+   function trasferLeader(){
+      window.location.href= "/clubAdminTransfer"
+   }
+  </script>
 </body>
+
 </html>
