@@ -12,22 +12,22 @@ router.get("/home", (req, res) => {
 });
 
 router.get("/club", (req, res) => {
-  res.render("club");
+  res.render("club/club");
 });
 router.get("/createClub", (req, res) => {
-   res.render("createClub");
- });
+  res.render("club/createClub");
+});
 
 router.get("/clubDetail", (req, res) => {
-   res.render("clubDetail");
- });
+  res.render("club/clubDetail");
+});
 
- router.get('/clubRegister',(req,res)=>{
-   res.render("clubRegister");
- })
+router.get("/clubRegister", (req, res) => {
+  res.render("club/clubRegister");
+});
 
 router.get("/clubSchedule", (req, res) => {
-  res.render("clubSchedule");
+  res.render("club/clubSchedule");
 });
 
 module.exports = router;

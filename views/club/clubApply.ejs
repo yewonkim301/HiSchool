@@ -1,11 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
+
 <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>하이스쿨 - 동아리 가입 요청</title>
+  <meta charset="UTF-8">
+  <title>과학 동아리</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/clubRegister.css">
 </head>
+
 <body>
-   <h1>동아리 가입 요청</h1>
+    <%- include('./component/header')%>
+
+
+  <main class="board">
+    <section class="post-section">
+      <h2>지원동기</h2>
+      <textarea class="input-field" placeholder="플레이스홀더"></textarea>
+    </section>
+
+    <section class="post-section">
+      <h2>자기소개</h2>
+      <textarea class="input-field" placeholder="플레이스홀더"></textarea>
+    </section>
+
+    <button type="button" class="btn-submit" onclick="clubRegister()">가입 신청</button>
+  </main>
+  <script>
+    function clubRegister(){
+        alert("가입 신청을 보냈습니다!");
+        window.location.href = '/club';
+    }
+  </script>
 </body>
+
 </html>
