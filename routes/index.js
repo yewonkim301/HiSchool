@@ -3,6 +3,11 @@ const express = require("express");
 // const controllerClub = require("../controller/Cclub");
 const router = express.Router();
 
+
+// const userRouter = require("./userRouter")
+// router.use("/auth", userRouter)
+
+
 router.get("/", (req, res) => {
   res.render("index");
 });
@@ -10,6 +15,23 @@ router.get("/", (req, res) => {
 router.get("/home", (req, res) => {
   res.render("home");
 });
+
+
+
+
+
+router.get("/login", (req, res) => {
+  res.render('login')
+})
+
+router.get("/register", (req, res) => {
+  res.render('register')
+})
+
+router.get("/register/findSchool", (req, res) => {
+  res.render('findSchool')
+})
+
 
 router.get("/club", (req, res) => {
   res.render("club");
