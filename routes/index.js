@@ -27,7 +27,7 @@ router.get("/clubRegister", (req, res) => {
 });
 
 router.get("/clubSchedule", (req, res) => {
-  res.render("club/clubSchedule");
+  res.render("myclub/myclubSchedule");
 });
 
 

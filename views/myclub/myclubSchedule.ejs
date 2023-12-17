@@ -6,6 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Custom Calendar</title>
   <link rel="stylesheet" href="./clubSchedule.css">
+
+  <!-- Axios CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 
 <body>
@@ -81,6 +84,45 @@
     let schedules = [];
     let scheduleIdCounter = 1;
 
+    // Axios를 사용하여 데이터 요청
+    axios.get('https://example.com/api/schedules')
+      .then((response) => {
+        // 받아온 데이터를 파싱하여 JavaScript 객체로 변환
+        const data = response.data;
+        addSchedulesToCalendar(data); // 데이터를 달력에 추가하는 함수 호출
+      })
+      .catch((error) => {
+        console.error('데이터 요청 중 오류 발생:', error);
+      });
+
+    // 데이터를 파싱하고 달력에 일정을 추가하는 함수 구현
+    function addSchedulesToCalendar(data) {
+      data.forEach((schedule) => {
+        const date = schedule.date;
+        const title = schedule.title;
+        const content = schedule.content;
+
+        // 달력에 해당 날짜에 일정을 추가하고 파란색 점 표시
+        // 예: 해당 날짜를 선택하고 일정을 추가하는 부분을 호출하고, 선택한 날짜에 일정 내용을 표시
+        addScheduleToSelectedDate(date, title, content);
+      });
+    }
+
+    // 선택한 날짜에 일정을 추가하고 표시하는 함수
+    function addScheduleToSelectedDate(date, title, content) {
+      // date에 해당하는 날짜를 선택
+      const selectedDateElem = document.querySelector(`.day[data-date="${date}"]`);
+      if (selectedDateElem) {
+        // 해당 날짜를 선택하고 일정을 추가하는 부분을 구현
+        // 예: 선택한 날짜에 일정 내용을 추가하고 파란색 점 표시
+        const scheduleElem = document.createElement('div');
+        scheduleElem.textContent = `${title} - ${content}`;
+        selectedDateElem.appendChild(scheduleElem);
+
+        // 파란색 점 표시 (이 부분은 기존 코드에 이미 구현되어 있어 수정할 필요 없음)
+        updateIconForDate(date);
+      }
+    }
 
     // 일정 추가시 날짜위에 파란색 점 표시 // 
     function updateIconForDate(date) {
@@ -199,7 +241,7 @@
       if (title.length > titleMaxLength || content.length > contentMaxLength) {
         let message = '';
         if (title.length > titleMaxLength) {
-          message += `제목은 ${titleMaxLength}글자 이하여야 합니다.\n`;
+          message += `제목은 ${titleMaxLength}글자 이하여야 합니다.`;
         }
         if (content.length > contentMaxLength) {
           message += `내용은 ${contentMaxLength}글자 이하여야 합니다.`;
@@ -370,6 +412,56 @@
     }
 
     calendarInit();
+
+    // --------- Axios 서버 요청  --------- //
+
+
+    // Axios를 사용하여 GET 요청 보내기 예시
+    function fetchDataFromServer() {
+      // 서버의 엔드포인트 URL 설정
+      const serverUrl = 'https://example.com/api/data'; // 실제 서버 URL로 변경해야 합니다.
+
+      // Axios를 사용하여 GET 요청 보내기
+      axios.get(serverUrl)
+        .then((response) => {
+          // 서버로부터의 응답을 처리하는 로직
+          const data = response.data;
+          console.log('서버로부터 받은 데이터:', data);
+
+          // 받은 데이터를 활용하여 원하는 동작 수행
+          // 예: 캘린더에 데이터 표시
+        })
+        .catch((error) => {
+          // 오류 처리
+          console.error('서버 요청 중 오류 발생:', error);
+        });
+    }
+
+    // Axios를 사용하여 POST 요청 보내기 예시
+    function sendDataToServer() {
+      // 서버의 엔드포인트 URL 설정
+      const serverUrl = 'https://example.com/api/post-data'; // 실제 서버 URL로 변경해야 합니다.
+
+      // 보낼 데이터 객체 생성
+      const postData = {
+        key1: 'value1',
+        key2: 'value2',
+      };
+
+      // Axios를 사용하여 POST 요청 보내기
+      axios.post(serverUrl, postData)
+        .then((response) => {
+          // 서버로부터의 응답을 처리하는 로직
+          const data = response.data;
+          console.log('서버로부터 받은 데이터:', data);
+
+          // 받은 데이터를 활용하여 원하는 동작 수행
+        })
+        .catch((error) => {
+          // 오류 처리
+          console.error('서버 요청 중 오류 발생:', error);
+        });
+    }
 
   </script>
 </body>
