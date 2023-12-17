@@ -12,35 +12,27 @@ router.get("/home", (req, res) => {
 });
 
 router.get("/club", (req, res) => {
-  res.render("club/clubMain");
+  res.render("club");
 });
 router.get("/createClub", (req, res) => {
-  res.render("club/createClub");
+  res.render("createClub");
 });
 
 router.get("/clubDetail", (req, res) => {
-  res.render("club/clubDetail");
+  res.render("clubDetail");
 });
 
-router.get("/clubApply", (req, res) => {
-  res.render("club/clubApply");
+router.get("/clubRegister", (req, res) => {
+  res.render("clubRegister");
 });
+
+// router.get("/clubSchedule", (req, res) => {
+//   res.render("clubSchedule");
+// });
 
 router.get("/clubSchedule", (req, res) => {
-  res.render("club/clubSchedule");
+  res.render("./myclub/myclubSchedule");
 });
-
-
-
-
-
-
-// myclub
-// 2023.12.17 동아리 게시판 추가
-router.get("/myClubPostMain", (req, res) => {
-  res.render("myclub/myClubPostMain");
-});
-
 
 // clubAdmin
 router.get("/clubAdminMain", (req, res) => {
@@ -64,6 +56,5 @@ router.get("/clubAdminMemberDetail", (req, res) => {
 router.get("/clubAdminTransfer", (req, res) => {
   res.render("clubAdmin/clubAdminTransfer");
 });
-
 
 module.exports = router;

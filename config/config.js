@@ -7,6 +7,7 @@ const development = {
   database: env.AWS_DB_NAME,
   host: env.AWS_HOST,
   dialect: "mysql",
+  timezone: "+09:00",
 };
 
 module.exports = { development };
