@@ -12,7 +12,7 @@ router.get("/home", (req, res) => {
 });
 
 router.get("/club", (req, res) => {
-  res.render("club/club");
+  res.render("club/clubMain");
 });
 router.get("/createClub", (req, res) => {
   res.render("club/createClub");
@@ -22,8 +22,8 @@ router.get("/clubDetail", (req, res) => {
   res.render("club/clubDetail");
 });
 
-router.get("/clubRegister", (req, res) => {
-  res.render("club/clubRegister");
+router.get("/clubApply", (req, res) => {
+  res.render("club/clubApply");
 });
 
 router.get("/clubSchedule", (req, res) => {
