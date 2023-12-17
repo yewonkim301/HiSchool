@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Custom Calendar</title>
-  <link rel="stylesheet" href="./clubSchedule.css">
+  <link rel="stylesheet" href="./clubSchedule.css" />
 
   <!-- Axios CDN -->
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -13,7 +13,6 @@
 
 <body>
   <%- include('../component/header')%>
-
 
     <div class="sec_cal">
       <div class="cal_nav">
@@ -41,7 +40,7 @@
         <div class="schdules-box">
           <button id="openBtn" class="btn">일정보기</button>
           <div class="list-additional">
-            <div class="list-additional-main"> </div>
+            <div class="list-additional-main"></div>
           </div>
         </div>
 
@@ -54,9 +53,9 @@
         <span class="close-fullscreen-modal">×</span>
         <div class="list">
           <div class="list-title">제목</div>
-          <input type="text" class="dateInput-title" placeholder="제목을 입력하세요">
+          <input type="text" class="dateInput-title" placeholder="제목을 입력하세요" />
           <div class="list-content">내용</div>
-          <input type="text" class="dateInput-content" placeholder="내용을 입력하세요">
+          <input type="text" class="dateInput-content" placeholder="내용을 입력하세요" />
         </div>
         <button id="submitDate">확인</button>
       </div>
@@ -65,7 +64,9 @@
     <script>
       // 전역 변수 선언 부분
       const fullscreenModal = document.querySelector('.fullscreen-modal');
-      const fullscreenModelClose = document.querySelector('.close-fullscreen-modal');
+      const fullscreenModelClose = document.querySelector(
+        '.close-fullscreen-modal'
+      );
       const dateInputTitle = document.querySelector('.dateInput-title');
       const dateInputContent = document.querySelector('.dateInput-content');
       const openBtn = document.getElementById('openBtn');
@@ -82,14 +83,14 @@
 
       // 서버에서 일정 데이터를 가져오는 함수
       function fetchDataFromServer() {
-        axios.get('https://example.com/api/clubSchedules/yourClubId')
+        axios
+          .get('http://localhost:8000/api/clubSchedules/yourClubId')
           .then((response) => {
             schedules = response.data; // 서버에서 받은 데이터를 schedules 배열에 저장
             updateScheduleList(); // 화면에 일정 목록을 업데이트
           })
           .catch((error) => {
             console.error('서버 요청 중 오류 발생:', error);
-
           });
       }
 
@@ -105,7 +106,9 @@
 
       // 선택한 날짜에 일정을 추가하는 함수
       function addScheduleToSelectedDate(date, title, content) {
-        const selectedDateElem = document.querySelector(`.day[data-date="${date}"]`);
+        const selectedDateElem = document.querySelector(
+          `.day[data-date="${date}"]`
+        );
         if (selectedDateElem) {
           const scheduleElem = document.createElement('div');
           scheduleElem.textContent = `${title} - ${content}`;
@@ -118,7 +121,9 @@
       function updateIconForDate(date) {
         const dayElem = document.querySelector(`.day[data-date="${date}"]`);
         if (dayElem) {
-          const hasSchedule = schedules.some(schedule => schedule.date === date);
+          const hasSchedule = schedules.some(
+            (schedule) => schedule.date === date
+          );
           let icon = dayElem.querySelector('.icon');
 
           if (hasSchedule && !icon) {
@@ -134,7 +139,7 @@
       // 클릭한 날짜에 해당하는 일정을 표시하는 함수
       function toggleSchedulesVisibility(selectedDate) {
         const allDates = document.querySelectorAll('.day.current');
-        allDates.forEach(dateElem => {
+        allDates.forEach((dateElem) => {
           const date = dateElem.getAttribute('data-date');
           const isSelectedDate = date === selectedDate;
           dateElem.classList.toggle('selected', isSelectedDate);
@@ -177,15 +182,35 @@
         if (e.target.classList.contains('current')) {
           const clickedDate = e.target.textContent;
           fullscreenModal.style.display = 'flex';
-          const selectedDateString = `${thisMonth.getFullYear()}-${('0' + (thisMonth.getMonth() + 1)).slice(-2)}-${('0' + clickedDate).slice(-2)}`;
+          const selectedDateString = `${thisMonth.getFullYear()}-${(
+            '0' +
+            (thisMonth.getMonth() + 1)
+          ).slice(-2)}-${('0' + clickedDate).slice(-2)}`;
           addIconForDate(selectedDateString);
         }
       });
 
+
+      // 현재 클릭한 테두리 생성 및 상단 아이콘 표시
+      function addIconForDate(date) {
+        const dayElem = document.querySelector(`.day[data-date="${date}"]`);
+        if (dayElem) {
+          const icon = dayElem.querySelector('.icon');
+          if (!icon) {
+            const iconElem = document.createElement('div');
+            iconElem.className = 'icon';
+            dayElem.appendChild(iconElem);
+          }
+        }
+      }
+
       datesContainer.addEventListener('click', function (e) {
         if (e.target.classList.contains('current')) {
           const clickedDate = e.target.textContent;
-          const clickedDateString = `${thisMonth.getFullYear()}-${('0' + (thisMonth.getMonth() + 1)).slice(-2)}-${('0' + clickedDate).slice(-2)}`;
+          const clickedDateString = `${thisMonth.getFullYear()}-${(
+            '0' +
+            (thisMonth.getMonth() + 1)
+          ).slice(-2)}-${('0' + clickedDate).slice(-2)}`;
           addIconForDate(clickedDateString);
 
           if (selectedDate) {
@@ -198,53 +223,64 @@
       });
 
       // 일정 등록 이벤트 처리
-      document.getElementById('submitDate').addEventListener('click', function () {
-        const title = dateInputTitle.value.trim();
-        const content = dateInputContent.value.trim();
-        const titleMaxLength = 15; // 제목의 최대 길이
-        const contentMaxLength = 60; // 내용의 최대 길이
+      document
+        .getElementById('submitDate')
+        .addEventListener('click', function () {
+          const title = dateInputTitle.value.trim();
+          const content = dateInputContent.value.trim();
+          const titleMaxLength = 15; // 제목의 최대 길이
+          const contentMaxLength = 60; // 내용의 최대 길이
 
-        if (title.length > titleMaxLength || content.length > contentMaxLength) {
-          let message = '';
-          if (title.length > titleMaxLength) {
-            message += `제목은 ${titleMaxLength}글자 이하여야 합니다.`;
+          if (
+            title.length > titleMaxLength ||
+            content.length > contentMaxLength
+          ) {
+            let message = '';
+            if (title.length > titleMaxLength) {
+              message += `제목은 ${titleMaxLength}글자 이하여야 합니다.`;
+            }
+            if (content.length > contentMaxLength) {
+              message += `내용은 ${contentMaxLength}글자 이하여야 합니다.`;
+            }
+            alert(message);
+            return;
           }
-          if (content.length > contentMaxLength) {
-            message += `내용은 ${contentMaxLength}글자 이하여야 합니다.`;
-          }
-          alert(message);
-          return;
-        }
 
-        // 일정 추가 로직
-        const selectedDateString = `${thisMonth.getFullYear()}-${('0' + (thisMonth.getMonth() + 1)).slice(-2)}-${('0' + selectedDate.textContent).slice(-2)}`;
-        const scheduleData = {
-          date: selectedDateString,
-          title: title,
-          content: content
-        };
+          // 일정 추가 로직
+          const selectedDateString = `${thisMonth.getFullYear()}-${(
+            '0' +
+            (thisMonth.getMonth() + 1)
+          ).slice(-2)}-${('0' + selectedDate.textContent).slice(-2)}`;
+          const scheduleData = {
+            date: selectedDateString,
+            title: title,
+            content: content,
+          };
 
-        axios.post('https://example.com/api/clubSchedule/yourClubId', scheduleData)
-          .then((response) => {
-            schedules.push(response.data); // 서버에서 반환된 새 일정을 로컬 상태에 추가
-            updateScheduleList(selectedDateString);
-            // 모달 초기화 및 숨김
-            fullscreenModal.style.display = 'none';
-            dateInputTitle.value = '';
-            dateInputContent.value = '';
-            selectedDate = null;
-          })
-          .catch((error) => {
-            console.error('일정 추가 중 오류 발생:', error);
-
-          });
-      });
+          axios
+            .post(
+              'http://localhost:8000/api/clubSchedule/yourClubId',
+              scheduleData
+            )
+            .then((response) => {
+              schedules.push(response.data); // 서버에서 반환된 새 일정을 로컬 상태에 추가
+              updateScheduleList(selectedDateString);
+              // 모달 초기화 및 숨김
+              fullscreenModal.style.display = 'none';
+              dateInputTitle.value = '';
+              dateInputContent.value = '';
+            })
+            .catch((error) => {
+              console.error('일정 추가 중 오류 발생:', error);
+            });
+        });
 
       // 일정 삭제 함수
       function deleteSchedule(id) {
-        axios.delete(`https://example.com/api/clubSchedule/yourClubId/${id}`)
+        axios
+          .delete(`http://localhost:8000/api/clubSchedule/yourClubId/${id}`)
           .then(() => {
-            const index = schedules.findIndex(schedule => schedule.id === id);
+            const index = schedules.findIndex((schedule) => schedule.id === id);
             if (index !== -1) {
               schedules.splice(index, 1);
               updateScheduleList(); // 일정 목록 업데이트
@@ -252,13 +288,14 @@
           })
           .catch((error) => {
             console.error('일정 삭제 중 오류 발생:', error);
-
           });
       }
 
       // 일정 목록 업데이트 함수
       function updateScheduleList(dateToUpdate) {
-        const currentDateSchedules = schedules.filter(schedule => schedule.date === dateToUpdate);
+        const currentDateSchedules = schedules.filter(
+          (schedule) => schedule.date === dateToUpdate
+        );
         const listAdditional = document.querySelector('.list-additional');
         listAdditional.innerHTML = '';
 
@@ -294,7 +331,6 @@
         });
       }
 
-
       // 캘린더 렌더링 및 초기화 함수
       function calendarInit() {
         const date = new Date();
@@ -314,7 +350,8 @@
         const nextDate = endDay.getDate();
         const nextDay = endDay.getDay();
 
-        yearMonth.textContent = `${month.getFullYear()}년 ${month.getMonth() + 1}월`;
+        yearMonth.textContent = `${month.getFullYear()}년 ${month.getMonth() + 1
+          }월`;
         datesContainer.innerHTML = '';
 
         // 이전 달 날짜 렌더링
@@ -325,7 +362,10 @@
         // 이번 달 날짜 렌더링
         for (let i = 1; i <= nextDate; i++) {
           let formattedDay = ('0' + i).slice(-2);
-          let formattedDate = `${month.getFullYear()}-${('0' + (month.getMonth() + 1)).slice(-2)}-${formattedDay}`;
+          let formattedDate = `${month.getFullYear()}-${(
+            '0' +
+            (month.getMonth() + 1)
+          ).slice(-2)}-${formattedDay}`;
           datesContainer.innerHTML += `<div class="day current" data-date="${formattedDate}">${i}</div>`;
         }
 
@@ -335,7 +375,7 @@
         }
 
         // 서버에서 가져온 일정 데이터로 캘린더에 아이콘 추가
-        schedules.forEach(schedule => {
+        schedules.forEach((schedule) => {
           addIconForDate(schedule.date);
         });
       }
@@ -353,7 +393,6 @@
 
       // 캘린더 초기화 함수 호출
       calendarInit();
-
     </script>
 </body>
 
