@@ -34,4 +34,27 @@ router.get("/clubSchedule", (req, res) => {
   res.render("./myclub/myclubSchedule");
 });
 
+// clubAdmin
+router.get("/clubAdminMain", (req, res) => {
+  res.render("clubAdmin/clubAdminMain");
+});
+router.get("/clubAdminApplyList", (req, res) => {
+  res.render("clubAdmin/clubAdminApplyList");
+});
+router.get("/clubAdminEdit", (req, res) => {
+  res.render("clubAdmin/clubAdminEdit");
+});
+router.get("/clubAdminMemberList", (req, res) => {
+  res.render("clubAdmin/clubAdminMemberList");
+});
+router.get("/clubAdminApplyDetail", (req, res) => {
+  res.render("clubAdmin/clubAdminApplyDetail");
+});
+router.get("/clubAdminMemberDetail", (req, res) => {
+  res.render("clubAdmin/clubAdminMemberDetail");
+});
+router.get("/clubAdminTransfer", (req, res) => {
+  res.render("clubAdmin/clubAdminTransfer");
+});
+
 module.exports = router;
