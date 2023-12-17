@@ -83,6 +83,10 @@ body {
 .logo {
   text-align: center;
 }
+.logo2 {
+  width: 100%;
+  text-align: center;
+}
 
 .sec_cal {
   width: 100%;

@@ -13,7 +13,6 @@ body {
   background-color: #fff;
 }
 
-
 /* 하단 플러스 버튼 */
 .plus-button {
   position: fixed;
@@ -30,7 +29,6 @@ body {
   font-size: 40px;
   cursor: pointer;
 }
-
 
 .modal-content {
   background: #fff;

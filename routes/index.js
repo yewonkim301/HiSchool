@@ -15,19 +15,23 @@ router.get("/club", (req, res) => {
   res.render("club");
 });
 router.get("/createClub", (req, res) => {
-   res.render("createClub");
- });
+  res.render("createClub");
+});
 
 router.get("/clubDetail", (req, res) => {
-   res.render("clubDetail");
- });
+  res.render("clubDetail");
+});
 
- router.get('/clubRegister',(req,res)=>{
-   res.render("clubRegister");
- })
+router.get('/clubRegister', (req, res) => {
+  res.render("clubRegister");
+});
 
 router.get("/clubSchedule", (req, res) => {
   res.render("clubSchedule");
+});
+
+router.get("/publicPost", (req, res) => {
+  res.render("publicPost");
 });
 
 module.exports = router;
