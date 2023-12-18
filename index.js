@@ -46,10 +46,10 @@ app.use(express.json());
 
 const indexRouter = require("./routes");
 app.use("/", indexRouter);
-app.use("/auth", authRouter)
+app.use("/auth", authRouter);
 
 app.get("*", (req, res) => {
-  console.log("error");
+  // console.log("error");
 }); // error 페이지 ?
 
 db.sequelize.sync({ force: false }).then(() => {
