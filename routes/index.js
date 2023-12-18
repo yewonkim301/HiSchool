@@ -21,19 +21,19 @@ router.get("/home", (req, res) => {
 
 
 router.get("/login", (req, res) => {
-  res.render('login')
-})
+  res.render('login');
+});
 
 router.get("/register", (req, res) => {
-  res.render('register')
-})
+  res.render('register');
+});
 
 
 
 
 router.get("/register/findSchool", (req, res) => {
-  res.render('findSchool')
-})
+  res.render('findSchool');
+});
 
 // club
 router.get("/club", (req, res) => {
@@ -42,7 +42,7 @@ router.get("/club", (req, res) => {
 router.get("/createClub", (req, res) => {
   res.render("club/createClub");
 });
-router.post("/createClub",controllerClub.createClub);
+router.post("/createClub", controllerClub.createClub);
 
 router.get("/clubDetail", (req, res) => {
   res.render("club/clubDetail");
@@ -88,25 +88,31 @@ router.get("/clubAdminTransfer", (req, res) => {
 // });
 
 
-router.get('/myClubSchedule/:club_id', controllerClub.getClubSchedules)
+router.get('/myClubSchedule/:club_id', controllerClub.getClubSchedules);
 
 // router.get('/myClubSchedule/:club_id', (req, res) => {
 //   res.render('./myclub/myclubSchedule')
 // })
 
-router.post('/myClubSchedule/:club_id', controllerClub.getClubSchedules)
+router.post('/myClubSchedule/:club_id', controllerClub.getClubSchedules);
 
-router.post("/createClub",controllerClub.createClub);
+router.post("/createClub", controllerClub.createClub);
 
-router.post('/myClubSchedule/:club_id', controllerClub.postClubSchedule)
+router.post('/myClubSchedule/:club_id', controllerClub.postClubSchedule);
 
 
-router.delete('/myClubSchedule/:club_id/:schedule_id', controllerClub.deleteClubSchedule)
+router.delete('/myClubSchedule/:club_id/:schedule_id', controllerClub.deleteClubSchedule);
+
+
 
 
 router.get("/myclubPostMain", (req, res) => {
   res.render("./myclub/myclubPostMain");
 });
+router.post('/myclubNewPost/:club_id', controllerClub.createClubPost);
+router.post('/myclubNewPost/:club_id', controllerClub.getClubPosts);
+
+
 
 // mypage
 router.get("/mypageMain", (req, res) => {
