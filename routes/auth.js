@@ -9,10 +9,11 @@ const router = express.Router();
 
 
 router.post('/register',isNotLoggedIn, async (req,res,next)=>{
-  console.log(req.data);
+  console.log('회원가입 요청 처리 시작');
+  // console.log(req);
   const { userid, name, school, grade, classid, birthday, phone, password } = req.body;
   try {
-    const exUser = await User.findOne({ where : { userid: userid}});
+    const exUser = await User.findOne({ where : { userid: userid }});
     if(exUser) {
       return res.redirect('/join?error=exist');
     }else {

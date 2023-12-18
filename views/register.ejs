@@ -236,24 +236,30 @@
         console.log(userid, name, school, grade, classid, birthday, phone);
 
         try {
-          await axios({
+          const result = await axios({
             method: "POST",
             url: "/auth/register",
-            headers: {}, 
-            data: {
-              userid: userid,
-              name: name,
-              school: school,
-              grade: grade,
-              classid: classid,
-              phone: phone,
-              birthday: birthday,
+            headers: {
+              // "Content-Type": "application/json",
             },
-
-          }).then((result) => {
-            console.log("회원가입 완료!");
-            console.log(result);
-          });
+            data: {
+              // userid: userid,
+              // name: name,
+              // school: school,
+              // grade: grade,
+              // classid: classid,
+              // phone: phone,
+              // birthday: birthday,
+              userid: form.userid.value,
+              name: form.name.value,
+              school: form.school.value,
+              grade: form.grade.value,
+              classid: form.classid.value,
+              birthday: form.birthday.value,
+              phone: form.phone.value,
+            },
+          })
+          console.log(data)
         } catch (err) {
           console.log(err);
         }
