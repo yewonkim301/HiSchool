@@ -13,7 +13,7 @@ const { trace } = require("../routes");
 exports.getClubs = async (req, res) => {
   try {
     const Clubs = await Club.findAll();
-    res.render("club", { data: Clubs });
+    res.render("clubMain", { data: Clubs });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -26,7 +26,7 @@ exports.getClub = async (req, res) => {
     const club = await Club.findOne({
       where: { club_id: req.params.club_id },
     });
-    res.send(club);
+    res.render("clubDetail", { data: club });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -311,7 +311,7 @@ exports.getClubSchedules = async (req, res) => {
     const clubSchedules = await Club_schedule.findAll({
       where: { clubClubId: club_id },
     });
-    res.render('./myclub/myclubSchedule', { data: clubSchedules } )
+    res.render("./myclub/myclubSchedule", { data: clubSchedules });
     // res.send(clubSchedules);
   } catch (err) {
     console.error(err);

@@ -1,12 +1,10 @@
 const express = require("express");
-// const controller = require("../controller/Cindex");
+// const controller = require("../controller/Cpublic");
 const controllerClub = require("../controller/Cclub");
 const router = express.Router();
 
-
 // const userRouter = require("./userRouter")
 // router.use("/auth", userRouter)
-
 
 router.get("/", (req, res) => {
   res.render("index");
@@ -16,37 +14,40 @@ router.get("/home", (req, res) => {
   res.render("home");
 });
 
-
-
-
-
 router.get("/login", (req, res) => {
-  res.render('login')
-})
+  res.render("login");
+});
 
 router.get("/register", (req, res) => {
-  res.render('register')
-})
-
-
-
+  res.render("register");
+});
 
 router.get("/register/findSchool", (req, res) => {
-  res.render('findSchool')
-})
+  res.render("findSchool");
+});
 
 // club
+/*
 router.get("/club", (req, res) => {
   res.render("club/clubMain");
 });
-router.get("/createClub", (req, res) => {
-  res.render("club/createClub");
-});
-router.post("/createClub",controllerClub.createClub);
+*/
+router.get("/clubMain", controllerClub.getClubs);
 
+/*
 router.get("/clubDetail", (req, res) => {
   res.render("club/clubDetail");
 });
+*/
+router.get("/clubDetail/:club_id", controllerClub.getClub);
+
+/*
+router.get("/createClub", (req, res) => {
+  res.render("club/createClub");
+});
+*/
+router.get("/createClub", controllerClub.getCreateClub);
+router.post("/createClub", controllerClub.postCreateClub);
 
 router.get("/clubApply", (req, res) => {
   res.render("club/clubApply");
@@ -55,8 +56,6 @@ router.get("/clubApply", (req, res) => {
 // router.get("/clubSchedule", (req, res) => {
 //   res.render("clubSchedule");
 // });
-
-
 
 // clubAdmin
 router.get("/clubAdminMain", (req, res) => {
@@ -87,22 +86,22 @@ router.get("/clubAdminTransfer", (req, res) => {
 //   res.render("./myclub/myclubSchedule", {  });
 // });
 
-
-router.get('/myClubSchedule/:club_id', controllerClub.getClubSchedules)
+router.get("/myClubSchedule/:club_id", controllerClub.getClubSchedules);
 
 // router.get('/myClubSchedule/:club_id', (req, res) => {
 //   res.render('./myclub/myclubSchedule')
 // })
 
-router.post('/myClubSchedule/:club_id', controllerClub.getClubSchedules)
+router.post("/myClubSchedule/:club_id", controllerClub.getClubSchedules);
 
-router.post("/createClub",controllerClub.createClub);
+router.post("/createClub", controllerClub.createClub);
 
-router.post('/myClubSchedule/:club_id', controllerClub.postClubSchedule)
+router.post("/myClubSchedule/:club_id", controllerClub.postClubSchedule);
 
-
-router.delete('/myClubSchedule/:club_id/:schedule_id', controllerClub.deleteClubSchedule)
-
+router.delete(
+  "/myClubSchedule/:club_id/:schedule_id",
+  controllerClub.deleteClubSchedule
+);
 
 router.get("/myclubPostMain", (req, res) => {
   res.render("./myclub/myclubPostMain");
