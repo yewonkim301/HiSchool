@@ -83,9 +83,25 @@ router.get("/clubAdminTransfer", (req, res) => {
 
 // myclub
 
-router.get("/clubSchedule", (req, res) => {
-  res.render("./myclub/myclubSchedule");
-});
+// router.get("/myClubSchedule", (req, res) => {
+//   res.render("./myclub/myclubSchedule", {  });
+// });
+
+
+router.get('/myClubSchedule/:club_id', controllerClub.getClubSchedules)
+
+// router.get('/myClubSchedule/:club_id', (req, res) => {
+//   res.render('./myclub/myclubSchedule')
+// })
+
+router.post('/myClubSchedule/:club_id', controllerClub.getClubSchedules)
+
+router.post("/createClub",controllerClub.createClub);
+
+router.post('/myClubSchedule/:club_id', controllerClub.postClubSchedule)
+
+
+router.delete('/myClubSchedule/:club_id/:schedule_id', controllerClub.deleteClubSchedule)
 
 
 router.get("/myclubPostMain", (req, res) => {

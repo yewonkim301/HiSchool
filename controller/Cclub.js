@@ -307,11 +307,12 @@ exports.createClubPost = async (req, res) => {
 // GET /myclubSchedule/:club_id : 동아리 일정 전체 조회
 exports.getClubSchedules = async (req, res) => {
   try {
-    const { club_id } = req.params.club_id;
+    const { club_id } = req.params;
     const clubSchedules = await Club_schedule.findAll({
-      where: { club_id: club_id },
+      where: { clubClubId: club_id },
     });
-    res.send(clubSchedules);
+    res.render('./myclub/myclubSchedule', { data: clubSchedules } )
+    // res.send(clubSchedules);
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -319,25 +320,27 @@ exports.getClubSchedules = async (req, res) => {
 };
 
 // GET /myclubSchedule/:club_id/:date : 특정 날짜 동아리 일정 조회
-exports.getClubSchedule = async (req, res) => {
-  try {
-    const { club_id, date } = req.params;
-    const clubSchedule = await Club_schedule.findAll({
-      where: { club_id: club_id, date: date },
-    });
-    res.send(clubSchedule);
-  } catch (err) {
-    console.error(err);
-    res.send("Internal Server Error!");
-  }
-};
+// exports.getClubSchedule = async (req, res) => {
+//   try {
+//     const { club_id, date } = req.params;
+//     const clubSchedule = await Club_schedule.findAll({
+//       where: { club_id: club_id, date: date },
+//     });
+//     res.send(clubSchedule);
+//   } catch (err) {
+//     console.error(err);
+//     res.send("Internal Server Error!");
+//   }
+// };
 
-// POST /myclubSchedule/:club_id/:date : 특정 날짜에 동아리 일정 추가
+// POST /myclubSchedule/:club_id/ : 특정 날짜에 동아리 일정 추가
 exports.postClubSchedule = async (req, res) => {
   try {
-    const { club_id, date } = req.params.date;
+    const { club_id } = req.params;
+    console.log(club_id);
+    const { date, time, title, content } = req.body;
     const newClubSchedule = await Club_schedule.create({
-      club_id: club_id,
+      clubClubId: club_id,
       date: date,
       time: time,
       title: title,
@@ -379,13 +382,13 @@ exports.patchClubSchedule = async (req, res) => {
 };
 */
 
-// DELETE /myclubSchedule/:club_id/:date/:schedule_id : 동아리 일정 삭제
+// DELETE /myclubSchedule/:club_id/:schedule_id : 동아리 일정 삭제
 exports.deleteClubSchedule = async (req, res) => {
+  const { club_id, schedule_id } = req.params;
   try {
     const isDeleted = await Club_schedule.destroy({
       where: {
-        club_id: club_id,
-        date: date,
+        clubClubId: club_id,
         schedule_id: schedule_id,
       },
     });

@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Custom Calendar</title>
   <link rel="stylesheet" href="/style.css">
-  <link rel="stylesheet" href="./clubSchedule.css" />
+  <link rel="stylesheet" href="/clubSchedule.css" />
 
   <!-- Axios CDN -->
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -85,10 +85,10 @@
       // 서버에서 일정 데이터를 가져오는 함수
       function fetchDataFromServer() {
         axios
-          .get('http://localhost:8000/api/clubSchedules/yourClubId')
+          .post(`http://localhost:8000/myClubSchedule/${1}`)
           .then((response) => {
-            schedules = response.data; // 서버에서 받은 데이터를 schedules 배열에 저장
-            updateScheduleList(); // 화면에 일정 목록을 업데이트
+            schedules = response.data; 
+            updateScheduleList();
           })
           .catch((error) => {
             console.error('서버 요청 중 오류 발생:', error);
@@ -253,14 +253,16 @@
             (thisMonth.getMonth() + 1)
           ).slice(-2)}-${('0' + selectedDate.textContent).slice(-2)}`;
           const scheduleData = {
+            club_id: 1,
             date: selectedDateString,
+            time: '1200',
             title: title,
             content: content,
           };
 
           axios
             .post(
-              'http://localhost:8000/api/clubSchedule/yourClubId',
+              `http://localhost:8000/myClubSchedule/${1}`,
               scheduleData
             )
             .then((response) => {
@@ -277,9 +279,9 @@
         });
 
       // 일정 삭제 함수
-      function deleteSchedule(id) {
+      function deleteSchedule(id, schedule) {
         axios
-          .delete(`http://localhost:8000/api/clubSchedule/yourClubId/${id}`)
+          .delete(`http://localhost:8000/myClubSchedule/${1}/${3}`)
           .then(() => {
             const index = schedules.findIndex((schedule) => schedule.id === id);
             if (index !== -1) {
