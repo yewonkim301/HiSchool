@@ -1,7 +1,6 @@
 const {
   Club,
   Club_chat,
-  Club_members,
   Club_post,
   Club_post_comment,
   Club_post_comment_like,
@@ -10,7 +9,7 @@ const {
 const { trace } = require("../routes");
 
 // Club
-// GET /club : 전체 동아리 조회
+// GET /clubMain : 전체 동아리 조회
 exports.getClubs = async (req, res) => {
   try {
     const Clubs = await Club.findAll();
@@ -34,9 +33,9 @@ exports.getClub = async (req, res) => {
   }
 };
 
-// GET / : 동아리 관리페이지 불러오기 - 동아리 상세 페이지와 경로를 다르게 쓴다면 필요
+// GET /clubAdminMain : 동아리 관리페이지 불러오기 - 동아리 상세 페이지와 경로를 다르게 쓴다면 필요
 
-// PATCH /clubDetail/:club_id : 동아리 수정
+// PATCH /clubAdminEdit/:club_id : 동아리 수정
 exports.patchClub = async (req, res) => {
   try {
     const { club_id } = req.params.club_id;
@@ -60,7 +59,7 @@ exports.patchClub = async (req, res) => {
   }
 };
 
-// DELETE /clubDetail/:club_id : 동아리 삭제
+// DELETE /clubAdminEdit/:club_id : 동아리 삭제
 exports.deleteClub = async (req, res) => {
   try {
     const { club_id } = req.params.club_id;
@@ -78,7 +77,7 @@ exports.deleteClub = async (req, res) => {
   }
 };
 
-// POST /clubCreate : 동아리 생성
+// POST /createClub : 동아리 생성
 exports.createClub = async (req, res) => {
   try {
     const { club_name, leader_id, limit, location, field, keyword } = req.body;
@@ -98,7 +97,7 @@ exports.createClub = async (req, res) => {
 };
 
 //Club_post
-// GET /clubPosts/:club_id : 동아리 게시글 전체 조회
+// GET /myclubPostMain/:club_id : 동아리 게시글 전체 조회
 exports.getClubPosts = async (req, res) => {
   try {
     const posts = await Club_post.findAll({
@@ -111,7 +110,7 @@ exports.getClubPosts = async (req, res) => {
   }
 };
 
-// GET /clubPost/:club_id/:post_id : 동아리 게시글 하나 조회
+// GET /myclubPostDetail/:club_id/:post_id : 동아리 게시글 하나 조회
 // 게시글 전달할 때, 게시글마다의 댓글과 좋아요 수 함께 전달
 exports.getClubPost = async (req, res) => {
   try {
@@ -143,7 +142,7 @@ exports.getClubPost = async (req, res) => {
   }
 };
 
-// PATCH /clubPost/:club_id/:post_id  : 동아리 게시글 수정
+// PATCH /myclubPostDetail/:club_id/:post_id  : 동아리 게시글 수정
 exports.patchPost = async (req, res) => {
   try {
     const { club_id, post_id } = req.params;
@@ -167,7 +166,7 @@ exports.patchPost = async (req, res) => {
   }
 };
 
-// DELETE /clubPost/:club_id/:post_id  : 동아리 게시글 삭제
+// DELETE /myclubPostDetail/:club_id/:post_id  : 동아리 게시글 삭제
 exports.deletePost = async (req, res) => {
   try {
     const { club_id, post_id } = req.params;
@@ -188,12 +187,15 @@ exports.deletePost = async (req, res) => {
   }
 };
 
-// POST  /clubPost/:club_id/:post_id : 동아리 게시글 댓글 생성
+// POST  /myclubPostDetail/:club_id/:post_id : 동아리 게시글 댓글 생성
 exports.createPostComment = async (req, res) => {
   try {
-    // const { club_id, post_id } = req.params;
-    const { comment_name, content } = req.body;
+    const { club_id, post_id } = req.params;
+    const { userid, comment_name, content } = req.body;
     const newClubPostComment = await Club_post_comment.create({
+      club_id: club_id,
+      post_id: post_id,
+      userid: userid,
       comment_name: comment_name,
       content: content,
     });
@@ -204,7 +206,7 @@ exports.createPostComment = async (req, res) => {
   }
 };
 
-// PATCH /clubPost/:club_id/:post_id/:comment_id : 동아리 게시글 댓글 수정
+// PATCH /myclubPostDetail/:club_id/:post_id/:comment_id : 동아리 게시글 댓글 수정
 exports.patchPostComment = async (req, res) => {
   try {
     const { comment_id, post_id, club_id } = req.params;
@@ -224,14 +226,18 @@ exports.patchPostComment = async (req, res) => {
   }
 };
 
-// DELETE  /clubPost/:club_id/:post_id/:comment_id : 동아리 게시글 댓글 삭제
+// DELETE  /myclubPostDetail/:club_id/:post_id/:comment_id : 동아리 게시글 댓글 삭제
 exports.deletePostComment = async (req, res) => {
   try {
     const { comment_id, post_id, club_id } = req.params;
-    const clubPostComment = await Club_post_comment.destroy({
+    const isDeleted = await Club_post_comment.destroy({
       where: { club_id: club_id, post_id: post_id, comment_id, comment_id },
     });
-    res.send(clubPostComment);
+    if (isDeleted) {
+      res.send({ isDeleted: true });
+    } else {
+      res.send({ isDeleted: false });
+    }
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -239,11 +245,14 @@ exports.deletePostComment = async (req, res) => {
 };
 
 // 동아리 게시글 좋아요
-// POST /clubPost/:club_id/:post_id/:comment_id
+// POST /myclubPostDetail/:club_id/:post_id/:comment_id
 exports.postClubPostCommentLike = async (req, res) => {
   try {
-    // const { club_id, post_id, comment_id } = req.params;
+    const { post_id, club_id, comment_id } = req.params;
     const clubPostCommentLike = await Club_post_comment_like.create({
+      club_id: club_id,
+      post_id: post_id,
+      comment_id: comment_id,
       like_id: like_id,
     });
     res.send(clubPostCommentLike);
@@ -253,11 +262,11 @@ exports.postClubPostCommentLike = async (req, res) => {
   }
 };
 
-// DELETE /clubPost/:club_id/:post_id/:comment_id/:like_id
+// DELETE /myclubPostDetail/:club_id/:post_id/:comment_id/:like_id
 exports.deleteClubPostCommentLike = async (req, res) => {
   try {
     const { club_id, post_id, comment_id, like_id } = req.params;
-    const clubPostCommentLike = await Club_post_comment_like.destroy({
+    const isDeleted = await Club_post_comment_like.destroy({
       where: {
         club_id: club_id,
         post_id: post_id,
@@ -265,18 +274,24 @@ exports.deleteClubPostCommentLike = async (req, res) => {
         like_id: like_id,
       },
     });
-    res.send(clubPostCommentLike);
+    if (isDeleted) {
+      res.send({ isDeleted: true });
+    } else {
+      res.send({ isDeleted: false });
+    }
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
   }
 };
 
-// POST /clubPostCreate : 동아리 게시글 생성
+// POST /myclubNewPost/:club_id : 동아리 게시글 생성
 exports.createClubPost = async (req, res) => {
   try {
-    const { title, content, image } = req.body;
+    const { club_id, userid, title, content, image } = req.body;
     const newPost = await Club_post.create({
+      club_id: club_id,
+      userid: userid,
       title: title,
       content: content,
       image: image,
@@ -289,7 +304,7 @@ exports.createClubPost = async (req, res) => {
 };
 
 // Club_schedule
-// GET /clubSchedules/:club_id : 동아리 일정 전체 조회
+// GET /myclubSchedule/:club_id : 동아리 일정 전체 조회
 exports.getClubSchedules = async (req, res) => {
   try {
     const { club_id } = req.params.club_id;
@@ -303,7 +318,7 @@ exports.getClubSchedules = async (req, res) => {
   }
 };
 
-// GET /clubSchedules/:club_id/:date : 특정 날짜 동아리 일정 조회
+// GET /myclubSchedule/:club_id/:date : 특정 날짜 동아리 일정 조회
 exports.getClubSchedule = async (req, res) => {
   try {
     const { club_id, date } = req.params;
@@ -317,11 +332,12 @@ exports.getClubSchedule = async (req, res) => {
   }
 };
 
-// POST /clubSchedule/:club_id/:date : 특정 날짜에 동아리 일정 추가
+// POST /myclubSchedule/:club_id/:date : 특정 날짜에 동아리 일정 추가
 exports.postClubSchedule = async (req, res) => {
   try {
-    const { date } = req.params.date;
+    const { club_id, date } = req.params.date;
     const newClubSchedule = await Club_schedule.create({
+      club_id: club_id,
       date: date,
       time: time,
       title: title,
@@ -334,7 +350,8 @@ exports.postClubSchedule = async (req, res) => {
   }
 };
 
-// PATCH /clubSchedule/:club_id/:date/:schedule_id : 동아리 일정 수정
+// PATCH /myclubSchedule/:club_id/:date/:schedule_id : 동아리 일정 수정
+/*
 exports.patchClubSchedule = async (req, res) => {
   try {
     const { club_id, date, schedule_id } = req.params;
@@ -360,18 +377,23 @@ exports.patchClubSchedule = async (req, res) => {
     res.send("Internal Server Error!");
   }
 };
+*/
 
-// DELETE /clubSchedule/:club_id/:date/:schedule_id : 동아리 일정 삭제
+// DELETE /myclubSchedule/:club_id/:date/:schedule_id : 동아리 일정 삭제
 exports.deleteClubSchedule = async (req, res) => {
   try {
-    const clubSchedule = await Club_schedule.destroy({
+    const isDeleted = await Club_schedule.destroy({
       where: {
         club_id: club_id,
         date: date,
         schedule_id: schedule_id,
       },
     });
-    res.send(clubSchedule);
+    if (isDeleted) {
+      res.send({ isDeleted: true });
+    } else {
+      res.send({ isDeleted: false });
+    }
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
