@@ -15,8 +15,8 @@ const User = (Sequelize, DataTypes) => {
                 type: DataTypes.STRING(200),
                 allowNull: false,
             },
-            location:{
-                type: DataTypes.STRING(200),
+            school:{
+                type: DataTypes.STRING(50),
                 allowNull: false,
             },
             phone: {
@@ -38,6 +38,14 @@ const User = (Sequelize, DataTypes) => {
             name:{
                 type : DataTypes.STRING(100),
                 allowNull:false,
+            },
+            grade: {
+                type: DataTypes.STRING(1),
+                allowNull: false,
+            },
+            classid: {
+                type: DataTypes.STRING(2),
+                allowNull: false,
             }
         },{
             freezeTableName: true,
