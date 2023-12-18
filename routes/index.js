@@ -1,6 +1,6 @@
 const express = require("express");
 // const controller = require("../controller/Cindex");
-// const controllerClub = require("../controller/Cclub");
+const controllerClub = require("../controller/Cclub");
 const router = express.Router();
 
 
@@ -35,20 +35,21 @@ router.get("/register/findSchool", (req, res) => {
   res.render('findSchool')
 })
 
-
+// club
 router.get("/club", (req, res) => {
-  res.render("club");
+  res.render("club/clubMain");
 });
 router.get("/createClub", (req, res) => {
-  res.render("createClub");
+  res.render("club/createClub");
 });
+router.post("/createClub",controllerClub.createClub);
 
 router.get("/clubDetail", (req, res) => {
-  res.render("clubDetail");
+  res.render("club/clubDetail");
 });
 
-router.get("/clubRegister", (req, res) => {
-  res.render("clubRegister");
+router.get("/clubApply", (req, res) => {
+  res.render("club/clubApply");
 });
 
 // router.get("/clubSchedule", (req, res) => {
