@@ -10,15 +10,16 @@ const db = require("./models/Index");
 const dotenv = require("dotenv");
 dotenv.config();
 
-
 // passport
 const passport = require("passport");
 const passportConfig = require("./passport");
 
+const swaggerUi = require("swagger-ui-express");
+const swaggerFile = require("./swagger-output");
 
+app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 const PORT = process.env.PORT;
-
 
 app.set("view engine", "ejs");
 app.set("views", "./views");
@@ -40,18 +41,11 @@ app.use(
   })
 );
 
-
-
-
-
-
 passportConfig();
 
 app.use(passport.initialize()); // 요청 객체에 passport 설정을 심음
 app.use(passport.session()); // req.session 객체에 passport정보를 추가 저장
 // passport.session()이 실행되면, 세션쿠키 정보를 바탕으로 해서 passport/index.js의 deserializeUser()가 실행하게 한다.
-
-
 
 const indexRouter = require("./routes");
 const authRouter = require("./routes/auth");
@@ -59,11 +53,9 @@ const authRouter = require("./routes/auth");
 app.use("/", indexRouter);
 app.use("/auth", authRouter);
 
-
 app.get("*", (req, res) => {
   // console.log("error");
 }); // error 페이지 ?
-
 
 db.sequelize.sync({ force: false }).then(() => {
   app.listen(PORT, () => {
