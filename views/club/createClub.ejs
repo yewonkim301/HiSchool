@@ -1,81 +1,79 @@
 <!DOCTYPE html>
 <html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>동아리 개설</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/createClub.css" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <title>동아리 개설</title>
-  <link rel="stylesheet" href="/style.css">
-  <link rel="stylesheet" href="/createClub.css">
-</head>
-
-<body>
+  <body>
     <%- include('../component/header')%>
 
-  <main class="create-club">
-    <form name="create-club-form" onsubmit="createClub(event)">
-      <label for="club-name">동아리 이름</label>
-      <input type="text" id="club-name" placeholder="과학 동아리" required>
+    <main class="create-club">
+      <form name="create-club-form" onsubmit="createClub(event)">
+        <label for="club-name">동아리 이름</label>
+        <input type="text" id="club-name" placeholder="과학 동아리" required />
 
-      <!-- <label for="club-description">동아리 설명</label>
+        <!-- <label for="club-description">동아리 설명</label>
       <input type="text" id="club-description" placeholder="설명을 입력해주세요" required> -->
 
-      <label for="category">분야</label>
-      <input type="text" id="category" placeholder="과학" required>
+        <label for="category">분야</label>
+        <input type="text" id="category" placeholder="과학" required />
 
-      <label for="member-limit">인원 제한</label>
-      <input type="number" id="member-limit" placeholder="50" required>
+        <label for="member-limit">인원 제한</label>
+        <input type="number" id="member-limit" placeholder="50" required />
 
-      <label for="keywords">키워드</label>
-      <input type="text" id="keywords" placeholder="과학, 로봇" required>
+        <label for="keywords">키워드</label>
+        <input type="text" id="keywords" placeholder="과학, 로봇" required />
 
-      <label for="location">활동 지역</label>
-      <div class="location-input">
-        <input type="text" id="city" placeholder="서울시" required>
-        <input type="text" id="district" placeholder="마포구" required>
-      </div>
+        <label for="location">활동 지역</label>
+        <div class="location-input">
+          <input type="text" id="city" placeholder="서울시" required />
+          <input type="text" id="district" placeholder="마포구" required />
+        </div>
 
-      <button type="submit" class="btn-create">동아리 만들기</button>
-    </form>
-  </main>
-  <script>
-   async function createClub(event){
-    event.preventDefault();
+        <button type="submit" class="btn-create">동아리 만들기</button>
+      </form>
+    </main>
+    <script>
+      async function createClub(event) {
+        event.preventDefault();
 
-      const createClubForm = document.forms['create-club-form'];
-    console.log(createClubForm);
+        const createClubForm = document.forms["create-club-form"];
+        console.log(createClubForm);
 
-    let clubName = createClubForm.elements['club-name'].value;
-    console.log(clubName)
-    // let clubDescription = createClubForm.elements['club-description'].value;
-    let clubCategory = createClubForm.elements['club-category'].value;
-    let clubMemberLimit = createClubForm.elements['club-member-limit'].value;
-    let clubKeywords = createClubForm.elements['club-keywords'].value;
-    let clubCity = createClubForm.elements['club-city'].value;
-    let clubDestrict = createClubForm.elements['club-district'].value;
+        let clubName = createClubForm.elements["club-name"].value;
+        console.log(clubName);
+        // let clubDescription = createClubForm.elements['club-description'].value;
+        let clubCategory = createClubForm.elements["category"].value;
+        let clubMemberLimit = createClubForm.elements["member-limit"].value;
+        let clubKeywords = createClubForm.elements["keywords"].value;
+        let clubCity = createClubForm.elements["city"].value;
+        let clubDestrict = createClubForm.elements["district"].value;
 
-    const KorMaxlength = 15;
-    const EngMaxlength = 50;
+        const KorMaxlength = 15;
+        const EngMaxlength = 50;
 
-    try{
-      const res = await axios({
-        method:'POST',
-        url:'/createClub',
-        data:{
-          club_name:clubName,
-          // leader_id:
-          limit:clubMemberLimit,
-          location:clubCity,
-          field: clubCategory,
-          keyword:clubKeywords
-
+        try {
+          const res = await axios({
+            method: "POST",
+            url: "/createClub",
+            data: {
+              club_name: clubName,
+              leader_id: 1,
+              limit: clubMemberLimit,
+              location: clubCity,
+              field: clubCategory,
+              keyword: clubKeywords,
+            },
+          });
+          console.log(res);
+        } catch (error) {
+          console.log("createClub 에서 axios error > ", error);
         }
-      })
-      console.log(res);
-    }catch(error){
-          console.log('createClub 에서 axios error > ',error);
-        }
-    }
-  </script>
-</body>
-
+      }
+    </script>
+  </body>
 </html>
