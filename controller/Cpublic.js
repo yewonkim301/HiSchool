@@ -4,6 +4,7 @@ const{
     Public_post_comment_like,
     Dm,
     Club_members,
+    Club_members_wait,
     User
 } = require('../models/Index');
 
@@ -290,10 +291,15 @@ exports.deleteDm = async (req,res) =>{
 }
 
 // 동아리 회원
-// GET /clubMembers 회원 전체 조회
+// GET /clubAdminMemberlist/:club_id 회원 전체 조회
 exports.getClubMembers = async (req,res) => {
     try{
-        const getMembers = await Club_members.findAll()
+        const {club_id} = req.params.club_id;
+        const getMembers = await Club_members.findAll({
+            where:{
+                club_id: club_id
+            }
+        })
         res.send(getMembers);
     }
     catch(err){
@@ -302,17 +308,36 @@ exports.getClubMembers = async (req,res) => {
     }
 }
 
-// POST /clubMembers/ 동아리 가입
+// GET /clubAdminMemberDetail/:club_id 회원 상세정보 보기
+exports.getClubMember = async (req,res) => {
+    try{
+        const {club_id} = req.params.club_id;
+        const {userid_num} = req.body;
+        const getMember = await Club_members.findOne({
+            where:{
+                club_id: club_id,
+                userid_num: userid_num
+            }
+        })
+        res.send(getMember);
+    }
+    catch(err){
+        nsole.error(err);
+        res.sned("Internal Server Error!");
+    }
+}
+
+// POST /clubAdminApplyDetaill/:club_id 동아리 가입 신청
 exports.createClubMembers = async (req,res) =>{
     try{
         // const {userid_num} = req.params.userid_num;
+        const {club_id} = req.params.club_id;
         const {
-            club_id,
             motivation,
             introduction,
             userid_num
         } = req.body;
-        const newMembers = await Club_members.create({
+        const newMembers = await Club_members_wait.create({
             club_id: club_id,
             motivation: motivation,
             introduction: introduction,
@@ -327,7 +352,43 @@ exports.createClubMembers = async (req,res) =>{
     }
 }
 
-// Delete /clubMembers 추방
+// GET /clubAdminApplyList/:club_id 클럽에 가입신청한 사람들 전체조회
+exports.getClubMembersApplyList = async (req,res) => {
+    try{
+        const {club_id} =req.params.club_id;
+        const getApplyList = await Club_members_wait.findAll({
+            where:{
+                club_id: club_id
+            }
+        })
+        res.send(getApplyList);
+    }
+    catch(err){
+        nsole.error(err);
+        res.sned("Internal Server Error!");
+    }
+}
+
+// DELETE /clubAdminApplyList/:club_id 클럽 가입 거절
+exports.deleteMembersApplyList = async (req,res) =>{
+    try{
+        const {club_id} = req.params.userid_num;
+        const {userid_num} = req.body
+        const destroyMembersApplyList = await Club_members_wait.destroy({
+            where:{
+                userid_num:userid_num,
+                club_id: club_id,
+            }
+        })
+        res.send(destroyMembersApplyList);
+    }
+    catch(err){
+        nsole.error(err);
+        res.sned("Internal Server Error!");
+    }
+}
+
+// Delete /clubAdminMemberDetail 추방
 exports.deleteMembers = async (req,res) =>{
     try{
         // 삭제 버튼클릭시 값이 넘어온다.
@@ -342,6 +403,23 @@ exports.deleteMembers = async (req,res) =>{
                 res.send({isDeleted:false});
             }    
         }
+    }
+    catch(err){
+        nsole.error(err);
+        res.sned("Internal Server Error!");
+    }
+}
+
+// GET /clubAdminMemberDetail/:club_id 클럽 회장 위임페이지 회원 전체 조회
+exports.getAllMembers = async (req,res) => {
+    try {
+        const {club_id} = req.params.club_id;
+        const getAllMembersShow = await Club_members.findAll({
+            where:{
+                club_id: club_id
+            }
+        })
+        res.send(getAllMembersShow);
     }
     catch(err){
         nsole.error(err);
