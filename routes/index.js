@@ -1,5 +1,5 @@
 const express = require("express");
-// const controller = require("../controller/Cpublic");
+const controllerPublic = require("../controller/Cpublic");
 const controllerClub = require("../controller/Cclub");
 const router = express.Router();
 
@@ -47,9 +47,8 @@ router.get("/clubApply", (req, res) => {
 // GET /clubAdminMain : 동아리 관리페이지 불러오기
 router.get("/clubAdminMain", controllerClub.getClubAdminMain);
 
-router.get("/clubAdminApplyList", (req, res) => {
-  res.render("clubAdmin/clubAdminApplyList");
-});
+// GET /clubAdminApplyList/:club_id : 동아리 지원자 전체 리스트 불러오기
+router.get("/clubAdminApplyList/:club_id", controllerPublic.getClubMembersApplyList);
 
 // GET /clubAdminEdit/:club_id : 동아리 수정페이지 불러오기
 router.get("/clubAdminEdit/:club_id", controllerClub.getClubAdminEdit);
@@ -60,20 +59,32 @@ router.patch("/clubAdminEdit/:club_id", controllerClub.patchClub);
 // DELETE /clubAdminEdit/:club_id : 동아리 삭제
 router.delete("/clubAdminEdit/:club_id", controllerClub.deleteClub);
 
-router.get("/clubAdminMemberList", (req, res) => {
-  res.render("clubAdmin/clubAdminMemberList");
-});
+// GET /clubAdminMemberList/:club_id 회원 전체 조회
+router.get("/clubAdminMemberList", controllerPublic.getClubMembers );
 
-router.get("/clubAdminApplyDetail", (req, res) => {
-  res.render("clubAdmin/clubAdminApplyDetail");
-});
+// GET /clubAdminApplyDetail 클럽 신청 페이지 상세 불러오기
+router.get("/clubAdminApplyDetail", controllerPublic.getClubAdminApplyDetail );
 
-router.get("/clubAdminMemberDetail", (req, res) => {
-  res.render("clubAdmin/clubAdminMemberDetail");
-});
-router.get("/clubAdminTransfer", (req, res) => {
-  res.render("clubAdmin/clubAdminTransfer");
-});
+// GET /clubAdminMemberDetail/:club_id 특정 클럽, 회원정보 상세보기 페이지
+router.get("/clubAdminMemberDetail/:club_id", controllerPublic.getClubMember);
+
+// POST /clubAdminApplyDetail/:club_id 동아리 가입 신청
+router.post("/clubAdminApplyDetail/:club_id", controllerPublic.createClubMembers);
+
+// DELETE /clubAdminMemberDetail 클럽에서 추방
+router.delete("/clubAdminMemberDetail", controllerPublic.deleteMembers);
+
+// DELETE /clubAdminApplyList/:club_id 클럽 가입 거절
+router.delete("/clubAdminApplyList/:club_id", controllerPublic.deleteMembersApplyList);
+
+// GET /clubAdminTransfer 클럽 회장 위임 페이지
+router.get("/clubAdminTransfer/", controllerPublic.getClubAdminTransfer);
+
+// GET /clubAdminTransfer/:club_id 클럽 회장 위임페이지 회원 전체 조회
+router.get("/clubAdminTransfer/:club_id", controllerPublic.getAllMembers);
+
+// DELETE /clubAdminTransfer/:club_id 회장 신청 거절
+router.delete("/clubAdminTransfer/:club_id", controllerPublic.deleteClubAdminTransfer);
 
 // myclub
 // GET /myclubSchedule/:club_id : 동아리 일정 전체 조회
@@ -149,5 +160,58 @@ router.get("/mypageMain", (req, res) => {
 router.get("/mypageProfile", (req, res) => {
   res.render("./mypage/mypageProfile");
 });
+
+// publicPost
+// GET /publicPostMain 익명 게시판 정보 불러오기
+router.get('/publicPostMain', controllerPublic.getPost);
+
+// GET /publicNewPost 새로운 포스트 생성 페이지
+router.get('/publicNewPost', controllerPublic.getNewPost);
+
+// POST /publicNewPost 새로운 포스트 생성
+router.post('/publicNewPost', controllerPublic.createPost);
+
+// GET /publicPostDetail/:post_id 특정 게시물 조회
+router.get('/publicPostDetail/:post_id', controllerPublic.getPostDetail);
+
+// POST /publicPostDetail/:post_id 특정 게시글 댓글 작성
+router.post("/publicPostDetail/:post_id",controllerPublic.createPostComment);
+
+// POST /publicPostDetail/:post_id/:comment_id 특정 게시글 댓글 좋아요
+router.post("/publicPostDetail/:post_id/:comment_id", controllerPublic.createPostCommentLike);
+
+// PATCH /publicPostDetail/:post_id 게시글 수정
+router.patch("/publucPostDetail/:post_id", controllerPublic.patchPost);
+
+// PATCH /publicPostDetail/:post_id/:comment_id 게시글 댓글 수정
+router.patch("/publucPostDetail/:post_id/:comment_id", controllerPublic.patchPostComment);
+
+// PATCH /publicPostDetail/:post_id/:comment_id 게시글 댓글 라이크 수정
+router.patch("/publucPostDetail/:post_id", controllerPublic.patchPostCommentLike);
+
+// DELETE /publicPostDetail/:post_id 특정 게시물 삭제
+router.delete("/publucPostDetail/:post_id", controllerPublic.deletePost);
+
+// DELETE /publicPostDetail/:post_id/:comment_id 게시글 댓글 삭제
+router.delete("/publucPostDetail/:post_id/:comment_id", controllerPublic.deletePostComment);
+
+// DM
+// GET /dm dm 가져오기
+router.get("/dm", controllerPublic.dm);
+
+// GET /dmDetail dmDetail 페이지 가져오기
+router.get("/dmDetail", controllerPublic.getDmDetail);
+
+// POST // 아직 완성 안됬어요
+router.post("/dmDetail", controllerPublic.postDm);
+
+// DELETE /dm dm삭제
+router.delete("/dm", controllerPublic.deleteDm);
+
+
+
+
+
+
 
 module.exports = router;
