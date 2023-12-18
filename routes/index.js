@@ -33,7 +33,7 @@ router.get("/clubMain", controllerClub.getClubs);
 // GET /clubDetail/:club_id : 동아리 하나 상세 조회
 router.get("/clubDetail/:club_id", controllerClub.getClub);
 
-// GET /createClub : 동아리 생성
+// GET /createClub : 동아리 생성 페이지 불러오기
 router.get("/createClub", controllerClub.getCreateClub);
 
 // POST /createClub : 동아리 생성
@@ -50,6 +50,9 @@ router.get("/clubAdminMain", controllerClub.getClubAdminMain);
 router.get("/clubAdminApplyList", (req, res) => {
   res.render("clubAdmin/clubAdminApplyList");
 });
+
+// GET /clubAdminEdit/:club_id : 동아리 수정페이지 불러오기
+router.get("/clubAdminEdit/:club_id", controllerClub.getClubAdminEdit);
 
 // PATCH /clubAdminEdit/:club_id : 동아리 수정
 router.patch("/clubAdminEdit/:club_id", controllerClub.patchClub);
@@ -73,16 +76,17 @@ router.get("/clubAdminTransfer", (req, res) => {
 });
 
 // myclub
+// GET /myclubSchedule/:club_id : 동아리 일정 전체 조회
 router.get("/myClubSchedule/:club_id", controllerClub.getClubSchedules);
 
 // router.get('/myClubSchedule/:club_id', (req, res) => {
 //   res.render('./myclub/myclubSchedule')
 // })
 
-router.post("/myClubSchedule/:club_id", controllerClub.getClubSchedules);
-
+// POST /myclubSchedule/:club_id/ : 특정 날짜에 동아리 일정 추가
 router.post("/myClubSchedule/:club_id", controllerClub.postClubSchedule);
 
+// DELETE /myclubSchedule/:club_id/:schedule_id : 동아리 일정 삭제
 router.delete(
   "/myClubSchedule/:club_id/:schedule_id",
   controllerClub.deleteClubSchedule
@@ -111,6 +115,24 @@ router.patch(
   controllerClub.patchPostComment
 );
 
+// DELETE  /myclubPostDetail/:club_id/:post_id/:comment_id : 동아리 게시글 댓글 삭제
+router.delete(
+  "/myclubPostDetail/:club_id/:post_id/:comment_id",
+  controllerClub.deletePostComment
+);
+
+// POST /myclubPostDetail/:club_id/:post_id/:comment_id
+router.post(
+  "/myclubPostDetail/:club_id/:post_id/:comment_id",
+  controllerClub.postClubPostCommentLike
+);
+
+// DElETE /myclubPostDetail/:club_id/:post_id/:comment_id/:like_id
+router.delete(
+  "/myclubPostDetail/:club_id/:post_id/:comment_id/:like_id",
+  controllerClub.deleteClubPostCommentLike
+);
+
 // POST /myclubNewPost/:club_id : 동아리 게시글 생성
 router.post("/myclubNewPost/:club_id", controllerClub.createClubPost);
 
@@ -118,7 +140,7 @@ router.post("/myclubNewPost/:club_id", controllerClub.createClubPost);
 router.patch("/myclubPostDetail/:club_id/:post_id", controllerClub.patchPost);
 
 // DELETE /myclubPostDetail/:club_id/:post_id  : 동아리 게시글 삭제
-router.delete("/myclubPostDetail/:club_id/:post_id", controllerClub.patchPost);
+router.delete("/myclubPostDetail/:club_id/:post_id", controllerClub.deletePost);
 
 // mypage
 router.get("/mypageMain", (req, res) => {
