@@ -8,7 +8,7 @@ const ClubChat = (Sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      form_name: {
+      from_name: {
         type: DataTypes.STRING(100),
         allowNull: false,
       },
