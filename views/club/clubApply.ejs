@@ -11,25 +11,56 @@
 <body>
     <%- include('../component/header')%>
 
-
-  <main class="board">
+<div class="club-name"><%= data.club_id %> 가입 신청하기</div>
+  <form name="clubApplyform" onsubmit="clubApply(event)">
     <section class="post-section">
       <h2>지원동기</h2>
-      <textarea class="input-field" placeholder="플레이스홀더"></textarea>
+      <textarea id="motivation" placeholder="플레이스홀더"></textarea>
     </section>
 
     <section class="post-section">
       <h2>자기소개</h2>
-      <textarea class="input-field" placeholder="플레이스홀더"></textarea>
+      <textarea id="introduction" placeholder="플레이스홀더"></textarea>
     </section>
 
-    <button type="button" class="btn-submit" onclick="clubRegister()">가입 신청</button>
-  </main>
+    <button type="submit" class="btn-submit" onclick="clubRegister()">가입 신청</button>
+  </form>
   <script>
-    function clubRegister(){
-        alert("가입 신청을 보냈습니다!");
-        window.location.href = '/club';
-    }
+    async function clubApply(event) {
+        event.preventDefault();
+
+        const clubApplyForm = document.forms["clubApplyform"];
+        console.log(clubApplyForm);
+
+        let motivation = createClubForm.elements["motivation"].value;
+
+        let introduction = createClubForm.elements["introduction"].value;
+        
+        
+        // 유효성 검사
+        
+
+        try {
+          const res = await axios({
+            method: "POST",
+            url: "/clubApply/<%=data.club_id%>",
+            data: {
+              motivation:motivation,
+              introduction:introduction
+            },
+          });
+          console.log(res);
+          if(res=='isapplySuccess'){
+            alert('가입 신청이 완료되었습니다.');
+            widow.location.href='/home'
+          }
+          else{
+            alert('가입 신청이 되지 않았습니다. 다시 신청해주세요');
+          }
+        } catch (error) {
+          console.log("createClub 에서 axios error > ", error);
+        }
+      }
   </script>
 </body>
 
