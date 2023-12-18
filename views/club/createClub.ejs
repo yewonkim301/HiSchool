@@ -95,7 +95,7 @@
           let nameError=document.querySelector('#name-error');
           console.log(nameError)
 
-          nameError.innerText='동아리이름은 한글 최대 15자, 영어 최대 50자까지 가능합니다';
+          // nameError.innerText='동아리이름은 한글 최대 15자, 영어 최대 50자까지 가능합니다';
           return;
         }
 
@@ -106,7 +106,7 @@
           let fieldError=document.querySelector('#field-error');
 
 
-          fieldError.innerText='분야는 최대 10글자로 입력하세요';
+          // fieldError.innerText='분야는 최대 10글자로 입력하세요';
 
           return;
         }
@@ -125,7 +125,7 @@
             },
           });
           console.log(res);
-          widow.location.href=`/clubDetail/:${res.club_id}`
+          window.location.href=`/clubDetail/${res.data.club_id}`
         } catch (error) {
           console.log("createClub 에서 axios error > ", error);
         }

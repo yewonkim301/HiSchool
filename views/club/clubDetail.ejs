@@ -10,9 +10,10 @@
 
 <body>
     <%- include('../component/header')%>
+
   <div class="club-details">
     <h1 class="club-name"><%=data.club_name%></h1>
-    <div style="visibility: none;" class="club_id"><%=data[i].club_id%></div>
+    <div style="visibility: none;" class="club_id"><%=data.club_id%></div>
     <!-- <p class="club-description">동아리에 대한 간략한 설명이 들어갑니다.</p> -->
     <div class="club-info">
       <span class="info-keyword"><%=data.keyword%></span>
@@ -23,7 +24,7 @@
   </div>
   <script>
     function showApplyForm(){
-        const url = '/clubApply:<%=data[i].club_id%>';
+        const url = '/clubApply/<%=data.club_id%>';
         window.location.href=url;
     }
   </script>
