@@ -61,6 +61,7 @@ exports.getClubAdminEdit = async (req, res) => {
 exports.patchClub = async (req, res) => {
   try {
     const { club_id } = req.params.club_id;
+    const { club_name, leader_id, limit, location, field, keyword } = req.body;
     const updateClub = await Club.update(
       {
         club_name,
@@ -183,6 +184,7 @@ exports.getClubPost = async (req, res) => {
 exports.patchPost = async (req, res) => {
   try {
     const { club_id, post_id } = req.params;
+    const { title, content, image } = req.body;
     const updatePost = await Club_post.update(
       {
         title,
@@ -295,6 +297,7 @@ exports.deletePostComment = async (req, res) => {
 exports.postClubPostCommentLike = async (req, res) => {
   try {
     const { post_id, club_id, comment_id } = req.params;
+    const { like_id } = req.body;
     const clubPostCommentLike = await Club_post_comment_like.create({
       club_id: club_id,
       post_id: post_id,
