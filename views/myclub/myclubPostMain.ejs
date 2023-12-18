@@ -1,111 +1,117 @@
 <!DOCTYPE html>
 <html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>동아리 게시판</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="./myClubPostMain.css" />
+    <!-- axios CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
 
-<head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>동아리 게시판</title>
-   <link rel="stylesheet" href="/style.css">
-   <link rel="stylesheet" href="./myClubPostMain.css">
-   <!-- axios CDN -->
-   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-</head>
+  <body>
+    <%- include('../component/header')%>
+    <div id="plus-button" class="plus-button">+</div>
 
-<body>
+    <!-- 모달 배경 -->
+    <div
+      id="modal-background"
+      class="modal-background"
+      style="display: none"
+    ></div>
 
-   <%- include('../component/header')%>
-      <div id="plus-button" class="plus-button">+</div>
+    <!-- 모달 창 -->
+    <div id="modal" class="modal" style="display: none">
+      <!-- 모달 내용 -->
+      <div class="modal-content">
+        <!-- 모달 닫기 버튼 -->
+        <span id="close-modal" class="close-modal">&times;</span>
 
-      <!-- 모달 배경 -->
-      <div id="modal-background" class="modal-background" style="display:none;"></div>
-
-      <!-- 모달 창 -->
-      <div id="modal" class="modal" style="display:none;">
-         <!-- 모달 내용 -->
-         <div class="modal-content">
-            <!-- 모달 닫기 버튼 -->
-            <span id="close-modal" class="close-modal">&times;</span>
-
-            <!-- 글쓰기 폼 -->
-            <form id="post-form" name="add-post">
-               <h2>게시글 작성</h2>
-               <input type="text" id="post-title" name="title" placeholder="제목을 입력하세요">
-               <textarea id="post-content" name="content" placeholder="내용을 입력하세요"></textarea>
-               <button type="button" class="btn-primary" onclick="addpost()">등록하기</button>
-            </form>
-         </div>
+        <!-- 글쓰기 폼 -->
+        <form id="post-form" name="add-post">
+          <h2>게시글 작성</h2>
+          <input
+            type="text"
+            id="post-title"
+            name="title"
+            placeholder="제목을 입력하세요"
+          />
+          <textarea
+            id="post-content"
+            name="content"
+            placeholder="내용을 입력하세요"
+          ></textarea>
+          <button type="button" class="btn-primary" onclick="addpost()">
+            등록하기
+          </button>
+        </form>
       </div>
+    </div>
 
-      <!-- 상세 게시글 보기를 위한 모달 추가 -->
-      <div id="detail-modal" class="modal" style="display:none;">
-         <div class="modal-content">
-            <span id="detail-close-modal" class="close-modal">&times;</span>
-            <h2 id="detail-post-title"></h2>
-            <p id="detail-post-content"></p>
-         </div>
+    <!-- 상세 게시글 보기를 위한 모달 추가 -->
+    <div id="detail-modal" class="modal" style="display: none">
+      <div class="modal-content">
+        <span id="detail-close-modal" class="close-modal">&times;</span>
+        <h2 id="detail-post-title"></h2>
+        <p id="detail-post-content"></p>
       </div>
+    </div>
 
-      <!-- 게시물 목록 -->
-      <div id="posts-container">
-         <!-- 게시물들이 여기에 추가 -->
-      </div>
-      <script>
-         const plusBtn = document.querySelector('.plus-button');
-         const modalBackground = document.querySelector('.modal-background');
-         const modal = document.querySelector('.modal');
-         const closebtn = document.querySelector('.close-modal');
-         const form = document.forms['add-post'];
-         const btnPrmary = document.querySelector('.btn-primary');
+    <!-- 게시물 목록 -->
+    <div id="posts-container">
+      <!-- 게시물들이 여기에 추가 -->
+    </div>
+    <script>
+      const plusBtn = document.querySelector(".plus-button");
+      const modalBackground = document.querySelector(".modal-background");
+      const modal = document.querySelector(".modal");
+      const closebtn = document.querySelector(".close-modal");
+      const form = document.forms["add-post"];
+      const btnPrmary = document.querySelector(".btn-primary");
 
+      // 모달창 활성화
+      plusBtn.addEventListener("click", function () {
+        modalBackground.style.display = "block";
+        modal.style.display = "block";
+      });
 
+      // 닫기 버튼시 모달 닫음
+      closebtn.addEventListener("click", function () {
+        modalBackground.style.display = "none";
+        modal.style.display = "none";
+      });
 
-         // 모달창 활성화
-         plusBtn.addEventListener('click', function () {
-            modalBackground.style.display = 'block';
-            modal.style.display = 'block';
-         });
+      // 모달 밖의 배경을 클릭하면 모달이 닫히도록 설정
+      modalBackground.addEventListener("click", function (event) {
+        if (event.target === modalBackground) {
+          modalBackground.style.display = "none";
+          modal.style.display = "none";
+        }
+      });
 
-         // 닫기 버튼시 모달 닫음
-         closebtn.addEventListener('click', function () {
-            modalBackground.style.display = 'none';
-            modal.style.display = 'none';
-         });
-
-         // 모달 밖의 배경을 클릭하면 모달이 닫히도록 설정
-         modalBackground.addEventListener('click', function (event) {
-            if (event.target === modalBackground) {
-               modalBackground.style.display = 'none';
-               modal.style.display = 'none';
-            }
-         });
-
-
-         console.log(form);
-         async function addpost() {
-            await axios({
-               method: "POST",
-               url: "/myclubNewPost/:club_id",
-               data: {
-                  club_id: "1", // 임시 데이터
-                  userid: "2", // 임시 데이터
-                  title: form.title.value,
-                  content: form.content.value,
-                  image: "1",
-               }
-
-            }).then((res) => {
-               console.log(res.status);
-               if (res.status === 200) {
-                  alert("게시물 등록완료");
-                  document.location.href = "/myClubPostMain/:club_id";
-               }
-            });
-         }
-
-
-      </script>
-
-
-</body>
-
+      console.log(form);
+      async function addpost() {
+        await axios({
+          method: "POST",
+          url: "/myclubNewPost/:club_id",
+          data: {
+            club_id: "1", // 임시 데이터
+            userid: "2", // 임시 데이터
+            title: form.title.value,
+            content: form.content.value,
+            image: "1",
+          },
+        }).then((res) => {
+          console.log(res.status);
+          if (res.status === 200) {
+            modalBackground.style.display = "none";
+            modal.style.display = "none";
+            alert("게시물 등록완료");
+            document.location.href = `/myClubPostMain/${1}`;
+          }
+        });
+      }
+    </script>
+  </body>
 </html>
