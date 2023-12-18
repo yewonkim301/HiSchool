@@ -57,11 +57,11 @@ const indexRouter = require("./routes");
 const authRouter = require("./routes/auth");
 
 app.use("/", indexRouter);
-app.use("/auth", authRouter)
+app.use("/auth", authRouter);
 
 
 app.get("*", (req, res) => {
-  console.log("error");
+  // console.log("error");
 }); // error 페이지 ?
 
 

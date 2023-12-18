@@ -13,7 +13,7 @@ const { trace } = require("../routes");
 exports.getClubs = async (req, res) => {
   try {
     const Clubs = await Club.findAll();
-    res.render("club", { data: Clubs });
+    res.render("club/clubMain", { data: Clubs });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -26,14 +26,22 @@ exports.getClub = async (req, res) => {
     const club = await Club.findOne({
       where: { club_id: req.params.club_id },
     });
-    res.send(club);
+    res.render("club/clubDetail", { data: club });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
   }
 };
 
-// GET /clubAdminMain : 동아리 관리페이지 불러오기 - 동아리 상세 페이지와 경로를 다르게 쓴다면 필요
+// GET /clubAdminMain : 동아리 관리페이지 불러오기
+exports.getClubAdminMain = async (req, res) => {
+  try {
+    res.render("clubAdmin/clubAdminMain");
+  } catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+};
 
 // PATCH /clubAdminEdit/:club_id : 동아리 수정
 exports.patchClub = async (req, res) => {
@@ -77,8 +85,18 @@ exports.deleteClub = async (req, res) => {
   }
 };
 
+// GET /createClub : 동아리 생성
+exports.getCreateClub = async (req, res) => {
+  try {
+    res.render("club/createClub");
+  } catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+};
+
 // POST /createClub : 동아리 생성
-exports.createClub = async (req, res) => {
+exports.postCreateClub = async (req, res) => {
   try {
     const { club_name, leader_id, limit, location, field, keyword } = req.body;
     const newClub = await Club.create({
@@ -101,9 +119,10 @@ exports.createClub = async (req, res) => {
 exports.getClubPosts = async (req, res) => {
   try {
     const posts = await Club_post.findAll({
-      where: { club_id: req.params.club_id },
+      where: { clubClubId: req.params.club_id },
+      //
     });
-    res.render("clubPosts", { data: posts });
+    res.render("myclub/myclubPostMain", { data: posts });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -114,28 +133,33 @@ exports.getClubPosts = async (req, res) => {
 // 게시글 전달할 때, 게시글마다의 댓글과 좋아요 수 함께 전달
 exports.getClubPost = async (req, res) => {
   try {
+    const { club_id, post_id } = req.params;
     // 게시글
     const clubPost = await Club_post.findOne({
       where: {
-        club_id: req.params.club_id,
-        post_id: req.params.post_id,
+        clubClubId: club_id,
+        post_id: post_id,
       },
     });
     // 게시글에 달린 댓글들
     const clubPostComment = await Club_post_comment.findAll({
       where: {
-        club_id: req.params.club_id,
-        post_id: req.params.post_id,
+        // clubClubId: req.params.club_id,
+        clubPostPostId: req.params.post_id,
       },
     });
     // 댓글마다 있는 좋아요
     const clubPostCommentLike = await Club_post_comment_like.findAll({
       where: {
-        club_id: req.params.club_id,
-        post_id: req.params.post_id,
+        // clubClubId: req.params.club_id,
+        clubPostCommentCommentId: req.params.post_id,
       },
     });
-    res.send(clubPost, clubPostComment, clubPostCommentLike);
+    res.render("myclub/myclubPostDetail", {
+      data: clubPost,
+      clubPostComment,
+      clubPostCommentLike,
+    });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -154,7 +178,7 @@ exports.patchPost = async (req, res) => {
       },
       {
         where: {
-          club_id: club_id,
+          clubClubId: club_id,
           post_id: post_id,
         },
       }
@@ -172,7 +196,7 @@ exports.deletePost = async (req, res) => {
     const { club_id, post_id } = req.params;
     const isDeleted = await Club_post.destroy({
       where: {
-        club_id: club_id,
+        clubClubId: club_id,
         post_id: post_id,
       },
     });
@@ -191,11 +215,12 @@ exports.deletePost = async (req, res) => {
 exports.createPostComment = async (req, res) => {
   try {
     const { club_id, post_id } = req.params;
-    const { userid, comment_name, content } = req.body;
+    const { comment_name, content } = req.body;
+    // comment_name : 세션에 저장되어 있는 로그인한 유저의 정보에서 찾아야 함
     const newClubPostComment = await Club_post_comment.create({
-      club_id: club_id,
-      post_id: post_id,
-      userid: userid,
+      clubClubId: club_id,
+      clubPostPostId: post_id,
+      // userid: userid,
       comment_name: comment_name,
       content: content,
     });
@@ -216,7 +241,11 @@ exports.patchPostComment = async (req, res) => {
         content: content,
       },
       {
-        where: { club_id: club_id, post_id: post_id, comment_id, comment_id },
+        where: {
+          clubClubId: club_id,
+          clubPostPostId: post_id,
+          comment_id: comment_id,
+        },
       }
     );
     res.send(clubPostComment);
@@ -231,7 +260,11 @@ exports.deletePostComment = async (req, res) => {
   try {
     const { comment_id, post_id, club_id } = req.params;
     const isDeleted = await Club_post_comment.destroy({
-      where: { club_id: club_id, post_id: post_id, comment_id, comment_id },
+      where: {
+        clubClubId: club_id,
+        clubPostPostId: post_id,
+        clubPostCommentCommentId: comment_id,
+      },
     });
     if (isDeleted) {
       res.send({ isDeleted: true });
@@ -250,9 +283,9 @@ exports.postClubPostCommentLike = async (req, res) => {
   try {
     const { post_id, club_id, comment_id } = req.params;
     const clubPostCommentLike = await Club_post_comment_like.create({
-      club_id: club_id,
-      post_id: post_id,
-      comment_id: comment_id,
+      clubClubId: club_id,
+      clubPostPostId: post_id,
+      clubPostCommentCommentId: comment_id,
       like_id: like_id,
     });
     res.send(clubPostCommentLike);
@@ -290,7 +323,7 @@ exports.createClubPost = async (req, res) => {
   try {
     const { club_id, userid, title, content, image } = req.body;
     const newPost = await Club_post.create({
-      club_id: club_id,
+      clubClubId: club_id,
       userid: userid,
       title: title,
       content: content,
@@ -311,7 +344,7 @@ exports.getClubSchedules = async (req, res) => {
     const clubSchedules = await Club_schedule.findAll({
       where: { clubClubId: club_id },
     });
-    res.render('./myclub/myclubSchedule', { data: clubSchedules } )
+    res.render("./myclub/myclubSchedule", { data: clubSchedules });
     // res.send(clubSchedules);
   } catch (err) {
     console.error(err);
