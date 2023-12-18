@@ -20,13 +20,15 @@ exports.getPost() = async (req,res) =>{
 }
 
 // POST /publicNewPost/:userid_num 게시물 생성
+// POST /publicNewPost
 exports.createPost() = async (req,res) =>{
     try{
-        const {userid_num} = req.params.userid_num;
+        // const {userid_num} = req.params.userid_num;
         const { 
             title,
             content,
             image,
+            userid_num
         } = req.body;
         const newPost = await Public_post.create({
             title: title,
@@ -67,14 +69,13 @@ exports.getPostDetail = async (req,res) =>{
 exports.createPostComment = async (req,res) => {
     try{
         const {post_id} = req.params.post_id;
-        const {comment} = req.body;
+        const {comment, comment_nickname, userid_num} = req.body;
         // content_nickname은 세션이름으로 받을까요?
         const newPublicPostComment = await Public_post_comment.create({
             comment: comment,
-            // include:[{model:User, attributes: 'nickname'}] // User에 있는 nickname값을 가져온다.
-            comment_nickname : req.session.nickname,
+            comment_nickname : comment_nickname,
             post_id: post_id,
-            userid_num: req.session.id,
+            userid_num: userid_num
             // userid_num 처리는 어떻게 해야할지
         })
         res.send(newPublicPostComment);
@@ -89,6 +90,7 @@ exports.createPostComment = async (req,res) => {
 exports.createPostCommentLike = async (req,res) =>{
     try{
         const {post_id, comment_id} = req.params;
+        const {like_id} = req.body;
         const publicPostCommentLike = await Public_post_comment_like.create({
             like_id : like_id,
             post_id: post_id,
@@ -111,6 +113,7 @@ exports.patchPost = async (req,res) => {
             title,
             content,
             image,
+            userid_num
         } = req.body;
         const updatePost = await Public_post.update({
             title: title,
@@ -119,7 +122,7 @@ exports.patchPost = async (req,res) => {
         },{
             where:{
                 post_id: post_id,
-                userid_num: req.session.id
+                userid_num: userid_num
             }
         }
         )
@@ -131,11 +134,11 @@ exports.patchPost = async (req,res) => {
     }
 }
 
-// PATCH /publicPostDetail/:post_id/:userid_num/:comment_id 특정 게시글 댓글 수정
+// PATCH /publicPostDetail/:post_id/:comment_id 특정 게시글 댓글 수정
 exports.patchPostComment = async (req,res) =>{
     try{
-        const {post_id, userid_num, comment_id} = req.params;
-        const {comment} = req.body;
+        const {post_id, comment_id} = req.params;
+        const {comment, userid_num} = req.body;
         if(req.session.id === userid_num){
             const updatePostComment = await Public_post_comment.update({
                 comment: comment,
@@ -155,19 +158,23 @@ exports.patchPostComment = async (req,res) =>{
     }
 }
 
-// PATCH /publicPostDetail/:post_id/:comment_id
+// PATCH /publicPostDetail/:post_id/:comment_id 특정 개시물 댓글 라이크 수정
 exports.patchPostCommentLike = async (req,res) =>{
     try{
         const {post_id, comment_id} = req.params;
-        const updatePostCommentLike = await Public_post_comment_like.update({
-            like_id: like_id,
-        },{
-            where:{
-                post_id: post_id,
-                comment_id: comment_id
-            }
-        })
-        res.send(updatePostCommentLike)
+        const {like_id, userid_num} = req.body;
+        // 세션과 userid를 비교해서 맞으면 수정
+        if(req.session.id === userid_num ){
+            const updatePostCommentLike = await Public_post_comment_like.update({
+                like_id: like_id,
+            },{
+                where:{
+                    post_id: post_id,
+                    comment_id: comment_id
+                }
+            })
+            res.send(updatePostCommentLike)
+        }
     }catch(err){
         onsole.error(err);
         res.sned("Internal Server Error!");
@@ -179,15 +186,18 @@ exports.patchPostCommentLike = async (req,res) =>{
 exports.deletePost = async (req,res) => {
     try{
         const {post_id} = req.params.post_id;
-        const deletePost = await Public_post.destroy({
-            where:{
-                post_id: post_id
+        const {userid_num} = req.body;
+        if(req.session.id === userid_num){
+            const deletePost = await Public_post.destroy({
+                where:{
+                    post_id: post_id
+                }
+            })
+            if(deletePost){
+                res.send({isDeleted:true});
+            }else {
+                res.send({isDeleted:false});
             }
-        })
-        if(deletePost){
-            res.send({isDeleted:true});
-        }else {
-            res.send({isDeleted:false});
         }
     }
     catch(err){
@@ -200,16 +210,19 @@ exports.deletePost = async (req,res) => {
 exports.deletePostComment = async (req,res) =>{
     try{
         const {post_id, comment_id} = req.params;
-        const deletePostComment = await Public_post_comment.destroy({
-            where:{
-                post_id: post_id,
-                comment_id: comment_id
+        const {userid_num} = req.body;
+        if(req.session.id === userid_num){
+            const deletePostComment = await Public_post_comment.destroy({
+                where:{
+                    post_id: post_id,
+                    comment_id: comment_id
+                }
+            })
+            if(deletePostComment){
+                res.send({isDeleted:true});
+            }else{
+                res.send({isDeleted:false});
             }
-        })
-        if(deletePostComment){
-            res.send({isDeleted:true});
-        }else{
-            res.send({isDeleted:false});
         }
     }
     catch(err){
@@ -219,13 +232,13 @@ exports.deletePostComment = async (req,res) =>{
 }
 
 // DM
-// GET /dm/:userid_num
+// GET /dm => dm 가져오기
 exports.dm = async (req,res) =>{
     try{
-        const {userid_num} = req.params.userid_num;
+        const {userid_num, nickname} = req.body
         const getDm = await Dm.findAll({
             where:{
-                [Sequelize.Op.or]: [{to_nickname: req.session.nickname}, {userid_num : userid_num}]
+                [Sequelize.Op.or]: [{to_nickname: nickname}, {userid_num : userid_num}]
             }
         })
         res.send(getDm);
@@ -236,11 +249,11 @@ exports.dm = async (req,res) =>{
     }
 }
 
-// POST /dmDetail/:userid_num
+// POST /dmDetail
 exports.postDm = async (req,res) =>{
     try{
-        const {userid_num} = req.params.userid_num;
-        const {to_nickname, dm_content} = req.body
+        // const {userid_num} = req.params.userid_num;
+        const {to_nickname, dm_content, userid_num} = req.body
         const sendDm = await Dm.create({
             to_nickname: to_nickname,
             dm_content: dm_content,
@@ -254,17 +267,20 @@ exports.postDm = async (req,res) =>{
     }
 }
 
-// DELETE /dm/:userid_num
+// DELETE /dm => dm 삭제
 exports.deleteDm = async (req,res) =>{
     try{
-        const {userid_num} = req.params.userid_num;
-        const destroyDm = await Dm.destroy({
-            where: note_id
-        })
-        if(destroyDm){
-            res.send({isDeleted:true});
-        }else {
-            res.send({isDeleted:false});
+        // const {userid_num} = req.params.userid_num;
+        const {userid_num} = req.body;
+        if(req.session.id === userid_num){
+            const destroyDm = await Dm.destroy({
+                where: note_id
+            })
+            if(destroyDm){
+                res.send({isDeleted:true});
+            }else {
+                res.send({isDeleted:false});
+            }
         }
     }
     catch(err){
@@ -286,14 +302,15 @@ exports.getClubMembers = async (req,res) => {
     }
 }
 
-// POST /clubMembers/:userid_num 동아리 가입
+// POST /clubMembers/ 동아리 가입
 exports.createClubMembers = async (req,res) =>{
     try{
-        const {userid_num} = req.params.userid_num;
+        // const {userid_num} = req.params.userid_num;
         const {
             club_id,
             motivation,
-            introduction
+            introduction,
+            userid_num
         } = req.body;
         const newMembers = await Club_members.create({
             club_id: club_id,
@@ -315,14 +332,16 @@ exports.deleteMembers = async (req,res) =>{
     try{
         // 삭제 버튼클릭시 값이 넘어온다.
         const{userid_num} = req.body;
-        const destroyMembers = await Club_members.destroy({
-            where: userid_num
-        })
-        if(destroyMembers){
-            res.send({isDeleted:true});
-        }else {
-            res.send({isDeleted:false});
-        }    
+        if(req.session.id === userid_num){
+            const destroyMembers = await Club_members.destroy({
+                where: userid_num
+            })
+            if(destroyMembers){
+                res.send({isDeleted:true});
+            }else {
+                res.send({isDeleted:false});
+            }    
+        }
     }
     catch(err){
         nsole.error(err);
