@@ -24,6 +24,7 @@ const Dm = require("./Dm")(sequelize, Sequelize);
 
 const Club = require("./Club")(sequelize, Sequelize);
 const Club_members = require("./Club_members")(sequelize, Sequelize);
+const Club_members_wait = require("./Club_members_wait")(sequelize, Sequelize);
 const Club_schedule = require("./Club_schedule")(sequelize, Sequelize);
 const Club_post = require("./Club_post")(sequelize, Sequelize);
 const Club_post_comment = require("./Club_post_comment")(sequelize, Sequelize);
@@ -54,15 +55,26 @@ Public_post.belongsTo(User,{
 });
 
 // User C_members => 1:N
-User.hasMany(Club_members,{
+User.hasMany(Club_members_wait,{
   foreingKey: 'userid_num',
 
   onDelete: 'CASCADE',
   onUpdate: 'CASCADE'
 });
-Club_members.belongsTo(User,{
+Club_members_wait.belongsTo(User,{
   foreingKey: 'userid_num'
 });
+
+Club_members_wait.hasOne(Club_members,{
+  foreingKey: 'club_id',
+  foreingKey: 'userid_num',
+
+  onDelete: 'CASCADE'
+})
+Club_members.belongsTo(Club_members_wait,{
+  foreingKey: 'club_id',
+  foreingKey: 'userid_num'
+})
 
 // Club C_members => 1:N
 Club.hasMany(Club_members,{
@@ -185,6 +197,7 @@ db.Public_post_comment_like = Public_post_comment_like;
 db.Club = Club;
 db.Club_chat = Club_chat;
 db.Club_members = Club_members;
+db.Club_members_wait = Club_members_wait;
 db.Club_post = Club_post;
 db.Club_post_comment = Club_post_comment;
 db.Club_post_comment_like = Club_post_comment_like;
