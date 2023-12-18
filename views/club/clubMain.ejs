@@ -33,15 +33,16 @@
     </div>
   </div> -->
 
-
+  <%console.log(data)%>
   <% for(let i=0; i<data.length;i++){ %>
     <div class="list" onclick="showDetail(event)">
-      <div style="visibility: none;" class="club_id"><%=data[i].club_id%></div>
+      <div style="display: none;" class="club_id"><%=data[i].club_id%></div>
     <div class="list-title"><%= data[i].club_name%></div>
-    <div class="list-content"><%=data[i].club_keywords%></div>
+    <div class="list-content"><%=data[i].keyword%></div>
+  </div>
     <% } %>
 
-    </div>
+    
 
   <div class="createClub" onclick="createClub()">+</div>
 
