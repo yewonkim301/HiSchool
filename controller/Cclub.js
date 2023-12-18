@@ -119,8 +119,8 @@ exports.postCreateClub = async (req, res) => {
 exports.getClubPosts = async (req, res) => {
   try {
     const posts = await Club_post.findAll({
-      where: { clubClubId: req.params.club_id },
-      //
+      where: { club_id: req.params.club_id },
+      //clubClubId 수정 전
     });
     res.render("myclub/myclubPostMain", { data: posts });
   } catch (err) {
@@ -324,14 +324,14 @@ exports.createClubPost = async (req, res) => {
     const { club_id, userid, title, content, image } = req.body;
     const newPost = await Club_post.create({
       clubClubId: club_id,
-      userid: userid,
+      // userid: userid,
       title: title,
       content: content,
       image: image,
     });
     res.send(newPost);
   } catch (error) {
-    console.error(err);
+    console.error(error);
     res.send("Internal Server Error!");
   }
 };
