@@ -82,7 +82,7 @@
             inputmode="numeric"
             pattern="[0-9]*"
             id="grade"
-            class="textField"
+            class="textField noscroll"
           />
         </div>
         <div class="input">
@@ -92,7 +92,7 @@
             inputmode="numeric"
             pattern="[0-9]*"
             id="classid"
-            class="textField"
+            class="textField noscroll"
           />
         </div>
         <div class="input">
@@ -257,13 +257,24 @@
               classid: form.classid.value,
               birthday: form.birthday.value,
               phone: form.phone.value,
+              password: form.password.value,
             },
-          })
-          console.log(data)
+          });
+          console.log(data);
         } catch (err) {
           console.log(err);
         }
       }
+
+      // number 스크롤 방지
+      document.addEventListener("wheel", function (event) {
+        if (
+          document.activeElement.type === "number" &&
+          document.activeElement.classList.contains("noscroll")
+        ) {
+          document.activeElement.blur();
+        }
+      });
     </script>
   </body>
 </html>
