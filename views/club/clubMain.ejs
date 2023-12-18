@@ -32,29 +32,16 @@
       <button type="button">확인</button>
     </div>
   </div> -->
-  <form name="club_name" action="/clubDetail" method="get">
-    <input type="hidden" name="club_name">
-  </form>
 
-  <div class="list" onclick="showDetail(event)">
-    <div class="list-title"> 생명과학 동아리</div>
-    <div class="list-content"> 비유전 마스터해요~ </div>
-  </div>
 
-  <div class="list" onclick="showDetail(event)">
-    <div class="list-title"> 화학 동아리</div>
-    <div class="list-content"> 양적관계 스터디 </div>
-  </div>
+  <% for(let i=0; i<data.length;i++){ %>
+    <div class="list" onclick="showDetail(event)">
+      <div style="visibility: none;" class="club_id"><%=data[i].club_id%></div>
+    <div class="list-title"><%= data[i].club_name%></div>
+    <div class="list-content"><%=data[i].club_keywords%></div>
+    <% } %>
 
-  <div class="list" onclick="showDetail(event)">
-    <div class="list-title"> 지구과학 동아리</div>
-    <div class="list-content"> 천체 어려워 </div>
-  </div>
-
-  <div class="list" onclick="showDetail(event)">
-    <div class="list-title"> 물리 동아리</div>
-    <div class="list-content"> 아인슈타인 </div>
-  </div>
+    </div>
 
   <div class="createClub" onclick="createClub()">+</div>
 
@@ -70,16 +57,14 @@
 
     function showDetail(event) {
     // Check if the clicked element has the class "list-title"
-    if (event.target.classList.contains('list-title')) {
+    if (event.target.classList.contains('club_id')) {
       // Get the text content of the clicked "list-title" div
-      const club_name = event.target.textContent;
+      const club_id = event.target.textContent;
       
       // Log the text content to the console
-      console.log(club_name);
-
-      const form_club_name = document.forms['club_name'];
-      form_club_name.club_name.value=club_name;
-      form_club_name.submit();
+      console.log(club_id);
+      window.location.href=`/clubDetail/:${club_id}`
+      
     }
   }
   function createClub(){
