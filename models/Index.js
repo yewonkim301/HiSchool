@@ -38,6 +38,7 @@ const Club_post_comment_like = require("./Club_post_comment_like")(
 const Club_chat = require("./Club_chat")(sequelize, Sequelize);
 
 // User DM = > 1:N
+
 User.hasMany(Dm, {
   foreignKey: "userid_num",
   onDelete: "CASCADE",
@@ -49,6 +50,7 @@ Dm.belongsTo(User, {
 
 // User Pubic_Post => 1:N
 User.hasMany(Public_post, {
+
   foreignKey: "userid_num",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
@@ -72,6 +74,7 @@ Club.hasMany(Club_members_wait, {
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
+
 Club_members_wait.belongsTo(User, {
   foreignKey: "club_id",
 });
@@ -117,6 +120,7 @@ Public_post.hasMany(Public_post_comment, {
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
+
 Public_post_comment.belongsTo(Public_post, {
   foreignKey: "post_id",
 });
@@ -175,6 +179,7 @@ Club_post.hasMany(Club_post_comment, {
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
+
 Club_post_comment.belongsTo(Club_post, {
   foreignKey: "club_id",
 });
@@ -203,6 +208,7 @@ Club_post_comment.hasMany(Club_post_comment_like, {
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
+
 Club_post_comment_like.belongsTo(Club_post_comment, {
   foreignKey: "club_id",
 });
@@ -222,6 +228,7 @@ Club.hasMany(Club_chat, {
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
+
 Club_chat.belongsTo(Club, {
   foreignKey: "club_id",
 });
