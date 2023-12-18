@@ -35,13 +35,13 @@ const Club_post_comment_like = require("./Club_post_comment_like")(
 const Club_chat = require('./Club_chat')(sequelize, Sequelize);
 
 // User DM = > 1:N
-User.hasMany(DM,{
+User.hasMany(Dm,{
   foreingKey: 'userid_num',
 
   onDelete: 'CASCADE',
   onUpdate: 'CASCADE'
 });
-DM.belongsTo(User,{
+Dm.belongsTo(User,{
   foreingKey: 'userid_num'
 });
 
