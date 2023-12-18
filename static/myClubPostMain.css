@@ -1,31 +1,15 @@
-body {
-  font-family: 'Arial', sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f0f0f0;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  background-color: #fff;
-}
-
 /* 하단 플러스 버튼 */
 .plus-button {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  background-color: blue;
+  background-color: var(--color-primary-500);
   color: white;
   border-radius: 50%;
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
   display: flex;
   justify-content: center;
-  align-items: center;
   font-size: 40px;
   cursor: pointer;
 }
@@ -50,20 +34,6 @@ body {
 .modal-content textarea {
   height: 150px;
   resize: none;
-}
-
-.modal-content button {
-  width: 100%;
-  padding: 10px;
-  background-color: blue;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.modal-content button:hover {
-  background-color: darkblue;
 }
 
 .modal-background {
