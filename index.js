@@ -55,7 +55,6 @@ app.get("*", (req, res) => {
 }); // error 페이지 ?
 
 db.sequelize.sync({ force: false }).then(() => {
-  console.log("DB 연결 완료!");
   app.listen(PORT, () => {
     console.log(`${PORT}번 포트에서 실행중`);
   });

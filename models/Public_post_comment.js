@@ -18,7 +18,7 @@ const PublicPostComment = (Sequelize, DataTypes) => {
         },
         {
             freezeTableName: true,
-            timestamps: false
+            timestamps: true
         }
     )
     return model;

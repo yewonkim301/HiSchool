@@ -9,7 +9,7 @@ const PublicPostCommentLike = (Sequelize, DataTypes) => {
         },
         {
             freezeTableName: true,
-            timestamp: false,
+            timestamp: true,
         }
     )
     return model;

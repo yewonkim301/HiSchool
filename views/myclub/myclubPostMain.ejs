@@ -5,6 +5,7 @@
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>동아리 게시판</title>
+   <link rel="stylesheet" href="/style.css">
    <link rel="stylesheet" href="./myClubPostMain.css">
    <!-- axios CDN -->
    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -13,7 +14,9 @@
 <body>
 
    <%- include('../component/header')%>
-      <div id="plus-button" class="plus-button">+</div>
+      <div id="plus-button" class="plus-button">
+         +
+      </div>
 
       <!-- 모달 배경 -->
       <div id="modal-background" class="modal-background" style="display:none;"></div>
@@ -30,7 +33,7 @@
                <h2>게시글 작성</h2>
                <input type="text" id="post-title" name="title" placeholder="제목을 입력하세요">
                <textarea id="post-content" name="content" placeholder="내용을 입력하세요"></textarea>
-               <button type="submit">등록하기</button>
+               <button type="submit" class="btn-primary">등록하기</button>
             </form>
          </div>
       </div>
