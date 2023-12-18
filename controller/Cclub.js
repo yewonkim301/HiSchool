@@ -13,7 +13,7 @@ const { trace } = require("../routes");
 exports.getClubs = async (req, res) => {
   try {
     const Clubs = await Club.findAll();
-    res.render("clubMain", { data: Clubs });
+    res.render("club/clubMain", { data: Clubs });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -26,7 +26,7 @@ exports.getClub = async (req, res) => {
     const club = await Club.findOne({
       where: { club_id: req.params.club_id },
     });
-    res.render("clubDetail", { data: club });
+    res.render("club/clubDetail", { data: club });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -77,8 +77,18 @@ exports.deleteClub = async (req, res) => {
   }
 };
 
+// GET /createClub : 동아리 생성
+exports.getCreateClub = async (req, res) => {
+  try {
+    res.render("club/createClub");
+  } catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+};
+
 // POST /createClub : 동아리 생성
-exports.createClub = async (req, res) => {
+exports.postCreateClub = async (req, res) => {
   try {
     const { club_name, leader_id, limit, location, field, keyword } = req.body;
     const newClub = await Club.create({
@@ -101,9 +111,10 @@ exports.createClub = async (req, res) => {
 exports.getClubPosts = async (req, res) => {
   try {
     const posts = await Club_post.findAll({
-      where: { club_id: req.params.club_id },
+      where: { clubClubId: req.params.club_id },
+      //
     });
-    res.render("myClubPostMain", { data: posts });
+    res.render("myclub/myclubPostMain", { data: posts });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -287,11 +298,10 @@ exports.deleteClubPostCommentLike = async (req, res) => {
 
 // POST /myclubNewPost/:club_id : 동아리 게시글 생성
 exports.createClubPost = async (req, res) => {
-  console.log('게시물 등록 정보', req.body);
   try {
     const { club_id, userid, title, content, image } = req.body;
     const newPost = await Club_post.create({
-      club_id: club_id,
+      clubClubId: club_id,
       userid: userid,
       title: title,
       content: content,
@@ -312,7 +322,7 @@ exports.getClubSchedules = async (req, res) => {
     const clubSchedules = await Club_schedule.findAll({
       where: { clubClubId: club_id },
     });
-    res.render('./myclub/myclubSchedule', { data: clubSchedules });
+    res.render("./myclub/myclubSchedule", { data: clubSchedules });
     // res.send(clubSchedules);
   } catch (err) {
     console.error(err);
