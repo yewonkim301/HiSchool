@@ -348,7 +348,7 @@ exports.getClubAdminApplyDetail = async (req, res) => {
         club_id: club_id,
         userid_num: userid_num
       },
-      include: [{ model: User, attributes: ["name","school","classid"], where: userid_num }]
+      include: [{ model: User}]
     })
     console.log("여기!!!!!!",getClubAdminApplyDetail)
     res.render("clubAdmin/clubAdminApplyDetail", {data: getClubAdminApplyDetail});
@@ -520,7 +520,7 @@ exports.getClubMembers = async (req, res) => {
       where: {
         club_id: club_id,
       },
-      include: [{ model: User, attributes: ["name","school","classid"] }]
+      include: [{ model: User}]
     });
     res.render("clubAdmin/clubAdminMemberlist", { data: getMembers });
   } catch (err) {
@@ -539,7 +539,7 @@ exports.getClubMember = async (req, res) => {
         club_id: club_id,
         userid_num: userid_num,
       },
-      include: [{ model: User, attributes: ["name","school","classid"] }]
+      include: [{ model: User}]
     });
     res.render("clubAdmin/clubAdminMemberDetail", { data: getMember });
   } catch (err) {
@@ -572,3 +572,39 @@ exports.deleteMembers = async (req, res) => {
     res.send("Internal Server Error!");
   }
 };
+
+// myPage
+// GET /mypageMain/:userid 내 페이지 가져오기 ver.동아리
+exports.getMyPage = async (req,res) =>{
+  try{
+    const {userid} = req.params;
+    const myPageMain = await User.findOne({
+      where:{
+        userid: userid
+      }
+    })
+    res.render("/mypage/mypageMain", {data:myPageMain});
+  }
+  catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+}
+
+// GET /mypageMainProfile/:nickname 내 페이지 가져오기 ver.닉네임
+exports.getMyPageProfile = async (req,res) =>{
+  try{
+    const {nickname} = req.params;
+    const myPageMainProfile = await User.findOne({
+      where:{
+        nickname:nickname
+      }
+    })
+    res.render("/mypage/mypageProfile", {data: myPageMainProfile});
+  }
+  catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+}
+

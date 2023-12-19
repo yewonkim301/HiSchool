@@ -175,12 +175,11 @@ router.patch("/myclubEditPost/:club_id/:post_id", controllerClub.patchPost);
 router.delete("/myclubEditPost/:club_id/:post_id", controllerClub.deletePost);
 
 // mypage
-router.get("/mypageMain", (req, res) => {
-  res.render("./mypage/mypageMain");
-});
-router.get("/mypageProfile", (req, res) => {
-  res.render("./mypage/mypageProfile");
-});
+// GET /mypageMain/:userid 마이페이지 정보 가져오기 ver.동아리
+router.get("/mypageMain/:userid", controllerPublic.getMyPage);
+
+// GET /mypageProfile/:nickname 마이페이지 정보 가져오기 ver.닉네임
+router.get("/mypageProfile/:nickname", controllerPublic.getMyPageProfile );
 
 // publicPost
 // GET /publicPostMain 익명 게시판 정보 불러오기
