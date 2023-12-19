@@ -19,7 +19,7 @@
         <p class="requester-name"><%=data.name%></p>
         <p class="request-text"><%=data.school%></p>
       </div>
-      <button class="<%=data.userid_num%>" onclick="checkDetail(this)">확인</button>
+      <button class="<%=data.userid_num%>" onclick="checkDetail(this)">상세 정보 확인</button>
     </div>
     
     <% } %>
@@ -28,7 +28,7 @@
   <script>
     const checkDetail=(clickedButton)=>{
       let userid_num=clickedButton.className;
-      window.location.href=`/clubAdminApplyDetail/${data.club_id}/${userid_num}`
+      window.location.href=`/clubAdminApplyDetail/<%=data.club_id%>/<%=data.userid_num%>`
     }
   </script>
 </body>
