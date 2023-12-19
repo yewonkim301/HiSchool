@@ -61,7 +61,15 @@ exports.getClubAdminEdit = async (req, res) => {
 exports.patchClub = async (req, res) => {
   try {
     const { club_id } = req.params.club_id;
-    const { club_name, leader_id, limit, location, field, keyword } = req.body;
+    const {
+      club_name,
+      leader_id,
+      limit,
+      location,
+      field,
+      keyword,
+      description,
+    } = req.body;
     const updateClub = await Club.update(
       {
         club_name,
@@ -70,6 +78,7 @@ exports.patchClub = async (req, res) => {
         location,
         field,
         keyword,
+        description,
       },
       {
         where: { club_id },
@@ -113,7 +122,15 @@ exports.getCreateClub = async (req, res) => {
 // POST /createClub : 동아리 생성
 exports.postCreateClub = async (req, res) => {
   try {
-    const { club_name, leader_id, limit, location, field, keyword } = req.body;
+    const {
+      club_name,
+      leader_id,
+      limit,
+      location,
+      field,
+      keyword,
+      description,
+    } = req.body;
     const newClub = await Club.create({
       club_name,
       leader_id,
@@ -121,6 +138,7 @@ exports.postCreateClub = async (req, res) => {
       location,
       field,
       keyword,
+      description,
     });
     res.send(newClub);
   } catch (err) {
@@ -277,9 +295,9 @@ exports.deletePostComment = async (req, res) => {
     const { comment_id, post_id, club_id } = req.params;
     const isDeleted = await Club_post_comment.destroy({
       where: {
-        clubClubId: club_id,
-        clubPostPostId: post_id,
-        clubPostCommentCommentId: comment_id,
+        club_id: club_id,
+        post_id: post_id,
+        comment_id: comment_id,
       },
     });
     if (isDeleted) {
@@ -341,7 +359,7 @@ exports.createClubPost = async (req, res) => {
     const { club_id } = req.params;
     const { userid, title, content, image } = req.body;
     const newPost = await Club_post.create({
-      clubClubId: club_id,
+      club_id: club_id,
       // userid: userid,
       title: title,
       content: content,
