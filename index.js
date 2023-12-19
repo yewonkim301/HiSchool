@@ -56,6 +56,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 // socket
+const { Club_chat } = require("./models/Index");
 const http = require("http");
 const socketIO = require("socket.io");
 const server = http.createServer(app);
@@ -97,19 +98,56 @@ const authRouter = require("./routes/auth");
 app.use("/", indexRouter);
 app.use("/auth", authRouter);
 
+/*
 io.on("connection", (socket) => {
   console.log("[ 서버가 연결되었습니다. ]", socket.id);
 
   // 클라이언트 -> 서버 통신
-  socket.on("send", (data) => {
-    console.log("socket send", data);
+  socket.on("send", (club_id) => {
+    console.log("socket send", club_id);
     // 메시지 전송
     // 프론트에서 메시지 보낸 사람의 userid_num 과 메세지 내용 받아와야 함
     // -> data 에 담겨 있어야 하는 정보
     // const socketId = data.id;
     const { userid_num, content } = data;
-    io.emit("send", data);
+    io.to(club_id).emit("send", data);
     // 클라이언트에서 사용자가 입력한 정보를 페이지에 띄우기
+  });
+});
+*/
+io.on("connection", (socket) => {
+  console.log("[ 서버가 연결되었습니다. ]", socket.id);
+
+  // 클라이언트 -> 서버 통신
+  socket.on("send", async (data) => {
+    console.log("socket send", data);
+
+    try {
+      const { club_id, userid_num, content } = data;
+
+      // 프론트에서 세션에 저장되어 있는 userid_num 값을 찾아서 from_name에 담아서 보내줌
+      const from_realName = await User.findOne({
+        attributes: ["name"],
+        where: { userid_num: userid_num },
+      });
+
+      // 데이터베이스에 채팅 내용 저장
+      const newClubChat = await Club_chat.create({
+        club_id: club_id,
+        from_name: from_realName.name,
+        content: content,
+      });
+
+      // 클라이언트에 메시지 전송
+      io.to(club_id).emit("send", {
+        club_id: club_id,
+        from_name: from_realName.name,
+        content: content,
+      });
+    } catch (err) {
+      console.error(err);
+      // 에러 처리
+    }
   });
 });
 
