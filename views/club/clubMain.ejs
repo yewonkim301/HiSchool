@@ -12,6 +12,7 @@
     <%- include('../component/header')%>
   <div class="search-container">
     <input type="search" class="search-bar" placeholder="검색">
+    <button type="button" onclick="searchClub()" >검색</button>
   </div>
 
   <div class="hashtags">
@@ -22,9 +23,17 @@
 
   <% for(let i=0; i<data.length;i++){ %>
     <div class="list" onclick="showDetail(event)" >
-      <div style="display: inline;"  class="club_id"><%=data[i].club_id%></div>
-      <div class="list-title" ><%= data[i].club_name%></div>
-      <div class="list-content"><%=data[i].keyword%></div>
+
+      <div class="list-title" >
+        <%= data[i].club_name%>
+        <span style="display: none;"  class="club_id"><%=data[i].club_id%>
+        </span>
+      </div>
+      <div class="list-content">
+        <%=data[i].description%>
+        <span style="display: none;"  class="club_id"><%=data[i].club_id%>
+        </span>
+      </div>
   </div>
     <% } %>
 
@@ -36,18 +45,18 @@
     
 
     function showDetail(event) {
-      console.log(event.target)
-    // Check if the clicked element has the class "list-title"
-    if (event.target.classList.contains('club_id')) {
-      // Get the text content of the clicked "list-title" div
-      const club_id = event.target.textContent;
+      let clickedDiv = event.target;
+      console.log('clickedDiv >',clickedDiv);
+
+      let selectedClub = clickedDiv.querySelector('.club_id');
+      let club_id = selectedClub.innerText;
       
-      // Log the text content to the console
+      console.log(selectedClub);
       console.log(club_id);
       window.location.href=`/clubDetail/${club_id}`
       
     }
-  }
+  
   function createClub(){
     window.location.href='/createClub';
   }

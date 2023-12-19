@@ -13,27 +13,33 @@
 
 <body>
   <%- include('../component/header')%>
-    <div class="content">
-      <p class="content-title">이름</p>
-      <p class="content-detail">홍길동</p>
 
-      <p class="content-title">지원동기</p>
-      <p class="content-detail">열심히 할게요</p>
+  <div class="content">
+    <p class="content-title">이름</p>
+    <p class="content-detail"><%=data.name%></p>
 
-      <p class="content-title">자기소개</p>
-      <p class="content-detail">열심히 하게요</p>
+    <p class="content-title">학교</p>
+    <p class="content-detail"><%=data.school%></p>
 
-      <div class="link">프로필 보기</div>
+    <p class="content-title">학년</p>
+    <p class="content-detail"><%=data.grade%></p>
 
-      <div class="buttons">
-        <button class="btn reject">거절</button>
-        <button class="btn btn-primary">승인</button>
-      </div>
-    </div>
+    <p class="content-title">지원동기</p>
+    <p class="content-detail"><%=data.motivation%></p>
+
+    <p class="content-title">자기소개</p>
+    <p class="content-detail"><%=data.introduction%></p>
+
+
+    <button>승인</button><br>
+    <button>거절</button>
+
+
+  </div>
+
+  
+
 </body>
 
 </html>
 
-</body>
-
-</html>
