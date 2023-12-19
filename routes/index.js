@@ -67,7 +67,7 @@ router.delete("/clubAdminEdit/:club_id", controllerClub.deleteClub);
 router.get("/clubAdminMemberList/:club_id", controllerPublic.getClubMembers);
 
 // GET /clubAdminApplyDetail/:club_id 클럽 신청한 회원정보 상세페이지 불러오기
-router.get("/clubAdminApplyDetail", controllerPublic.getClubAdminApplyDetail);
+router.get("/clubAdminApplyDetail/:club_id/:userid_num", controllerPublic.getClubAdminApplyDetail);
 
 // GET /clubAdminMemberDetail/:club_id 클럽 회원정보 상세보기 페이지
 router.get("/clubAdminMemberDetail/:club_id", controllerPublic.getClubMember);
