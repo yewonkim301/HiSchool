@@ -12,7 +12,7 @@
    <%- include('../component/header') %>
       <div class="board">
          <!-- 게시글 세부 내용 -->
-         <div class="post-detail">      
+         <div class="post-detail">
             <h2>
                <%= data.title %>
             </h2>
@@ -22,6 +22,7 @@
             <!-- 게시글 작성 시간 등의 메타 정보도 추가 있습니다. -->
          </div>
          <button class="btn btn-primary" onclick="deletepost()">삭제</button>
+         <button class="btn btn-primary" onclick="editPost()">수정</button>
 
          <!-- 댓글 목록 -->
          <% clubPostComment.forEach(comment=> { %>
@@ -56,6 +57,10 @@
                      console.error('Delete error:', error);
                   });
             }
+         }
+
+         function editPost(clubId, postId) {
+            window.location.href = `/myclubEditPost/1/46`; // 수정 페이지로 이동
          }
       </script>
 </body>

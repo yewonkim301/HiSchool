@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <!-- 생략 (head 내용) -->
+
+  <!-- axios CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+
+<body>
+  <%- include('../component/header') %>
+    <div class="board">
+      <!-- 게시글 세부 내용 -->
+      <div class="post-detail">
+        <h2>
+          <%= data.title %>
+        </h2>
+        <p>
+          <%= data.content %>
+        </p>
+
+      </div>
+
+      <button class="btn btn-primary" onclick="editPost()">수정</button>
+
+
+
+
+    </div>
+    <script>
+      function eidtPost() {
+        window.location.href = `/myclubPostDetail/1/46`;
+      }
+    </script>
+</body>
+
+</html>
