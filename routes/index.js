@@ -199,15 +199,17 @@ router.delete("/publucPostDetail/:post_id/:comment_id", controllerPublic.deleteP
 // GET /dm dm 가져오기
 router.get("/dm", controllerPublic.dm);
 
-// GET /dmDetail dmDetail 페이지 가져오기
-router.get("/dmDetail", controllerPublic.getDmDetail);
+// post /mypageProfile/:nickname Dm 생성
+router.post("/mypageProfile/:nickname", controllerPublic.newDm);
 
-// POST // 아직 완성 안됬어요
+// GET /dmDetail/:note_id dmDetail 페이지 가져오기
+router.get("/dmDetail/:note_id", controllerPublic.getDmDetail);
+
+// POST //dmDetail/:note_id 데이터 전송
 router.post("/dmDetail", controllerPublic.postDm);
 
 // DELETE /dm dm삭제
 router.delete("/dm", controllerPublic.deleteDm);
-
 
 
 

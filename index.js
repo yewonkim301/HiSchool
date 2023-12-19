@@ -1,6 +1,5 @@
 /* eslint-disable no-console */
 const express = require("express");
-
 const app = express();
 const path = require("path");
 const cookieParser = require("cookie-parser");
@@ -9,6 +8,12 @@ const session = require("express-session");
 const db = require("./models/Index");
 const dotenv = require("dotenv");
 dotenv.config();
+
+// socket
+const http = require('http');
+const socketIO = require('socket.io');
+const server = http.createServer(app);
+const io = socketIO(server);
 
 // passport
 const passport = require("passport");
@@ -52,6 +57,36 @@ const authRouter = require("./routes/auth");
 
 app.use("/", indexRouter);
 app.use("/auth", authRouter);
+
+io.on('connection', (socket) => {
+  console.log('[ 서버가 연결되었습니다. ]', socket.id );
+
+  // 클라이언트 -> 서버 통신
+  socket.on('forServer', (data) => {
+
+    // 메시지 전송
+    const socketId = data.id;
+  })
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 app.get("*", (req, res) => {
   // console.log("error");
