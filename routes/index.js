@@ -40,9 +40,8 @@ router.get("/createClub", controllerClub.getCreateClub);
 // POST /createClub : 동아리 생성
 router.post("/createClub", controllerClub.postCreateClub);
 
-router.get("/clubApply", (req, res) => {
-  res.render("club/clubApply");
-});
+//get /clubApply/:club_id
+router.get("/clubApply/:club_id", controllerPublic.clubApply);
 
 // clubAdmin
 // GET /clubAdminMain : 동아리 관리페이지 불러오기
