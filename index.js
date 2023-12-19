@@ -3,15 +3,13 @@ const express = require("express");
 const app = express();
 const path = require("path");
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser')
 const session = require('express-session');
+const db = require('./models/Index.js');
+// const { sequelize } = require('./models/Index.js');
 
 
 
-var SequelizeStore = require("connect-session-sequelize")(session.Store);
-
-
-const db = require("./models/Index");
-const { User } = require('./models/Index.js')
 
 const dotenv = require("dotenv");
 dotenv.config();
@@ -27,11 +25,23 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 
+app.use(cookieParser(process.env.COOKIE_SECRET)); // 쿠키를 활성화하는 코드
+app.use(session({  // 메모리 세션을 활성화하는 코드
+    resave:false, // 세션 객체에 수정사항이 없어도 저장할까를 정하는 코드
+    saveUninitialized:false, // 처음의 빈 세션 객체라도 저장을 할지말지 정하는 코드
+    secret:process.env.COOKIE_SECRET,
+    cookie:{
+        httpOnly:true,
+        secure:false, // https를 쓸것인가?
+    },
+}));
+
+
 app.use(session({
   secret:"#JDKLF439jsdlfsjl",
   resave:false,
   saveUninitialized:true,
-  // store: sessionStore
+  // store: sequelizeSessionStore,
 }))
 
 
