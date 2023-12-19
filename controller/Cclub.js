@@ -485,7 +485,7 @@ exports.deleteClubSchedule = async (req, res) => {
 };
 
 // Club_chat
-// GET /clubChat/:club_id : 동아리 채팅방 조회
+// GET /myclubChat/:club_id : 동아리 채팅방 조회
 exports.getClubChat = async (req, res) => {
   try {
     const { club_id } = req.params.club_id;
@@ -498,7 +498,7 @@ exports.getClubChat = async (req, res) => {
     res.send("Internal Server Error!");
   }
 };
-// POST /clubChat/:club_id : 동아리 채팅방에서 채팅 보내기
+// POST /myclubChat/:club_id : 동아리 채팅방에서 채팅 보내기
 exports.postClubChat = async (req, res) => {
   try {
     const { club_id } = req.params.club_id;

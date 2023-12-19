@@ -5,64 +5,64 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 
-
-const bodyParser = require('body-parser');
-const passport = require('passport');
+const bodyParser = require("body-parser");
+const passport = require("passport");
 app.use(bodyParser.urlencoded({ extended: false }));
 
-require('./middleware/auth.js')()
+require("./middleware/auth.js")();
 
-
-
-const { User } = require('./models/Index.js')
-const accountController = require('./controller/Caccount')
-const LocalStrategy = require('passport-local');
-
+const { User } = require("./models/Index.js");
+const accountController = require("./controller/Caccount");
+const LocalStrategy = require("passport-local");
 
 // passport
 // passport.use(new LocalStrategy(User.authenticate()));
 
-passport.use(new LocalStrategy(
-  function(userid, password, done) {
+passport.use(
+  new LocalStrategy(function (userid, password, done) {
     User.findOne({ userid: userid }, function (err, user) {
-      if (err) { return done(err); }
-      if (!user) { return done(null, false); }
-      if (!user.verifyPassword(password)) { return done(null, false); }
+      if (err) {
+        return done(err);
+      }
+      if (!user) {
+        return done(null, false);
+      }
+      if (!user.verifyPassword(password)) {
+        return done(null, false);
+      }
       return done(null, user);
     });
-  }
-));
+  })
+);
 
-passport.serializeUser(function(user, done) {    
-	console.log('serialize');    
-	done(null, user);
+passport.serializeUser(function (user, done) {
+  console.log("serialize");
+  done(null, user);
 });
 
 // passport.serializeUser(User.serializeUser());
 app.use(passport.initialize());
 
-
-app.get('/profile', passport.authenticate('jwt', { session: false }), accountController.profile)
-app.post('/login', passport.authenticate('local'), accountController.login)
-app.post('/register', accountController.register)
-
-
-
-
+app.get(
+  "/profile",
+  passport.authenticate("jwt", { session: false }),
+  accountController.profile
+);
+app.post("/login", passport.authenticate("local"), accountController.login);
+app.post("/register", accountController.register);
 
 const db = require("./models/Index");
 const dotenv = require("dotenv");
 dotenv.config();
 
 // socket
-const http = require('http');
-const socketIO = require('socket.io');
+const http = require("http");
+const socketIO = require("socket.io");
 const server = http.createServer(app);
 const io = socketIO(server);
 
 // passport
 const passportConfig = require("./passport");
-
 
 const swaggerUi = require("swagger-ui-express");
 const swaggerFile = require("./swagger-output");
@@ -91,45 +91,27 @@ app.use(express.json());
 //   })
 // );
 
-
-
-
-
 const indexRouter = require("./routes");
 const authRouter = require("./routes/auth");
 
 app.use("/", indexRouter);
 app.use("/auth", authRouter);
 
-io.on('connection', (socket) => {
-  console.log('[ 서버가 연결되었습니다. ]', socket.id );
+io.on("connection", (socket) => {
+  console.log("[ 서버가 연결되었습니다. ]", socket.id);
 
   // 클라이언트 -> 서버 통신
-  socket.on('forServer', (data) => {
-
+  socket.on("send", (data) => {
+    console.log("socket send", data);
     // 메시지 전송
-    const socketId = data.id;
-  })
-})
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    // 프론트에서 메시지 보낸 사람의 userid_num 과 메세지 내용 받아와야 함
+    // -> data 에 담겨 있어야 하는 정보
+    // const socketId = data.id;
+    const { userid_num, content } = data;
+    io.emit("send", data);
+    // 클라이언트에서 사용자가 입력한 정보를 페이지에 띄우기
+  });
+});
 
 app.get("*", (req, res) => {
   // console.log("error");
@@ -140,3 +122,10 @@ db.sequelize.sync({ force: false }).then(() => {
     console.log(`${PORT}번 포트에서 실행중`);
   });
 });
+
+/*
+socket의 listen 부분이 어디로 들어가야 하는지
+server.listen(PORT, () => {
+  console.log(`http://localhost:${PORT}`);
+})
+*/
