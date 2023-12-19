@@ -506,7 +506,7 @@ exports.getClubChat = async (req, res) => {
     const clubChat = await Club_chat.findAll({
       where: { club_id: club_id },
     });
-    res.render("myclub/myClubChat", { data: clubChat });
+    res.render("myclub/socketTest", { club_id });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
