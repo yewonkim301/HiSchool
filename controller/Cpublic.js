@@ -474,6 +474,8 @@ exports.getClubMembersApplyList = async (req, res) => {
       },
       include: [{ model: User, attributes: ["name","school","classid"] }]
     });
+    console.log(getApplyList)
+
     res.render("clubAdmin/clubAdminApplyList", { data: getApplyList });
   } catch (err) {
     console.error(err);
