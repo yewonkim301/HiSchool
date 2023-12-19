@@ -69,11 +69,8 @@ exports.getPostDetail = async (req, res) => {
     const getPostCommentLike = await Public_post_comment_like.findAll({
       where: { post_id: post_id },
     });
-    res.render("/publicPost/publicPostDetail", {
-      data: getPost,
-      getPostComment,
-      getPostCommentLike,
-    });
+    res.render("/publicPost/publicPostDetail", 
+    {data: getPost, getPostComment, getPostCommentLike,});
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -262,25 +259,51 @@ exports.dm = async (req, res) => {
   }
 };
 
-// GET /dmDetail 채팅방 페이지 가져오기
+// POST /mypageProfile/:nickname => dm 생성
+exports.newDm = async (req,res) => {
+  try{
+      const {nickname} = req.params.nickname;
+      const {userid_num} = req.body;
+      const createDm = await Dm.create({
+        userid_num: userid_num,
+        to_nickname: nickname
+      })
+      res.render("/mypage/mypageProfile", {data: createDm});
+  }
+  catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+}
+
+// GET /dmDetail/:note_id 채팅방 페이지 가져오기
 exports.getDmDetail = async (req, res) => {
   try {
-    res.render("/support/dmDetail");
+    const {note_id} = this.params.note_id;
+    const getRoom = await Dm.findAll({
+      where:{
+        note_id: note_id
+      }
+    })
+    res.render("/support/dmDetail", {data: getRoom});
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
   }
 };
 
-// POST /dmDetail
+// POST /dmDetail/:note_id
 exports.postDm = async (req, res) => {
   try {
-    // const {userid_num} = req.params.userid_num;
+    const {note_id} = req.params.userid_num;
     const { to_nickname, dm_content, userid_num } = req.body;
     const sendDm = await Dm.create({
       to_nickname: to_nickname,
       dm_content: dm_content,
       userid_num: userid_num,
+      where:{
+        note_id: note_id
+      }
     });
     res.send(sendDm);
   } catch (err) {
