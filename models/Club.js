@@ -24,7 +24,7 @@ const Club = (Sequelize, DataTypes) => {
         allowNull: false,
       },
       location: {
-        type: DataTypes.STRING(200),
+        type: DataTypes.STRING(100),
         allowNull: false,
       },
       field: {
@@ -33,6 +33,10 @@ const Club = (Sequelize, DataTypes) => {
       },
       keyword: {
         type: DataTypes.JSON,
+        allowNull: false,
+      },
+      description: {
+        type: DataTypes.STRING(200),
         allowNull: false,
       },
     },
