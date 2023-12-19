@@ -162,11 +162,14 @@ router.get("/myclubNewPost/:club_id", controllerClub.getCreateClubPost);
 // POST /myclubNewPost/:club_id : 동아리 게시글 생성
 router.post("/myclubNewPost/:club_id", controllerClub.createClubPost);
 
-// PATCH /myclubPostDetail/:club_id/:post_id  : 동아리 게시글 수정
-router.patch("/myclubPostDetail/:club_id/:post_id", controllerClub.patchPost);
+// GET /myclubEditPost/:club_id/:post_id  : 동아리 게시글 수정 페이지 불러오기
+router.get("/myclubEditPost/:club_id/:post_id", controllerClub.getClubEditPost);
 
-// DELETE /myclubPostDetail/:club_id/:post_id  : 동아리 게시글 삭제
-router.delete("/myclubPostDetail/:club_id/:post_id", controllerClub.deletePost);
+// PATCH /myclubEditPost/:club_id/:post_id  : 동아리 게시글 수정
+router.patch("/myclubEditPost/:club_id/:post_id", controllerClub.patchPost);
+
+// DELETE /myclubEditPost/:club_id/:post_id  : 동아리 게시글 삭제
+router.delete("/myclubEditPost/:club_id/:post_id", controllerClub.deletePost);
 
 // mypage
 router.get("/mypageMain", (req, res) => {

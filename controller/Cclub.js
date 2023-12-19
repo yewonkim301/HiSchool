@@ -200,7 +200,20 @@ exports.getClubPost = async (req, res) => {
   }
 };
 
-// PATCH /myclubPostDetail/:club_id/:post_id  : 동아리 게시글 수정
+// GET /myclubEditPost/:club_id/:post_id 동아리 게시글 수정 페이지 불러오기
+exports.getClubEditPost = async (req, res) => {
+  try {
+    const { club_id, post_id } = req.params;
+    const clubPost = await findOne({
+      where: { club_id: club_id, post_id: post_id },
+    });
+    res.render("myclub/myclubEditPost", { data: clubPost });
+  } catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+};
+// PATCH /myclubEditPost/:club_id/:post_id  : 동아리 게시글 수정
 exports.patchPost = async (req, res) => {
   try {
     const { club_id, post_id } = req.params;
@@ -225,7 +238,7 @@ exports.patchPost = async (req, res) => {
   }
 };
 
-// DELETE /myclubPostDetail/:club_id/:post_id  : 동아리 게시글 삭제
+// DELETE /myclubEditPost/:club_id/:post_id  : 동아리 게시글 삭제
 exports.deletePost = async (req, res) => {
   try {
     const { club_id, post_id } = req.params;
