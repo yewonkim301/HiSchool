@@ -11,25 +11,26 @@
 <body>
   <%- include('../component/header')%>
 
-    <main class="request-list">
-      <!-- 가입 요청 목록 -->
-      <div class="request">
-        <div class="request-info">
-          <p class="requester-name">홍길동</p>
-          <p class="request-text">열심히 할게요</p>
-        </div>
-        <button class="btn-confirm" onclick="showApplyDetail()">확인</button>
+  <main class="request-list">
+    <!-- 가입 요청 목록 -->
+    <% for(let i=0; i<data.length;i++){ %>
+    <div class="request">
+      <div class="request-info">
+        <p class="requester-name"><%=data.name%></p>
+        <p class="request-text"><%=data.school%></p>
       </div>
-      <!-- 추가 요청들을 여기에 반복 -->
-    </main>
-
-    <script>
-      function showApplyDetail() {
-        window.location.href = "/clubAdminApplyDetail";
-      }
-
-      // 여기에 가입 요청을 승인하는 JavaScript 코드가 들어갈 수 있습니다.
-    </script>
+      <button class="<%=data.userid_num%>" onclick="checkDetail(this)">확인</button>
+    </div>
+    
+    <% } %>
+    <!-- 추가 요청들을 여기에 반복 -->
+  </main>
+  <script>
+    const checkDetail=(clickedButton)=>{
+      let userid_num=clickedButton.className;
+      window.location.href=`/clubAdminApplyDetail/${data.club_id}/${userid_num}`
+    }
+  </script>
 </body>
 
 </html>
