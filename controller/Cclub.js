@@ -5,6 +5,7 @@ const {
   Club_post_comment,
   Club_post_comment_like,
   Club_schedule,
+  User,
 } = require("../models/Index");
 const { trace } = require("../routes");
 
@@ -61,7 +62,15 @@ exports.getClubAdminEdit = async (req, res) => {
 exports.patchClub = async (req, res) => {
   try {
     const { club_id } = req.params.club_id;
-    const { club_name, leader_id, limit, location, field, keyword } = req.body;
+    const {
+      club_name,
+      leader_id,
+      limit,
+      location,
+      field,
+      keyword,
+      description,
+    } = req.body;
     const updateClub = await Club.update(
       {
         club_name,
@@ -70,6 +79,7 @@ exports.patchClub = async (req, res) => {
         location,
         field,
         keyword,
+        description,
       },
       {
         where: { club_id },
@@ -113,7 +123,15 @@ exports.getCreateClub = async (req, res) => {
 // POST /createClub : 동아리 생성
 exports.postCreateClub = async (req, res) => {
   try {
-    const { club_name, leader_id, limit, location, field, keyword } = req.body;
+    const {
+      club_name,
+      leader_id,
+      limit,
+      location,
+      field,
+      keyword,
+      description,
+    } = req.body;
     const newClub = await Club.create({
       club_name,
       leader_id,
@@ -121,6 +139,7 @@ exports.postCreateClub = async (req, res) => {
       location,
       field,
       keyword,
+      description,
     });
     res.send(newClub);
   } catch (err) {
@@ -277,9 +296,9 @@ exports.deletePostComment = async (req, res) => {
     const { comment_id, post_id, club_id } = req.params;
     const isDeleted = await Club_post_comment.destroy({
       where: {
-        clubClubId: club_id,
-        clubPostPostId: post_id,
-        clubPostCommentCommentId: comment_id,
+        club_id: club_id,
+        post_id: post_id,
+        comment_id: comment_id,
       },
     });
     if (isDeleted) {
@@ -335,13 +354,24 @@ exports.deleteClubPostCommentLike = async (req, res) => {
   }
 };
 
+// GET /myclubNewPost/:club_id : 동아리 게시글 생성 페이지 불러오기
+exports.getCreateClubPost = async (req, res) => {
+  try {
+    // const { club_id } = req.params.club_id;
+    res.render("myclub/myclubNewPost");
+  } catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+};
+
 // POST /myclubNewPost/:club_id : 동아리 게시글 생성
 exports.createClubPost = async (req, res) => {
   try {
     const { club_id } = req.params;
     const { userid, title, content, image } = req.body;
     const newPost = await Club_post.create({
-      clubClubId: club_id,
+      club_id: club_id,
       // userid: userid,
       title: title,
       content: content,
@@ -455,4 +485,39 @@ exports.deleteClubSchedule = async (req, res) => {
 };
 
 // Club_chat
-// GET /clubChat : 동아리 채팅방 조회
+// GET /clubChat/:club_id : 동아리 채팅방 조회
+exports.getClubChat = async (req, res) => {
+  try {
+    const { club_id } = req.params.club_id;
+    const clubChat = await Club_chat.findAll({
+      where: { club_id: club_id },
+    });
+    res.render("myclub/myClubChat", { data: clubChat });
+  } catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+};
+// POST /clubChat/:club_id : 동아리 채팅방에서 채팅 보내기
+exports.postClubChat = async (req, res) => {
+  try {
+    const { club_id } = req.params.club_id;
+    const { from_name, content } = req.body;
+    // 프론트에서 세션에 저장되어 있는 userid_num 값을 찾아서 from_name에 담아서 보내줌
+    const from_realName = await User.findOne({
+      attributes: ["name"],
+      where: { userid_num: from_name },
+    });
+    const newClubChat = await Club_chat.create({
+      club_id: club_id,
+      from_name: from_realName,
+      content: content,
+    });
+    res.send(newClubChat);
+  } catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+};
+
+// DELETE  동아리 채팅방 삭제 -> 동아리가 삭제될 때 채팅방도 함께 삭제
