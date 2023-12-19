@@ -30,7 +30,7 @@
 
 
 
-         <button class="btn btn-primary" onclick="editPost()">수정</button>
+         <button class="btn btn-primary" onclick="editPost('<%= data.post_id %>')">수정</button>
 
          <!-- 댓글 목록 -->
          <% clubPostComment.forEach(comment=> { %>
@@ -101,7 +101,7 @@
          }
 
          // clubId, postId
-         function editPost(event, post_id) {
+         function editPost(post_id) {
             window.location.href = `/myclubEditPost/1/${post_id}`; // 수정 페이지로 이동
          }
 
