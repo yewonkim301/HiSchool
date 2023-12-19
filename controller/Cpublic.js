@@ -35,7 +35,7 @@ exports.getNewPost = async (req, res) => {
 
 // POST /publicNewPost/:userid_num 게시물 생성
 // POST /publicNewPost
-exports.createPost() = async (req,res) =>{
+exports.createPost = async (req,res) =>{
     try{
         // const {userid_num} = req.params.userid_num;
         const { 
