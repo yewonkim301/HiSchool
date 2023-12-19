@@ -4,14 +4,31 @@ const controllerClub = require("../controller/Cclub");
 const router = express.Router();
 const { isNotLoggedIn, isLoggedIn } = require("./middlewares");
 const passport = require("passport");
-
-
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv").config();
+const { User } = require("../models/Index");
 
 router.get("/", (req, res) => {
   res.render("index");
 });
 
-router.get("/home", isLoggedIn, (req, res) => {
+router.get("/home", isLoggedIn, async (req, res) => {
+  console.log(req.cookies.jwt);
+  const verified = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET).userid
+  console.log('verified : ', verified);
+
+  try {
+    const user = await User.findOne({
+      where: {
+        userid: verified
+      }
+    })
+    console.log(user);
+  } catch(err) {
+    console.log(err);
+  }
+  
+  
   res.render("home");
 });
 
@@ -29,7 +46,11 @@ router.get("/register", isNotLoggedIn, (req, res) => {
 
 // club
 // GET /clubMain : 전체 동아리 조회
-router.get("/clubMain", controllerClub.getClubs);
+router.get(
+  "/clubMain",
+  passport.authenticate("jwt", { session: false }),
+  controllerClub.getClubs
+);
 
 // GET /clubDetail/:club_id : 동아리 하나 상세 조회
 router.get("/clubDetail/:club_id", controllerClub.getClub);
@@ -69,7 +90,10 @@ router.delete("/clubAdminEdit/:club_id", controllerClub.deleteClub);
 router.get("/clubAdminMemberList/:club_id", controllerPublic.getClubMembers);
 
 // GET /clubAdminApplyDetail/:club_id 클럽 신청한 회원정보 상세페이지 불러오기
-router.get("/clubAdminApplyDetail/:club_id/:userid_num", controllerPublic.getClubAdminApplyDetail);
+router.get(
+  "/clubAdminApplyDetail/:club_id/:userid_num",
+  controllerPublic.getClubAdminApplyDetail
+);
 
 // GET /clubAdminMemberDetail/:club_id 클럽 회원정보 상세보기 페이지
 router.get("/clubAdminMemberDetail/:club_id", controllerPublic.getClubMember);
@@ -81,7 +105,10 @@ router.post(
 );
 
 // DELETE /clubAdminMemberDetail/:club_id 클럽에서 추방
-router.delete("/clubAdminMemberDetail/:club_id", controllerPublic.deleteMembers);
+router.delete(
+  "/clubAdminMemberDetail/:club_id",
+  controllerPublic.deleteMembers
+);
 
 // DELETE /clubAdminApplyDetail/:club_id 클럽 가입 거절
 router.delete(
