@@ -338,131 +338,25 @@ exports.deleteDm = async (req, res) => {
 };
 
 
-// ======= 동아리 회원 =======
-
-// GET /clubAdminMemberlist/:club_id 회원 전체 조회
-
-exports.getClubMembers = async (req, res) => {
-  try {
-    const { club_id } = req.params.club_id;
-    const getMembers = await Club_members.findAll({
-      where: {
-        club_id: club_id,
-      },
-    });
-    res.render("clubAdmin/clubAdminMemberlist", { data: getMembers });
-  } catch (err) {
-    console.error(err);
-    res.send("Internal Server Error!");
-  }
-};
-
-// GET /clubAdminMemberDetail/:club_id 회원 상세정보 보기
-exports.getClubMember = async (req, res) => {
-  try {
-    const { club_id } = req.params.club_id;
-    const { userid_num } = req.body;
-    const getMember = await Club_members.findOne({
-      where: {
-        club_id: club_id,
-        userid_num: userid_num,
-      },
-    });
-    res.render("clubAdmin/clubAdminMemberDetail", { data: getMember });
-  } catch (err) {
-    console.error(err);
-    res.send("Internal Server Error!");
-  }
-};
-
-// GET /clubAdminApplyDetail 동아리 페이지 불러오기
+// GET /clubAdminApplyDetail/:club_id 동아리 페이지 불러오기
 exports.getClubAdminApplyDetail = async (req, res) => {
   try {
-    res.render("clubAdmin/clubAdminApplyDetail");
-  } catch (err) {
-    console.error(err);
-    res.send("Internal Server Error!");
-  }
-};
-
-// POST /clubAdminApplyDetail/:club_id 동아리 가입 신청
-exports.createClubMembers = async (req, res) => {
-  try {
-    // const {userid_num} = req.params.userid_num;
-    const { club_id } = req.params.club_id;
-    const { motivation, introduction, userid_num } = req.body;
-    const newMembers = await Club_members_wait.create({
-      club_id: club_id,
-      motivation: motivation,
-      introduction: introduction,
-      userid_num: userid_num,
-      include: [{ model: User, attributes: ["name"] }],
-    });
-    res.send(newMembers);
-  } catch (err) {
-    console.error(err);
-    res.send("Internal Server Error!");
-  }
-};
-
-// GET /clubAdminApplyList/:club_id 클럽에 가입신청한 사람들 전체조회
-exports.getClubMembersApplyList = async (req, res) => {
-  try {
-    const { club_id } = req.params.club_id;
-    const getApplyList = await Club_members_wait.findAll({
-      where: {
+    const{club_id} = req.params.club_id;
+    const {userid_num} = req.body;
+    const getClubAdminApplyDetail = await Club_members_wait.findOne({
+      where:{
         club_id: club_id,
+        userid_num: userid_num
       },
-    });
-    res.render("clubAdmin/clubAdminApplyList", { data: getApplyList });
+      include: [{ model: User, attributes: ["name","school","classid"], where: club_id }]
+    })
+    res.render("clubAdmin/clubAdminApplyDetail", {data: getClubAdminApplyDetail});
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
   }
 };
 
-// DELETE /clubAdminApplyList/:club_id 클럽 가입 거절
-exports.deleteMembersApplyList = async (req, res) => {
-  try {
-    const { club_id } = req.params.userid_num;
-    const { userid_num } = req.body;
-    const destroyMembersApplyList = await Club_members_wait.destroy({
-      where: {
-        userid_num: userid_num,
-        club_id: club_id,
-      },
-    });
-    if (destroyMembersApplyList) {
-      res.send({ isDeleted: true });
-    } else {
-      res.send({ isDeleted: false });
-    }
-  } catch (err) {
-    console.error(err);
-    res.send("Internal Server Error!");
-  }
-};
-
-// Delete /clubAdminMemberDetail 추방
-exports.deleteMembers = async (req, res) => {
-  try {
-    // 삭제 버튼클릭시 값이 넘어온다.
-    const { userid_num } = req.body;
-    if (req.session.id === userid_num) {
-      const destroyMembers = await Club_members.destroy({
-        where: userid_num,
-      });
-      if (destroyMembers) {
-        res.send({ isDeleted: true });
-      } else {
-        res.send({ isDeleted: false });
-      }
-    }
-  } catch (err) {
-    console.error(err);
-    res.send("Internal Server Error!");
-  }
-};
 
 // GET /clubAdminTransfer 클럽 회장 위임 페이지 가져오기
 exports.getClubAdminTransfer = async (req, res) => {
@@ -512,6 +406,160 @@ exports.deleteClubAdminTransfer = async (req, res) => {
   }
 };
 
+// ======== Apply, Admin ======
+
+// clubApply/:club_id 동아리 신청페이지
 exports.clubApply = async (req,res) =>{
-  res.render("club/clubApply");
+  try{
+    const {club_id} = req.params.club_id;
+    res.render("club/clubApply", {data:club_id});
+  }
+  catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
 }
+
+// clubApply/:club_id 동아리 신청 정보 전달
+exports.clubApplyinfo = async (req,res) => {
+  try{
+    const {club_id} = req.params.id;
+    const {motivation, introduction, userid_num} = req.body;
+    const clubApplyinfo = await Club_members_wait.create({
+      club_id: club_id,
+      motivation: motivation,
+      introduction: introduction,
+      userid_num: userid_num,
+    })
+    res.send(clubApplyinfo);
+  }
+  catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+}
+
+// GET /club
+
+
+// POST /clubAdminApplyDetail/:club_id 동아리 가입 신청
+exports.createClubMembers = async (req, res) => {
+  try {
+    // const {userid_num} = req.params.userid_num;
+    const { club_id } = req.params.club_id;
+    const { motivation, introduction, userid_num } = req.body;
+    if(applyResult){
+      const newMembers = await Club_members.create({
+        club_id: club_id,
+        motivation: motivation,
+        introduction: introduction,
+        userid_num: userid_num,
+      });
+      res.send(newMembers);
+    }
+  } catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+};
+
+// GET /clubAdminApplyList/:club_id 클럽에 가입신청한 사람들 전체조회
+exports.getClubMembersApplyList = async (req, res) => {
+  try {
+    const { club_id } = req.params.club_id;
+    const getApplyList = await Club_members_wait.findAll({
+      where: {
+        club_id: club_id,
+      },
+      include: [{ model: User, attributes: ["name","school","classid"] }]
+    });
+    res.render("clubAdmin/clubAdminApplyList", { data: getApplyList });
+  } catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+};
+
+// DELETE /clubAdminApplyDetail/:club_id 클럽 가입 거절
+exports.deleteApplyDetail = async (req, res) => {
+  try {
+    const { club_id } = req.params.club_id;
+    const { userid_num } = req.body;
+    const destroyApplyDetail = await Club_members_wait.destroy({
+      where: {
+        userid_num: userid_num,
+        club_id: club_id,
+      },
+    });
+    if (destroyApplyDetail) {
+      res.send({ isDeleted: true });
+    } else {
+      res.send({ isDeleted: false });
+    }
+  } catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+};
+
+
+// GET /clubAdminMemberlist/:club_id 클럽 회원 전체 조회
+exports.getClubMembers = async (req, res) => {
+  try {
+    const { club_id } = req.params.club_id;
+    const getMembers = await Club_members.findAll({
+      where: {
+        club_id: club_id,
+      },
+      include: [{ model: User, attributes: ["name","school","classid"] }]
+    });
+    res.render("clubAdmin/clubAdminMemberlist", { data: getMembers });
+  } catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+};
+
+// GET /clubAdminMemberDetail/:club_id 신청한 회원 상세정보 보기
+exports.getClubMember = async (req, res) => {
+  try {
+    const { club_id } = req.params.club_id;
+    const { userid_num } = req.body;
+    const getMember = await Club_members.findOne({
+      where: {
+        club_id: club_id,
+        userid_num: userid_num,
+      },
+      include: [{ model: User, attributes: ["name","school","classid"] }]
+    });
+    res.render("clubAdmin/clubAdminMemberDetail", { data: getMember });
+  } catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+};
+
+// Delete /clubAdminMemberDetail/:club_id 클럽회원 추방
+exports.deleteMembers = async (req, res) => {
+  try {
+    // 삭제 버튼클릭시 값이 넘어온다.
+    const {club_id} = req.params.userid_num;
+    const { userid_num } = req.body;
+    if (req.session.id === userid_num) {
+      const destroyMembers = await Club_members.destroy({
+        where: {
+          club_id: club_id,
+          userid_num: userid_num
+        }
+      });
+      if (destroyMembers) {
+        res.send({ isDeleted: true });
+      } else {
+        res.send({ isDeleted: false });
+      }
+    }
+  } catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+};
