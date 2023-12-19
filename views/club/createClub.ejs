@@ -12,22 +12,25 @@
     <%- include('../component/header')%>
 
     <main class="create-club">
-      <form name="create-club-form" onsubmit="createClub(event)">
+      <form name="create-club-form"class="create-club-form">
         <label for="club-name">동아리 이름</label>
-        <input type="text" id="club-name" placeholder="과학 동아리" required />
+        <input type="text" id="club-name" placeholder="" required>
+        <div id="name-error"></div>
 
-        <!-- <label for="club-description">동아리 설명</label>
-      <input type="text" id="club-description" placeholder="설명을 입력해주세요" required> -->
-
+        <label for="club-description">동아리 설명</label>
+        <textarea  id="club-description" placeholder="" required>
+        <div id="name-error"></div>
+  
         <label for="category">분야</label>
-        <input type="text" id="category" placeholder="과학" required />
-
+        <input type="text" id="category" placeholder="" required>
+        <div id="field-error"></div>
+  
         <label for="member-limit">인원 제한</label>
-        <input type="number" id="member-limit" placeholder="50" required />
-
+        <input type="number" id="member-limit" placeholder="" required>
+  
         <label for="keywords">키워드</label>
-        <input type="text" id="keywords" placeholder="과학, 로봇" required />
-
+        <input type="text" id="keywords" placeholder="" required>
+  
         <label for="location">활동 지역</label>
         <div class="location-input">
           <select  id="city" required>
@@ -76,7 +79,7 @@
 
         let clubName = createClubForm.elements["club-name"].value;
         console.log(clubName);
-        // let clubDescription = createClubForm.elements['club-description'].value;
+        let clubDescription = createClubForm.elements['club-description'].value;
         let clubCategory = createClubForm.elements["category"].value;
         let clubMemberLimit = createClubForm.elements["member-limit"].value;
         let clubKeywords = createClubForm.elements["keywords"].value;
@@ -95,7 +98,7 @@
           let nameError=document.querySelector('#name-error');
           console.log(nameError)
 
-          // nameError.innerText='동아리이름은 한글 최대 15자, 영어 최대 50자까지 가능합니다';
+          nameError.innerText='동아리이름은 한글 최대 15자, 영어 최대 50자까지 가능합니다';
           return;
         }
 
@@ -106,7 +109,17 @@
           let fieldError=document.querySelector('#field-error');
 
 
-          // fieldError.innerText='분야는 최대 10글자로 입력하세요';
+          fieldError.innerText='분야는 최대 10글자로 입력하세요';
+        }
+
+
+          // 설명 유효성 검사
+        const descriptionMaxLength = 200;
+
+      if(clubDescription.length > descriptionMaxLength){
+      let descriptionError=document.querySelector('#description-error');
+      descriptionError.innerText='설명은 최대 200글자로 입력하세요';
+
 
           return;
         }
