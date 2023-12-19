@@ -56,8 +56,12 @@
               userid: form.userid.value,
               password: form.password.value,
             },
-          }).then((result) => {
-            console.log(result);
+          }).then((res) => {
+            console.log(res.data);
+            if(res.data.isLogin === true) {
+              alert('로그인 성공')
+              document.location.href = '/home'
+            }
           });
         } catch (err) {
           console.log(err);

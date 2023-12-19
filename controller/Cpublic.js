@@ -57,6 +57,7 @@ exports.createPost = async (req,res) =>{
 }
 
 // GET /publicPostDetail/:post_id 특정 게시물 조회
+
 exports.getPostDetail = async (req, res) => {
   try {
     const { post_id } = req.params.post_id;
@@ -140,6 +141,7 @@ exports.patchPost = async (req, res) => {
   }
 };
 
+
 // PATCH /publicPostDetail/:post_id/:comment_id 특정 게시글 댓글 수정
 exports.patchPostComment = async (req, res) => {
   try {
@@ -156,6 +158,7 @@ exports.patchPostComment = async (req, res) => {
             post_id: post_id,
           },
         }
+
       );
       res.send(updatePostComment);
     }
@@ -164,6 +167,7 @@ exports.patchPostComment = async (req, res) => {
     res.send("Internal Server Error!");
   }
 };
+
 
 // PATCH /publicPostDetail/:post_id/:comment_id 특정 개시물 댓글 라이크 수정
 exports.patchPostCommentLike = async (req, res) => {
@@ -333,9 +337,11 @@ exports.deleteDm = async (req, res) => {
   }
 };
 
+
 // ======= 동아리 회원 =======
 
 // GET /clubAdminMemberlist/:club_id 회원 전체 조회
+
 exports.getClubMembers = async (req, res) => {
   try {
     const { club_id } = req.params.club_id;

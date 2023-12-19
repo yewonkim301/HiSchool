@@ -5,6 +5,51 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 
+
+const bodyParser = require('body-parser');
+const passport = require('passport');
+app.use(bodyParser.urlencoded({ extended: false }));
+
+require('./middleware/auth.js')()
+
+
+
+const { User } = require('./models/Index.js')
+const accountController = require('./controller/Caccount')
+const LocalStrategy = require('passport-local');
+
+
+// passport
+// passport.use(new LocalStrategy(User.authenticate()));
+
+passport.use(new LocalStrategy(
+  function(userid, password, done) {
+    User.findOne({ userid: userid }, function (err, user) {
+      if (err) { return done(err); }
+      if (!user) { return done(null, false); }
+      if (!user.verifyPassword(password)) { return done(null, false); }
+      return done(null, user);
+    });
+  }
+));
+
+passport.serializeUser(function(user, done) {    
+	console.log('serialize');    
+	done(null, user);
+});
+
+// passport.serializeUser(User.serializeUser());
+app.use(passport.initialize());
+
+
+app.get('/profile', passport.authenticate('jwt', { session: false }), accountController.profile)
+app.post('/login', passport.authenticate('local'), accountController.login)
+app.post('/register', accountController.register)
+
+
+
+
+
 const db = require("./models/Index");
 const dotenv = require("dotenv");
 dotenv.config();
@@ -18,6 +63,7 @@ const io = socketIO(server);
 // passport
 const passport = require("passport");
 const passportConfig = require("./passport");
+
 
 const swaggerUi = require("swagger-ui-express");
 const swaggerFile = require("./swagger-output");
@@ -33,24 +79,22 @@ app.use(express.static(path.join(__dirname, "static")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use(cookieParser(process.env.COOKIE_SECRET));
-app.use(
-  session({
-    resave: false,
-    saveUninitialized: false,
-    secret: process.env.COOKIE_SECRET,
-    cookie: {
-      httpOnly: true,
-      secure: false,
-    },
-  })
-);
+// app.use(cookieParser(process.env.COOKIE_SECRET));
+// app.use(
+//   session({
+//     resave: false,
+//     saveUninitialized: false,
+//     secret: process.env.COOKIE_SECRET,
+//     cookie: {
+//       httpOnly: true,
+//       secure: false,
+//     },
+//   })
+// );
 
-passportConfig();
 
-app.use(passport.initialize()); // 요청 객체에 passport 설정을 심음
-app.use(passport.session()); // req.session 객체에 passport정보를 추가 저장
-// passport.session()이 실행되면, 세션쿠키 정보를 바탕으로 해서 passport/index.js의 deserializeUser()가 실행하게 한다.
+
+
 
 const indexRouter = require("./routes");
 const authRouter = require("./routes/auth");
