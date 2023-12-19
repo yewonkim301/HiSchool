@@ -34,10 +34,11 @@ exports.getClub = async (req, res) => {
   }
 };
 
-// GET /clubAdminMain : 동아리 관리페이지 불러오기
+// GET /clubAdminMain/:club_id : 동아리 관리페이지 불러오기
 exports.getClubAdminMain = async (req, res) => {
   try {
-    res.render("clubAdmin/clubAdminMain");
+    const{club_id} = req.body;
+    res.render("clubAdmin/clubAdminMain", {data:club_id});
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -507,7 +508,7 @@ exports.getClubChat = async (req, res) => {
     const clubChat = await Club_chat.findAll({
       where: { club_id: club_id },
     });
-    res.render("myclub/myClubChat", { data: clubChat });
+    res.render("myclub/socketTest", { club_id });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");

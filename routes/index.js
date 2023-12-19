@@ -1,35 +1,56 @@
 const express = require("express");
 const controllerPublic = require("../controller/Cpublic");
 const controllerClub = require("../controller/Cclub");
-const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
 const router = express.Router();
-
-// const userRouter = require("./userRouter")
-// router.use("/auth", userRouter)
+const { isNotLoggedIn, isLoggedIn } = require("./middlewares");
+const passport = require("passport");
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv").config();
+const { User } = require("../models/Index");
 
 router.get("/", (req, res) => {
   res.render("index");
 });
 
-router.get("/home", (req, res) => {
+router.get("/home", isLoggedIn, async (req, res) => {
+  console.log(req.cookies.jwt);
+  const verified = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET).userid
+  console.log('verified : ', verified);
+
+  try {
+    const user = await User.findOne({
+      where: {
+        userid: verified
+      }
+    })
+    console.log(user);
+  } catch(err) {
+    console.log(err);
+  }
+  
+  
   res.render("home");
 });
 
-router.get("/login", (req, res) => {
+router.get("/login", isNotLoggedIn, (req, res) => {
   res.render("login");
 });
 
-router.get("/register", (req, res) => {
+router.get("/register", isNotLoggedIn, (req, res) => {
   res.render("register");
 });
 
-router.get("/register/findSchool", (req, res) => {
-  res.render("findSchool");
-});
+// router.get("/register/findSchool", (req, res) => {
+//   res.render("findSchool");
+// });
 
 // club
 // GET /clubMain : 전체 동아리 조회
-router.get("/clubMain", controllerClub.getClubs);
+router.get(
+  "/clubMain",
+  passport.authenticate("jwt", { session: false }),
+  controllerClub.getClubs
+);
 
 // GET /clubDetail/:club_id : 동아리 하나 상세 조회
 router.get("/clubDetail/:club_id", controllerClub.getClub);
@@ -43,9 +64,12 @@ router.post("/createClub", controllerClub.postCreateClub);
 //get /clubApply/:club_id
 router.get("/clubApply/:club_id", controllerPublic.clubApply);
 
+//post /clubApply/:club_id
+router.post("/clubApply/:club_id", controllerPublic.clubApplyinfo);
+
 // clubAdmin
 // GET /clubAdminMain : 동아리 관리페이지 불러오기
-router.get("/clubAdminMain", controllerClub.getClubAdminMain);
+router.get("/clubAdminMain/:club_id", controllerClub.getClubAdminMain);
 
 // GET /clubAdminApplyList/:club_id : 동아리 지원자 전체 리스트 불러오기
 router.get(
@@ -62,28 +86,34 @@ router.patch("/clubAdminEdit/:club_id", controllerClub.patchClub);
 // DELETE /clubAdminEdit/:club_id : 동아리 삭제
 router.delete("/clubAdminEdit/:club_id", controllerClub.deleteClub);
 
-// GET /clubAdminMemberList/:club_id 회원 전체 조회
-router.get("/clubAdminMemberList", controllerPublic.getClubMembers);
+// GET /clubAdminMemberList/:club_id 신청한 회원 전체 조회
+router.get("/clubAdminMemberList/:club_id", controllerPublic.getClubMembers);
 
-// GET /clubAdminApplyDetail 클럽 신청 페이지 상세 불러오기
-router.get("/clubAdminApplyDetail", controllerPublic.getClubAdminApplyDetail);
+// GET /clubAdminApplyDetail/:club_id 클럽 신청한 회원정보 상세페이지 불러오기
+router.get(
+  "/clubAdminApplyDetail/:club_id/:userid_num",
+  controllerPublic.getClubAdminApplyDetail
+);
 
-// GET /clubAdminMemberDetail/:club_id 특정 클럽, 회원정보 상세보기 페이지
+// GET /clubAdminMemberDetail/:club_id 클럽 회원정보 상세보기 페이지
 router.get("/clubAdminMemberDetail/:club_id", controllerPublic.getClubMember);
 
-// POST /clubAdminApplyDetail/:club_id 동아리 가입 신청
+// POST /clubAdminApplyDetail/:club_id 동아리 가입 신청 승인
 router.post(
   "/clubAdminApplyDetail/:club_id",
   controllerPublic.createClubMembers
 );
 
-// DELETE /clubAdminMemberDetail 클럽에서 추방
-router.delete("/clubAdminMemberDetail", controllerPublic.deleteMembers);
-
-// DELETE /clubAdminApplyList/:club_id 클럽 가입 거절
+// DELETE /clubAdminMemberDetail/:club_id 클럽에서 추방
 router.delete(
-  "/clubAdminApplyList/:club_id",
-  controllerPublic.deleteMembersApplyList
+  "/clubAdminMemberDetail/:club_id",
+  controllerPublic.deleteMembers
+);
+
+// DELETE /clubAdminApplyDetail/:club_id 클럽 가입 거절
+router.delete(
+  "/clubAdminApplyDetail/:club_id",
+  controllerPublic.deleteApplyDetail
 );
 
 // GET /clubAdminTransfer 클럽 회장 위임 페이지
@@ -172,12 +202,11 @@ router.patch("/myclubEditPost/:club_id/:post_id", controllerClub.patchPost);
 router.delete("/myclubEditPost/:club_id/:post_id", controllerClub.deletePost);
 
 // mypage
-router.get("/mypageMain", (req, res) => {
-  res.render("./mypage/mypageMain");
-});
-router.get("/mypageProfile", (req, res) => {
-  res.render("./mypage/mypageProfile");
-});
+// GET /mypageMain/:userid 마이페이지 정보 가져오기 ver.동아리
+router.get("/mypageMain/:userid", controllerPublic.getMyPage);
+
+// GET /mypageProfile/:nickname 마이페이지 정보 가져오기 ver.닉네임
+router.get("/mypageProfile/:nickname", controllerPublic.getMyPageProfile );
 
 // publicPost
 // GET /publicPostMain 익명 게시판 정보 불러오기
