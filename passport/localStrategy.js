@@ -11,6 +11,7 @@ module.exports = () => {
       {
         usernameField: "userid",
         passwordField: "password",
+        // passReqToCallback: true
       },
       async (userid, password, done) => {
         console.log(userid, password, done);

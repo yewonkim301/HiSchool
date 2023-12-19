@@ -1,16 +1,17 @@
 const express = require("express");
 const controllerPublic = require("../controller/Cpublic");
 const controllerClub = require("../controller/Cclub");
+const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 const router = express.Router();
 
 // const userRouter = require("./userRouter")
 // router.use("/auth", userRouter)
 
-router.get("/", (req, res) => {
+router.get("/", isNotLoggedIn, (req, res) => {
   res.render("index");
 });
 
-router.get("/home", (req, res) => {
+router.get("/home", isLoggedIn, (req, res) => {
   res.render("home");
 });
 
@@ -28,7 +29,7 @@ router.get("/register/findSchool", (req, res) => {
 
 // club
 // GET /clubMain : 전체 동아리 조회
-router.get("/clubMain", controllerClub.getClubs);
+router.get("/clubMain", isLoggedIn, controllerClub.getClubs);
 
 // GET /clubDetail/:club_id : 동아리 하나 상세 조회
 router.get("/clubDetail/:club_id", controllerClub.getClub);
