@@ -1,26 +1,70 @@
-const express = require('express');
-const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
+const express = require("express");
+const passport = require("passport");
+const bcrypt = require("bcrypt");
+const { isNotLoggedIn, isLoggedIn } = require("./middlewares");
+const { User } = require("./../models/Index");
+
 const router = express.Router();
-const controllerAuth = require("../controller/Cauth");
-const controllerAccount = require("../controller/Caccount")
-const passport = require('passport')
+
+// 회원 가입
+router.post("/register", isNotLoggedIn, async (req, res, next) => {
+  const { userid, password, school, phone, birthday, name, grade, classid } = req.body;
+
+  try {
+    const exUser = await User.find({ where: { userid: userid } });
+    if (exUser) {
+      console.log("join Error : 이미 가입된 아이디입니다");
+      return res.redirect("/join");
+    }
+    const hash = await bcrypt.hash(password, 12);
+    await User.create({
+      userid,
+      school,
+      phone,
+      profile_img: 'tmp',
+      nickname: 'tmp',
+      birthday,
+      name,
+      grade,
+      classid,
+      password: hash,
+    });
+    return res.redirect("/");
+  } catch (error) {
+    console.log(error);
+    return next(error);
+  }
+});
 
 
-/* router.post('/register', isNotLoggedIn, controllerAuth.handleRegister)
+// 로그인
+router.post("/login", isNotLoggedIn, (req, res, next) => {
+  passport.authenticate("local", (authError, user, info) => {
+    if (authError) {
+      console.error(authError);
+      return next(authError);
+    }
+    if (!user) {
+      console.log("유저가 존재하지 않습니다");
+      // return res.redirect("/");
+      return res.send('유저 정보가 일치하지 않습니다')
+    }
+    return req.login(user, (loginError) => {
+      if (loginError) {
+        console.error(loginError);
+        return next(loginError);
+      }
+      // return res.redirect("/");
+      return res.send('로그인 성공')
+    });
+  })(req, res, next); // 미들웨어 내의 미들웨어에는 (req,res,next)를 붙인다.
+});
 
-router.post('/login', isNotLoggedIn, controllerAuth.handleLogin)
-
-router.get('/logout', isLoggedIn, controllerAuth.handleLogout) */
-
-
-
-router.post('/register', passport.authenticate('local'), controllerAccount.register)
-
-router.post('/login', isNotLoggedIn, controllerAccount.login)
-
-// router.get('/logout', isLoggedIn, controllerAccount.logout)
-
-
-
+//로그아웃
+router.get("/logout", isLoggedIn, (req, res) => {
+  req.logout();
+  req.session.destroy();
+  res.redirect("/");
+});
 
 module.exports = router;

@@ -18,11 +18,11 @@
   <div class="content">
     <div class="group">
       <h2>동아리 이름</h2>
-      <p> 동아리 </p>
+      <input  id="editClubName" placeholder="<%=data.club_name%>">
     </div>
     <div class="group">
       <h2>동아리 설명</h2>
-      <p> ~~~ </p>
+      <input id="editClubName" placeholder="<%=data.club_name%>">
     </div>
     <div class="group">
       <h2>관리자</h2>
@@ -37,7 +37,7 @@
 
   <script>
    function trasferLeader(){
-      window.location.href= "/clubAdminTransfer"
+      window.location.href= "/clubAdminTransfer/<%=data.club_id%>"
    }
   </script>
 </body>
