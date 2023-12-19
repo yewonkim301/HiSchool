@@ -2,6 +2,8 @@ const express = require("express");
 const controllerPublic = require("../controller/Cpublic");
 const controllerClub = require("../controller/Cclub");
 const router = express.Router();
+const { isNotLoggedIn, isLoggedIn } = require("./middlewares");
+const passport = require("passport");
 
 
 
@@ -9,21 +11,21 @@ router.get("/", (req, res) => {
   res.render("index");
 });
 
-router.get("/home", (req, res) => {
+router.get("/home", isLoggedIn, (req, res) => {
   res.render("home");
 });
 
-router.get("/login", (req, res) => {
+router.get("/login", isNotLoggedIn, (req, res) => {
   res.render("login");
 });
 
-router.get("/register", (req, res) => {
+router.get("/register", isNotLoggedIn, (req, res) => {
   res.render("register");
 });
 
-router.get("/register/findSchool", (req, res) => {
-  res.render("findSchool");
-});
+// router.get("/register/findSchool", (req, res) => {
+//   res.render("findSchool");
+// });
 
 // club
 // GET /clubMain : 전체 동아리 조회
