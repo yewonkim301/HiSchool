@@ -24,16 +24,16 @@
       <form name="login">
         <div class="input">
           <label for="userid">아이디</label>
-          <input type="text" id="userid" class="textField" />
+          <input type="text" id="userid" class="textField" onkeyup="if(window.event.keyCode==13){handleLogin()}"/>
         </div>
         <div class="input">
           <label for="password">비밀번호</label>
-          <input type="password" id="password" class="textField" />
+          <input type="password" id="password" class="textField" onkeyup="if(window.event.keyCode==13){handleLogin()}"/>
         </div>
       </form>
 
       <div class="cta">
-        <button type="button" class="btn btn-primary" onclick="handleLogin()">
+        <button type="button" class="btn btn-primary" onclick="handleLogin()" >
           로그인
         </button>
       </div>
@@ -44,6 +44,8 @@
     </script>
 
     <script>
+
+      
 
       const form = document.forms['login']
 

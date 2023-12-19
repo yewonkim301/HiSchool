@@ -38,4 +38,4 @@ module.exports = (passport) => {
 };
 
 // 토큰에 담길 유저명의 key를 지정하는 옵션. 패스워드도 지정할 수 있다.
-const passportConfig = { usernameField: "userid", passwordField: "password" };
+// const passportConfig = { usernameField: "userid", passwordField: "password" };

@@ -59,18 +59,25 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
         console.log('로그인 에러');
         return next(loginError);
       }
-      // return res.redirect("/");
+
+      const payload = {
+        userid: req.body.userid
+      }
 
       const token = jwt.sign(
-        { userid: req.body.userid },
-        process.env.JWT_SECRET, {
-          expiresIn: "1w"
-        }
+        JSON.stringify(payload),
+        process.env.JWT_SECRET,
       );
 
-      return res.send({ isLoggedIn:true, token: token });
+      return res
+      .cookie('jwt', token, {
+        httpOnly: true,
+        secure: false, // https 사용시 true 설정해줄것
+      })
+      .status(200)
+      .send({ isLoggedIn:true });
     });
-  })(req, res, next); // 미들웨어 내의 미들웨어에는 (req,res,next)를 붙인다.
+  })(req, res, next); 
 });
 
 
