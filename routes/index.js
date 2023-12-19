@@ -156,6 +156,9 @@ router.delete(
   controllerClub.deleteClubPostCommentLike
 );
 
+// GET /myclubNewPost/:club_id : 동아리 게시글 생성
+router.get("/myclubNewPost/:club_id", controllerClub.getCreateClubPost);
+
 // POST /myclubNewPost/:club_id : 동아리 게시글 생성
 router.post("/myclubNewPost/:club_id", controllerClub.createClubPost);
 

@@ -33,22 +33,28 @@ exports.getNewPost = async (req, res) => {
 
 // POST /publicNewPost/:userid_num 게시물 생성
 // POST /publicNewPost
-exports.createPost = async (req, res) => {
-  try {
-    // const {userid_num} = req.params.userid_num;
-    const { title, content, image, userid_num } = req.body;
-    const newPost = await Public_post.create({
-      title: title,
-      content: content,
-      image: image,
-      userid_num: userid_num,
-    });
-    res.send(newPost);
-  } catch (err) {
-    console.error(err);
-    res.send("Internal Server Error!");
-  }
-};
+exports.createPost = async (req,res) =>{
+    try{
+        // const {userid_num} = req.params.userid_num;
+        const { 
+            title,
+            content,
+            image,
+            userid_num
+        } = req.body;
+        const newPost = await Public_post.create({
+            title: title,
+            content: content,
+            image: image,
+            userid_num: userid_num,
+        })
+        res.send(newPost)
+    }
+    catch(err){
+        console.error(err);
+        res.send("Internal Server Error!");
+    }
+}
 
 // GET /publicPostDetail/:post_id 특정 게시물 조회
 exports.getPostDetail = async (req, res) => {

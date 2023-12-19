@@ -12,14 +12,14 @@
     <%- include('../component/header')%>
 
     <main class="create-club">
-      <form name="create-club-form"class="create-club-form">
+      <form name="create-club-form" class="create-club-form" onsubmit="createClub(event)">
         <label for="club-name">동아리 이름</label>
         <input type="text" id="club-name" placeholder="" required>
         <div id="name-error"></div>
 
         <label for="club-description">동아리 설명</label>
-        <textarea  id="club-description" placeholder="" required>
-        <div id="name-error"></div>
+        <input type="text"  id="club-description" placeholder="" required>
+        <div id="description-error"></div>
   
         <label for="category">분야</label>
         <input type="text" id="category" placeholder="" required>
@@ -88,7 +88,7 @@
 
         
         // clubName 유효성 검사 -> 한글 있으면 최대 15자
-        const maxKoreanLength = 2;
+        const maxKoreanLength = 15;
         const maxEnglishLength = 50;
 
         const NameMaxLength = (/[ㄱ-ㅎㅏ-ㅣ가-힣]/.test(clubName)) ? maxKoreanLength : maxEnglishLength;
@@ -135,10 +135,11 @@
               location: `${clubCity}시 ${clubDistrict}구`,
               field: clubCategory,
               keyword: clubKeywords,
+              description: clubDescription
             },
           });
           console.log(res);
-          window.location.href=`/clubDetail/${res.data.club_id}`
+          window.location.href=`/clubMain`
         } catch (error) {
           console.log("createClub 에서 axios error > ", error);
         }
