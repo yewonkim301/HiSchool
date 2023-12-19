@@ -411,7 +411,8 @@ exports.deleteClubAdminTransfer = async (req, res) => {
 // clubApply/:club_id 동아리 신청페이지
 exports.clubApply = async (req,res) =>{
   try{
-    const {club_id} = req.params.club_id;
+    const {club_id} = req.params;
+    console.log(club_id);
     res.render("club/clubApply", {data:club_id});
   }
   catch (err) {
