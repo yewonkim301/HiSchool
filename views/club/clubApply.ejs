@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <title>과학 동아리</title>
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="/clubApply.css">
@@ -23,15 +24,15 @@
       <textarea id="introduction" placeholder="플레이스홀더"></textarea>
     </section>
 
-    <button type="button" class="btn-submit" onclick="clubRegister()">가입 신청</button>
+    <button type="submit" class="btn-submit">가입 신청</button>
   </form>
   <script>
     console.log('<%=data%>');
     async function clubApply(event) {
         event.preventDefault();
 
-        const clubApplyForm = document.forms["clubApplyform"];
-        console.log(clubApplyForm);
+        const createClubForm = document.forms["clubApplyform"];
+        console.log(createClubForm);
 
         let motivation = createClubForm.elements["motivation"].value;
 
@@ -53,9 +54,9 @@
             },
           });
           console.log(res);
-          if(res=='isapplySuccess'){
+          if(res.data.isApplySuccess){
             alert('가입 신청이 완료되었습니다.');
-            widow.location.href='/clubDetail/<%=data%>'
+            window.location.href='/clubDetail/<%=data%>'
           }
           else{
             alert('가입 신청이 되지 않았습니다. 다시 신청해주세요');

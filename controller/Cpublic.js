@@ -432,7 +432,7 @@ exports.clubApplyinfo = async (req,res) => {
       introduction: introduction,
       userid_num: userid_num,
     })
-    res.send(clubApplyinfo);
+    res.send({isApplySuccess:true});
   }
   catch (err) {
     console.error(err);
