@@ -11,131 +11,142 @@ const {
 // ===== publicPost =====
 
 // GET /publicPostMain 익명 게시판 정보 가져오기
-exports.getPost = async (req, res) => {
-  try {
-    const Posts = await Public_post.findAll();
-    res.render("/publicPost/publicPostMain", { data: Posts });
-  } catch {
-    console.error(err);
-    res.send("Internal Server Error!");
-  }
-};
+exports.getPost = async (req,res) =>{
+    try{
+        const Posts = await Public_post.findAll();
+        res.render('/publicPost/publicPostMain', {data: Posts});
+    }
+    catch{
+        console.error(err);
+        res.send("Internal Server Error!");
+    }
+}
 
 // GET /publicNewPost 게시물 생성 페이지 로드
 exports.getNewPost = async (req, res) => {
-  try {
-    res.render("/publicPost/publicNewPost");
-  } catch {
-    console.error(err);
-    res.send("Internal Server Error!");
-  }
-};
+    try{
+        res.render("/publicPost/publicNewPost");
+    }
+    catch{
+        console.error(err);
+        res.send("Internal Server Error!");
+    }
+}
 
 // POST /publicNewPost/:userid_num 게시물 생성
 // POST /publicNewPost
-exports.createPost = async (req, res) => {
-  try {
-    // const {userid_num} = req.params.userid_num;
-    const { title, content, image, userid_num } = req.body;
-    const newPost = await Public_post.create({
-      title: title,
-      content: content,
-      image: image,
-      userid_num: userid_num,
-    });
-    res.send(newPost);
-  } catch (err) {
-    console.error(err);
-    res.send("Internal Server Error!");
-  }
-};
+exports.createPost() = async (req,res) =>{
+    try{
+        // const {userid_num} = req.params.userid_num;
+        const { 
+            title,
+            content,
+            image,
+            userid_num
+        } = req.body;
+        const newPost = await Public_post.create({
+            title: title,
+            content: content,
+            image: image,
+            userid_num: userid_num,
+        })
+        res.send(newPost)
+    }
+    catch(err){
+        console.error(err);
+        res.send("Internal Server Error!");
+    }
+}
 
 // GET /publicPostDetail/:post_id 특정 게시물 조회
-exports.getPostDetail = async (req, res) => {
-  try {
-    const { post_id } = req.params.post_id;
-    const getPost = await Public_post.findOne({
-      where: { post_id: post_id },
-    });
-    const getPostComment = await Public_post_comment.findAll({
-      where: { post_id: post_id },
-    });
-    const getPostCommentLike = await Public_post_comment_like.findAll({
-      where: { post_id: post_id },
-    });
-    res.render("/publicPost/publicPostDetail", {
-      data: getPost,
-      getPostComment,
-      getPostCommentLike,
-    });
-  } catch (err) {
-    console.error(err);
-    res.send("Internal Server Error!");
-  }
-};
+exports.getPostDetail = async (req,res) =>{
+    try{
+        const {post_id} = req.params.post_id;
+        const getPost = await Public_post.findOne({
+            where:{post_id: post_id}
+        });
+        const getPostComment = await Public_post_comment.findAll({
+            where:{post_id: post_id}
+        });
+        const getPostCommentLike = await Public_post_comment_like.findAll({
+            where: {post_id: post_id}
+        })
+        res.render("/publicPost/publicPostDetail",{data: getPost, getPostComment, getPostCommentLike});
+    }
+    catch(err){
+        console.error(err);
+        res.send("Internal Server Error!");
+    }
+}
 
 // POST //publicPostDetail/:post_id 특정 게시글 댓글 작성
-exports.createPostComment = async (req, res) => {
-  try {
-    const { post_id } = req.params.post_id;
-    const { comment, comment_nickname, userid_num } = req.body;
-    // content_nickname은 세션이름으로 받을까요?
-    const newPublicPostComment = await Public_post_comment.create({
-      comment: comment,
-      comment_nickname: comment_nickname,
-      post_id: post_id,
-      userid_num: userid_num,
-      // userid_num 처리는 어떻게 해야할지
-    });
-    res.send(newPublicPostComment);
-  } catch (err) {
-    console.error(err);
-    res.send("Internal Server Error!");
-  }
-};
+exports.createPostComment = async (req,res) => {
+    try{
+        const {post_id} = req.params.post_id;
+        const {comment, comment_nickname, userid_num} = req.body;
+        // content_nickname은 세션이름으로 받을까요?
+        const newPublicPostComment = await Public_post_comment.create({
+            comment: comment,
+            comment_nickname : comment_nickname,
+            post_id: post_id,
+            userid_num: userid_num
+            // userid_num 처리는 어떻게 해야할지
+        })
+        res.send(newPublicPostComment);
+    }
+    catch(err){
+        console.error(err);
+        res.send("Internal Server Error!");
+    }
+}
 
 // POST /publicPostDetail/:post_id/:comment_id 특정 댓글 좋아요
-exports.createPostCommentLike = async (req, res) => {
-  try {
-    const { post_id, comment_id } = req.params;
-    const { like_id } = req.body;
-    const publicPostCommentLike = await Public_post_comment_like.create({
-      like_id: like_id,
-      post_id: post_id,
-      comment_id: comment_id,
-    });
-    res.send(publicPostCommentLike);
-  } catch (err) {
-    onsole.error(err);
-    res.send("Internal Server Error!");
-  }
-};
+exports.createPostCommentLike = async (req,res) =>{
+    try{
+        const {post_id, comment_id} = req.params;
+        const {like_id} = req.body;
+        const publicPostCommentLike = await Public_post_comment_like.create({
+            like_id : like_id,
+            post_id: post_id,
+            comment_id: comment_id
+        })
+        res.send(publicPostCommentLike)
+    }
+    catch(err){
+        console.error(err);
+        res.send("Internal Server Error!");
+    }
+}
 
 // ==== 수정 ====
 // PATCH /publicPostDetail/:post_id 게시글 수정
-exports.patchPost = async (req, res) => {
-  try {
-    const { post_id } = req.params.post_id;
-    const { title, content, image, userid_num } = req.body;
-    const updatePost = await Public_post.update(
-      {
-        title: title,
-        content: content,
-        image: image,
-      },
-      {
-        where: {
-          post_id: post_id,
-          userid_num: userid_num,
-        },
-      }
-    );
-    res.send(updatePost);
-  } catch (err) {
-    console.error(err);
-    res.send("Internal Server Error!");
-  }
-};
+exports.patchPost = async (req,res) => {
+    try{
+        const {post_id} = req.params.post_id;
+        const { 
+            title,
+            content,
+            image,
+            userid_num
+        } = req.body;
+        const updatePost = await Public_post.update({
+            title: title,
+            content: content,
+            image:image
+        },{
+            where:{
+                post_id: post_id,
+                userid_num: userid_num
+            }
+        }
+        )
+        res.send(updatePost);
+    }
+    catch(err){
+        console.error(err);
+        res.send("Internal Server Error!");
+    }
+}
 
 // PATCH /publicPostDetail/:post_id/:comment_id 특정 게시글 댓글 수정
 exports.patchPostComment = async (req, res) => {
@@ -161,6 +172,7 @@ exports.patchPostComment = async (req, res) => {
     res.send("Internal Server Error!");
   }
 };
+
 
 // PATCH /publicPostDetail/:post_id/:comment_id 특정 개시물 댓글 라이크 수정
 exports.patchPostCommentLike = async (req, res) => {
