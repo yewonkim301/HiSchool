@@ -34,10 +34,11 @@ exports.getClub = async (req, res) => {
   }
 };
 
-// GET /clubAdminMain : 동아리 관리페이지 불러오기
+// GET /clubAdminMain/:club_id : 동아리 관리페이지 불러오기
 exports.getClubAdminMain = async (req, res) => {
   try {
-    res.render("clubAdmin/clubAdminMain");
+    const{club_id} = req.body;
+    res.render("clubAdmin/clubAdminMain", {data:club_id});
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -200,7 +201,20 @@ exports.getClubPost = async (req, res) => {
   }
 };
 
-// PATCH /myclubPostDetail/:club_id/:post_id  : 동아리 게시글 수정
+// GET /myclubEditPost/:club_id/:post_id 동아리 게시글 수정 페이지 불러오기
+exports.getClubEditPost = async (req, res) => {
+  try {
+    const { club_id, post_id } = req.params;
+    const clubPost = await findOne({
+      where: { club_id: club_id, post_id: post_id },
+    });
+    res.render("myclub/myclubEditPost", { data: clubPost });
+  } catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+};
+// PATCH /myclubEditPost/:club_id/:post_id  : 동아리 게시글 수정
 exports.patchPost = async (req, res) => {
   try {
     const { club_id, post_id } = req.params;
@@ -225,7 +239,7 @@ exports.patchPost = async (req, res) => {
   }
 };
 
-// DELETE /myclubPostDetail/:club_id/:post_id  : 동아리 게시글 삭제
+// DELETE /myclubEditPost/:club_id/:post_id  : 동아리 게시글 삭제
 exports.deletePost = async (req, res) => {
   try {
     const { club_id, post_id } = req.params;
@@ -485,7 +499,7 @@ exports.deleteClubSchedule = async (req, res) => {
 };
 
 // Club_chat
-// GET /clubChat/:club_id : 동아리 채팅방 조회
+// GET /myclubChat/:club_id : 동아리 채팅방 조회
 exports.getClubChat = async (req, res) => {
   try {
     const { club_id } = req.params.club_id;
@@ -498,7 +512,7 @@ exports.getClubChat = async (req, res) => {
     res.send("Internal Server Error!");
   }
 };
-// POST /clubChat/:club_id : 동아리 채팅방에서 채팅 보내기
+// POST /myclubChat/:club_id : 동아리 채팅방에서 채팅 보내기
 exports.postClubChat = async (req, res) => {
   try {
     const { club_id } = req.params.club_id;

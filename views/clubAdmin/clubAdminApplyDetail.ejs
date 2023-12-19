@@ -31,13 +31,62 @@
     <p class="content-detail"><%=data.introduction%></p>
 
 
-    <button>승인</button><br>
-    <button>거절</button>
+    <button onclick="approve()">승인</button><br>
+    <button onclick="reject()">거절</button>
 
 
   </div>
 
-  
+  <script>
+    async function approve(){
+      try {
+          const res = await axios({
+            method: "POST",
+            url: "/clubApply/<%=data.club_id%>/<%=data.club_id%>",
+            data: {
+              ApplyResult:true,
+            },
+          });
+          console.log(res);
+          if(res.isSuccess){
+            alert('승인되었습니다');
+            window.location.href='clubAdminApplyList/<%=data.club_id%>'
+
+          }
+          else{
+            alert('오류가 발생했습니다. 다시 시도해주세요');
+          }
+        } catch (error) {
+          console.log("createClub 에서 axios error > ", error);
+        }
+
+    }
+
+
+    async function reject(){
+      try {
+          const res = await axios({
+            method: "POST",
+            url: "/clubApply/<%=data.club_id%>/<%=data.club_id%>",
+            data: {
+              ApplyResult:false,
+            },
+          });
+          console.log(res);
+          if(res.isSuccess){
+            alert('거절되었습니다');
+            window.location.href='clubAdminApplyList/<%=data.club_id%>'
+
+          }
+          else{
+            alert('오류가 발생했습니다. 다시 시도해주세요');
+          }
+        } catch (error) {
+          console.log("createClub 에서 axios error > ", error);
+        }
+
+    }
+  </script>
 
 </body>
 

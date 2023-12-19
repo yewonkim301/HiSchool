@@ -23,9 +23,10 @@
       <textarea id="introduction" placeholder="플레이스홀더"></textarea>
     </section>
 
-    <button type="submit" class="btn-submit" onclick="clubRegister()">가입 신청</button>
+    <button type="button" class="btn-submit" onclick="clubRegister()">가입 신청</button>
   </form>
   <script>
+    console.log('<%=data%>');
     async function clubApply(event) {
         event.preventDefault();
 
@@ -43,19 +44,22 @@
         try {
           const res = await axios({
             method: "POST",
-            url: "/clubApply/<%=data.club_id%>",
+            url: `/clubApply/<%=data%>`,
             data: {
               motivation:motivation,
-              introduction:introduction
+              introduction:introduction,
+              // 데이터 수정 --> 어떻게.......?
+              userid_num:1
             },
           });
           console.log(res);
           if(res=='isapplySuccess'){
             alert('가입 신청이 완료되었습니다.');
-            widow.location.href='/home'
+            widow.location.href='/clubDetail/<%=data%>'
           }
           else{
             alert('가입 신청이 되지 않았습니다. 다시 신청해주세요');
+            return;
           }
         } catch (error) {
           console.log("createClub 에서 axios error > ", error);

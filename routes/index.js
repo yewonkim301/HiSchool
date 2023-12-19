@@ -41,9 +41,12 @@ router.post("/createClub", controllerClub.postCreateClub);
 //get /clubApply/:club_id
 router.get("/clubApply/:club_id", controllerPublic.clubApply);
 
+//post /clubApply/:club_id
+router.post("/clubApply/:club_id", controllerPublic.clubApplyinfo);
+
 // clubAdmin
 // GET /clubAdminMain : 동아리 관리페이지 불러오기
-router.get("/clubAdminMain", controllerClub.getClubAdminMain);
+router.get("/clubAdminMain/:club_id", controllerClub.getClubAdminMain);
 
 // GET /clubAdminApplyList/:club_id : 동아리 지원자 전체 리스트 불러오기
 router.get(
@@ -60,28 +63,28 @@ router.patch("/clubAdminEdit/:club_id", controllerClub.patchClub);
 // DELETE /clubAdminEdit/:club_id : 동아리 삭제
 router.delete("/clubAdminEdit/:club_id", controllerClub.deleteClub);
 
-// GET /clubAdminMemberList/:club_id 회원 전체 조회
-router.get("/clubAdminMemberList", controllerPublic.getClubMembers);
+// GET /clubAdminMemberList/:club_id 신청한 회원 전체 조회
+router.get("/clubAdminMemberList/:club_id", controllerPublic.getClubMembers);
 
-// GET /clubAdminApplyDetail 클럽 신청 페이지 상세 불러오기
+// GET /clubAdminApplyDetail/:club_id 클럽 신청한 회원정보 상세페이지 불러오기
 router.get("/clubAdminApplyDetail", controllerPublic.getClubAdminApplyDetail);
 
-// GET /clubAdminMemberDetail/:club_id 특정 클럽, 회원정보 상세보기 페이지
+// GET /clubAdminMemberDetail/:club_id 클럽 회원정보 상세보기 페이지
 router.get("/clubAdminMemberDetail/:club_id", controllerPublic.getClubMember);
 
-// POST /clubAdminApplyDetail/:club_id 동아리 가입 신청
+// POST /clubAdminApplyDetail/:club_id 동아리 가입 신청 승인
 router.post(
   "/clubAdminApplyDetail/:club_id",
   controllerPublic.createClubMembers
 );
 
-// DELETE /clubAdminMemberDetail 클럽에서 추방
-router.delete("/clubAdminMemberDetail", controllerPublic.deleteMembers);
+// DELETE /clubAdminMemberDetail/:club_id 클럽에서 추방
+router.delete("/clubAdminMemberDetail/:club_id", controllerPublic.deleteMembers);
 
-// DELETE /clubAdminApplyList/:club_id 클럽 가입 거절
+// DELETE /clubAdminApplyDetail/:club_id 클럽 가입 거절
 router.delete(
-  "/clubAdminApplyList/:club_id",
-  controllerPublic.deleteMembersApplyList
+  "/clubAdminApplyDetail/:club_id",
+  controllerPublic.deleteApplyDetail
 );
 
 // GET /clubAdminTransfer 클럽 회장 위임 페이지
@@ -160,11 +163,14 @@ router.get("/myclubNewPost/:club_id", controllerClub.getCreateClubPost);
 // POST /myclubNewPost/:club_id : 동아리 게시글 생성
 router.post("/myclubNewPost/:club_id", controllerClub.createClubPost);
 
-// PATCH /myclubPostDetail/:club_id/:post_id  : 동아리 게시글 수정
-router.patch("/myclubPostDetail/:club_id/:post_id", controllerClub.patchPost);
+// GET /myclubEditPost/:club_id/:post_id  : 동아리 게시글 수정 페이지 불러오기
+router.get("/myclubEditPost/:club_id/:post_id", controllerClub.getClubEditPost);
 
-// DELETE /myclubPostDetail/:club_id/:post_id  : 동아리 게시글 삭제
-router.delete("/myclubPostDetail/:club_id/:post_id", controllerClub.deletePost);
+// PATCH /myclubEditPost/:club_id/:post_id  : 동아리 게시글 수정
+router.patch("/myclubEditPost/:club_id/:post_id", controllerClub.patchPost);
+
+// DELETE /myclubEditPost/:club_id/:post_id  : 동아리 게시글 삭제
+router.delete("/myclubEditPost/:club_id/:post_id", controllerClub.deletePost);
 
 // mypage
 router.get("/mypageMain", (req, res) => {
@@ -236,5 +242,10 @@ router.post("/dmDetail", controllerPublic.postDm);
 // DELETE /dm dm삭제
 router.delete("/dm", controllerPublic.deleteDm);
 
+// GET /myclubChat/:club_id 동아리 채팅방 페이지 불러오기
+router.get("/myclubChat/:club_id", controllerClub.getClubChat);
+
+// POST /myclubChat/:club_id 동아리 채팅방에서 채팅 보내기
+router.post("/myclubChat/:club_id", controllerClub.postClubChat);
 
 module.exports = router;
