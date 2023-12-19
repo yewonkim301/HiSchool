@@ -61,7 +61,6 @@ const server = http.createServer(app);
 const io = socketIO(server);
 
 // passport
-const passport = require("passport");
 const passportConfig = require("./passport");
 
 
