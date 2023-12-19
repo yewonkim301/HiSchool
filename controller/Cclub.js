@@ -189,10 +189,12 @@ exports.getClubPost = async (req, res) => {
         post_id: post_id,
       },
     });
+
     res.render("myclub/myclubPostDetail", {
       data: clubPost,
       clubPostComment,
       clubPostCommentLike,
+
     });
   } catch (err) {
     console.error(err);
@@ -204,7 +206,7 @@ exports.getClubPost = async (req, res) => {
 exports.getClubEditPost = async (req, res) => {
   try {
     const { club_id, post_id } = req.params;
-    const clubPost = await findOne({
+    const clubPost = await Club_post.findOne({
       where: { club_id: club_id, post_id: post_id },
     });
     res.render("myclub/myclubEditPost", { data: clubPost });

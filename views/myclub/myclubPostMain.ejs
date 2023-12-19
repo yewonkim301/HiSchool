@@ -15,44 +15,25 @@
    <%- include('../component/header')%>
       <a href="/myclubNewPost/:club_id" id="plus-button" class="plus-button">+</a>
 
-
-
-
-
       <!-- 게시물 목록 -->
-      <div class="list">
-         <% for(let i=0; i<data.length;i++){ %>
-            <div class="list" onclick="showDetail(event)">
-               <div class="list-title">
-                  <%= data[i].title%>
-               </div>
-               <div class="list-content">
-                  <%=data[i].content%>
-               </div>
+
+      <% for(let i=0; i < data.length; i++) { %>
+         <div class="list" onclick="showDetail(event, <%= data[i].post_id %>)">
+            <div class="list-title">
+               <%= data[i].title %>
             </div>
-            <% } %>
-               <!-- 게시물들이 여기에 추가 -->
-      </div>
-      <script>
-
-         function showDetail(event) {
-            console.log(event.target);
-            // Check if the clicked element has the class "list-title"
-            if (event.target.classList.contains('list')) {
-               // Get the text content of the clicked "list-title" div
-               const club_id = event.target.textContent;
-
-               // Log the text content to the console
-               console.log(club_id);
-               window.location.href = "/myclubPostDetail/1/46";
-               // window.location.href = `/myclubPostDetail/${club_id}:${post_id}`;
-            }
-         }
+            <div class="list-content">
+               <%= data[i].content %>
+            </div>
+         </div>
+         <% } %>
+            <script>
+               function showDetail(event, post_id) {
+                  window.location.href = `/myclubPostDetail/1/${post_id}`;
+               }
 
 
-
-
-      </script>
+            </script>
 </body>
 
 </html>

@@ -21,7 +21,15 @@
             </p>
             <!-- 게시글 작성 시간 등의 메타 정보도 추가 있습니다. -->
          </div>
-         <button class="btn btn-primary" onclick="deletepost()">삭제</button>
+         <div>댓글보기</div>
+         <div>댓글작성
+            <input type="text" id="commentContent">
+            <button onclick="submitComment()">작성하기</button>
+         </div>
+         <div>댓글삭제</div>
+
+
+
          <button class="btn btn-primary" onclick="editPost()">수정</button>
 
          <!-- 댓글 목록 -->
@@ -30,21 +38,54 @@
                <div class="comment-body">
                   <%= comment.content %>
                </div>
-               <div class="comment-footer">
-                  <!-- 좋아요 수를 계산하는 로직 -->
-               </div>
+               <button onclick="deleteComment('<%= comment.id %>')">삭제</button> <!-- 삭제 버튼 -->
             </div>
-            <% }) %>
+            <% }); %>
       </div>
       <script>
 
 
+         // (async function () {
+         //    axios({
+         //       method: get,
+         //       url: 'myclub/myclubPostDetail/1/40'
+
+         //    }).then(res => {
+         //       console.log(data);
+         //    });
+         // });
+         // 댓글 작성
+         // POST  /myclubPostDetail/:club_id/:post_id : 동아리 게시글 댓글 생성
+         function submitComment() {
+            const content = document.getElementById('commentContent').value;
+
+
+            axios.post(`/myclubPostDetail/1/<%=data.post_id%>`, {
+
+               club_id: 1,
+               post_id: 46,
+               comment_name: "수정", // 클라이언트에서 가져온 사용자 이름
+               content: content
+            })
+
+               .then(function (res) {
+                  alert('댓글이 작성되었습니다.');
+                  window.location.reload(); // 페이지 새로고침 또는 댓글 목록 업데이트
+               })
+               .catch(function (err) {
+                  console.error('Comment submit error:', error);
+                  alert('댓글 작성 중 오류가 발생했습니다.');
+               });
+
+         }
+
+         // 댓글 삭제
          // DELETE /myclubPostDetail/:club_id/:post_id  : 동아리 게시글 삭제
 
          function deletepost() {
             if (confirm('게시글을 삭제하시겠습니까?')) {
                axios.delete('/myclubPostDetail/1/45')
-                  .then(function (response) {
+                  .then(function (res) {
                      if (response.data.isDeleted) {
                         alert('게시글이 삭제되었습니다.');
                         window.location.href = '/myClubPostMain/1'; // 게시글 목록으로 리디렉션
@@ -52,16 +93,19 @@
                         alert('게시글 삭제에 실패했습니다.');
                      }
                   })
-                  .catch(function (error) {
+                  .catch(function (err) {
                      alert('게시글 삭제 중 오류가 발생했습니다.');
                      console.error('Delete error:', error);
                   });
             }
          }
 
-         function editPost(clubId, postId) {
-            window.location.href = `/myclubEditPost/1/46`; // 수정 페이지로 이동
+         // clubId, postId
+         function editPost(event, post_id) {
+            window.location.href = `/myclubEditPost/1/${post_id}`; // 수정 페이지로 이동
          }
+
+
       </script>
 </body>
 
