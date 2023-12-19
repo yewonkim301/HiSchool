@@ -13,134 +13,42 @@
 
 <body>
    <%- include('../component/header')%>
-      <div id="plus-button" class="plus-button">+</div>
+      <a href="/myclubNewPost/:club_id" id="plus-button" class="plus-button">+</a>
 
-      <!-- 모달 배경 -->
-      <div id="modal-background" class="modal-background" style="display: none"></div>
 
-      <!-- 모달 창 -->
-      <div id="modal" class="modal" style="display: none">
-         <!-- 모달 내용 -->
-         <div class="modal-content">
-            <!-- 모달 닫기 버튼 -->
-            <span id="close-modal" class="close-modal">&times;</span>
 
-            <!-- 글쓰기 폼 -->
-            <form id="post-form" name="add-post">
-               <h2>게시글 작성</h2>
-               <input type="text" id="post-title" name="title" placeholder="제목을 입력하세요" />
-               <textarea id="post-content" name="content" placeholder="내용을 입력하세요"></textarea>
-               <button type="button" class="btn-primary" onclick="addpost()">
-                  등록하기
-               </button>
-            </form>
-         </div>
-      </div>
 
-      <!-- 상세 게시글 보기를 위한 모달 추가 -->
-      <div id="detail-modal" class="modal" style="display: none">
-         <div class="modal-content">
-            <span id="detail-close-modal" class="close-modal">&times;</span>
-            <h2 id="detail-post-title"></h2>
-            <p id="detail-post-content"></p>
-         </div>
-      </div>
 
       <!-- 게시물 목록 -->
-      <div id="posts-container">
-         <!-- 게시물들이 여기에 추가 -->
+      <div class="list">
+         <% for(let i=0; i<data.length;i++){ %>
+            <div class="list" onclick="showDetail(event)">
+               <div class="list-title">
+                  <%= data[i].title%>
+               </div>
+               <div class="list-content">
+                  <%=data[i].content%>
+               </div>
+            </div>
+            <% } %>
+               <!-- 게시물들이 여기에 추가 -->
       </div>
       <script>
-         const plusBtn = document.querySelector(".plus-button");
-         const modalBackground = document.querySelector(".modal-background");
-         const modal = document.querySelector(".modal");
-         const closebtn = document.querySelector(".close-modal");
-         const form = document.forms["add-post"];
-         const btnPrmary = document.querySelector(".btn-primary");
 
-         // 모달창 활성화
-         plusBtn.addEventListener("click", function () {
-            modalBackground.style.display = "block";
-            modal.style.display = "block";
-         });
+         function showDetail(event) {
+            console.log(event.target);
+            // Check if the clicked element has the class "list-title"
+            if (event.target.classList.contains('list')) {
+               // Get the text content of the clicked "list-title" div
+               const club_id = event.target.textContent;
 
-         // 닫기 버튼시 모달 닫음
-         closebtn.addEventListener("click", function () {
-            modalBackground.style.display = "none";
-            modal.style.display = "none";
-         });
-
-         // 모달 밖의 배경을 클릭하면 모달이 닫히도록 설정
-         modalBackground.addEventListener("click", function (event) {
-            if (event.target === modalBackground) {
-               modalBackground.style.display = "none";
-               modal.style.display = "none";
-            }
-         });
-
-         console.log(form);
-         async function addpost() {
-            await axios({
-               method: "POST",
-               url: "/myclubNewPost/:club_id",
-               data: {
-                  club_id: "1", // 임시 데이터
-                  userid: "2", // 임시 데이터
-                  title: form.title.value,
-                  content: form.content.value,
-                  image: "1",
-               },
-            })
-               .then((res) => {
-                  console.log(res.status);
-                  if (res.status === 200) {
-                     modalBackground.style.display = "none";
-                     modal.style.display = "none";
-                     alert("게시물 등록완료");
-
-                     // 새 게시물 엘리먼트 생성
-                     const newPostElement = document.createElement('div');
-                     newPostElement.innerHTML = `
-            <h3>${form.title.value}</h3>
-            <p>${form.content.value}</p>
-            
-         `;
-
-                     // 게시물 목록에 새 게시물 추가
-                     const postsContainer = document.getElementById('posts-container');
-                     postsContainer.appendChild(newPostElement);
-                  }
-               });
-         }
-
-         async function fetchAndDisplayPosts() {
-            try {
-               const club_id = '1'; // 예시 동아리 ID
-               const response = await axios.get('/myclubPosts/' + club_id);
-               const posts = response.data;
-
-               // 게시물 목록 컨테이너
-               const postsContainer = document.getElementById('posts-container');
-               postsContainer.innerHTML = ''; // 목록을 비우고 새로운 게시물로 채움
-
-               // 각 게시물에 대해 HTML 요소를 생성하고 목록에 추가
-               posts.forEach(post => {
-                  const postElement = document.createElement('div');
-                  postElement.innerHTML = `
-        <h3>${post.title}</h3>
-        <p>${post.content}</p>
-        // 이미지나 다른 필드를 표시하려면 여기에 추가
-      `;
-                  postsContainer.appendChild(postElement);
-               });
-            } catch (error) {
-               console.error('Error fetching posts:', error);
-               // 오류 처리 로직을 여기에 추가
+               // Log the text content to the console
+               console.log(club_id);
+               window.location.href = "/myclubPostDetail/1/45";
+               // window.location.href = `/myclubPostDetail/${club_id}:${post_id}`;
             }
          }
 
-         // 페이지 로드 시 게시글 목록을 가져옴
-         document.addEventListener('DOMContentLoaded', fetchAndDisplayPosts);
 
 
 
