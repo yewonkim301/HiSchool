@@ -353,6 +353,17 @@ exports.deleteClubPostCommentLike = async (req, res) => {
   }
 };
 
+// GET /myclubNewPost/:club_id : 동아리 게시글 생성 페이지 불러오기
+exports.getCreateClubPost = async (req, res) => {
+  try {
+    // const { club_id } = req.params.club_id;
+    res.render("myclub/myclubNewPost");
+  } catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+};
+
 // POST /myclubNewPost/:club_id : 동아리 게시글 생성
 exports.createClubPost = async (req, res) => {
   try {
