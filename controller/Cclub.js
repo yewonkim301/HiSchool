@@ -5,6 +5,7 @@ const {
   Club_post_comment,
   Club_post_comment_like,
   Club_schedule,
+  User,
 } = require("../models/Index");
 const { trace } = require("../routes");
 
@@ -484,4 +485,39 @@ exports.deleteClubSchedule = async (req, res) => {
 };
 
 // Club_chat
-// GET /clubChat : 동아리 채팅방 조회
+// GET /clubChat/:club_id : 동아리 채팅방 조회
+exports.getClubChat = async (req, res) => {
+  try {
+    const { club_id } = req.params.club_id;
+    const clubChat = await Club_chat.findAll({
+      where: { club_id: club_id },
+    });
+    res.render("myclub/myClubChat", { data: clubChat });
+  } catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+};
+// POST /clubChat/:club_id : 동아리 채팅방에서 채팅 보내기
+exports.postClubChat = async (req, res) => {
+  try {
+    const { club_id } = req.params.club_id;
+    const { from_name, content } = req.body;
+    // 프론트에서 세션에 저장되어 있는 userid_num 값을 찾아서 from_name에 담아서 보내줌
+    const from_realName = await User.findOne({
+      attributes: ["name"],
+      where: { userid_num: from_name },
+    });
+    const newClubChat = await Club_chat.create({
+      club_id: club_id,
+      from_name: from_realName,
+      content: content,
+    });
+    res.send(newClubChat);
+  } catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+};
+
+// DELETE  동아리 채팅방 삭제 -> 동아리가 삭제될 때 채팅방도 함께 삭제
