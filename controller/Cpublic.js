@@ -512,6 +512,6 @@ exports.deleteClubAdminTransfer = async (req, res) => {
   }
 };
 
-exports.clubApplys = async (req,res) =>{
+exports.clubApply = async (req,res) =>{
   res.render("club/clubApply");
 }
