@@ -511,3 +511,7 @@ exports.deleteClubAdminTransfer = async (req, res) => {
     res.send("Internal Server Error!");
   }
 };
+
+exports.clubApplys = async (req,res) =>{
+  res.render("club/clubApply");
+}
