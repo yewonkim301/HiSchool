@@ -1,38 +1,30 @@
-const passport = require("passport");
-const localStrategy = require("passport-local").Strategy;
+const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt");
+const passport = require("passport");
 const { User } = require("../models/Index");
 
 
-module.exports = () => {
-  console.log('localStrategy.js 호출');
+module.exports = (passport) => {
   passport.use(
-    new localStrategy(
+    new LocalStrategy(
       {
         usernameField: "userid",
-        passwordField: "password",
-        // passReqToCallback: true
+        passwordFiled: "password",
       },
       async (userid, password, done) => {
-        console.log(userid, password, done);
         try {
-          const exUser = await User.findOne({ 
-            where: { 
-              userid: userid,
-            } 
-          });
-          console.log('exUser:', exUser);
+          const exUser = await User.findOne({ where: { userid: userid } });
           if (exUser) {
-            console.log(exUser);
             const result = await bcrypt.compare(password, exUser.password);
-            console.log('일치하는 회원정보 확인 완료');
             if (result) {
+              console.log('비밀번호 일치함');
               done(null, exUser);
             } else {
+              console.log('비밀번호 일치하지 않습니다');
               done(null, false, { message: "비밀번호가 일치하지 않습니다." });
             }
           } else {
-            console.log('오류 : 가입되지 않은 회원');
+            console.log('가입하지 않은 회원입니다');
             done(null, false, { message: "가입되지 않은 회원입니다." });
           }
         } catch (error) {

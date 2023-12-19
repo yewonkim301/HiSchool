@@ -1,11 +1,9 @@
 const express = require("express");
 const controllerPublic = require("../controller/Cpublic");
 const controllerClub = require("../controller/Cclub");
-const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
 const router = express.Router();
 
-// const userRouter = require("./userRouter")
-// router.use("/auth", userRouter)
+
 
 router.get("/", (req, res) => {
   res.render("index");

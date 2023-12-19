@@ -3,6 +3,8 @@ const config = require(__dirname + "/../config/config.js")["development"];
 
 const db = {};
 
+
+
 const sequelize = new Sequelize(
   config.database,
   config.username,
@@ -12,6 +14,8 @@ const sequelize = new Sequelize(
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
+
+
 
 const User = require("./User")(sequelize, Sequelize);
 const Public_post = require("./Public_post")(sequelize, Sequelize);

@@ -7,8 +7,11 @@ const development = {
   database: env.AWS_DB_NAME,
   host: env.AWS_HOST,
   dialect: "mysql",
+  storage: "./session.mysql",
   timezone: "+09:00",
 };
+
+
 
 const production = {
   username: env.AWS_DB_USERNAME,
@@ -16,6 +19,7 @@ const production = {
   database: env.AWS_DB_NAME,
   host: env.AWS_HOST,
   dialect: "mysql",
+  storage: "./session.mysql",
   timezone: "+09:00",
 }
 
