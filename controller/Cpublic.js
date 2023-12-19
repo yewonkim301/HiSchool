@@ -341,15 +341,16 @@ exports.deleteDm = async (req, res) => {
 // GET /clubAdminApplyDetail/:club_id 동아리 페이지 불러오기
 exports.getClubAdminApplyDetail = async (req, res) => {
   try {
-    const{club_id} = req.params;
-    const {userid_num} = req.body;
+    const{club_id,userid_num} = req.params;
+
     const getClubAdminApplyDetail = await Club_members_wait.findOne({
       where:{
         club_id: club_id,
         userid_num: userid_num
       },
-      include: [{ model: User, attributes: ["name","school","classid"], where: club_id }]
+      include: [{ model: User, attributes: ["name","school","classid"], where: userid_num }]
     })
+    console.log("여기!!!!!!",getClubAdminApplyDetail)
     res.render("clubAdmin/clubAdminApplyDetail", {data: getClubAdminApplyDetail});
   } catch (err) {
     console.error(err);
@@ -467,14 +468,19 @@ exports.createClubMembers = async (req, res) => {
 // GET /clubAdminApplyList/:club_id 클럽에 가입신청한 사람들 전체조회
 exports.getClubMembersApplyList = async (req, res) => {
   try {
-    const { club_id } = req.params;
+    const { club_id,userid_num } = req.params;
+    console.log('club_id > ',club_id);
+
+  
     const getApplyList = await Club_members_wait.findAll({
       where: {
         club_id: club_id,
+    
       },
-      include: [{ model: User, attributes: ["name","school","classid"] }]
+      include: [{ model: User}]
     });
-    console.log(getApplyList)
+    console.log("getClubMembersApplyList>",getApplyList[0].dataValues);
+    console.log("dataType>",typeof (getApplyList[0].dataValues));
 
     res.render("clubAdmin/clubAdminApplyList", { data: getApplyList });
   } catch (err) {

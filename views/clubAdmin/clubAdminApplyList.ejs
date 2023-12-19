@@ -16,10 +16,10 @@
     <% for(let i=0; i<data.length;i++){ %>
     <div class="request">
       <div class="request-info">
-        <p class="requester-name"><%=data.name%></p>
-        <p class="request-text"><%=data.school%></p>
+        <p class="requester-name"><%=data[i].dataValues.user.dataValues.userid%></p>
+        <p class="request-text"><%=data[i].dataValues.introduction%></p>
       </div>
-      <button class="<%=data.userid_num%>" onclick="checkDetail(this)">상세 정보 확인</button>
+      <button class="<%=data[i].dataValues.user.dataValues.userid_num%>" onclick="checkDetail(this)">상세 정보 확인</button>
     </div>
     
     <% } %>
