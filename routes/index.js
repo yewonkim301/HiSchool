@@ -7,11 +7,11 @@ const router = express.Router();
 // const userRouter = require("./userRouter")
 // router.use("/auth", userRouter)
 
-router.get("/", isNotLoggedIn, (req, res) => {
+router.get("/", (req, res) => {
   res.render("index");
 });
 
-router.get("/home", isLoggedIn, (req, res) => {
+router.get("/home", (req, res) => {
   res.render("home");
 });
 
@@ -29,7 +29,7 @@ router.get("/register/findSchool", (req, res) => {
 
 // club
 // GET /clubMain : 전체 동아리 조회
-router.get("/clubMain", isLoggedIn, controllerClub.getClubs);
+router.get("/clubMain", controllerClub.getClubs);
 
 // GET /clubDetail/:club_id : 동아리 하나 상세 조회
 router.get("/clubDetail/:club_id", controllerClub.getClub);
