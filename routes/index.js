@@ -1,7 +1,7 @@
 const express = require("express");
 const controllerPublic = require("../controller/Cpublic");
 const controllerClub = require("../controller/Cclub");
-const { isLoggedIn, isNotLoggedIn } = require('./middlewares');
+const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
 const router = express.Router();
 
 // const userRouter = require("./userRouter")
@@ -238,5 +238,10 @@ router.post("/dmDetail", controllerPublic.postDm);
 // DELETE /dm dm삭제
 router.delete("/dm", controllerPublic.deleteDm);
 
+// GET /myclubChat/:club_id 동아리 채팅방 페이지 불러오기
+router.get("/myclubChat/:club_id", controllerClub.getClubChat);
+
+// POST /myclubChat/:club_id 동아리 채팅방에서 채팅 보내기
+router.post("/myclubChat/:club_id", controllerClub.postClubChat);
 
 module.exports = router;
