@@ -454,7 +454,8 @@ exports.createClubMembers = async (req, res) => {
   try {
     // const {userid_num} = req.params.userid_num;
     const { club_id, userid_num} = req.params;
-    const { motivation, introduction } = req.body;
+    const { motivation, introduction, applyResult } = req.body;
+    console.log('승인했을 때 > ', motivation, introduction, applyResult)
     if(applyResult){
       const newMembers = await Club_members.create({
         club_id: club_id,
@@ -462,7 +463,7 @@ exports.createClubMembers = async (req, res) => {
         introduction: introduction,
         userid_num: userid_num,
       });
-      res.send(newMembers);
+      res.send({isApplySuccess:true, newMembers});
     }
   } catch (err) {
     console.error(err);
@@ -474,14 +475,13 @@ exports.createClubMembers = async (req, res) => {
 exports.getClubMembersApplyList = async (req, res) => {
   try {
     const { club_id,userid_num } = req.params;
-    console.log('club_id > ',club_id);
+
     const getApplyList = await Club_members_wait.findAll({
       where: {
         club_id: club_id,
       },
       include: [{ model: User}]
     });
-   
 
     if(!getApplyList){
       res.render("clubAdmin/clubAdminApplyList")
