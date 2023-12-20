@@ -265,11 +265,15 @@ exports.createPostComment = async (req, res) => {
     const { comment_name, content } = req.body;
     console.log(req.params);
     console.log(req.body);
+    const { userid, userid_num } = jwt.verify(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
     // ? comment_name : 세션에 저장되어 있는 로그인한 유저의 정보에서 찾아야 함
     const newClubPostComment = await Club_post_comment.create({
       club_id: club_id,
       post_id: post_id,
-      // userid: userid,
+      userid: userid,
       comment_name: comment_name,
       content: content,
     });
@@ -562,7 +566,7 @@ exports.getMyclubMain = async (req, res) => {
   console.log(req.params);
   const { club_id } = req.params;
   console.log(club_id);
-  console.log({club_id});
+  console.log({ club_id });
   const { userid, userid_num } = jwt.verify(
     req.cookies.jwt,
     process.env.JWT_SECRET
