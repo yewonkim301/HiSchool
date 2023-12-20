@@ -1,6 +1,7 @@
 const express = require("express");
 const controllerPublic = require("../controller/Cpublic");
 const controllerClub = require("../controller/Cclub");
+const controllerSupport = require("../controller/Csupport");
 const router = express.Router();
 const { isNotLoggedIn, isLoggedIn } = require("./middlewares");
 const passport = require("passport");
@@ -313,5 +314,18 @@ router.get("/myclubList", controllerClub.getMyclubList);
 
 // GET /myclubMain/:club_id 내가 가입한 동아리의 메인 페이지 불러오기
 router.get("/myclubMain/:club_id", controllerClub.getMyclubMain);
+
+// ====== Support =======
+// GET /supportMain 고객센터 페이지 로드
+router.get("/supportMain", controllerSupport.getSupport);
+
+// POST /supportMain 고객 문의 등록
+router.post("/supportMain", controllerSupport.postSupport );
+
+// PATCH /supportMain 고객 문의 답글
+router.patch("/supportMain", controllerSupport.postSupportComment);
+
+// DELETE /supportMain 문의글 삭제
+router.delete("/supportMain", controllerSupport.deleteSupport);
 
 module.exports = router;
