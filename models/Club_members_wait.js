@@ -2,6 +2,12 @@ const ClubMembersWait = (Sequelize, DataTypes) => {
     return Sequelize.define(
         "clubMembersWait",
         {
+            members_id: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                primaryKey: true,
+                autoIncrement: true,
+            },
             motivation: {
                 type: DataTypes.STRING(400),
                 allowNull: false,
