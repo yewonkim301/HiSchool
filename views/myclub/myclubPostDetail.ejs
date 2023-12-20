@@ -61,33 +61,32 @@
                   // 댓글 작성
                   // POST  /myclubPostDetail/:club_id/:post_id : 동아리 게시글 댓글 생성
 
-                  const club_id = 1; // 예시 데이터, 실제 데이터로 변경 필요
+                  const club_id = '<%= data.club_id %>'; // 예시 데이터, 실제 데이터로 변경 필요
                   const post_id = '<%= data.post_id %>'; // ejs를 사용하여 서버로부터 받은 post_id
-
+                  // const comment_name = '<%=data.comment_name%>';
 
                   function submitComment() {
-
                      const content = document.getElementById('commentContent').value;
-                     axios.post(`/myclubPostDetail/${club_id}/${post_id}`, {
-                        club_id: club_id,
-                        post_id: post_id,
-                        comment_name: "수정", // 현재 로그인한 사용자의 이름 (변경필요)
-                        content: content
-                     })
-                        .then(function (res) {
+                     console.log(club_id, post_id, content);
+                     axios(
+                        {
+                           url: `/myclubPostDetail/${club_id}/${post_id}`,
+                           method: 'post',
+                           data: {
+                              comment_name: "수정", // 현재 로그인한 사용자의 이름 (변경필요)
+                              content: content,
+                           }
+                        })
 
-                           console.log(res.data.comment_id);
+                        .then((res) => {
                            const newComment = res.data; // 새 댓글 데이터
-
-
+                           console.log(newComment);
                            // 새 댓글 요소 생성
                            const commentElement = document.createElement('div');
                            commentElement.className = 'comment';
                            commentElement.innerHTML = `
          <div class="comment-body">${newComment.content}</div>
-         <button onclick="deleteComment('${newComment.id}')">삭제</button>
-      `;
-
+         <button onclick="deleteComment('${newComment.id}')">삭제</button> `;
                            // "수정" 텍스트 바로 아래에 새 댓글 요소 삽입
                            const editButton = document.querySelector('.btn.btn-primary');
                            editButton.parentNode.insertBefore(commentElement, editButton.nextSibling);
@@ -102,12 +101,12 @@
                   }
 
                   // 댓글 삭제
-                  // DELETE /myclubPostDetail/:club_id/:post_id  : 동아리 게시글 삭제
+
 
                   function deleteComment(comment_id) {
 
-                     axios.delete(`/myclubPostDetail/${club_id}/${post_id}/${comment_id}`);
-                     alert("게")
+                     axios.delete(`/myclubPostDetail/${club_id}/${post_id}/${comment_id}`)
+
                         .then(function (res) {
                            if (res.data.isDeleted) {
                               alert('댓글이 삭제되었습니다.');
@@ -150,7 +149,7 @@
 
                   // clubId, postId
                   function editPost(post_id) {
-                     window.location.href = `/myclubEditPost/1/${post_id}`; // 수정 페이지로 이동
+                     window.location.href = `/myclubEditPost/${club_id}/${post_id}`; // 수정 페이지로 이동
                   }
 
 

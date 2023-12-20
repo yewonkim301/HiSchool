@@ -275,11 +275,11 @@ exports.deletePost = async (req, res) => {
 
 // POST  /myclubPostDetail/:club_id/:post_id : 동아리 게시글 댓글 생성
 exports.createPostComment = async (req, res) => {
+  console.log('myclubpostdetail clubid postid 댓글 입력');
   try {
     const { club_id, post_id } = req.params;
     const { comment_name, content } = req.body;
-    console.log(req.params);
-    console.log(req.body);
+    console.log("욕ㄴ이러ㅣㄴ얼쟈대러ㅐㅑㅈㄷㄹㄷㅈ", content);
     const { userid, userid_num } = jwt.verify(
       req.cookies.jwt,
       process.env.JWT_SECRET
@@ -390,8 +390,9 @@ exports.deleteClubPostCommentLike = async (req, res) => {
 // GET /myclubNewPost/:club_id : 동아리 게시글 생성 페이지 불러오기
 exports.getCreateClubPost = async (req, res) => {
   try {
-    // const { club_id } = req.params.club_id;
-    res.render("myclub/myclubNewPost");
+    // 수정
+    const { club_id } = req.params;
+    res.render("myclub/myclubNewPost", { data: club_id });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -400,6 +401,9 @@ exports.getCreateClubPost = async (req, res) => {
 
 // POST /myclubNewPost/:club_id : 동아리 게시글 생성
 exports.createClubPost = async (req, res) => {
+  console.log('createClubPost 실행');
+  console.log('createClubPost clubid', req.params.club_id);
+
   try {
     const { club_id } = req.params;
     const { title, content, image } = req.body;
@@ -411,6 +415,7 @@ exports.createClubPost = async (req, res) => {
       content: content,
       image: image,
     });
+    console.log('생성 완료');
     res.send(newPost);
   } catch (error) {
     console.error(error);
