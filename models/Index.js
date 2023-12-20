@@ -1,10 +1,7 @@
 const Sequelize = require("sequelize");
 const config = require(__dirname + "/../config/config.js")["development"];
 
-
 const db = {};
-
-
 
 const sequelize = new Sequelize(
   config.database,
@@ -15,9 +12,6 @@ const sequelize = new Sequelize(
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
-
-
-
 
 const User = require("./User")(sequelize, Sequelize);
 const Public_post = require("./Public_post")(sequelize, Sequelize);
@@ -56,7 +50,6 @@ Dm.belongsTo(User, {
 
 // User Pubic_Post => 1:N
 User.hasMany(Public_post, {
-
   foreignKey: "userid_num",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
@@ -113,12 +106,12 @@ Club_members.belongsTo(Club, {
 
 // Public_post P_Comment => 1:N
 Public_post.hasMany(Public_post_comment, {
-  foreignKey: "userid_num",
+  foreignKey: "club_id",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
 Public_post_comment.belongsTo(Public_post, {
-  foreignKey: "userid_num",
+  foreignKey: "club_id",
 });
 
 Public_post.hasMany(Public_post_comment, {
