@@ -473,7 +473,7 @@ exports.createClubMembers = async (req, res) => {
 // GET /clubAdminApplyList/:club_id 클럽에 가입신청한 사람들 전체조회
 exports.getClubMembersApplyList = async (req, res) => {
   try {
-    const { club_id,userid_num } = req.params;
+    const { club_id } = req.params;
     console.log('club_id > ',club_id);
     const getApplyList = await Club_members_wait.findAll({
       where: {
@@ -621,6 +621,20 @@ exports.getMyPageProfile = async (req,res) =>{
       }
     })
     res.render("/mypage/mypageProfile", {data: myPageMainProfile});
+  }
+  catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+}
+
+// =============== HOME =================
+// GET /home 전체 동아리, 유저아이디가 가입되어있는 동아리 정보 로드
+exports.home = async (req,res) => {
+  try{
+    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
+    const getClubs = await Club.findAll();
+    const getClub
   }
   catch (err) {
     console.error(err);
