@@ -79,7 +79,7 @@ Club_members_wait.belongsTo(User, {
   foreignKey: "club_id",
 });
 
-/// 임시 추가
+/// 임시 ///
 Club_members_wait.hasOne(Club_members,{
   foreignKey: "members_id",
 });

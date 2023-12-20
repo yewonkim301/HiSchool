@@ -3,6 +3,7 @@ const {
   Public_post_comment,
   Public_post_comment_like,
   Dm,
+  Club,
   Club_members,
   Club_members_wait,
   User,
@@ -650,7 +651,7 @@ exports.home = async (req,res) => {
       },
       include: [{ model: User}]
     });
-    res.render("/home", {data: getClubs, myClubs});
+    res.render("home", {data: getClubs, myClubs});
 
   }
   catch (err) {

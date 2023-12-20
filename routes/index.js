@@ -9,16 +9,41 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv").config();
 const { User } = require("../models/Index");
 
-const fileparser = require("../middleware/fileparser");
+const fileparser = require('../middleware/fileparser')
+const { parsefile } = require('../middleware/fileparser')
+const s3bucketList = require('../middleware/s3bucketList')
+const s3objectList = require('../middleware/s3objectList')
+const s3fileUpload = require('../middleware/s3fileUpload')
 
-router.post("/upload", async (req, res) => {
-  await fileparser(req)
-    .then((data) => {
-      res.status(200).json({
-        message: "Success",
-        data,
-      });
-    })
+
+
+router.post('/upload', async (req, res) => {
+  
+  await s3bucketList()
+  .then(data => {
+    // res
+    // .status(200)
+    // .json({
+    //   message: "Success",
+    //   data
+    // })
+    console.log(data)
+  })
+  await s3objectList()
+  .then(data => {
+    console.log(data);
+  })
+  await s3fileUpload()
+  .then(data => {
+    console.log(data);
+    // res.send(data)
+  })
+  await s3objectList()
+  .then(data => {
+    console.log(data);
+    res.send('업로드 완료!')
+  })
+  
     .catch((error) => {
       res.status(400).json({
         message: "An error occurred.",
@@ -27,32 +52,15 @@ router.post("/upload", async (req, res) => {
     });
 });
 
+
+
+
+
 router.get("/", (req, res) => {
   res.render("index");
 });
 
-router.get("/home", isLoggedIn, async (req, res) => {
-  console.log(req.cookies.jwt);
-  const { userid, userid_num } = jwt.verify(
-    req.cookies.jwt,
-    process.env.JWT_SECRET
-  );
-
-  console.log("jwt : ", userid, userid_num);
-
-  try {
-    const user = await User.findOne({
-      where: {
-        userid: verified,
-      },
-    });
-    console.log(user);
-  } catch (err) {
-    console.log(err);
-  }
-
-  res.render("home");
-});
+router.get("/home", isLoggedIn, controllerPublic.home);
 
 router.get("/login", isNotLoggedIn, (req, res) => {
   res.render("login");
