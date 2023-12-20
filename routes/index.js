@@ -341,4 +341,8 @@ router.delete("/supportMain", isLoggedIn, controllerSupport.deleteSupport);
 // GET /clubChat
 router.get("/clubChat", controllerClub.clubChat);
 
+// GET /home 홈 화면 로드(전체 동아리, 유저가 가입되어 있는 동아이 정보)
+router.get("/home", isLoggedIn ,controllerPublic.home);
+
+
 module.exports = router;
