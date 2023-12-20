@@ -263,6 +263,8 @@ exports.createPostComment = async (req, res) => {
   try {
     const { club_id, post_id } = req.params;
     const { comment_name, content } = req.body;
+    console.log(req.params);
+    console.log(req.body);
     // ? comment_name : 세션에 저장되어 있는 로그인한 유저의 정보에서 찾아야 함
     const newClubPostComment = await Club_post_comment.create({
       club_id: club_id,

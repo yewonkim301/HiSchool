@@ -22,14 +22,17 @@
    </form>
 
    <script>
+
+
       const plusBtn = document.querySelector(".plus-button");
       const form = document.forms["add-post"];
       const btnPrmary = document.querySelector(".btn-primary");
 
 
-      console.log(form);
-      async function addpost() {
-         await axios({
+
+
+      function addpost() {
+         axios({
             method: "POST",
             url: "/myclubNewPost/1",
             data: {
@@ -41,20 +44,26 @@
             },
          })
             .then((res) => {
-               console.log(res.status);
+
                if (res.status === 200) {
+                  let clubId = "1"; // 예시 데이터, 실제로는 동적으로 설정
+                  let postId = res.data.post_id; // 응답으로부터 post_id를 얻음
                   alert("게시물 등록완료");
                   // 새 게시물 엘리먼트 생성
                   const newPostElement = document.createElement('div');
+                  console.log(res.data);
                   newPostElement.innerHTML = `
             <h3>${form.title.value}</h3>
             <p>${form.content.value}</p>
-            
-         `;
-                  window.location.href = `/myclubPostDetail/1/46`;
+            `;
+
+                  window.location.href = `/myclubPostDetail/1/${postId};
+               }`;
                }
             });
+
       }
+
 
    </script>
 </body>
