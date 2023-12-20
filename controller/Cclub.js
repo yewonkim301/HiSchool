@@ -169,7 +169,10 @@ exports.getClubPosts = async (req, res) => {
       where: { club_id: req.params.club_id },
       //clubClubId 수정 전
     });
-    res.render("myclub/myclubPostMain", { data: posts });
+    res.render("myclub/myclubPostMain", {
+      data: posts,
+      club_id: req.params.club_id // club_id를 별도로 전달
+    });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -275,11 +278,10 @@ exports.deletePost = async (req, res) => {
 
 // POST  /myclubPostDetail/:club_id/:post_id : 동아리 게시글 댓글 생성
 exports.createPostComment = async (req, res) => {
-  console.log('myclubpostdetail clubid postid 댓글 입력');
+  console.log("받은 데이터:", req.body);
   try {
     const { club_id, post_id } = req.params;
     const { comment_name, content } = req.body;
-    console.log("욕ㄴ이러ㅣㄴ얼쟈대러ㅐㅑㅈㄷㄹㄷㅈ", content);
     const { userid, userid_num } = jwt.verify(
       req.cookies.jwt,
       process.env.JWT_SECRET
@@ -292,6 +294,7 @@ exports.createPostComment = async (req, res) => {
       comment_name: comment_name,
       content: content,
     });
+
     res.send(newClubPostComment);
   } catch (err) {
     console.error(err);
@@ -401,8 +404,7 @@ exports.getCreateClubPost = async (req, res) => {
 
 // POST /myclubNewPost/:club_id : 동아리 게시글 생성
 exports.createClubPost = async (req, res) => {
-  console.log('createClubPost 실행');
-  console.log('createClubPost clubid', req.params.club_id);
+  console.log('createClubPost 실행: clubid', req.params.club_id);
 
   try {
     const { club_id } = req.params;

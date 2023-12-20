@@ -21,139 +21,69 @@
             </p>
             <!-- 게시글 작성 시간 등의 메타 정보도 추가 있습니다. -->
          </div>
-         <div>댓글보기</div>
-         <div>댓글작성
-            <input type="text" id="commentContent" placeholder="댓글을 입력하세요">
-            <button onclick="submitComment()">댓글등록</button>
-         </div>
-
-
-
 
          <button class="btn btn-primary" onclick="editPost('<%= data.post_id %>')">수정</button>
 
-         <!-- 댓글 목록 -->
-         <% clubPostComment.forEach(comment=> { %>
-            <div class="comment" id="comment-<%= comment.comment_id %>">
-               <div class="comment-body">
-                  <span class="comment-text">
-                     <%= comment.content %>
-                  </span>
-                  <input type="text" class="edit-comment" style="display: none;">
-               </div>
-               <button onclick="deleteComment('<%= comment.comment_id %>')">댓글삭제</button>
-               <button onclick="editComment('<%= comment.comment_id %>')">댓글수정</button>
-               <button onclick="submitEdit('<%= comment.comment_id %>')" style="display: none;">수정 완료</button>
-            </div>
-            <% }); %>
-               <script>
+
+         <div class="comment-section">
+            <input type="text" id="commentInput" placeholder="댓글을 입력하세요">
+            <button onclick="submitComment()">등록</button>
+         </div>
+
+         <!-- 댓글 들어갈곳 -->
+         <div class="list" id="commentList"></div>
+
+         <button onclick="patchPostComment()">댓글수정</button>
+         <button onclick="deletePostComment()">댓글삭제</button>
 
 
-                  // (async function () {
-                  //    axios({
-                  //       method: get,
-                  //       url: 'myclub/myclubPostDetail/1/40'
+         <script>
+            const club_id = "<%=data.club_id%>";
+            const post_id = "<%=data.post_id%>";
 
-                  //    }).then(res => {
-                  //       console.log(data);
-                  //    });
-                  // });
-                  // 댓글 작성
-                  // POST  /myclubPostDetail/:club_id/:post_id : 동아리 게시글 댓글 생성
 
-                  const club_id = '<%= data.club_id %>'; // 예시 데이터, 실제 데이터로 변경 필요
-                  const post_id = '<%= data.post_id %>'; // ejs를 사용하여 서버로부터 받은 post_id
-                  // const comment_name = '<%=data.comment_name%>';
+            function submitComment() {
+               const commentContent = document.getElementById('commentInput').value;
+               const requestData = {
+                  comment_name: "test", // 예시 데이터
+                  content: commentContent
+               };
+               console.log("보내는 데이터:", requestData);
 
-                  function submitComment() {
-                     const content = document.getElementById('commentContent').value;
-                     console.log(club_id, post_id, content);
-                     axios(
-                        {
-                           url: `/myclubPostDetail/${club_id}/${post_id}`,
-                           method: 'post',
-                           data: {
-                              comment_name: "수정", // 현재 로그인한 사용자의 이름 (변경필요)
-                              content: content,
-                           }
-                        })
-
-                        .then((res) => {
-                           const newComment = res.data; // 새 댓글 데이터
-                           console.log(newComment);
-                           // 새 댓글 요소 생성
-                           const commentElement = document.createElement('div');
-                           commentElement.className = 'comment';
-                           commentElement.innerHTML = `
-         <div class="comment-body">${newComment.content}</div>
-         <button onclick="deleteComment('${newComment.id}')">삭제</button> `;
-                           // "수정" 텍스트 바로 아래에 새 댓글 요소 삽입
-                           const editButton = document.querySelector('.btn.btn-primary');
-                           editButton.parentNode.insertBefore(commentElement, editButton.nextSibling);
-
-                           // 입력 필드 초기화
-                           document.getElementById('commentContent').value = '';
-                        })
-                        .catch(function (error) {
-                           console.error('Comment submit error:', error);
-                           alert('댓글 작성 중 오류가 발생했습니다.');
-                        });
+               axios({
+                  method: 'post',
+                  url: `/myclubPostDetail/${club_id}/${post_id}/`,
+                  data: {
+                     comment_name: "test", // 예시 데이터
+                     content: commentContent
                   }
+               })
+                  .then(res => {
+                     console.log(`club_id:${club_id}`);
+                     console.log(`post_id:${post_id}`);
+                     console.log("댓글 등록 완료");
+                     console.log(`받는 데이터`, res.data);
 
-                  // 댓글 삭제
+                     // 새로운 댓글을 목록에 추가
+                     const commentList = document.getElementById('commentList');
+                     const newCommentDiv = document.createElement('div');
+                     newCommentDiv.classList.add('comment');
+                     newCommentDiv.innerHTML = `
+                     <p>${res.data.comment_name}</p>
+                     <p>${res.data.content}</p>
+                  `;
+                     commentList.appendChild(newCommentDiv);
 
+                     // 입력 필드 초기화
+                     document.getElementById('commentInput').value = '';
+                  })
+                  .catch(error => {
+                     console.error("댓글 등록 에러:", error);
+                  });
+            }
 
-                  function deleteComment(comment_id) {
-
-                     axios.delete(`/myclubPostDetail/${club_id}/${post_id}/${comment_id}`)
-
-                        .then(function (res) {
-                           if (res.data.isDeleted) {
-                              alert('댓글이 삭제되었습니다.');
-                              window.location.href = `/myclubPostDetail/${club_id}/${post_id}%>`; // 게시글 목록으로 리디렉션
-                           } else {
-                              alert('댓글 삭제에 실패했습니다.');
-                           }
-                        })
-                        .catch(function (err) {
-                           alert('댓글 삭제 중 오류가 발생했습니다.');
-                           console.error('Delete error:', err);
-                        });
-
-                  }
-
-
-                  function showEditField(button) {
-                     // '댓글수정' 버튼을 숨기고, 입력 필드와 '수정 완료' 버튼을 표시합니다.
-                     button.style.display = 'none';
-                     const editContainer = button.nextElementSibling;
-                     editContainer.style.display = 'block';
-                  }
-
-                  function submitEdit(comment_id) {
-                     // 수정할 내용을 입력 필드에서 가져옵니다.
-                     const editContainer = document.querySelector(`.edit-container[data-comment-id="${commentId}"]`);
-                     const newContent = editContainer.querySelector('.edit-content').value;
-
-                     // 입력받은 내용을 서버에 전송합니다.
-                     axios.patch(`/myclubPostDetail/${club_id}/${post_id}/${comment_id}`, { content: newContent })
-                        .then(function (response) {
-                           // 성공적으로 수정되었다면 페이지를 새로고침하거나, UI를 업데이트합니다.
-                           window.location.reload();
-                        })
-                        .catch(function (error) {
-                           console.error('Edit error:', error);
-                           alert('댓글 수정 중 오류가 발생했습니다.');
-                        });
-                  }
-
-                  // clubId, postId
-                  function editPost(post_id) {
-                     window.location.href = `/myclubEditPost/${club_id}/${post_id}`; // 수정 페이지로 이동
-                  }
-
-
-               </script>
+            // 기존의 patchPostComment 및 deletePostComment 함수
+         </script>
 </body>
 
 </html>
