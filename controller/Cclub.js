@@ -37,8 +37,8 @@ exports.getClub = async (req, res) => {
 // GET /clubAdminMain/:club_id : 동아리 관리페이지 불러오기
 exports.getClubAdminMain = async (req, res) => {
   try {
-    const{club_id} = req.body;
-    res.render("clubAdmin/clubAdminMain", {data:club_id});
+    const { club_id } = req.body;
+    res.render("clubAdmin/clubAdminMain", { data: club_id });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
