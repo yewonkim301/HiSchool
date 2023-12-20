@@ -481,8 +481,7 @@ exports.getClubMembersApplyList = async (req, res) => {
       },
       include: [{ model: User}]
     });
-    console.log("getClubMembersApplyList>",getApplyList[0].dataValues);
-    console.log("dataType>",typeof (getApplyList[0].dataValues));
+   
 
     res.render("clubAdmin/clubAdminApplyList", { data: getApplyList });
   } catch (err) {
@@ -634,7 +633,7 @@ exports.home = async (req,res) => {
   try{
     const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
     const getClubs = await Club.findAll();
-    const getClub
+    //const getClub
   }
   catch (err) {
     console.error(err);
