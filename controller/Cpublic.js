@@ -10,7 +10,6 @@ const {
 } = require("../models/Index");
 const jwt = require("jsonwebtoken");
 
-
 // ===== publicPost =====
 
 // GET /publicPostMain 익명 게시판 정보 가져오기
@@ -36,24 +35,26 @@ exports.getNewPost = async (req, res) => {
 
 // POST /publicNewPost/:userid_num 게시물 생성
 // POST /publicNewPost
-exports.createPost = async (req,res) =>{
-    try{
-        // const {userid_num} = req.params.userid_num;
-        const { title, content, image,} = req.body;
-        const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET)
-        const newPost = await Public_post.create({
-            title: title,
-            content: content,
-            image: image,
-            userid_num: userid_num,
-        })
-        res.send(newPost)
-    }
-    catch(err){
-        console.error(err);
-        res.send("Internal Server Error!");
-    }
-}
+exports.createPost = async (req, res) => {
+  try {
+    // const {userid_num} = req.params.userid_num;
+    const { title, content, image } = req.body;
+    const { userid, userid_num } = jwt.verify(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
+    const newPost = await Public_post.create({
+      title: title,
+      content: content,
+      image: image,
+      userid_num: userid_num,
+    });
+    res.send(newPost);
+  } catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+};
 
 // GET /publicPostDetail/:post_id 특정 게시물 조회
 
@@ -69,8 +70,11 @@ exports.getPostDetail = async (req, res) => {
     const getPostCommentLike = await Public_post_comment_like.findAll({
       where: { post_id: post_id },
     });
-    res.render("/publicPost/publicPostDetail", 
-    {data: getPost, getPostComment, getPostCommentLike,});
+    res.render("/publicPost/publicPostDetail", {
+      data: getPost,
+      getPostComment,
+      getPostCommentLike,
+    });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -82,7 +86,10 @@ exports.createPostComment = async (req, res) => {
   try {
     const { post_id } = req.params;
     const { comment, comment_nickname } = req.body;
-    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET)
+    const { userid, userid_num } = jwt.verify(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
     // content_nickname은 세션이름으로 받을까요?
     const newPublicPostComment = await Public_post_comment.create({
       comment: comment,
@@ -121,7 +128,10 @@ exports.patchPost = async (req, res) => {
   try {
     const { post_id } = req.params;
     const { title, content, image } = req.body;
-    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET)
+    const { userid, userid_num } = jwt.verify(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
     const updatePost = await Public_post.update(
       {
         title: title,
@@ -142,13 +152,15 @@ exports.patchPost = async (req, res) => {
   }
 };
 
-
 // PATCH /publicPostDetail/:post_id/:comment_id 특정 게시글 댓글 수정
 exports.patchPostComment = async (req, res) => {
   try {
     const { post_id, comment_id } = req.params;
     const { comment } = req.body;
-    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET)
+    const { userid, userid_num } = jwt.verify(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
     if (req.session.id === userid_num) {
       const updatePostComment = await Public_post_comment.update(
         {
@@ -160,7 +172,6 @@ exports.patchPostComment = async (req, res) => {
             post_id: post_id,
           },
         }
-
       );
       res.send(updatePostComment);
     }
@@ -170,13 +181,15 @@ exports.patchPostComment = async (req, res) => {
   }
 };
 
-
 // PATCH /publicPostDetail/:post_id/:comment_id 특정 개시물 댓글 라이크 수정
 exports.patchPostCommentLike = async (req, res) => {
   try {
     const { post_id, comment_id } = req.params;
     const { like_id } = req.body;
-    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
+    const { userid, userid_num } = jwt.verify(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
     // 세션과 userid를 비교해서 맞으면 수정
     if (req.session.id === userid_num) {
       const updatePostCommentLike = await Public_post_comment_like.update(
@@ -203,7 +216,10 @@ exports.patchPostCommentLike = async (req, res) => {
 exports.deletePost = async (req, res) => {
   try {
     const { post_id } = req.params;
-    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET)
+    const { userid, userid_num } = jwt.verify(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
     if (req.session.id === userid_num) {
       const deletePost = await Public_post.destroy({
         where: {
@@ -226,7 +242,10 @@ exports.deletePost = async (req, res) => {
 exports.deletePostComment = async (req, res) => {
   try {
     const { post_id, comment_id } = req.params;
-    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
+    const { userid, userid_num } = jwt.verify(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
     if (req.session.id === userid_num) {
       const deletePostComment = await Public_post_comment.destroy({
         where: {
@@ -251,7 +270,10 @@ exports.deletePostComment = async (req, res) => {
 exports.dm = async (req, res) => {
   try {
     const { nickname } = req.body;
-    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET)
+    const { userid, userid_num } = jwt.verify(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
     const getDm = await Dm.findAll({
       where: {
         [Sequelize.Op.or]: [
@@ -268,32 +290,34 @@ exports.dm = async (req, res) => {
 };
 
 // POST /mypageProfile/:nickname => dm 생성
-exports.newDm = async (req,res) => {
-  try{
-      const {nickname} = req.params;
-      const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET)
-      const createDm = await Dm.create({
-        userid_num: userid_num,
-        to_nickname: nickname
-      })
-      res.render("/mypage/mypageProfile", {data: createDm});
-  }
-  catch (err) {
+exports.newDm = async (req, res) => {
+  try {
+    const { nickname } = req.params;
+    const { userid, userid_num } = jwt.verify(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
+    const createDm = await Dm.create({
+      userid_num: userid_num,
+      to_nickname: nickname,
+    });
+    res.render("/mypage/mypageProfile", { data: createDm });
+  } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
   }
-}
+};
 
 // GET /dmDetail/:note_id 채팅방 페이지 가져오기
 exports.getDmDetail = async (req, res) => {
   try {
-    const {note_id} = this.params;
+    const { note_id } = this.params;
     const getRoom = await Dm.findAll({
-      where:{
-        note_id: note_id
-      }
-    })
-    res.render("/support/dmDetail", {data: getRoom});
+      where: {
+        note_id: note_id,
+      },
+    });
+    res.render("/support/dmDetail", { data: getRoom });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -303,16 +327,19 @@ exports.getDmDetail = async (req, res) => {
 // POST /dmDetail/:note_id
 exports.postDm = async (req, res) => {
   try {
-    const {note_id} = req.params;
+    const { note_id } = req.params;
     const { to_nickname, dm_content } = req.body;
-    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET)
+    const { userid, userid_num } = jwt.verify(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
     const sendDm = await Dm.create({
       to_nickname: to_nickname,
       dm_content: dm_content,
       userid_num: userid_num,
-      where:{
-        note_id: note_id
-      }
+      where: {
+        note_id: note_id,
+      },
     });
     res.send(sendDm);
   } catch (err) {
@@ -325,7 +352,10 @@ exports.postDm = async (req, res) => {
 exports.deleteDm = async (req, res) => {
   try {
     // const {userid_num} = req.params.userid_num;
-    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET)
+    const { userid, userid_num } = jwt.verify(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
     if (req.session.id === userid_num) {
       const destroyDm = await Dm.destroy({
         where: note_id,
@@ -342,27 +372,27 @@ exports.deleteDm = async (req, res) => {
   }
 };
 
-
 // GET /clubAdminApplyDetail/:club_id/:userid_num 동아리 페이지 불러오기
 exports.getClubAdminApplyDetail = async (req, res) => {
   try {
-    const{club_id,userid_num} = req.params;
+    const { club_id, userid_num } = req.params;
 
     const getClubAdminApplyDetail = await Club_members_wait.findOne({
-      where:{
+      where: {
         club_id: club_id,
-        userid_num: userid_num
+        userid_num: userid_num,
       },
-      include: [{ model: User}]
-    })
-    console.log("여기!!!!!!",getClubAdminApplyDetail)
-    res.render("clubAdmin/clubAdminApplyDetail", {data: getClubAdminApplyDetail});
+      include: [{ model: User }],
+    });
+    console.log("여기!!!!!!", getClubAdminApplyDetail);
+    res.render("clubAdmin/clubAdminApplyDetail", {
+      data: getClubAdminApplyDetail,
+    });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
   }
 };
-
 
 // GET /clubAdminTransfer 클럽 회장 위임 페이지 가져오기
 exports.getClubAdminTransfer = async (req, res) => {
@@ -394,7 +424,10 @@ exports.getAllMembers = async (req, res) => {
 exports.deleteClubAdminTransfer = async (req, res) => {
   try {
     const { club_id } = req.params;
-    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET)
+    const { userid, userid_num } = jwt.verify(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
     const deleteMember = await Club_members.destroy({
       where: {
         club_id: club_id,
@@ -415,58 +448,64 @@ exports.deleteClubAdminTransfer = async (req, res) => {
 // ======== Apply, Admin ======
 
 // clubApply/:club_id 동아리 신청페이지
-exports.clubApply = async (req,res) =>{
-  try{
-    const {club_id} = req.params;
+exports.clubApply = async (req, res) => {
+  try {
+    const { club_id } = req.params;
     console.log(club_id);
-    res.render("club/clubApply", {data:club_id});
-  }
-  catch (err) {
+    res.render("club/clubApply", { data: club_id });
+  } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
   }
-}
+};
 
 // clubApply/:club_id 동아리 신청 정보 전달
-exports.clubApplyinfo = async (req,res) => {
-  try{
-    const {club_id} = req.params;
-    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET)
-    const {motivation, introduction} = req.body;
+exports.clubApplyinfo = async (req, res) => {
+  try {
+    const { club_id } = req.params;
+    const { userid, userid_num } = jwt.verify(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
+    const { motivation, introduction } = req.body;
     const clubApplyinfo = await Club_members_wait.create({
       club_id: club_id,
       motivation: motivation,
       introduction: introduction,
       userid_num: userid_num,
-    })
-    res.send({isApplySuccess:true});
-  }
-  catch (err) {
+    });
+    res.send({ isApplySuccess: true });
+  } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
   }
-}
+};
 
 // GET /club
-
 
 // POST /clubAdminApplyDetail/:club_id/:userid_num 동아리 가입 신청
 exports.createClubMembers = async (req, res) => {
   try {
     // const {userid_num} = req.params.userid_num;
-    const { club_id, userid_num} = req.params;
+    let isApplySuccess;
+    const { club_id, userid_num } = req.params;
     const { motivation, introduction, applyResult } = req.body;
-    console.log("여기!!!!!!!!!!!!! >>>>>>>.",club_id);
-    console.log('승인했을 때 > ', motivation, introduction, applyResult)
-    if(applyResult){
-      console.log("ifffffffff")
+    console.log("여기!!!!!!!!!!!!! >>>>>>>.", club_id);
+    console.log("승인했을 때 > ", motivation, introduction, applyResult);
+    if (applyResult) {
+      console.log("ifffffffff");
       const newMembers = await Club_members.create({
         club_id: club_id,
         motivation: motivation,
         introduction: introduction,
         userid_num: userid_num,
       });
-      res.send(newMembers, {isApplySuccess:true} );
+      if (newMembers) {
+        isApplySuccess = true;
+      } else {
+        isApplySuccess = false;
+      }
+      res.send(isApplySuccess);
     }
   } catch (err) {
     console.error(err);
@@ -477,18 +516,18 @@ exports.createClubMembers = async (req, res) => {
 // GET /clubAdminApplyList/:club_id 클럽에 가입신청한 사람들 전체조회
 exports.getClubMembersApplyList = async (req, res) => {
   try {
-    const { club_id,userid_num } = req.params;
+    const { club_id, userid_num } = req.params;
 
     const getApplyList = await Club_members_wait.findAll({
       where: {
         club_id: club_id,
       },
-      include: [{ model: User}]
+      include: [{ model: User }],
     });
 
-    if(!getApplyList){
-      res.render("clubAdmin/clubAdminApplyList")
-    }else{
+    if (!getApplyList) {
+      res.render("clubAdmin/clubAdminApplyList");
+    } else {
       res.render("clubAdmin/clubAdminApplyList", { data: getApplyList });
     }
   } catch (err) {
@@ -518,7 +557,6 @@ exports.deleteApplyDetail = async (req, res) => {
   }
 };
 
-
 // GET /clubAdminMemberlist/:club_id 클럽 회원 전체 조회
 exports.getClubMembers = async (req, res) => {
   try {
@@ -527,11 +565,11 @@ exports.getClubMembers = async (req, res) => {
       where: {
         club_id: club_id,
       },
-      include: [{ model: User}]
+      include: [{ model: User }],
     });
-    if(!getMembers){
+    if (!getMembers) {
       res.render("clubAdmin/clubAdminMemberList");
-    }else{      
+    } else {
       res.render("clubAdmin/clubAdminMemberList", { data: getMembers });
     }
   } catch (err) {
@@ -549,7 +587,7 @@ exports.getClubMember = async (req, res) => {
         club_id: club_id,
         userid_num: userid_num,
       },
-      include: [{ model: User}]
+      include: [{ model: User }],
     });
     res.render("clubAdmin/clubAdminMemberDetail", { data: getMember });
   } catch (err) {
@@ -562,13 +600,13 @@ exports.getClubMember = async (req, res) => {
 exports.deleteMembers = async (req, res) => {
   try {
     // 삭제 버튼클릭시 값이 넘어온다.
-    const {club_id, userid_num} = req.params;
+    const { club_id, userid_num } = req.params;
     if (req.session.id === userid_num) {
       const destroyMembers = await Club_members.destroy({
         where: {
           club_id: club_id,
-          userid_num: userid_num
-        }
+          userid_num: userid_num,
+        },
       });
       if (destroyMembers) {
         res.send({ isDeleted: true });
@@ -584,83 +622,83 @@ exports.deleteMembers = async (req, res) => {
 
 // myPage
 // GET /mypageMain/ 내 페이지 가져오기 ver.동아리
-exports.getMyPage = async (req,res) =>{
-  try{
-    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
+exports.getMyPage = async (req, res) => {
+  try {
+    const { userid, userid_num } = jwt.verify(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
     const myPageMain = await User.findOne({
-      where:{
-        userid: userid
-      }
-    })
-    res.render("/mypage/mypageMain", {data:myPageMain});
-  }
-  catch (err) {
+      where: {
+        userid: userid,
+      },
+    });
+    res.render("/mypage/mypageMain", { data: myPageMain });
+  } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
   }
-}
+};
 
 // DELETE /mypageMain/
-exports.deleteMyID = async (req,res) =>{
-  try{
-    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
+exports.deleteMyID = async (req, res) => {
+  try {
+    const { userid, userid_num } = jwt.verify(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
     const destroyMyID = await User.destroy({
-      where:{
-        userid_num: userid_num
-      }
-    })
-    if(destroyMyID){
+      where: {
+        userid_num: userid_num,
+      },
+    });
+    if (destroyMyID) {
       res.send({ isDeleted: true });
     } else {
       res.send({ isDeleted: false });
     }
-  }
-  catch (err) {
+  } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
   }
-}
+};
 
 // GET /mypageMainProfile/:nickname 내 페이지 가져오기 ver.닉네임
-exports.getMyPageProfile = async (req,res) =>{
-  try{
-    const{nickname} = req.params;
+exports.getMyPageProfile = async (req, res) => {
+  try {
+    const { nickname } = req.params;
     const myPageMainProfile = await User.findOne({
-      where:{
-        nickname:nickname
-      }
-    })
-    res.render("/mypage/mypageProfile", {data: myPageMainProfile});
-  }
-  catch (err) {
+      where: {
+        nickname: nickname,
+      },
+    });
+    res.render("/mypage/mypageProfile", { data: myPageMainProfile });
+  } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
   }
-}
+};
 
 // =============== HOME =================
 // GET /home 전체 동아리, 유저아이디가 가입되어있는 동아리 정보 로드
-exports.home = async (req,res) => {
-  try{
-    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
+exports.home = async (req, res) => {
+  try {
+    const { userid, userid_num } = jwt.verify(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
     const getClubs = await Club.findAll();
 
     const myClubs = await Club_members.findAll({
-      where:{
-        userid_num: userid_num
+      where: {
+        userid_num: userid_num,
       },
-      include: [{ model: User}]
+      // include: [{ model: User }],
     });
-    res.render("home", {data: getClubs, myClubs});
-
-  }
-  catch (err) {
+    // console.log(myClubs);
+    res.render("home", { data: getClubs, myClubs });
+  } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
   }
-}
-
-
-
-
-
+};
