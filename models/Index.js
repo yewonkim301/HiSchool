@@ -105,6 +105,15 @@ Club_members.belongsTo(Club, {
   foreignKey: "club_id",
 });
 
+User.hasMany(Club_members, {
+  foreignKey: "userid_num",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+});
+Club_members.belongsTo(User, {
+  foreignKey: "userid_num",
+});
+
 // Public_post P_Comment => 1:N
 Public_post.hasMany(Public_post_comment, {
   foreignKey: "userid_num",
