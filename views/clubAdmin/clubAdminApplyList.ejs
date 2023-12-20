@@ -13,6 +13,9 @@
 
   <main class="request-list">
     <!-- 가입 요청 목록 -->
+    <% if(data.length==0){%>
+      <div>가입 요청이 없습니다.</div>
+      <%} else {%>
     <% for(let i=0; i<data.length;i++){ %>
     <div class="request">
       <div class="request-info">
@@ -22,6 +25,7 @@
       <button class="<%=data[i].dataValues.user.dataValues.userid_num%>" onclick="checkDetail(this)">상세 정보 확인</button>
     </div>
     
+    <% } %>
     <% } %>
     <!-- 추가 요청들을 여기에 반복 -->
   </main>

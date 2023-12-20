@@ -19,12 +19,13 @@
   <div class="content">
     <div class="group">
       <h2>동아리 이름</h2>
-      <input  id="editClubName" placeholder="<%=data.club_name%>">
+      <input  id="editClubName" value="<%=data.club_name%>">
     </div>
     <div class="group">
       <h2>동아리 설명</h2>
-      <input id="editClubName" placeholder="<%=data.club_name%>">
+      <input id="editClubDescription" value="<%=data.club_name%>">
     </div>
+    
     <div class="group">
       <h2>관리자</h2>
       <p><%=data.leader_id%></p>
@@ -32,12 +33,23 @@
     </div>
     <div class="group">
       <h2>회원수</h2>
-      <p><%=data.limit%></p>
+      
+    </div>
+    <div class="group">
+      <h2>제한 회원</h2>
+      <input id="editClubLimit" value="<%=data.limit%>"></input>
+    </div>
+    <div class="group">
+      <h2>키워드</h2>
+      <input id="editClubKeyword" value="<%=data.keyword%>">
     </div>
     <button onclick="patchClubInfo()">수정</button>
+    <button onclick="deleteClubInfo()">삭제</button>
   </div>
 
   <script>
+    console.log('<%=data%>');
+    // club
    function trasferLeader(){
       window.location.href= "/clubAdminTransfer/<%=data.club_id%>"
    }
@@ -47,12 +59,34 @@
             method: "PATCH",
             url: `/clubAdminEdit/<%=data.club_id%>`,
             data: {
-              club_name: clubName,
-              field: clubCategory,
-              keyword: clubKeywords,
+              club_name: "동아리 이름",
+              leader_id: "동아리 생성하는 유저",
+              limit: "인원",
+              location: "활동 지역 (예: 서울시 마포구)",
+              field: "활동 분야 (예: 과학)",
+              keyword: "키워드 (예: 과학, 로봇)",
+              description: "동아리 설명"
             },
           });
           console.log(res);
+          
+        } catch (error) {
+          console.log("createAdminEdit 에서 axios error > ", error);
+        }
+
+   }
+   async function deleteClubInfo(){
+    try {
+          const res = await axios({
+            method: "DELETE",
+            url: `/clubAdminEdit/<%=data.club_id%>`,
+            data: {
+              club_name: clubName
+            },
+          });
+          console.log(res);
+          alert('삭제되었습니다!');
+          window.location.href='/home'
           
         } catch (error) {
           console.log("createAdminEdit 에서 axios error > ", error);
