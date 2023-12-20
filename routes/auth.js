@@ -45,6 +45,7 @@ router.post("/register", isNotLoggedIn, async (req, res, next) => {
 // 로그인
 router.post("/login", isNotLoggedIn, (req, res, next) => {
   passport.authenticate("local", (authError, user, info) => {
+    console.log('/login user : ', user);
     if (authError) {
       console.error(authError);
       return next(authError);
@@ -61,7 +62,8 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
       }
 
       const payload = {
-        userid: req.body.userid
+        userid: req.body.userid,
+        userid_num: user.userid_num
       }
 
       const token = jwt.sign(

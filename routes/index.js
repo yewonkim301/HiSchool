@@ -14,8 +14,8 @@ router.get("/", (req, res) => {
 
 router.get("/home", isLoggedIn, async (req, res) => {
   console.log(req.cookies.jwt);
-  const verified = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET).userid
-  console.log('verified : ', verified);
+  const { userid, userid_num } = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET)
+  console.log('verified : ', userid, userid_num);
 
   try {
     const user = await User.findOne({
