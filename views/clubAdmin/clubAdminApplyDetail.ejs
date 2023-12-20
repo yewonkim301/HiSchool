@@ -38,11 +38,12 @@
   </div>
 
   <script>
+    console.log('<%=data%>')
     async function approve(){
       try {
           const res = await axios({
             method: "POST",
-            url: "/clubAdminApplyDetail/<%=data.club_id%>/<%=data..userid_num%>",
+            url: "/clubAdminApplyDetail/<%=data.club_id%>/<%=data.userid_num%>",
             data: {
               ApplyResult:true,
             },

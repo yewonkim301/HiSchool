@@ -473,7 +473,7 @@ exports.createClubMembers = async (req, res) => {
 // GET /clubAdminApplyList/:club_id 클럽에 가입신청한 사람들 전체조회
 exports.getClubMembersApplyList = async (req, res) => {
   try {
-    const { club_id,userid_num } = req.params;
+    const { club_id } = req.params;
     console.log('club_id > ',club_id);
     const getApplyList = await Club_members_wait.findAll({
       where: {
