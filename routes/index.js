@@ -13,28 +13,37 @@ const fileparser = require('../middleware/fileparser')
 const { parsefile } = require('../middleware/fileparser')
 const s3bucketList = require('../middleware/s3bucketList')
 const s3objectList = require('../middleware/s3objectList')
+const s3fileUpload = require('../middleware/s3fileUpload')
 
 
 
 router.post('/upload', async (req, res) => {
+  
+  await s3bucketList()
+  .then(data => {
+    // res
+    // .status(200)
+    // .json({
+    //   message: "Success",
+    //   data
+    // })
+    console.log(data)
+  })
   await s3objectList()
   .then(data => {
     console.log(data);
   })
-  await s3bucketList()
+  await s3fileUpload()
   .then(data => {
-    res
-    .status(200)
-    .json({
-      message: "Success",
-      data
-    })
+    console.log(data);
+    // res.send(data)
   })
-  .catch(error => {
-    res.status(400).json({
-      message: "An error occurred.",
-      error
-    })
+  await s3objectList()
+  .then(data => {
+    console.log(data);
+    res.send('업로드 완료!')
+  })
+  
     .catch((error) => {
       res.status(400).json({
         message: "An error occurred.",
@@ -42,7 +51,7 @@ router.post('/upload', async (req, res) => {
       });
     });
 });
-});
+
 
 
 
