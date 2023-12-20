@@ -9,30 +9,23 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv").config();
 const { User } = require("../models/Index");
 
-const fileparser = require('../middleware/fileparser')
+const fileparser = require("../middleware/fileparser");
 
-
-
-
-router.post('/upload', async (req, res) => {
+router.post("/upload", async (req, res) => {
   await fileparser(req)
-  .then(data => {
-    res
-    .status(200)
-    .json({
-      message: "Success",
-      data
+    .then((data) => {
+      res.status(200).json({
+        message: "Success",
+        data,
+      });
     })
-  })
-  .catch(error => {
-    res.status(400).json({
-      message: "An error occurred.",
-      error
-    })
-  })
-})
-
-
+    .catch((error) => {
+      res.status(400).json({
+        message: "An error occurred.",
+        error,
+      });
+    });
+});
 
 router.get("/", (req, res) => {
   res.render("index");
@@ -45,7 +38,7 @@ router.get("/home", isLoggedIn, async (req, res) => {
     process.env.JWT_SECRET
   );
 
-  console.log('jwt : ', userid, userid_num);
+  console.log("jwt : ", userid, userid_num);
 
   try {
     const user = await User.findOne({
@@ -125,7 +118,10 @@ router.get(
 );
 
 // GET /clubAdminMemberDetail/:club_id/:userid_num 클럽 회원정보 상세보기 페이지
-router.get("/clubAdminMemberDetail/:club_id/:userid_num", controllerPublic.getClubMember);
+router.get(
+  "/clubAdminMemberDetail/:club_id/:userid_num",
+  controllerPublic.getClubMember
+);
 
 // POST /clubAdminApplyDetail/:club_id 동아리 가입 신청 승인
 router.post(
@@ -320,12 +316,15 @@ router.get("/myclubMain/:club_id", controllerClub.getMyclubMain);
 router.get("/supportMain", controllerSupport.getSupport);
 
 // POST /supportMain 고객 문의 등록
-router.post("/supportMain", controllerSupport.postSupport );
+router.post("/supportMain", controllerSupport.postSupport);
 
 // PATCH /supportMain 고객 문의 답글
 router.patch("/supportMain", controllerSupport.postSupportComment);
 
 // DELETE /supportMain 문의글 삭제
 router.delete("/supportMain", controllerSupport.deleteSupport);
+
+// GET /clubChat
+router.get("/clubChat", controllerClub.clubChat);
 
 module.exports = router;
