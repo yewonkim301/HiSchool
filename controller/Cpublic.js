@@ -342,7 +342,7 @@ exports.deleteDm = async (req, res) => {
 };
 
 
-// GET /clubAdminApplyDetail/:club_id 동아리 페이지 불러오기
+// GET /clubAdminApplyDetail/:club_id/:userid_num 동아리 페이지 불러오기
 exports.getClubAdminApplyDetail = async (req, res) => {
   try {
     const{club_id,userid_num} = req.params;
@@ -449,13 +449,12 @@ exports.clubApplyinfo = async (req,res) => {
 // GET /club
 
 
-// POST /clubAdminApplyDetail/:club_id 동아리 가입 신청
+// POST /clubAdminApplyDetail/:club_id/:userid_num 동아리 가입 신청
 exports.createClubMembers = async (req, res) => {
   try {
     // const {userid_num} = req.params.userid_num;
-    const { club_id } = req.params;
+    const { club_id, userid_num} = req.params;
     const { motivation, introduction } = req.body;
-    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET)
     if(applyResult){
       const newMembers = await Club_members.create({
         club_id: club_id,
@@ -474,7 +473,7 @@ exports.createClubMembers = async (req, res) => {
 // GET /clubAdminApplyList/:club_id 클럽에 가입신청한 사람들 전체조회
 exports.getClubMembersApplyList = async (req, res) => {
   try {
-    const { club_id,userid_num } = req.params;
+    const { club_id } = req.params;
     console.log('club_id > ',club_id);
     const getApplyList = await Club_members_wait.findAll({
       where: {
@@ -492,11 +491,10 @@ exports.getClubMembersApplyList = async (req, res) => {
   }
 };
 
-// DELETE /clubAdminApplyDetail/:club_id 클럽 가입 거절
+// DELETE /clubAdminApplyDetail/:club_id/:userid_num 클럽 가입 거절
 exports.deleteApplyDetail = async (req, res) => {
   try {
-    const { club_id } = req.params;
-    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET)
+    const { club_id, userid_num } = req.params;
     const destroyApplyDetail = await Club_members_wait.destroy({
       where: {
         userid_num: userid_num,
@@ -532,11 +530,10 @@ exports.getClubMembers = async (req, res) => {
   }
 };
 
-// GET /clubAdminMemberDetail/:club_id 신청한 회원 상세정보 보기
+// GET /clubAdminMemberDetail/:club_id/:userid_num 신청한 회원 상세정보 보기
 exports.getClubMember = async (req, res) => {
   try {
-    const { club_id } = req.params;
-    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET)
+    const { club_id, userid_num } = req.params;
     const getMember = await Club_members.findOne({
       where: {
         club_id: club_id,
@@ -555,8 +552,7 @@ exports.getClubMember = async (req, res) => {
 exports.deleteMembers = async (req, res) => {
   try {
     // 삭제 버튼클릭시 값이 넘어온다.
-    const {club_id} = req.params;
-    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET)
+    const {club_id, userid_num} = req.params;
     if (req.session.id === userid_num) {
       const destroyMembers = await Club_members.destroy({
         where: {
@@ -625,6 +621,20 @@ exports.getMyPageProfile = async (req,res) =>{
       }
     })
     res.render("/mypage/mypageProfile", {data: myPageMainProfile});
+  }
+  catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+}
+
+// =============== HOME =================
+// GET /home 전체 동아리, 유저아이디가 가입되어있는 동아리 정보 로드
+exports.home = async (req,res) => {
+  try{
+    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
+    const getClubs = await Club.findAll();
+    const getClub
   }
   catch (err) {
     console.error(err);

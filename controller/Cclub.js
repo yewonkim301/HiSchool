@@ -40,7 +40,7 @@ exports.getClub = async (req, res) => {
 // GET /clubAdminMain/:club_id : 동아리 관리페이지 불러오기
 exports.getClubAdminMain = async (req, res) => {
   try {
-    const { club_id } = req.body;
+    const { club_id } = req.params;
     res.render("clubAdmin/clubAdminMain", { data: club_id });
   } catch (err) {
     console.error(err);
@@ -51,7 +51,7 @@ exports.getClubAdminMain = async (req, res) => {
 // GET /clubAdminEdit/:club_id : 동아리 수정페이지 불러오기
 exports.getClubAdminEdit = async (req, res) => {
   try {
-    const { club_id } = req.params.club_id;
+    const { club_id } = req.params;
     const clubAdminEdit = await Club.findOne({
       where: { club_id: club_id },
     });
@@ -65,7 +65,7 @@ exports.getClubAdminEdit = async (req, res) => {
 // PATCH /clubAdminEdit/:club_id : 동아리 수정
 exports.patchClub = async (req, res) => {
   try {
-    const { club_id } = req.params.club_id;
+    const { club_id } = req.params;
     const {
       club_name,
       leader_id,
@@ -99,7 +99,7 @@ exports.patchClub = async (req, res) => {
 // DELETE /clubAdminEdit/:club_id : 동아리 삭제
 exports.deleteClub = async (req, res) => {
   try {
-    const { club_id } = req.params.club_id;
+    const { club_id } = req.params;
     const isDeleted = await Club.destroy({
       where: { club_id },
     });
@@ -504,7 +504,7 @@ exports.deleteClubSchedule = async (req, res) => {
 // GET /myclubChat/:club_id : 동아리 채팅방 조회
 exports.getClubChat = async (req, res) => {
   try {
-    const { club_id } = req.params.club_id;
+    const { club_id } = req.params;
     const clubChat = await Club_chat.findAll({
       where: { club_id: club_id },
     });
@@ -517,7 +517,7 @@ exports.getClubChat = async (req, res) => {
 // POST /myclubChat/:club_id : 동아리 채팅방에서 채팅 보내기
 exports.postClubChat = async (req, res) => {
   try {
-    const { club_id } = req.params.club_id;
+    const { club_id } = req.params;
     const { from_name, content } = req.body;
     // 프론트에서 세션에 저장되어 있는 userid_num 값을 찾아서 from_name에 담아서 보내줌
     const from_realName = await User.findOne({
