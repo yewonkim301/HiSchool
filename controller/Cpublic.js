@@ -455,15 +455,17 @@ exports.createClubMembers = async (req, res) => {
     // const {userid_num} = req.params.userid_num;
     const { club_id, userid_num} = req.params;
     const { motivation, introduction, applyResult } = req.body;
+    console.log("여기!!!!!!!!!!!!! >>>>>>>.",club_id);
     console.log('승인했을 때 > ', motivation, introduction, applyResult)
     if(applyResult){
+      console.log("ifffffffff")
       const newMembers = await Club_members.create({
         club_id: club_id,
         motivation: motivation,
         introduction: introduction,
         userid_num: userid_num,
       });
-      res.send({isApplySuccess:true, newMembers});
+      res.send(newMembers, {isApplySuccess:true} );
     }
   } catch (err) {
     console.error(err);
