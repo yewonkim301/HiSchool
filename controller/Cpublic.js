@@ -36,12 +36,8 @@ exports.getNewPost = async (req, res) => {
 exports.createPost = async (req,res) =>{
     try{
         // const {userid_num} = req.params.userid_num;
-        const { 
-            title,
-            content,
-            image,
-            userid_num
-        } = req.body;
+        const { title, content, image,} = req.body;
+        const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET).userid
         const newPost = await Public_post.create({
             title: title,
             content: content,
@@ -82,7 +78,8 @@ exports.getPostDetail = async (req, res) => {
 exports.createPostComment = async (req, res) => {
   try {
     const { post_id } = req.params;
-    const { comment, comment_nickname, userid_num } = req.body;
+    const { comment, comment_nickname } = req.body;
+    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET).userid
     // content_nickname은 세션이름으로 받을까요?
     const newPublicPostComment = await Public_post_comment.create({
       comment: comment,
@@ -120,7 +117,8 @@ exports.createPostCommentLike = async (req, res) => {
 exports.patchPost = async (req, res) => {
   try {
     const { post_id } = req.params;
-    const { title, content, image, userid_num } = req.body;
+    const { title, content, image } = req.body;
+    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET).userid
     const updatePost = await Public_post.update(
       {
         title: title,
@@ -146,7 +144,8 @@ exports.patchPost = async (req, res) => {
 exports.patchPostComment = async (req, res) => {
   try {
     const { post_id, comment_id } = req.params;
-    const { comment, userid_num } = req.body;
+    const { comment } = req.body;
+    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET).userid
     if (req.session.id === userid_num) {
       const updatePostComment = await Public_post_comment.update(
         {
@@ -173,7 +172,8 @@ exports.patchPostComment = async (req, res) => {
 exports.patchPostCommentLike = async (req, res) => {
   try {
     const { post_id, comment_id } = req.params;
-    const { like_id, userid_num } = req.body;
+    const { like_id } = req.body;
+    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET).userid;
     // 세션과 userid를 비교해서 맞으면 수정
     if (req.session.id === userid_num) {
       const updatePostCommentLike = await Public_post_comment_like.update(
@@ -200,7 +200,7 @@ exports.patchPostCommentLike = async (req, res) => {
 exports.deletePost = async (req, res) => {
   try {
     const { post_id } = req.params;
-    const { userid_num } = req.body;
+    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET).userid
     if (req.session.id === userid_num) {
       const deletePost = await Public_post.destroy({
         where: {
@@ -223,7 +223,7 @@ exports.deletePost = async (req, res) => {
 exports.deletePostComment = async (req, res) => {
   try {
     const { post_id, comment_id } = req.params;
-    const { userid_num } = req.body;
+    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET).userid
     if (req.session.id === userid_num) {
       const deletePostComment = await Public_post_comment.destroy({
         where: {
@@ -247,7 +247,8 @@ exports.deletePostComment = async (req, res) => {
 // GET /dm => dm 가져오기
 exports.dm = async (req, res) => {
   try {
-    const { userid_num, nickname } = req.body;
+    const { nickname } = req.body;
+    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET).userid
     const getDm = await Dm.findAll({
       where: {
         [Sequelize.Op.or]: [
@@ -267,7 +268,7 @@ exports.dm = async (req, res) => {
 exports.newDm = async (req,res) => {
   try{
       const {nickname} = req.params;
-      const {userid_num} = req.body;
+      const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET).userid
       const createDm = await Dm.create({
         userid_num: userid_num,
         to_nickname: nickname
@@ -300,7 +301,8 @@ exports.getDmDetail = async (req, res) => {
 exports.postDm = async (req, res) => {
   try {
     const {note_id} = req.params;
-    const { to_nickname, dm_content, userid_num } = req.body;
+    const { to_nickname, dm_content } = req.body;
+    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET).userid
     const sendDm = await Dm.create({
       to_nickname: to_nickname,
       dm_content: dm_content,
@@ -320,7 +322,7 @@ exports.postDm = async (req, res) => {
 exports.deleteDm = async (req, res) => {
   try {
     // const {userid_num} = req.params.userid_num;
-    const { userid_num } = req.body;
+    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET).userid
     if (req.session.id === userid_num) {
       const destroyDm = await Dm.destroy({
         where: note_id,
@@ -389,7 +391,7 @@ exports.getAllMembers = async (req, res) => {
 exports.deleteClubAdminTransfer = async (req, res) => {
   try {
     const { club_id } = req.params;
-    const { userid_num } = req.body;
+    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET).userid
     const deleteMember = await Club_members.destroy({
       where: {
         club_id: club_id,
@@ -426,7 +428,8 @@ exports.clubApply = async (req,res) =>{
 exports.clubApplyinfo = async (req,res) => {
   try{
     const {club_id} = req.params;
-    const {motivation, introduction, userid_num} = req.body;
+    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET).userid
+    const {motivation, introduction} = req.body;
     const clubApplyinfo = await Club_members_wait.create({
       club_id: club_id,
       motivation: motivation,
@@ -449,7 +452,8 @@ exports.createClubMembers = async (req, res) => {
   try {
     // const {userid_num} = req.params.userid_num;
     const { club_id } = req.params;
-    const { motivation, introduction, userid_num } = req.body;
+    const { motivation, introduction } = req.body;
+    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET).userid
     if(applyResult){
       const newMembers = await Club_members.create({
         club_id: club_id,
@@ -470,12 +474,9 @@ exports.getClubMembersApplyList = async (req, res) => {
   try {
     const { club_id,userid_num } = req.params;
     console.log('club_id > ',club_id);
-
-  
     const getApplyList = await Club_members_wait.findAll({
       where: {
         club_id: club_id,
-    
       },
       include: [{ model: User}]
     });
@@ -493,7 +494,7 @@ exports.getClubMembersApplyList = async (req, res) => {
 exports.deleteApplyDetail = async (req, res) => {
   try {
     const { club_id } = req.params;
-    const { userid_num } = req.body;
+    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET).userid
     const destroyApplyDetail = await Club_members_wait.destroy({
       where: {
         userid_num: userid_num,
@@ -533,7 +534,7 @@ exports.getClubMembers = async (req, res) => {
 exports.getClubMember = async (req, res) => {
   try {
     const { club_id } = req.params;
-    const { userid_num } = req.body;
+    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET).userid
     const getMember = await Club_members.findOne({
       where: {
         club_id: club_id,
@@ -553,7 +554,7 @@ exports.deleteMembers = async (req, res) => {
   try {
     // 삭제 버튼클릭시 값이 넘어온다.
     const {club_id} = req.params;
-    const { userid_num } = req.body;
+    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET).userid
     if (req.session.id === userid_num) {
       const destroyMembers = await Club_members.destroy({
         where: {
