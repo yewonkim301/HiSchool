@@ -14,21 +14,23 @@ router.get("/", (req, res) => {
 
 router.get("/home", isLoggedIn, async (req, res) => {
   console.log(req.cookies.jwt);
-  const { userid, userid_num } = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET)
-  console.log('verified : ', userid, userid_num);
+  const { userid, userid_num } = jwt.verify(
+    req.cookies.jwt,
+    process.env.JWT_SECRET
+  );
+  console.log("verified : ", userid, userid_num);
 
   try {
     const user = await User.findOne({
       where: {
-        userid: verified
-      }
-    })
+        userid: verified,
+      },
+    });
     console.log(user);
-  } catch(err) {
+  } catch (err) {
     console.log(err);
   }
-  
-  
+
   res.render("home");
 });
 
@@ -145,9 +147,10 @@ router.delete(
   controllerClub.deleteClubSchedule
 );
 
-router.delete(
+// PATCH /myclubSchedule/:club_id/:date/:schedule_id : 동아리 일정 수정
+router.patch(
   "/myClubSchedule/:club_id/:schedule_id",
-  controllerClub.deleteClubSchedule
+  controllerClub.patchClubSchedule
 );
 
 // GET /myclubPostMain/:club_id : 동아리 게시글 전체 조회
@@ -206,7 +209,7 @@ router.delete("/myclubEditPost/:club_id/:post_id", controllerClub.deletePost);
 router.get("/mypageMain/:userid", controllerPublic.getMyPage);
 
 // GET /mypageProfile/:nickname 마이페이지 정보 가져오기 ver.닉네임
-router.get("/mypageProfile/:nickname", controllerPublic.getMyPageProfile );
+router.get("/mypageProfile/:nickname", controllerPublic.getMyPageProfile);
 
 // publicPost
 // GET /publicPostMain 익명 게시판 정보 불러오기
@@ -275,5 +278,11 @@ router.get("/myclubChat/:club_id", controllerClub.getClubChat);
 
 // POST /myclubChat/:club_id 동아리 채팅방에서 채팅 보내기
 router.post("/myclubChat/:club_id", controllerClub.postClubChat);
+
+// GET /myclubList 내가 가입한 동아리 목록 페이지 불러오기
+router.get("/myclubList", controllerClub.getMyclubList);
+
+// GET /myclubMain/:club_id 내가 가입한 동아리의 메인 페이지 불러오기
+router.get("/myclubMain/:club_id", controllerClub.getMyclubMain);
 
 module.exports = router;

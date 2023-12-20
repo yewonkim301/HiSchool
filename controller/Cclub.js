@@ -5,9 +5,12 @@ const {
   Club_post_comment,
   Club_post_comment_like,
   Club_schedule,
+  Club_members,
   User,
+  Sequelize,
 } = require("../models/Index");
 const { trace } = require("../routes");
+const jwt = require("jsonwebtoken");
 
 // Club
 // GET /clubMain : 전체 동아리 조회
@@ -124,23 +127,17 @@ exports.getCreateClub = async (req, res) => {
 // POST /createClub : 동아리 생성
 exports.postCreateClub = async (req, res) => {
   try {
-    const {
-      club_name,
-      leader_id,
-      limit,
-      location,
-      field,
-      keyword,
-      description,
-    } = req.body;
+    const { club_name, limit, location, field, keyword, description } =
+      req.body;
+    const { userid_num } = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
     const newClub = await Club.create({
-      club_name,
-      leader_id,
-      limit,
-      location,
-      field,
-      keyword,
-      description,
+      club_name: club_name,
+      leader_id: userid_num,
+      limit: limit,
+      location: location,
+      field: field,
+      keyword: keyword,
+      description: description,
     });
     res.send(newClub);
   } catch (err) {
@@ -195,7 +192,6 @@ exports.getClubPost = async (req, res) => {
       data: clubPost,
       clubPostComment,
       clubPostCommentLike,
-
     });
   } catch (err) {
     console.error(err);
@@ -451,7 +447,6 @@ exports.postClubSchedule = async (req, res) => {
 };
 
 // PATCH /myclubSchedule/:club_id/:date/:schedule_id : 동아리 일정 수정
-/*
 exports.patchClubSchedule = async (req, res) => {
   try {
     const { club_id, date, schedule_id } = req.params;
@@ -477,7 +472,6 @@ exports.patchClubSchedule = async (req, res) => {
     res.send("Internal Server Error!");
   }
 };
-*/
 
 // DELETE /myclubSchedule/:club_id/:schedule_id : 동아리 일정 삭제
 exports.deleteClubSchedule = async (req, res) => {
@@ -537,3 +531,40 @@ exports.postClubChat = async (req, res) => {
 };
 
 // DELETE  동아리 채팅방 삭제 -> 동아리가 삭제될 때 채팅방도 함께 삭제
+
+// GET /myclubList 내가 가입한 동아리 목록 페이지 불러오기
+exports.getMyclubList = async (req, res) => {
+  const { userid, userid_num } = jwt.verify(
+    req.cookies.jwt,
+    process.env.JWT_SECRET
+  );
+  const myclubs = await Club_members.findAll({
+    attributes: ["club_id"],
+    where: { userid_num: userid_num },
+  }); // [{},{},{}]
+  const { club_id1, club_id2, club_id3 } = myclubs;
+  const myclubList = await Club.findAll({
+    where: {
+      [Sequelize.Op.or]: [
+        { club_id: club_id1 },
+        { club_id: club_id2 },
+        { club_id: club_id3 },
+      ],
+    },
+  });
+  res.render("myclub/myclubList", { data: myclubList });
+};
+
+// GET /myclubMain/:club_id 내가 가입한 동아리의 메인 페이지 불러오기
+exports.getMyclubMain = async (req, res) => {
+  const { club_id } = req.params.club_id;
+  const { userid, userid_num } = jwt.verify(
+    req.cookies.jwt,
+    process.env.JWT_SECRET
+  );
+  const myClub = await Club.findOne({ where: { club_id: club_id } });
+  let isAdmin;
+  if (myClub[0].leader_id == userid_num) isAdmin = true;
+  else isAdmin = false;
+  res.render("myclub/myclubMain", { data: myClub, isAdmin });
+};
