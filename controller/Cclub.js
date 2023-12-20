@@ -402,10 +402,11 @@ exports.getCreateClubPost = async (req, res) => {
 exports.createClubPost = async (req, res) => {
   try {
     const { club_id } = req.params;
-    const { userid, title, content, image } = req.body;
+    const { title, content, image } = req.body;
+    const { userid_num } = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
     const newPost = await Club_post.create({
       club_id: club_id,
-      // userid: userid,
+      userid: userid_num,
       title: title,
       content: content,
       image: image,
