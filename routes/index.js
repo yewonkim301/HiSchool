@@ -8,6 +8,31 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv").config();
 const { User } = require("../models/Index");
 
+const fileparser = require('../middleware/fileparser')
+
+
+
+
+router.post('/upload', async (req, res) => {
+  await fileparser(req)
+  .then(data => {
+    res
+    .status(200)
+    .json({
+      message: "Success",
+      data
+    })
+  })
+  .catch(error => {
+    res.status(400).json({
+      message: "An error occurred.",
+      error
+    })
+  })
+})
+
+
+
 router.get("/", (req, res) => {
   res.render("index");
 });

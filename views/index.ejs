@@ -15,6 +15,15 @@
       <br />
       <a href="/home">홈 화면으로 이동</a>
       <a href="./myClubPostMain">동아리게시판</a>
+      <br>
+
+      <form action="/upload" enctype="multipart/form-data" method="post">
+        <label for="profileImg">이미지 업로드</label>
+        <input type="file" name="profileImg" id="profileImg" multiple>
+        <button type="button">업로드</button>
+      </form>
+      <br>
+
       <div class="cta">
         <a href="/register" class="btn btn-secondary">회원가입</a>
         <a href="/login" class="btn btn-primary">로그인</a>
