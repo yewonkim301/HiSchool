@@ -61,13 +61,13 @@ exports.getClubAdminEdit = async (req, res) => {
     });
     const leaderName = await User.findOne({
       attributes: ["name"],
-      where: { userid_num: leaderId },
+      where: { userid_num: leaderId.dataValues.leader_id },
     });
     const clubmembers = await Club_members.findAll({
       where: { club_id: club_id },
     });
     res.render("clubAdmin/clubAdminEdit", {
-      data: clubAdminEdit,
+      clubAdminEdit,
       leaderName,
       clubmembers,
     });
