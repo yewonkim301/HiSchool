@@ -42,6 +42,7 @@ router.post('/upload', async (req, res) => {
       });
     });
 });
+});
 
 
 
@@ -50,28 +51,7 @@ router.get("/", (req, res) => {
   res.render("index");
 });
 
-router.get("/home", isLoggedIn, async (req, res) => {
-  console.log(req.cookies.jwt);
-  const { userid, userid_num } = jwt.verify(
-    req.cookies.jwt,
-    process.env.JWT_SECRET
-  );
-
-  console.log("jwt : ", userid, userid_num);
-
-  try {
-    const user = await User.findOne({
-      where: {
-        userid: userid,
-      },
-    });
-    console.log(user);
-  } catch (err) {
-    console.log(err);
-  }
-
-  res.render("home");
-});
+router.get("/home", isLoggedIn, controllerPublic.home);
 
 router.get("/login", isNotLoggedIn, (req, res) => {
   res.render("login");
