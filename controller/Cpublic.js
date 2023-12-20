@@ -225,7 +225,7 @@ exports.deletePost = async (req, res) => {
 exports.deletePostComment = async (req, res) => {
   try {
     const { post_id, comment_id } = req.params;
-    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET)
+    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
     if (req.session.id === userid_num) {
       const deletePostComment = await Public_post_comment.destroy({
         where: {
@@ -580,7 +580,7 @@ exports.deleteMembers = async (req, res) => {
 // GET /mypageMain/ 내 페이지 가져오기 ver.동아리
 exports.getMyPage = async (req,res) =>{
   try{
-    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET)
+    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
     const myPageMain = await User.findOne({
       where:{
         userid: userid
@@ -594,9 +594,25 @@ exports.getMyPage = async (req,res) =>{
   }
 }
 
-// DELETE /mypageMain/:userid
+// DELETE /mypageMain/
 exports.deleteMyID = async (req,res) =>{
-  
+  try{
+    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
+    const destroyMyID = await User.destroy({
+      where:{
+        userid_num: userid_num
+      }
+    })
+    if(destroyMyID){
+      res.send({ isDeleted: true });
+    } else {
+      res.send({ isDeleted: false });
+    }
+  }
+  catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
 }
 
 // GET /mypageMainProfile/:nickname 내 페이지 가져오기 ver.닉네임
