@@ -37,8 +37,8 @@ exports.getClub = async (req, res) => {
 // GET /clubAdminMain/:club_id : 동아리 관리페이지 불러오기
 exports.getClubAdminMain = async (req, res) => {
   try {
-    const{club_id} = req.body;
-    res.render("clubAdmin/clubAdminMain", {data:club_id});
+    const { club_id } = req.body;
+    res.render("clubAdmin/clubAdminMain", { data: club_id });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -267,6 +267,8 @@ exports.createPostComment = async (req, res) => {
   try {
     const { club_id, post_id } = req.params;
     const { comment_name, content } = req.body;
+    console.log(req.params);
+    console.log(req.body);
     // ? comment_name : 세션에 저장되어 있는 로그인한 유저의 정보에서 찾아야 함
     const newClubPostComment = await Club_post_comment.create({
       club_id: club_id,

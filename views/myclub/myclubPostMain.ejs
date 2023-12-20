@@ -13,12 +13,12 @@
 
 <body>
    <%- include('../component/header')%>
-      <a href="/myclubNewPost/:club_id" id="plus-button" class="plus-button">+</a>
+      <button onclick="createPost()" ()id="plus-button" class="plus-button">+</button>
 
       <!-- 게시물 목록 -->
 
       <% for(let i=0; i < data.length; i++) { %>
-         <div class="list" onclick="showDetail(event, <%= data[i].post_id %>)">
+         <div class="list" onclick="showDetail(' <%= data[i].post_id %>')">
             <div class="list-title">
                <%= data[i].title %>
             </div>
@@ -29,9 +29,14 @@
          <% } %>
             <script>
 
-               function showDetail(event, post_id) {
+               function showDetail(post_id) {
                   window.location.href = `/myclubPostDetail/1/${post_id}`;
                }
+
+               function createPost() {
+                  window.location.href = `/myclubNewPost/1`;
+               }
+
 
 
             </script>
