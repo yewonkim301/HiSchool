@@ -102,7 +102,12 @@
         </div>
         <div class="input">
           <label for="birthday">생일</label>
-          <input type="date" id="birthday" class="textField" value="2000-10-10" />
+          <input
+            type="date"
+            id="birthday"
+            class="textField"
+            value="2000-10-10"
+          />
         </div>
         <div class="input">
           <label for="phone">전화번호</label>
@@ -115,14 +120,24 @@
 
         <div class="input">
           <label for="password">비밀번호</label>
-          <input type="password" id="password" class="textField" value="12341234"/>
+          <input
+            type="password"
+            id="password"
+            class="textField"
+            value="12341234"
+          />
           <span class="helpText"
             ><i data-feather="info" width="16"></i>8자리 이상, 16자리 이하</span
           >
         </div>
         <div class="input">
           <label for="passwordCheck">비밀번호 확인</label>
-          <input type="password" id="passwordCheck" class="textField" value="12341234"/>
+          <input
+            type="password"
+            id="passwordCheck"
+            class="textField"
+            value="12341234"
+          />
         </div>
       </form>
 
@@ -245,7 +260,7 @@
             method: "POST",
             url: "/auth/register",
             headers: {
-              // "Content-Type": "application/json",
+              // "Content-Type": "application/formData",
             },
             data: {
               // userid: userid,
@@ -266,6 +281,11 @@
             },
           });
           console.log(result);
+          console.log(result.data.success);
+          if(result.data.success === true) {
+            alert('회원가입 성공')
+            document.location.href = '/login'
+          }
         } catch (err) {
           console.log(err);
         }

@@ -473,7 +473,7 @@ exports.createClubMembers = async (req, res) => {
 // GET /clubAdminApplyList/:club_id 클럽에 가입신청한 사람들 전체조회
 exports.getClubMembersApplyList = async (req, res) => {
   try {
-    const { club_id } = req.params;
+    const { club_id,userid_num } = req.params;
     console.log('club_id > ',club_id);
     const getApplyList = await Club_members_wait.findAll({
       where: {
@@ -483,7 +483,11 @@ exports.getClubMembersApplyList = async (req, res) => {
     });
    
 
-    res.render("clubAdmin/clubAdminApplyList", { data: getApplyList });
+    if(!getApplyList){
+      res.render("clubAdmin/clubAdminApplyList")
+    }else{
+      res.render("clubAdmin/clubAdminApplyList", { data: getApplyList });
+    }
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -522,7 +526,11 @@ exports.getClubMembers = async (req, res) => {
       },
       include: [{ model: User}]
     });
-    res.render("clubAdmin/clubAdminMemberlist", { data: getMembers });
+    if(!getMembers){
+      res.render("clubAdmin/clubAdminMemberList");
+    }else{      
+      res.render("clubAdmin/clubAdminMemberList", { data: getMembers });
+    }
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -633,15 +641,21 @@ exports.home = async (req,res) => {
   try{
     const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
     const getClubs = await Club.findAll();
-    //const getClub
+
+    const myClubs = await Club_members.findAll({
+      where:{
+        userid_num: userid_num
+      },
+      include: [{ model: User}]
+    });
+    res.render("/home", {data: getClubs, myClubs});
+
   }
   catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
   }
 }
-
-
 
 
 

@@ -35,7 +35,7 @@ router.post("/register", isNotLoggedIn, async (req, res, next) => {
       classid,
       password: hash,
     });
-    return res.send("회원가입 성공");
+    return res.send({ success: true, message: "회원가입 성공" });
   } catch (error) {
     console.log(error);
     return next(error);

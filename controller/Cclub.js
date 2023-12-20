@@ -55,7 +55,22 @@ exports.getClubAdminEdit = async (req, res) => {
     const clubAdminEdit = await Club.findOne({
       where: { club_id: club_id },
     });
-    res.render("clubAdmin/clubAdminEdit", { data: clubAdminEdit });
+    const leaderId = await Club.findOne({
+      attributes: ["leader_id"],
+      where: { club_id: club_id },
+    });
+    const leaderName = await User.findOne({
+      attributes: ["name"],
+      where: { userid_num: leaderId },
+    });
+    const clubmembers = await Club_members.findAll({
+      where: { club_id: club_id },
+    });
+    res.render("clubAdmin/clubAdminEdit", {
+      data: clubAdminEdit,
+      leaderName,
+      clubmembers,
+    });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -576,4 +591,9 @@ exports.getMyclubMain = async (req, res) => {
   if (myClub.leader_id == userid_num) isAdmin = true;
   else isAdmin = false;
   res.render("myclub/myclubMain", { data: myClub, isAdmin });
+};
+
+// GET /clubChat
+exports.clubChat = (req, res) => {
+  res.render("myclub/socketTest");
 };
