@@ -1,5 +1,4 @@
 const Sequelize = require("sequelize");
-const Support = require("./Support");
 const config = require(__dirname + "/../config/config.js")["development"];
 
 
