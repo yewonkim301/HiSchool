@@ -58,11 +58,11 @@
       <form name="login">
         <div class="input">
           <label for="userid">아이디</label>
-          <input type="text" id="userid" class="textField" />
+          <input type="text" id="userid" class="textField" value="admin" />
         </div>
         <div class="input">
           <label for="name">이름</label>
-          <input type="text" id="name" class="textField" />
+          <input type="text" id="name" class="textField" value="관리자" />
         </div>
         <div class="input">
           <label for="school">학교</label>
@@ -72,6 +72,7 @@
             class="textField"
             oninput="showResult(); searchSchool();"
             onfocus="resetSchoolInput();"
+            value="가락고등학교"
           />
           <div id="schoolSearchResults" class="search-results hidden"></div>
         </div>
@@ -84,6 +85,7 @@
               pattern="[0-9]*"
               id="grade"
               class="textField noscroll"
+              value="1"
             />
           </div>
           <div class="input">
@@ -94,16 +96,17 @@
               pattern="[0-9]*"
               id="classid"
               class="textField noscroll"
+              value="2"
             />
           </div>
         </div>
         <div class="input">
           <label for="birthday">생일</label>
-          <input type="date" id="birthday" class="textField" />
+          <input type="date" id="birthday" class="textField" value="2000-10-10" />
         </div>
         <div class="input">
           <label for="phone">전화번호</label>
-          <input type="tel" id="phone" class="textField" />
+          <input type="tel" id="phone" class="textField" value="01012341234" />
           <span class="helpText"
             ><i data-feather="info" width="16"></i>- 를 제외하고
             입력해주세요</span
@@ -112,14 +115,14 @@
 
         <div class="input">
           <label for="password">비밀번호</label>
-          <input type="password" id="password" class="textField" />
+          <input type="password" id="password" class="textField" value="12341234"/>
           <span class="helpText"
             ><i data-feather="info" width="16"></i>8자리 이상, 16자리 이하</span
           >
         </div>
         <div class="input">
           <label for="passwordCheck">비밀번호 확인</label>
-          <input type="password" id="passwordCheck" class="textField" />
+          <input type="password" id="passwordCheck" class="textField" value="12341234"/>
         </div>
       </form>
 
