@@ -124,24 +124,24 @@ router.get(
   controllerPublic.getClubAdminApplyDetail
 );
 
-// GET /clubAdminMemberDetail/:club_id 클럽 회원정보 상세보기 페이지
-router.get("/clubAdminMemberDetail/:club_id", controllerPublic.getClubMember);
+// GET /clubAdminMemberDetail/:club_id/:userid_num 클럽 회원정보 상세보기 페이지
+router.get("/clubAdminMemberDetail/:club_id/:userid_num", controllerPublic.getClubMember);
 
 // POST /clubAdminApplyDetail/:club_id 동아리 가입 신청 승인
 router.post(
-  "/clubAdminApplyDetail/:club_id",
+  "/clubAdminApplyDetail/:club_id/:userid_num",
   controllerPublic.createClubMembers
 );
 
-// DELETE /clubAdminMemberDetail/:club_id 클럽에서 추방
+// DELETE /clubAdminMemberDetail/:club_id/:userid_num 클럽에서 추방
 router.delete(
-  "/clubAdminMemberDetail/:club_id",
+  "/clubAdminMemberDetail/:club_id/:userid_num",
   controllerPublic.deleteMembers
 );
 
-// DELETE /clubAdminApplyDetail/:club_id 클럽 가입 거절
+// DELETE /clubAdminApplyDetail/:club_id/:userid_num 클럽 가입 거절
 router.delete(
-  "/clubAdminApplyDetail/:club_id",
+  "/clubAdminApplyDetail/:club_id/:userid_num",
   controllerPublic.deleteApplyDetail
 );
 
