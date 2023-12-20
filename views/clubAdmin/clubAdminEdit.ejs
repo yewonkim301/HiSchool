@@ -48,24 +48,36 @@
   </div>
 
   <script>
-    console.log('<%=data%>');
+
+    console.log('<%=data.club_id%>');
+    console.log('<%=leaderName%>');
+    console.log('<%=clubmembers%>');
     // club
+
+    
    function trasferLeader(){
       window.location.href= "/clubAdminTransfer/<%=data.club_id%>"
    }
    async function patchClubInfo(){
+    const newName = document.getElementById('editClubName').value;
+    const newDescription = document.getElementById('editClubDescription').value;
+    const newLimit = document.getElementById('editClubLimit').value;
+    const newKeyword = document.getElementById('editClubKeyword').value;
+    console.log(newName,newDescription,newLimit,newKeyword)
+ 
+
     try {
           const res = await axios({
             method: "PATCH",
             url: `/clubAdminEdit/<%=data.club_id%>`,
             data: {
-              club_name: "동아리 이름",
-              leader_id: "동아리 생성하는 유저",
-              limit: "인원",
-              location: "활동 지역 (예: 서울시 마포구)",
-              field: "활동 분야 (예: 과학)",
-              keyword: "키워드 (예: 과학, 로봇)",
-              description: "동아리 설명"
+              club_name: newName,
+              leader_id: '<%=data.leader_id%>',
+              limit: newLimit,
+              location: '<%=data.location%>',
+              field:'<%=data.field%>',
+              keyword: newKeyword,
+              description: newDescription
             },
           });
           console.log(res);
