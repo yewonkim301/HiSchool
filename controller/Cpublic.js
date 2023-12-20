@@ -7,6 +7,8 @@ const {
   Club_members_wait,
   User,
 } = require("../models/Index");
+const jwt = require("jsonwebtoken");
+
 
 // ===== publicPost =====
 
@@ -613,4 +615,10 @@ exports.getMyPageProfile = async (req,res) =>{
     res.send("Internal Server Error!");
   }
 }
+
+
+
+
+
+
 
