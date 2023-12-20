@@ -202,7 +202,7 @@ router.patch("/myclubEditPost/:club_id/:post_id", controllerClub.patchPost);
 router.delete("/myclubEditPost/:club_id/:post_id", controllerClub.deletePost);
 
 // mypage
-// GET /mypageMain/:userid 마이페이지 정보 가져오기 ver.동아리
+// GET /mypageMain/ 마이페이지 정보 가져오기 ver.동아리
 router.get("/mypageMain/:userid", controllerPublic.getMyPage);
 
 // GET /mypageProfile/:nickname 마이페이지 정보 가져오기 ver.닉네임
