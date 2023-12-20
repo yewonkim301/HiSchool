@@ -42,7 +42,7 @@
       try {
           const res = await axios({
             method: "POST",
-            url: "/clubApply/<%=data.club_id%>/<%=data.club_id%>",
+            url: "/clubAdminApplyDetail/<%=data.club_id%>/<%=data..userid_num%>",
             data: {
               ApplyResult:true,
             },
@@ -66,8 +66,8 @@
     async function reject(){
       try {
           const res = await axios({
-            method: "POST",
-            url: "/clubApply/<%=data.club_id%>/<%=data.club_id%>",
+            method: "DELETE",
+            url: "/clubAdminApplyDetail/<%=data.club_id%>/<%=data.userid_num%>",
             data: {
               ApplyResult:false,
             },
