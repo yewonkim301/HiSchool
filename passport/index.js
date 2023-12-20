@@ -13,7 +13,10 @@ module.exports = (passport) => {
     // console.log("deserializeUser id : ", id);
     User.findOne({ where: { userid: id.userid } })
       .then((user) => done(null, user))
-      .catch((err) => done(err));
+      .catch((err) => {
+        console.log('오류')
+        done(err)
+      });
   });
   local(passport);
   jwt(passport);

@@ -484,7 +484,11 @@ exports.getClubMembersApplyList = async (req, res) => {
     console.log("getClubMembersApplyList>",getApplyList[0].dataValues);
     console.log("dataType>",typeof (getApplyList[0].dataValues));
 
-    res.render("clubAdmin/clubAdminApplyList", { data: getApplyList });
+    if(!getApplyList){
+      res.render("clubAdmin/clubAdminApplyList")
+    }else{
+      res.render("clubAdmin/clubAdminApplyList", { data: getApplyList });
+    }
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -523,7 +527,11 @@ exports.getClubMembers = async (req, res) => {
       },
       include: [{ model: User}]
     });
-    res.render("clubAdmin/clubAdminMemberlist", { data: getMembers });
+    if(!getMembers){
+      res.render("clubAdmin/clubAdminMemberList");
+    }else{      
+      res.render("clubAdmin/clubAdminMemberList", { data: getMembers });
+    }
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -627,6 +635,22 @@ exports.getMyPageProfile = async (req,res) =>{
     res.send("Internal Server Error!");
   }
 }
+
+// =============== HOME =================
+// GET /home 전체 동아리, 유저아이디가 가입되어있는 동아리 정보 로드
+// exports.home = async (req,res) => {
+//   try{
+//     const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
+//     const getClubs = await Club.findAll();
+//     const myClubs = await Club_members.findAll({
+//       where:
+//     });
+//   }
+//   catch (err) {
+//     console.error(err);
+//     res.send("Internal Server Error!");
+//   }
+// }
 
 
 
