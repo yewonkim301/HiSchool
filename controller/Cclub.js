@@ -557,14 +557,17 @@ exports.getMyclubList = async (req, res) => {
 
 // GET /myclubMain/:club_id 내가 가입한 동아리의 메인 페이지 불러오기
 exports.getMyclubMain = async (req, res) => {
-  const { club_id } = req.params.club_id;
+  console.log(req.params);
+  const { club_id } = req.params;
+  console.log(club_id);
+  console.log({club_id});
   const { userid, userid_num } = jwt.verify(
     req.cookies.jwt,
     process.env.JWT_SECRET
   );
   const myClub = await Club.findOne({ where: { club_id: club_id } });
   let isAdmin;
-  if (myClub[0].leader_id == userid_num) isAdmin = true;
+  if (myClub.leader_id == userid_num) isAdmin = true;
   else isAdmin = false;
   res.render("myclub/myclubMain", { data: myClub, isAdmin });
 };
