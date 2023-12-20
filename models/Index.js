@@ -1,7 +1,11 @@
 const Sequelize = require("sequelize");
+const Support = require("./Support");
 const config = require(__dirname + "/../config/config.js")["development"];
 
+
 const db = {};
+
+
 
 const sequelize = new Sequelize(
   config.database,
@@ -12,6 +16,9 @@ const sequelize = new Sequelize(
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
+
+
+
 
 const User = require("./User")(sequelize, Sequelize);
 const Public_post = require("./Public_post")(sequelize, Sequelize);
@@ -36,6 +43,7 @@ const Club_post_comment_like = require("./Club_post_comment_like")(
   Sequelize
 );
 const Club_chat = require("./Club_chat")(sequelize, Sequelize);
+const Support = require('./Support')(sequelize, Sequelize);
 
 // User DM = > 1:N
 
@@ -50,6 +58,7 @@ Dm.belongsTo(User, {
 
 // User Pubic_Post => 1:N
 User.hasMany(Public_post, {
+
   foreignKey: "userid_num",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
@@ -106,12 +115,12 @@ Club_members.belongsTo(Club, {
 
 // Public_post P_Comment => 1:N
 Public_post.hasMany(Public_post_comment, {
-  foreignKey: "club_id",
+  foreignKey: "userid_num",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
 Public_post_comment.belongsTo(Public_post, {
-  foreignKey: "club_id",
+  foreignKey: "userid_num",
 });
 
 Public_post.hasMany(Public_post_comment, {
@@ -242,6 +251,15 @@ Club_schedule.belongsTo(Club, {
   foreignKey: "club_id",
 });
 
+User.hasMany(Support,{
+  foreignKey: "club_id",
+  onDelete: "CASCADE",
+  onUpdate: "CASCADE",
+})
+Support.belongsTo(User, {
+  foreignKey: "club_id",
+});
+
 db.User = User;
 db.Public_post = Public_post;
 db.Public_post_comment = Public_post_comment;
@@ -255,6 +273,7 @@ db.Club_post = Club_post;
 db.Club_post_comment = Club_post_comment;
 db.Club_post_comment_like = Club_post_comment_like;
 db.Club_schedule = Club_schedule;
+db.Support = Support;
 
 db.Dm = Dm;
 
