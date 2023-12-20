@@ -638,21 +638,23 @@ exports.getMyPageProfile = async (req,res) =>{
 
 // =============== HOME =================
 // GET /home 전체 동아리, 유저아이디가 가입되어있는 동아리 정보 로드
-// exports.home = async (req,res) => {
-//   try{
-//     const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
-//     const getClubs = await Club.findAll();
-//     const myClubs = await Club_members.findAll({
-//       where:
-//     });
-//   }
-//   catch (err) {
-//     console.error(err);
-//     res.send("Internal Server Error!");
-//   }
-// }
-
-
+exports.home = async (req,res) => {
+  try{
+    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
+    const getClubs = await Club.findAll();
+    const myClubs = await Club_members.findAll({
+      where:{
+        userid_num: userid_num
+      },
+      include: [{ model: User}]
+    });
+    res.render("/home", {data: getClubs, myClubs});
+  }
+  catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+}
 
 
 
