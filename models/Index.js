@@ -79,9 +79,19 @@ Club_members_wait.belongsTo(User, {
   foreignKey: "club_id",
 });
 
+/// 임시 ///
+Club_members_wait.hasOne(Club_members,{
+  foreignKey: "members_id",
+});
+Club_members.belongsTo(Club_members_wait,{
+  foreignKey: "members_id",
+})
+
+//
+
 Club_members_wait.hasOne(Club_members, {
   foreignKey: "club_id",
-  onDelete: "CASCADE",
+  // onDelete: "CASCADE",
 });
 Club_members.belongsTo(Club_members_wait, {
   foreignKey: "club_id",
@@ -89,30 +99,30 @@ Club_members.belongsTo(Club_members_wait, {
 
 Club_members_wait.hasOne(Club_members, {
   foreignKey: "userid_num",
-  onDelete: "CASCADE",
+  // onDelete: "CASCADE",
 });
 Club_members.belongsTo(Club_members_wait, {
   foreignKey: "userid_num",
 });
 
 // Club C_members => 1:N
-Club.hasMany(Club_members, {
-  foreignKey: "club_id",
-  onDelete: "CASCADE",
-  onUpdate: "CASCADE",
-});
-Club_members.belongsTo(Club, {
-  foreignKey: "club_id",
-});
+// Club.hasMany(Club_members, {
+//   foreignKey: "club_id",
+//   onDelete: "CASCADE",
+//   onUpdate: "CASCADE",
+// });
+// Club_members.belongsTo(Club, {
+//   foreignKey: "club_id",
+// });
 
-User.hasMany(Club_members, {
-  foreignKey: "userid_num",
-  onDelete: "CASCADE",
-  onUpdate: "CASCADE",
-});
-Club_members.belongsTo(User, {
-  foreignKey: "userid_num",
-});
+// User.hasMany(Club_members, {
+//   foreignKey: "userid_num",
+//   onDelete: "CASCADE",
+//   onUpdate: "CASCADE",
+// });
+// Club_members.belongsTo(User, {
+//   foreignKey: "userid_num",
+// });
 
 // Public_post P_Comment => 1:N
 Public_post.hasMany(Public_post_comment, {
