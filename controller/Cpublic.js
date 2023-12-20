@@ -454,7 +454,8 @@ exports.createClubMembers = async (req, res) => {
   try {
     // const {userid_num} = req.params.userid_num;
     const { club_id, userid_num} = req.params;
-    const { motivation, introduction } = req.body;
+    const { motivation, introduction, applyResult } = req.body;
+    console.log('승인했을 때 > ', motivation, introduction, applyResult)
     if(applyResult){
       const newMembers = await Club_members.create({
         club_id: club_id,
@@ -462,7 +463,7 @@ exports.createClubMembers = async (req, res) => {
         introduction: introduction,
         userid_num: userid_num,
       });
-      res.send(newMembers);
+      res.send({isApplySuccess:true, newMembers});
     }
   } catch (err) {
     console.error(err);
@@ -474,15 +475,13 @@ exports.createClubMembers = async (req, res) => {
 exports.getClubMembersApplyList = async (req, res) => {
   try {
     const { club_id,userid_num } = req.params;
-    console.log('club_id > ',club_id);
+
     const getApplyList = await Club_members_wait.findAll({
       where: {
         club_id: club_id,
       },
       include: [{ model: User}]
     });
-    console.log("getClubMembersApplyList>",getApplyList[0].dataValues);
-    console.log("dataType>",typeof (getApplyList[0].dataValues));
 
     if(!getApplyList){
       res.render("clubAdmin/clubAdminApplyList")
@@ -638,21 +637,25 @@ exports.getMyPageProfile = async (req,res) =>{
 
 // =============== HOME =================
 // GET /home 전체 동아리, 유저아이디가 가입되어있는 동아리 정보 로드
-// exports.home = async (req,res) => {
-//   try{
-//     const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
-//     const getClubs = await Club.findAll();
-//     const myClubs = await Club_members.findAll({
-//       where:
-//     });
-//   }
-//   catch (err) {
-//     console.error(err);
-//     res.send("Internal Server Error!");
-//   }
-// }
+exports.home = async (req,res) => {
+  try{
+    const {userid, userid_num} = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
+    const getClubs = await Club.findAll();
 
+    const myClubs = await Club_members.findAll({
+      where:{
+        userid_num: userid_num
+      },
+      include: [{ model: User}]
+    });
+    res.render("/home", {data: getClubs, myClubs});
 
+  }
+  catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+}
 
 
 

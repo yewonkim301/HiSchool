@@ -13,22 +13,28 @@
 
   <main class="request-list">
     <!-- 가입 요청 목록 -->
+    <% if(data.length==0){%>
+      <div>가입 요청이 없습니다.</div>
+      <%} else {%>
     <% for(let i=0; i<data.length;i++){ %>
     <div class="request">
       <div class="request-info">
-        <p class="requester-name"><%=data[i].dataValues.user.dataValues.userid%></p>
+        <p class="requester-name"><%=data[i].dataValues.user.dataValues.name%></p>
         <p class="request-text"><%=data[i].dataValues.introduction%></p>
       </div>
-      <button class="<%=data[i].dataValues.user.dataValues.userid_num%>" onclick="checkDetail(this)">상세 정보 확인</button>
+      <button class="<%=data[i].dataValues.userid_num%>" onclick="checkDetail('<%=data[i].dataValues.userid_num%>')">상세 정보 확인</button>
     </div>
     
+    <% } %>
     <% } %>
     <!-- 추가 요청들을 여기에 반복 -->
   </main>
   <script>
-    const checkDetail=(clickedButton)=>{
-      let userid_num=clickedButton.className;
-      window.location.href=`/clubAdminApplyDetail/<%=data.club_id%>/<%=data.userid_num%>`
+    
+    const checkDetail=(userid_num)=>{
+      
+
+      window.location.href=`/clubAdminApplyDetail/<%=data[0].dataValues.club_id%>/${userid_num}`
     }
   </script>
 </body>

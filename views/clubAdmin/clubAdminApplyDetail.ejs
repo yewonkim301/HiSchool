@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <title>Document</title>
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="/clubAdminApplyDetail.css">
@@ -16,13 +17,13 @@
 
   <div class="content">
     <p class="content-title">이름</p>
-    <p class="content-detail"><%=data.name%></p>
+    <p class="content-detail"><%=data.dataValues.user.dataValues.name%></p>
 
     <p class="content-title">학교</p>
-    <p class="content-detail"><%=data.school%></p>
+    <p class="content-detail"><%=data.dataValues.user.dataValues.school%></p>
 
     <p class="content-title">학년</p>
-    <p class="content-detail"><%=data.grade%></p>
+    <p class="content-detail"><%=data.dataValues.user.dataValues.grade%></p>
 
     <p class="content-title">지원동기</p>
     <p class="content-detail"><%=data.motivation%></p>
@@ -45,7 +46,9 @@
             method: "POST",
             url: "/clubAdminApplyDetail/<%=data.club_id%>/<%=data.userid_num%>",
             data: {
-              ApplyResult:true,
+              motivation:'<%=data.motivation%>',
+              introduction:'<%=data.introduction%>',
+              applyResult:true,
             },
           });
           console.log(res);
@@ -68,13 +71,13 @@
       try {
           const res = await axios({
             method: "DELETE",
-            url: "/clubAdminApplyDetail/<%=data.club_id%>/<%=data.userid_num%>",
+            url: "/clubAdminApplyDetail/<%=data.dataValues.club_id%>/<%=data.dataValues.userid_num%>",
             data: {
               ApplyResult:false,
             },
           });
           console.log(res);
-          if(res.isSuccess){
+          if(res.isDeleted){
             alert('거절되었습니다');
             window.location.href='clubAdminApplyList/<%=data.club_id%>'
 

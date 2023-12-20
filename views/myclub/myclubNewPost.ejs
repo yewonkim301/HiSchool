@@ -30,13 +30,14 @@
 
 
 
+      const club_id = "1"; // 예시 데이터, 실제로는 동적으로 설정
 
       function addpost() {
          axios({
             method: "POST",
             url: "/myclubNewPost/1",
             data: {
-               club_id: "1", // 임시 데이터
+               club_id: `${club_id}`, // 임시 데이터
                // userid: "2", // 임시 데이터
                title: form.title.value,
                content: form.content.value,
@@ -46,8 +47,8 @@
             .then((res) => {
 
                if (res.status === 200) {
-                  let clubId = "1"; // 예시 데이터, 실제로는 동적으로 설정
-                  let postId = res.data.post_id; // 응답으로부터 post_id를 얻음
+
+                  const post_id = res.data.post_id; // 응답으로부터 post_id를 얻음
                   alert("게시물 등록완료");
                   // 새 게시물 엘리먼트 생성
                   const newPostElement = document.createElement('div');
@@ -57,8 +58,8 @@
             <p>${form.content.value}</p>
             `;
 
-                  window.location.href = `/myclubPostDetail/1/${postId};
-               }`;
+                  window.location.href = `/myclubPostDetail/1/${post_id}`;
+
                }
             });
 
