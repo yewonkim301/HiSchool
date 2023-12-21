@@ -398,7 +398,7 @@ exports.getClubAdminApplyDetail = async (req, res) => {
     })
     console.log("여기 봐봐 !!!>>>>>>>>>>", userInfo);
     console.log("여기!!!!!!", getClubAdminApplyDetail);
-    res.render("clubAdmin/clubAdminApplyDetail", getClubAdminApplyDetail, userInfo);
+    res.render("clubAdmin/clubAdminApplyDetail", {getClubAdminApplyDetail, userInfo});
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -511,11 +511,13 @@ exports.createClubMembers = async (req, res) => {
         // introduction: introduction,
         // userid_num: userid_num,
         isMember: "true",
+      },{
         where: {
           club_id:club_id,
           userid_num:userid_num
         }
-      });
+      }
+      );
       if (newMembers) {
         isApplySuccess = true;
       } else {
