@@ -169,8 +169,8 @@ router.get(
 );
 
 // PATCH /clubAdminTransfer/:club_id 회장 위임 전달
-router.delete(
-  "/clubAdminTransfer/:club_id",
+router.patch(
+  "/clubAdminTransfer/:club_id/:userid_num",
   isLoggedIn,
   controllerPublic.updateClubAdminTransfer
 );

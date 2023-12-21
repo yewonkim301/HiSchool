@@ -429,22 +429,47 @@ exports.getAllMembers = async (req, res) => {
         isMember: "true",
       },
     });
-    res.render("clubAdmin/clubAdminTransfer", { data: getAllMembersShow });
+
+    // 회원 전체 조회
+    const getusers = await Club_members.findAll({
+      attributes: ["userid_num"],
+      where: {
+        club_id: club_id,
+        isMember: "true"
+      }
+    });
+
+    let getusersid = [];
+    getusers.forEach((element) => {
+      getusersid.push(element.dataValues.userid_num);
+    });
+    let userInfo = [];
+    getusersid.forEach(async (element) => {
+      console.log(element);
+      let info = await User.findOne({ where: { userid_num: element } });
+      await userInfo.push(info.name);
+      console.log("userinfo >>>>>>>>>>>>>", userInfo);
+    });
+    console.log('getAllMembersShow >>>>>',getAllMembersShow)
+
+
+
+    res.render("clubAdmin/clubAdminTransfer", { data: getAllMembersShow, userInfo, club_id });
+
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
   }
 };
 
-// PATCH /clubAdminTransfer/:club_id 신청 거절
+// PATCH /clubAdminTransfer/:club_id 동아리장 위임 요청
 exports.updateClubAdminTransfer = async (req, res) => {
   try {
-    const { club_id } = req.params;
+    const { club_id,userid_num } = req.params;
+    const { changeLeader } = req.body;
 
-    const { userid_num } = req.body;
-    const updateLeader = await Club.update(
-      {
-        leader_id: userid_num,
+    const updateLeader = await Club.update({
+      leader_id : userid_num
       },
       {
         where: {
@@ -654,16 +679,6 @@ exports.getClubMembers = async (req, res) => {
       console.log("여기!!!!!!!!!!!!!>>>>>>", element.dataValues.userid_num);
       getUserInfo.push(element.dataValues.userid_num);
     });
-
-    // let userInfo = [];
-    // getusersid.forEach(async (element) => {
-    //   console.log(element)
-    //   let info = await User.findOne({where: {userid_num: element}});
-    //   console.log("info >>>>>>>>", info.nickname);
-    //   await userInfo.push(info.name);
-    //   console.log("userinfo >>>>>>>>>>>>>", userInfo);
-    // })
-
     if (!getMembers) {
       res.render("clubAdmin/clubAdminMemberList");
     } else {
