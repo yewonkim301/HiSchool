@@ -43,16 +43,16 @@ exports.createPost = async (req, res) => {
       process.env.JWT_SECRET
     );
     const getName = await User.findOne({
-      where:{
-        userid_num: userid_num
-      }
+      where: {
+        userid_num: userid_num,
+      },
     });
     const newPost = await Public_post.create({
       title: title,
       content: content,
       image: image,
       userid_num: userid_num,
-      nickname: getName.dataValues.nickname
+      nickname: getName.dataValues.nickname,
     });
     res.send(newPost);
   } catch (err) {
@@ -74,7 +74,7 @@ exports.getPostDetail = async (req, res) => {
     });
     const getPostComment = await Public_post_comment.findAll({
       where: { post_id: post_id },
-      include: [{model : Public_post_comment_like}]
+      include: [{ model: Public_post_comment_like }],
     });
     // const getComments = await Public_post_comment.findAll({
 
@@ -104,8 +104,8 @@ exports.createPostComment = async (req, res) => {
     );
     const getNickname = await User.findOne({
       where: {
-        userid_num: userid_num
-      }
+        userid_num: userid_num,
+      },
     });
     const newPublicPostComment = await Public_post_comment.create({
       comment: comment,
@@ -176,18 +176,18 @@ exports.patchPostComment = async (req, res) => {
       process.env.JWT_SECRET
     );
     // 유저가 누구인지 어떻게 알고 내 아이디 글만 수정 하는거죠?
-      const updatePostComment = await Public_post_comment.update(
-        {
-          comment: comment,
+    const updatePostComment = await Public_post_comment.update(
+      {
+        comment: comment,
+      },
+      {
+        where: {
+          comment_id: comment_id,
+          post_id: post_id,
         },
-        {
-          where: {
-            comment_id: comment_id,
-            post_id: post_id,
-          },
-        }
-      );
-      res.send(updatePostComment);
+      }
+    );
+    res.send(updatePostComment);
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -203,17 +203,17 @@ exports.patchPostCommentLike = async (req, res) => {
       req.cookies.jwt,
       process.env.JWT_SECRET
     );
-      const updatePostCommentLike = await Public_post_comment_like.update(
-        {
-          like_id: like_id,
+    const updatePostCommentLike = await Public_post_comment_like.update(
+      {
+        like_id: like_id,
+      },
+      {
+        where: {
+          comment_id: comment_id,
         },
-        {
-          where: {
-            comment_id: comment_id,
-          },
-        }
-      );
-      res.send(updatePostCommentLike);
+      }
+    );
+    res.send(updatePostCommentLike);
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -229,16 +229,16 @@ exports.deletePost = async (req, res) => {
       req.cookies.jwt,
       process.env.JWT_SECRET
     );
-      const deletePost = await Public_post.destroy({
-        where: {
-          post_id: post_id,
-        },
-      });
-      if (deletePost) {
-        res.send({ isDeleted: true });
-      } else {
-        res.send({ isDeleted: false });
-      }
+    const deletePost = await Public_post.destroy({
+      where: {
+        post_id: post_id,
+      },
+    });
+    if (deletePost) {
+      res.send({ isDeleted: true });
+    } else {
+      res.send({ isDeleted: false });
+    }
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -253,17 +253,17 @@ exports.deletePostComment = async (req, res) => {
       req.cookies.jwt,
       process.env.JWT_SECRET
     );
-      const deletePostComment = await Public_post_comment.destroy({
-        where: {
-          post_id: post_id,
-          comment_id: comment_id,
-        },
-      });
-      if (deletePostComment) {
-        res.send({ isDeleted: true });
-      } else {
-        res.send({ isDeleted: false });
-      }
+    const deletePostComment = await Public_post_comment.destroy({
+      where: {
+        post_id: post_id,
+        comment_id: comment_id,
+      },
+    });
+    if (deletePostComment) {
+      res.send({ isDeleted: true });
+    } else {
+      res.send({ isDeleted: false });
+    }
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -386,7 +386,7 @@ exports.getClubAdminApplyDetail = async (req, res) => {
       where: {
         club_id: club_id,
         userid_num: userid_num,
-        isMember: false
+        isMember: "false",
       },
       include: [{ model: User }],
     });
@@ -417,7 +417,7 @@ exports.getAllMembers = async (req, res) => {
     const getAllMembersShow = await Club_members.findAll({
       where: {
         club_id: club_id,
-        isMember: true
+        isMember: true,
       },
     });
     res.render("clubAdmin/clubAdminTransfer", { data: getAllMembersShow });
@@ -439,7 +439,7 @@ exports.deleteClubAdminTransfer = async (req, res) => {
       where: {
         club_id: club_id,
         userid_num: userid_num,
-        isMember: false
+        isMember: false,
       },
     });
     if (deleteMember) {
