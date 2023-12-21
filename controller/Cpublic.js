@@ -426,7 +426,30 @@ exports.getAllMembers = async (req, res) => {
         isMember: "true",
       },
     });
-    res.render("clubAdmin/clubAdminTransfer", { data: getAllMembersShow });
+    // 회원 전체 조회
+    const getusers = await Club_members.findAll({
+      attributes: ["userid_num"],
+      where: {
+        club_id: club_id,
+        isMember: "true"
+      }
+    });
+
+    let getusersid = [];
+    getusers.forEach((element) => {
+      getusersid.push(element.dataValues.userid_num);
+    });
+    let userInfo = [];
+    getusersid.forEach(async (element) => {
+      console.log(element);
+      let info = await User.findOne({ where: { userid_num: element } });
+      await userInfo.push(info.name);
+      console.log("userinfo >>>>>>>>>>>>>", userInfo);
+    });
+
+
+
+    res.render("clubAdmin/clubAdminTransfer", { data: getAllMembersShow, userInfo });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -624,15 +647,6 @@ exports.getClubMembers = async (req, res) => {
       console.log("여기!!!!!!!!!!!!!>>>>>>",element.dataValues.userid_num);
       getUserInfo.push(element.dataValues.userid_num);
     });
-
-    // let userInfo = [];
-    // getusersid.forEach(async (element) => {
-    //   console.log(element)
-    //   let info = await User.findOne({where: {userid_num: element}});
-    //   console.log("info >>>>>>>>", info.nickname);
-    //   await userInfo.push(info.name);
-    //   console.log("userinfo >>>>>>>>>>>>>", userInfo);
-    // })
     
     if (!getMembers) {
       res.render("clubAdmin/clubAdminMemberList");
