@@ -449,7 +449,7 @@ exports.getAllMembers = async (req, res) => {
 
 
 
-    res.render("clubAdmin/clubAdminTransfer", { data: getAllMembersShow, });
+    res.render("clubAdmin/clubAdminTransfer", { data: getAllMembersShow, userInfo, club_id});
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -678,9 +678,30 @@ exports.getClubMember = async (req, res) => {
         userid_num: userid_num,
         isMember: "true",
       },
-      include: [{ model: User }],
+      // include: [{ model: User }],
     });
-    res.render("clubAdmin/clubAdminMemberDetail", { data: getMember });
+
+    const getusers = await Club_members.findAll({
+      attributes: ["userid_num"],
+      where: {
+        club_id: club_id,
+        isMember: "false",
+      },
+    });
+
+    let getusersid = [];
+    getusers.forEach((element) => {
+      getusersid.push(element.dataValues.userid_num);
+    });
+
+    let userInfo = [];
+    getusersid.forEach(async (element) => {
+      console.log(element);
+      let info = await User.findOne({ where: { userid_num: element } });
+      await userInfo.push(info.name);
+    });
+
+    res.render("clubAdmin/clubAdminMemberDetail", { data: getMember, userInfo, club_id});
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
