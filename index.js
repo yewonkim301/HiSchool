@@ -67,12 +67,12 @@ const swaggerFile = require("./swagger-output");
 app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 const indexRouter = require("./routes");
-const authRouter = require("./routes/auth");
+// const authRouter = require("./routes/auth");
 const socketRouter = require("./routes/socket");
 let flag = true;
 
 app.use("/", indexRouter);
-app.use("/auth", authRouter);
+// app.use("/auth", authRouter);
 
 app.get("/clubChat", (req, res) => {
   if (flag) {
