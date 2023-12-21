@@ -96,8 +96,6 @@
   color: var(--color-gray-400);
 } */
 
-
-
 /* //////////////// */
 /* .list-additional {
   display: flex;
@@ -105,7 +103,6 @@
   padding: 16px 24px;
   align-items: center;
   gap: 16px;
-
   border-bottom: 1px solid #eaeaea;
 }
 .list-additional-main {
@@ -131,9 +128,9 @@
   font-weight: 500;
   line-height: normal;
   color: #6b7280;
-} */
+} 
 
-
+*/
 
 /* .list {
   display: flex;
@@ -186,8 +183,6 @@
   border-radius: 5px;
   width: 50%;
 } */
-
-
 
 /* CSS RESET */
 
@@ -281,7 +276,7 @@ meter {
 /* revert for bug in Chromium browsers
    - fix for the content editable attribute will work properly.
    - webkit-user-select: auto; added for Safari in case of using user-select:none on wrapper element */
-:where([contenteditable]:not([contenteditable="false"])) {
+:where([contenteditable]:not([contenteditable='false'])) {
   -moz-user-modify: read-write;
   -webkit-user-modify: read-write;
   overflow-wrap: break-word;
@@ -290,7 +285,7 @@ meter {
 }
 
 /* apply back the draggable feature - exist only in Chromium and Safari */
-:where([draggable="true"]) {
+:where([draggable='true']) {
   -webkit-user-drag: element;
 }
 
@@ -308,12 +303,12 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type="number"] {
+input[type='number'] {
   -moz-appearance: textfield;
 }
 
 /* 스타일 정의 */
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
 
 :root {
   --spacing-1: 12px;
@@ -356,10 +351,10 @@ input[type="number"] {
   --color-red-900: #7f1d1d;
   --color-red-950: #450a0a;
 
-  font-family: "Pretendard Variable", Pretendard, -apple-system,
-    BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI",
-    "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  font-family: 'Pretendard Variable', Pretendard, -apple-system,
+    BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI',
+    'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
 }
 
 body {
@@ -440,8 +435,6 @@ label {
   flex-direction: column;
   gap: 8px;
   position: relative;
-
-  
 }
 
 .input .helpText {
@@ -597,6 +590,3 @@ button {
   font-size: var(--spacing-3);
   color: var(--color-gray-400);
 }
-
-
-
