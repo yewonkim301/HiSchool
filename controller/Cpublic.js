@@ -523,7 +523,7 @@ exports.createClubMembers = async (req, res) => {
 // GET /clubAdminApplyList/:club_id 클럽에 가입신청한 사람들 전체조회
 exports.getClubMembersApplyList = async (req, res) => {
   try {
-    const { club_id,  } = req.params;
+    const { club_id  } = req.params;
 
     const getApplyList = await Club_members.findAll({
       where: {
@@ -552,11 +552,9 @@ exports.getClubMembersApplyList = async (req, res) => {
     })
     
     console.log("getuserid >>>>>>>>>>>>>", getusersid);
-    if (!getApplyList) {
-      res.render("clubAdmin/clubAdminApplyList");
-    } else {
-      res.render("clubAdmin/clubAdminApplyList", { data: getApplyList });
-    }
+    
+    res.render("clubAdmin/clubAdminApplyList", { getApplyList, userInfo,club_id:club_id });
+    
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");

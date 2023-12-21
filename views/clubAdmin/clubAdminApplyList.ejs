@@ -11,7 +11,35 @@
 <body>
   <%- include('../component/header')%>
 
- 
+  <main class="request-list">
+    <!-- 가입 요청 목록 -->
+    <% if(getApplyList.length==0){%>
+      <div>가입 요청이 없습니다.</div>
+      <%} else {%>
+    <% for(let i=0; i<getApplyList.length;i++){ %>
+    <div class="request">
+      <div class="request-info">
+        <p class="requester-name"><%=userInfo[i]%></p>
+        <p class="request-text"><%=getApplyList[i].introduction%></p>
+      </div>
+      <button class="<%=getApplyList[i].userid_num%>" onclick="checkDetail('<%=getApplyList[i].userid_num%>')">상세 정보 확인</button>
+    </div>
+    
+    <% } %>
+    <% } %>
+    <!-- 추가 요청들을 여기에 반복 -->
+  </main>
+  <script>
+    console.log('<%=club_id%>');
+    
+    const checkDetail=(userid_num)=>{
+      
+
+  
+      window.location.href=`/clubAdminApplyDetail/<%=club_id%>/${userid_num}`
+      
+    }
+  </script>
 </body>
 
 </html>
