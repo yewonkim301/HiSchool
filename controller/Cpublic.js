@@ -586,15 +586,16 @@ exports.getClubMembersApplyList = async (req, res) => {
       console.log("info >>>>>>>>", info.nickname);
       await userInfo.push(info.name);
       console.log("userinfo >>>>>>>>>>>>>", userInfo);
+      res.render("clubAdmin/clubAdminApplyList", {
+        getApplyList,
+        userInfo,
+        club_id: club_id,
+      });
     });
 
     console.log("getuserid >>>>>>>>>>>>>", getusersid);
 
-    res.render("clubAdmin/clubAdminApplyList", {
-      getApplyList,
-      userInfo,
-      club_id: club_id,
-    });
+    
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
