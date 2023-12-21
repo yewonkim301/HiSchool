@@ -11,19 +11,21 @@
     <%- include('../component/header')%>
     <h1> 내 동아리 전체 조회 </h1>
     <% for(let i=0; i<data.length;i++){ %>
-        <div class="list" onclick="showDetail(event)" >
+        <div class="list" onclick="showMyclubMain('<%=data[i].club_id%>')" >
     
           <div class="list-title" >
             <%= data[i].club_name%>
-            <span style="display: none;"  class="club_id"><%=data[i].club_id%>
-            </span>
           </div>
           <div class="list-content">
             <%=data[i].description%>
-            <span style="display: none;"  class="club_id"><%=data[i].club_id%>
-            </span>
           </div>
       </div>
         <% } %>
+
+        <script>
+            function showMyclubMain(club_id){
+                window.location.href=`/myclubMain/${club_id}`
+            }
+        </script>
 </body>
 </html>

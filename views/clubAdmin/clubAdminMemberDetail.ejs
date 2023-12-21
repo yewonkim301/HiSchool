@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <title>회원 등록</title>
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="/clubAdminMemberDetail.css">
@@ -14,18 +15,37 @@
    <%- include('../component/header')%>
   <div class="content">
     <p class="content-title">이름</p>
-    <p class="content-detail">홍길동</p>
+    <p class="content-detail"><%= data.name %></p>
 
     <p class="content-title">지원동기</p>
-    <p class="content-detail">열심히 할게요</p>
+    <p class="content-detail"><%= data.motivation %></p>
 
     <p class="content-title">자기소개</p>
-    <p class="content-detail">열심히 하게요</p>
+    <p class="content-detail"><%= data.introduction %></p>
 
-    <button class="submit-button">강퇴</button>
+    <button class="submit-button"  onclick="outMember('<%=data.userid_num%>')">강퇴</button>
   </div>
 
+<script>
+  async function outMember(userid_num){
 
+    try {
+          const res = await axios({
+            method: "DELETE",
+            url: `/clubAdminMemberDetail/<%=data.club_id%>/${userid_num}`,
+            data: {
+
+            },
+          });
+          console.log(res)
+          window.location.href='/clubAdminMemberList/<%=data.club_id%>'
+        } catch (error) {
+          console.log("clubAdminMemberDetail 에서 axios delete error > ", error);
+        }
+
+    
+  }
+</script>
 </body>
 
 </html>
