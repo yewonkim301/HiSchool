@@ -5,10 +5,10 @@ const {
   Dm,
   Club,
   Club_members,
-  Club_members_wait,
   User,
 } = require("../models/Index");
 const jwt = require("jsonwebtoken");
+const { OP } = require("sequelize")
 
 // ===== publicPost =====
 
@@ -386,7 +386,7 @@ exports.getClubAdminApplyDetail = async (req, res) => {
       where: {
         club_id: club_id,
         userid_num: userid_num,
-        isMember: false
+        isMember: "false"
       },
       include: [{ model: User }],
     });
@@ -417,7 +417,7 @@ exports.getAllMembers = async (req, res) => {
     const getAllMembersShow = await Club_members.findAll({
       where: {
         club_id: club_id,
-        isMember: true
+        isMember: "true"
       },
     });
     res.render("clubAdmin/clubAdminTransfer", { data: getAllMembersShow });
@@ -439,7 +439,7 @@ exports.deleteClubAdminTransfer = async (req, res) => {
       where: {
         club_id: club_id,
         userid_num: userid_num,
-        isMember: false
+        isMember: "false"
       },
     });
     if (deleteMember) {
@@ -476,11 +476,12 @@ exports.clubApplyinfo = async (req, res) => {
       process.env.JWT_SECRET
     );
     const { motivation, introduction } = req.body;
-    const clubApplyinfo = await Club_members_wait.create({
+    const clubApplyinfo = await Club_members.create({
       club_id: club_id,
       motivation: motivation,
       introduction: introduction,
       userid_num: userid_num,
+      isMember: "false"
     });
     res.send({ isApplySuccess: true });
   } catch (err) {
@@ -498,15 +499,13 @@ exports.createClubMembers = async (req, res) => {
     let isApplySuccess;
     const { club_id, userid_num } = req.params;
     const { motivation, introduction, applyResult } = req.body;
-    console.log("여기!!!!!!!!!!!!! >>>>>>>.", club_id);
-    console.log("승인했을 때 > ", motivation, introduction, applyResult);
     if (applyResult) {
-      console.log("ifffffffff");
       const newMembers = await Club_members.create({
         club_id: club_id,
         motivation: motivation,
         introduction: introduction,
         userid_num: userid_num,
+        isMember: "false"
       });
       if (newMembers) {
         isApplySuccess = true;
@@ -526,13 +525,13 @@ exports.getClubMembersApplyList = async (req, res) => {
   try {
     const { club_id, userid_num } = req.params;
 
-    const getApplyList = await Club_members_wait.findAll({
+    const getApplyList = await Club_members.findAll({
       where: {
         club_id: club_id,
+        isMember: "false"
       },
       include: [{ model: User }],
     });
-
     if (!getApplyList) {
       res.render("clubAdmin/clubAdminApplyList");
     } else {
@@ -548,10 +547,11 @@ exports.getClubMembersApplyList = async (req, res) => {
 exports.deleteApplyDetail = async (req, res) => {
   try {
     const { club_id, userid_num } = req.params;
-    const destroyApplyDetail = await Club_members_wait.destroy({
+    const destroyApplyDetail = await Club_members.destroy({
       where: {
         userid_num: userid_num,
         club_id: club_id,
+        isMember: "false"
       },
     });
     if (destroyApplyDetail) {
@@ -572,6 +572,7 @@ exports.getClubMembers = async (req, res) => {
     const getMembers = await Club_members.findAll({
       where: {
         club_id: club_id,
+        isMember: "true"
       },
       include: [{ model: User }],
     });
@@ -586,7 +587,7 @@ exports.getClubMembers = async (req, res) => {
   }
 };
 
-// GET /clubAdminMemberDetail/:club_id/:userid_num 신청한 회원 상세정보 보기
+// GET /clubAdminMemberDetail/:club_id/:userid_num 회원 상세정보 보기
 exports.getClubMember = async (req, res) => {
   try {
     const { club_id, userid_num } = req.params;
@@ -594,6 +595,7 @@ exports.getClubMember = async (req, res) => {
       where: {
         club_id: club_id,
         userid_num: userid_num,
+        isMember: "true"
       },
       include: [{ model: User }],
     });
@@ -609,11 +611,11 @@ exports.deleteMembers = async (req, res) => {
   try {
     // 삭제 버튼클릭시 값이 넘어온다.
     const { club_id, userid_num } = req.params;
-    if (req.session.id === userid_num) {
       const destroyMembers = await Club_members.destroy({
         where: {
           club_id: club_id,
           userid_num: userid_num,
+          isMember: "true"
         },
       });
       if (destroyMembers) {
@@ -621,7 +623,6 @@ exports.deleteMembers = async (req, res) => {
       } else {
         res.send({ isDeleted: false });
       }
-    }
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -700,6 +701,7 @@ exports.home = async (req, res) => {
     const myClubs = await Club_members.findAll({
       where: {
         userid_num: userid_num,
+        isMember: "true"
       },
       // include: [{ model: User }],
     });
