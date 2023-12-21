@@ -14,41 +14,41 @@
 
     <div class="content">
       <p class="content-title">이름</p>
-      <p class="content-detail"><%=data.dataValues.user.dataValues.nickname%></p>
+      <p class="content-detail"><%=userInfo.name%></p>
 
       <p class="content-title">학교</p>
-      <p class="content-detail"><%=data.dataValues.user.dataValues.school%></p>
+      <p class="content-detail"><%=userInfo.school%></p>
 
       <p class="content-title">학년</p>
-      <p class="content-detail"><%=data.dataValues.user.dataValues.grade%></p>
+      <p class="content-detail"><%=userInfo.grade%></p>
 
       <p class="content-title">지원동기</p>
-      <p class="content-detail"><%=data.motivation%></p>
+      <p class="content-detail"><%=getClubAdminApplyDetail.motivation%></p>
 
       <p class="content-title">자기소개</p>
-      <p class="content-detail"><%=data.introduction%></p>
+      <p class="content-detail"><%=getClubAdminApplyDetail.introduction%></p>
 
       <button onclick="approve()">승인</button><br />
       <button onclick="reject()">거절</button>
     </div>
 
     <script>
-      console.log("<%=data%>");
+
       async function approve() {
         try {
           const res = await axios({
-            method: "POST",
-            url: "/clubAdminApplyDetail/<%=data.club_id%>/<%=data.userid_num%>",
+            method: "PATCH",
+            url: "/clubAdminApplyDetail/<%=getClubAdminApplyDetail.club_id%>/<%=getClubAdminApplyDetail.userid_num%>",
             data: {
-              motivation: "<%=data.motivation%>",
-              introduction: "<%=data.introduction%>",
+              motivation: "<%=getClubAdminApplyDetail.motivation%>",
+              introduction: "<%=getClubAdminApplyDetail.introduction%>",
               applyResult: true,
             },
           });
           // console.log(res);
           if (res) {
             alert("승인되었습니다");
-            window.location.href = "/clubAdminApplyList/<%=data.club_id%>";
+            window.location.href = "/clubAdminApplyList/<%=getClubAdminApplyDetail.club_id%>";
           } else {
             alert("오류가 발생했습니다. 다시 시도해주세요");
           }
@@ -61,7 +61,7 @@
         try {
           const res = await axios({
             method: "DELETE",
-            url: "/clubAdminApplyDetail/<%=data.dataValues.club_id%>/<%=data.dataValues.userid_num%>",
+            url: "/clubAdminApplyDetail/<%=getClubAdminApplyDetail.club_id%>/<%=getClubAdminApplyDetail.userid_num%>",
             data: {
               ApplyResult: false,
             },
@@ -69,7 +69,7 @@
           console.log(res);
           if (res.isDeleted) {
             alert("거절되었습니다");
-            window.location.href = "clubAdminApplyList/<%=data.club_id%>";
+            window.location.href = "clubAdminApplyList/<%=getClubAdminApplyDetail.club_id%>";
           } else {
             alert("오류가 발생했습니다. 다시 시도해주세요");
           }
