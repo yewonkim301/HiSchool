@@ -219,8 +219,8 @@ router.get(
   controllerPublic.getClubMember
 );
 
-// POST /clubAdminApplyDetail/:club_id 동아리 가입 신청 승인
-router.post(
+// PATCH /clubAdminApplyDetail/:club_id 동아리 가입 신청 승인
+router.patch(
   "/clubAdminApplyDetail/:club_id/:userid_num",
   isLoggedIn,
 
