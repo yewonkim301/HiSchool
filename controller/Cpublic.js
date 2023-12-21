@@ -33,8 +33,7 @@ exports.getNewPost = async (req, res) => {
   }
 };
 
-// POST /publicNewPost/:userid_num 게시물 생성
-// POST /publicNewPost
+// POST /publicNewPost 새로운 포스트 생성
 exports.createPost = async (req, res) => {
   try {
     // const {userid_num} = req.params.userid_num;
@@ -43,11 +42,17 @@ exports.createPost = async (req, res) => {
       req.cookies.jwt,
       process.env.JWT_SECRET
     );
+    const getName = await User.findOne({
+      where:{
+        userid_num: userid_num
+      }
+    });
     const newPost = await Public_post.create({
       title: title,
       content: content,
       image: image,
       userid_num: userid_num,
+      nickname: getName.dataValues.nickname
     });
     res.send(newPost);
   } catch (err) {
@@ -56,20 +61,27 @@ exports.createPost = async (req, res) => {
   }
 };
 
-// GET /publicPostDetail/:post_id 특정 게시물 조회
-
+// GET /publicPostDetail/:post_id 특정 게시물 조회 // 다시 보자
 exports.getPostDetail = async (req, res) => {
   try {
     const { post_id } = req.params;
+    const { userid, userid_num } = jwt.verify(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
     const getPost = await Public_post.findOne({
       where: { post_id: post_id },
     });
     const getPostComment = await Public_post_comment.findAll({
       where: { post_id: post_id },
+      include: [{model : Public_post_comment_like}]
     });
-    const getPostCommentLike = await Public_post_comment_like.findAll({
-      where: { post_id: post_id },
-    });
+    // const getComments = await Public_post_comment.findAll({
+
+    // })
+    // const getPostCommentLike = await Public_post_comment_like.findAll({
+    //   where: {  },
+    // });
     res.render("/publicPost/publicPostDetail", {
       data: getPost,
       getPostComment,
@@ -85,18 +97,21 @@ exports.getPostDetail = async (req, res) => {
 exports.createPostComment = async (req, res) => {
   try {
     const { post_id } = req.params;
-    const { comment, comment_nickname } = req.body;
+    const { comment } = req.body;
     const { userid, userid_num } = jwt.verify(
       req.cookies.jwt,
       process.env.JWT_SECRET
     );
-    // content_nickname은 세션이름으로 받을까요?
+    const getNickname = await User.findOne({
+      where: {
+        userid_num: userid_num
+      }
+    });
     const newPublicPostComment = await Public_post_comment.create({
       comment: comment,
-      comment_nickname: comment_nickname,
+      comment_nickname: getNickname.dataValues.nickname,
       post_id: post_id,
       userid_num: userid_num,
-      // userid_num 처리는 어떻게 해야할지
     });
     res.send(newPublicPostComment);
   } catch (err) {
@@ -112,7 +127,6 @@ exports.createPostCommentLike = async (req, res) => {
     const { like_id } = req.body;
     const publicPostCommentLike = await Public_post_comment_like.create({
       like_id: like_id,
-      post_id: post_id,
       comment_id: comment_id,
     });
     res.send(publicPostCommentLike);
@@ -161,7 +175,7 @@ exports.patchPostComment = async (req, res) => {
       req.cookies.jwt,
       process.env.JWT_SECRET
     );
-    if (req.session.id === userid_num) {
+    // 유저가 누구인지 어떻게 알고 내 아이디 글만 수정 하는거죠?
       const updatePostComment = await Public_post_comment.update(
         {
           comment: comment,
@@ -174,7 +188,6 @@ exports.patchPostComment = async (req, res) => {
         }
       );
       res.send(updatePostComment);
-    }
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -190,21 +203,17 @@ exports.patchPostCommentLike = async (req, res) => {
       req.cookies.jwt,
       process.env.JWT_SECRET
     );
-    // 세션과 userid를 비교해서 맞으면 수정
-    if (req.session.id === userid_num) {
       const updatePostCommentLike = await Public_post_comment_like.update(
         {
           like_id: like_id,
         },
         {
           where: {
-            post_id: post_id,
             comment_id: comment_id,
           },
         }
       );
       res.send(updatePostCommentLike);
-    }
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -220,7 +229,6 @@ exports.deletePost = async (req, res) => {
       req.cookies.jwt,
       process.env.JWT_SECRET
     );
-    if (req.session.id === userid_num) {
       const deletePost = await Public_post.destroy({
         where: {
           post_id: post_id,
@@ -231,7 +239,6 @@ exports.deletePost = async (req, res) => {
       } else {
         res.send({ isDeleted: false });
       }
-    }
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -246,7 +253,6 @@ exports.deletePostComment = async (req, res) => {
       req.cookies.jwt,
       process.env.JWT_SECRET
     );
-    if (req.session.id === userid_num) {
       const deletePostComment = await Public_post_comment.destroy({
         where: {
           post_id: post_id,
@@ -258,7 +264,6 @@ exports.deletePostComment = async (req, res) => {
       } else {
         res.send({ isDeleted: false });
       }
-    }
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -372,15 +377,16 @@ exports.deleteDm = async (req, res) => {
   }
 };
 
-// GET /clubAdminApplyDetail/:club_id/:userid_num 동아리 페이지 불러오기
+// GET /clubAdminApplyDetail/:club_id/:userid_num 회원 신청자 상세페이지 불러오기
 exports.getClubAdminApplyDetail = async (req, res) => {
   try {
     const { club_id, userid_num } = req.params;
 
-    const getClubAdminApplyDetail = await Club_members_wait.findOne({
+    const getClubAdminApplyDetail = await Club_members.findOne({
       where: {
         club_id: club_id,
         userid_num: userid_num,
+        isMember: false
       },
       include: [{ model: User }],
     });
@@ -411,6 +417,7 @@ exports.getAllMembers = async (req, res) => {
     const getAllMembersShow = await Club_members.findAll({
       where: {
         club_id: club_id,
+        isMember: true
       },
     });
     res.render("clubAdmin/clubAdminTransfer", { data: getAllMembersShow });
@@ -432,6 +439,7 @@ exports.deleteClubAdminTransfer = async (req, res) => {
       where: {
         club_id: club_id,
         userid_num: userid_num,
+        isMember: false
       },
     });
     if (deleteMember) {

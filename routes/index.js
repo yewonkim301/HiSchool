@@ -376,7 +376,7 @@ router.get("/publicNewPost", isLoggedIn, controllerPublic.getNewPost);
 // POST /publicNewPost 새로운 포스트 생성
 router.post("/publicNewPost", isLoggedIn, controllerPublic.createPost);
 
-// GET /publicPostDetail/:post_id 특정 게시물 조회
+// GET /publicPostDetail/:post_id 특정 게시물 조회 // 미완성
 router.get(
   "/publicPostDetail/:post_id",
   isLoggedIn,
