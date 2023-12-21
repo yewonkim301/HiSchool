@@ -67,7 +67,7 @@
             },
           });
           console.log(res);
-          if (res.isDeleted) {
+          if (res.data.isDeleted) {
             alert("거절되었습니다");
             window.location.href = "clubAdminApplyList/<%=getClubAdminApplyDetail.club_id%>";
           } else {
