@@ -19,7 +19,7 @@
     <% for(let i=0; i<data.length;i++){ %>
     <div class="request">
       <div class="request-info">
-        <p class="requester-name"><%=data[i].dataValues.user.dataValues.name%></p>
+        <p class="requester-name"><%=data[i].dataValues.user.dataValues.nickname%></p>
         <p class="request-text"><%=data[i].dataValues.introduction%></p>
       </div>
       <button class="<%=data[i].dataValues.userid_num%>" onclick="checkDetail('<%=data[i].dataValues.userid_num%>')">상세 정보 확인</button>
@@ -30,7 +30,7 @@
     <!-- 추가 요청들을 여기에 반복 -->
   </main>
   <script>
-    console.log('<%=data%>');
+    console.log('<%=data.length%>');
     
     const checkDetail=(userid_num)=>{
       
