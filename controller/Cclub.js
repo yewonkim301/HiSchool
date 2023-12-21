@@ -65,7 +65,7 @@ exports.getClubAdminEdit = async (req, res) => {
     });
     const clubmembers = await Club_members.findAll({
       where: {
-        [Op.and]: [{ club_id: club_id }, { ismember: "true" }],
+        [Sequelize.Op.and]: [{ club_id: club_id }, { ismember: "true" }],
       },
     });
     res.render("clubAdmin/clubAdminEdit", {
@@ -155,6 +155,15 @@ exports.postCreateClub = async (req, res) => {
       field: field,
       keyword: keyword,
       description: description,
+    });
+    console.log("res >>>>>>>>>", newClub.dataValues.club_id);
+
+    const newMember = await Club_members.create({
+      club_id: newClub.dataValues.club_id,
+      userid_num: userid_num,
+      motivation: "",
+      introduction: "",
+      isMember: true,
     });
     res.send(newClub);
   } catch (err) {
@@ -290,7 +299,7 @@ exports.createPostComment = async (req, res) => {
       process.env.JWT_SECRET
     );
     const newClubPostComment = await Club_post_comment.create({
-      club_id: Number(club_id),
+      club_id: club_id,
       post_id: post_id,
       userid: userid_num,
       comment_name: userid,
