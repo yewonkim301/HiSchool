@@ -19,34 +19,31 @@
   <div class="content">
     <div class="group">
       <h2>동아리 이름</h2>
-      <input  id="editClubName" value="<%=clubAdminEdit.club_name%>">
+      <input  id="editClubName" class=" textField" value="<%=clubAdminEdit.club_name%>">
     </div>
     <div class="group">
       <h2>동아리 설명</h2>
-      <input id="editClubDescription" value="<%=clubAdminEdit.description%>">
+      <input id="editClubDescription" class=" textField" value="<%=clubAdminEdit.description%>">
     </div>
     
     <div class="group">
       <h2>관리자</h2>
       <p><%=leaderName.name%></p>
-      <button onclick="trasferLeader()">동아리장 위임</button>
+      <button class="btn-sm btn-primary" onclick="trasferLeader()">위임</button>
     </div>
     <div class="group">
       <h2>회원수</h2>
-      <p><%=clubmembers.length%>
+      <p><%=clubmembers.length%>/<input id="editClubLimit" value="<%=clubAdminEdit.limit%>"></input>
     </p>
       
     </div>
-    <div class="group">
-      <h2>제한 회원</h2>
-      <input id="editClubLimit" value="<%=clubAdminEdit.limit%>"></input>
-    </div>
+    
     <div class="group">
       <h2>키워드</h2>
-      <input id="editClubKeyword" value="<%=clubAdminEdit.keyword%>">
+      <input class=" textField" id="editClubKeyword" value="<%=clubAdminEdit.keyword%>">
     </div>
-    <button onclick="patchClubInfo()">수정</button>
-    <button onclick="deleteClubInfo()">삭제</button>
+    <button onclick="patchClubInfo()" class="btn-sm btn-primary">삭제</button><br><br>
+    <button onclick="deleteClubInfo()" class="btn btn-primary">수정</button>
   </div>
 
   <script>

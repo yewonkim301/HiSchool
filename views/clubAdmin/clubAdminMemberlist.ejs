@@ -21,7 +21,7 @@
   <div class="content">
     <!-- 회원 카드 목록 -->
     <div class="card" onclick="showMemberDetail('<%=data[i].userid_num%>')">
-      <p class="member-name"><%=data[i].name%></p>
+      <p class="member-name"><%=data[i].userid_num%></p>
       <p class="join-date"><%=data[i].date%></p>
     </div>
     <!-- 추가 회원 카드 반복 -->
@@ -29,9 +29,9 @@
   <% } %>
   </div>
   <script>
-    console.log('<%=data%>');
+    console.log('<%=data[0].dataValues%>');
    function showMemberDetail(userid_num){
-      window.location.href="/clubAdminMemberDetail/<%=club_id%>/<%=userid_num%>"
+      window.location.href=`/clubAdminMemberDetail/<%=data[0].club_id%>/${userid_num}`
    }
   </script>
 
