@@ -2,136 +2,45 @@ const express = require("express");
 const controllerPublic = require("../controller/Cpublic");
 const controllerClub = require("../controller/Cclub");
 const controllerSupport = require("../controller/Csupport");
+const controllerUser = require('../controller/Cuser')
 const router = express.Router();
-const { isNotLoggedIn, isLoggedIn } = require("./middlewares");
-const passport = require("passport");
-const jwt = require("jsonwebtoken");
-const dotenv = require("dotenv").config();
-const { User } = require("../models/Index");
-
-const fileparser = require("../middleware/fileparser");
-const { parsefile } = require("../middleware/fileparser");
-const s3bucketList = require("../middleware/s3bucketList");
-const s3objectList = require("../middleware/s3objectList");
-const s3fileUpload = require("../middleware/s3fileUpload");
-
-const {
-  S3Client,
-  GetObjectCommand,
-  PutObjectCommand,
-  DeleteObjectCommand,
-} = require("@aws-sdk/client-s3");
-const {
-  createPresignedPost,
-} = require("@aws-sdk/s3-presigned-post");
-const {
-  getSignedUrl
-} = require("@aws-sdk/s3-request-presigner")
-
-const s3 = new S3Client({
-  credentials: {
-    accessKeyId: process.env.AWS_S3_KEY_ID,
-    secretAccessKey: process.env.AWS_S3_ACCESS_KEY,
-    // bucket: process.env.AWS_S3_BUCKET,
-  },
-  region: process.env.AWS_S3_REGION,
-});
-
-
-router.post("/s3upload", async (req, res) => {
-  console.log('s3 업로드 시작');
-  console.log(req.method);
-  console.log(req.body);
-  if (req.method === "POST") {
-    try {
-      let { name, type } = req.body;
-      console.log('name, type >>>>>>>>>>>>', name, type);
-
-      const fileParams = {
-        name: name,
-        type: type,
-      };
-
-
-      console.log('signedURL 만들 차례');
-      const signedUrl = await getSignedFileUrl(fileParams);
-      console.log(signedUrl);
-
-      // return res.send({
-      //   // message: "make url succeed",
-      //   url: signedUrl,
-      // });
-      return res.send(signedUrl)
-    } catch (e) {
-      return res.status(500).json({
-        message: "make url failed",
-      });
-    }
-  }
-});
+const { isNotLoggedIn, isLoggedIn } = require("./../middleware/loginCheck");
 
 
 
+router.post("/s3upload", controllerUser.s3upload);
 
-// file signedUrl 가져오기
-async function getSignedFileUrl(data) {
-  console.log('file signedUrl 시작');
-  const params = {
-    Bucket: process.env.AWS_S3_BUCKET,
-    Key: data.name,
-  };
-  const command = new PutObjectCommand(params);
-  console.log('putObjectCommand 시작');
-  const url = await getSignedUrl(s3, command, {
-    expiresIn: 3600 * 60,
-  });
-  console.log('getSignedUrl 성공');
-  return url;
-};
 
-// 파일 업로드
-async function uploadFile(fileBuffer, fileName, mimetype) {
-  const uploadParams = {
-    Bucket: awsS3Bucket,
-    Key: fileName,
-    Body: fileBuffer,
-    ContentType: mimetype,
-  };
+// router.post("/upload", async (req, res) => {
+//   await s3bucketList().then((data) => {
+//     // res
+//     // .status(200)
+//     // .json({
+//     //   message: "Success",
+//     //   data
+//     // })
+//     console.log(data);
+//   });
+//   await s3objectList().then((data) => {
+//     console.log(data);
+//   });
+//   await s3fileUpload().then((data) => {
+//     console.log(data);
+//     // res.send(data)
+//   });
+//   await s3objectList()
+//     .then((data) => {
+//       console.log(data);
+//       res.send("업로드 완료!");
+//     })
 
-  const res = await s3.send(new PutObjectCommand(uploadParams));
-  return res.$metadata.httpStatusCode;
-};
-
-router.post("/upload", async (req, res) => {
-  await s3bucketList().then((data) => {
-    // res
-    // .status(200)
-    // .json({
-    //   message: "Success",
-    //   data
-    // })
-    console.log(data);
-  });
-  await s3objectList().then((data) => {
-    console.log(data);
-  });
-  await s3fileUpload().then((data) => {
-    console.log(data);
-    // res.send(data)
-  });
-  await s3objectList()
-    .then((data) => {
-      console.log(data);
-      res.send("업로드 완료!");
-    })
-
-    .catch((error) => {
-      res.status(400).json({
-        message: "An error occurred.",
-        error,
-      });
-    });
-});
+//     .catch((error) => {
+//       res.status(400).json({
+//         message: "An error occurred.",
+//         error,
+//       });
+//     });
+// });
 
 router.get("/", (req, res) => {
   res.render("index");
@@ -143,13 +52,17 @@ router.get("/login", isNotLoggedIn, (req, res) => {
   res.render("login");
 });
 
+router.post("/login", isNotLoggedIn, controllerUser.postLogin);
+
+
 router.get("/register", isNotLoggedIn, (req, res) => {
   res.render("register");
 });
 
-// router.get("/register/findSchool", (req, res) => {
-//   res.render("findSchool");
-// });
+
+router.post("/register", isNotLoggedIn, controllerUser.postRegister)
+
+
 
 // club
 // GET /clubMain : 전체 동아리 조회
