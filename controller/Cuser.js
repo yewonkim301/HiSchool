@@ -10,8 +10,10 @@ const { getSignedFileUrl, printLog } = require('./../middleware/s3fileUpload')
 
 
 exports.postRegister = async(req, res, next) => {
-  const { userid, password, school, phone, birthday, name, grade, classid } =
+  const { userid, password, school, phone, birthday, name, grade, classid, profile_img } =
     req.body;
+
+  console.log("profile_img : ", profile_img);
 
   try {
     const exUser = await User.findOne({ where: { userid: userid } });
@@ -25,8 +27,8 @@ exports.postRegister = async(req, res, next) => {
       userid,
       school,
       phone,
-      profile_img: "tmp",
-      nickname: Math.random(),
+      profile_img,
+      nickname: Math.random().toString(36).substring(2, 12),
       birthday,
       name,
       grade,

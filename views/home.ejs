@@ -6,13 +6,27 @@
     <link rel="stylesheet" href="/style.css" />
     <link rel="stylesheet" href="/home.css" />
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.0/dist/js.cookie.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
 
   <body>
-    <%- include('./component/header')%>
+    <div class="container">
+      <%- include('./component/header')%>
+      <!-- <a href="/clubAdminMain">동아리 관리 페이지(test)</a> -->
+      <a href="/clubMain/" style="font-size: large">전체 동아리</a>
+      <a href="/myclubPostMain/1/" style="font-size: large">내 동아리 메인</a>
+      <br>
+      <br>
+      <hr>
+      <br>
+      <br>
+      <% for(i = 0; i < getClubs.length; i++) { %> 
+      <span><%= getClubs[i].club_name %></span>
+      <% } %> 
+      <% for(i = 0; i < clubInfo.length; i++) { %> 
+      <span><%= clubInfo[i].club_name %></span>
+      <% } %>
 
-    <main class="content">
-      <a href="/clubAdminMain">동아리 관리 페이지(test)</a>
       <section class="card">
         <h2>내 동아리 목록</h2>
         <div class="card-item">
@@ -50,10 +64,9 @@
         </div>
         <a href="/clubMain">전체보기</a>
       </section>
-    </main>
-  
+    </div>
 
-    <script>
+    <!-- <script>
       function getCookie(name) {
         let matches = document.cookie.match(
           new RegExp(
@@ -70,8 +83,19 @@
     <script>
       const allCookies = Cookies.get();
       console.log(allCookies);
-    </script>
+    </script> -->
 
-    
+    <script>
+      function getHome() {
+        axios({
+          method: "GET",
+          url: "/home",
+        }).then(res => {
+          console.log(res.getClubs);
+        });
+      }
+
+      getHome();
+    </script>
   </body>
 </html>

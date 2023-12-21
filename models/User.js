@@ -28,7 +28,7 @@ const User = (Sequelize, DataTypes) => {
             },
             profile_img:{
                 type: DataTypes.STRING(200),
-                allowNull: false,
+                allowNull: true,
             },
             nickname:{
                 type: DataTypes.STRING(50),

@@ -34,7 +34,7 @@ module.exports.getSignedFileUrl = async function getSignedFileUrl(data) {
   const command = new PutObjectCommand(params);
   console.log('putObjectCommand 시작');
   const url = await getSignedUrl(s3, command, {
-    expiresIn: 3600 * 60,
+    expiresIn: 3600,
   });
   console.log('getSignedUrl 성공');
   return url;

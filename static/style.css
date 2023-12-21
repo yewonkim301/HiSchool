@@ -327,6 +327,39 @@ label {
   box-shadow: 0px 2px 8px 0px rgba(47, 128, 237, 0.2);
 }
 
+
+
+.file-upload-input {
+  width: 0.1px;
+  height: 0.1px;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  z-index: -1;
+}
+
+.file-upload-button {
+  background-color: var(--color-primary-500);
+  color: white;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.file-upload-text {
+  margin-left: 10px;
+  font-size: 16px;
+}
+
+#preview {
+  margin-top: 10px;
+  max-width: 100%;
+  height: auto;
+}
+
+
+
 /* 헤더 CSS */
 .header {
   height: 100px;
