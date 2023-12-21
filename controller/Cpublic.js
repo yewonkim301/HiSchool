@@ -447,10 +447,11 @@ exports.getAllMembers = async (req, res) => {
       await userInfo.push(info.name);
       console.log("userinfo >>>>>>>>>>>>>", userInfo);
     });
+    console.log('getAllMembersShow >>>>>',getAllMembersShow)
 
 
 
-    res.render("clubAdmin/clubAdminTransfer", { data: getAllMembersShow, userInfo });
+    res.render("clubAdmin/clubAdminTransfer", { data: getAllMembersShow, userInfo, club_id });
 
   } catch (err) {
     console.error(err);
@@ -458,12 +459,13 @@ exports.getAllMembers = async (req, res) => {
   }
 };
 
-// PATCH /clubAdminTransfer/:club_id 신청 거절
+// PATCH /clubAdminTransfer/:club_id 동아리장 위임 요청
 exports.updateClubAdminTransfer = async (req, res) => {
   try {
-    const { club_id } = req.params;
+    const { club_id,userid_num } = req.params;
+    const { changeLeader } = req.body;
 
-    const {userid_num} = req.body
+
     const updateLeader = await Club.update({
       leader_id : userid_num
       },
