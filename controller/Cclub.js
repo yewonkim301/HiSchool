@@ -301,10 +301,13 @@ exports.createPostComment = async (req, res) => {
       req.cookies.jwt,
       process.env.JWT_SECRET
     );
+    const getName = await User.findOne({
+      attributes: ["name"],
+      where: { userid_num },
+    });
     const newClubPostComment = await Club_post_comment.create({
       post_id: post_id,
-      userid: userid_num,
-      comment_name: userid,
+      comment_name: getName.dataValues.name,
       content: content,
     });
 
@@ -365,12 +368,13 @@ exports.deletePostComment = async (req, res) => {
 exports.postClubPostCommentLike = async (req, res) => {
   try {
     const { post_id, club_id, comment_id } = req.params;
-    const { like_id } = req.body;
+    const { userid, userid_num } = jwt.verify(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
     const clubPostCommentLike = await Club_post_comment_like.create({
-      club_id: club_id,
-      post_id: post_id,
       comment_id: comment_id,
-      like_id: like_id,
+      like_id: userid_num,
     });
     res.send(clubPostCommentLike);
   } catch (err) {
@@ -385,8 +389,6 @@ exports.deleteClubPostCommentLike = async (req, res) => {
     const { club_id, post_id, comment_id, like_id } = req.params;
     const isDeleted = await Club_post_comment_like.destroy({
       where: {
-        club_id: club_id,
-        post_id: post_id,
         comment_id: comment_id,
         like_id: like_id,
       },
@@ -450,7 +452,6 @@ exports.getClubSchedules = async (req, res) => {
       where: { club_id: club_id },
     });
     res.render("./myclub/myclubSchedule", { data: clubSchedules });
-    // res.send(clubSchedules);
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
