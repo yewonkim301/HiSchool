@@ -655,13 +655,14 @@ exports.getClubMembers = async (req, res) => {
       console.log("info >>>>>>>>", info.nickname);
       await userInfo.push(info.name);
       console.log("userinfo >>>>>>>>>>>>>", userInfo);
+      if (!getMembers) {
+        res.render("clubAdmin/clubAdminMemberList");
+      } else {
+        res.render("clubAdmin/clubAdminMemberList", { data: getMembers , userInfo, club_id});
+      }
     });
     
-    if (!getMembers) {
-      res.render("clubAdmin/clubAdminMemberList");
-    } else {
-      res.render("clubAdmin/clubAdminMemberList", { data: getMembers , userInfo, userid_num});
-    }
+   
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");

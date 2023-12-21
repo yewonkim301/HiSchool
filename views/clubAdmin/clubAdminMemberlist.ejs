@@ -20,16 +20,16 @@
    <% for(let i=0; i<data.length;i++){ %>
     <div class="content">
       <!-- 회원 카드 목록 -->
-      <div class="card" onclick="selectClubLeader('<%=data[i].userid_num%>')">
-        <p class="member-name" onclick="selectClubLeader('<%=data[i].userid_num%>')"><%=userInfo[i]%></p>
-        <p class="join-date" onclick="selectClubLeader('<%=data[i].userid_num%>')"><%=data[i].updatedAt%></p>
+      <div class="card" onclick="showMemberDetail('<%=data[i].userid_num%>')">
+        <p class="member-name" onclick="showMemberDetail('<%=data[i].userid_num%>')"><%=userInfo[i]%></p>
+        <p class="join-date" onclick="showMemberDetail('<%=data[i].userid_num%>')"><%=data[i].updatedAt%></p>
       </div>
       <!-- 추가 회원 카드 반복 -->
     </div>
     <% } %>
     </div>
   <script>
-
+console.log('<%=userInfo%>')
    function showMemberDetail(userid_num){
       window.location.href=`/clubAdminMemberDetail/<%=club_id%>/${userid_num}`
    }
