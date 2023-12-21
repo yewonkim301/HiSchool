@@ -33,7 +33,7 @@
     </div>
 
     <script>
-      console.log("<%=data.club_id%>");
+      console.log("<%=data%>");
       async function approve() {
         try {
           const res = await axios({
@@ -74,7 +74,7 @@
             alert("오류가 발생했습니다. 다시 시도해주세요");
           }
         } catch (error) {
-          console.log("createClub 에서 axios error > ", error);
+          console.log("clubAdminApplyDetail 에서 axios error > ", error);
         }
       }
     </script>

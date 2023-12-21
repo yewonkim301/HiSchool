@@ -16,12 +16,12 @@
   <form name="clubApplyform" onsubmit="clubApply(event)">
     <section class="post-section">
       <h2>지원동기</h2>
-      <textarea id="motivation" placeholder="플레이스홀더"></textarea>
+      <textarea id="motivation" placeholder="최대 100글자" maxlength="100"></textarea>
     </section>
 
     <section class="post-section">
       <h2>자기소개</h2>
-      <textarea id="introduction" placeholder="플레이스홀더"></textarea>
+      <textarea id="introduction" placeholder="최대 100글자" maxlength="100"></textarea>
     </section>
 
     <button type="submit" class="btn-submit">가입 신청</button>
@@ -30,18 +30,14 @@
     console.log('<%=data%>');
     async function clubApply(event) {
         event.preventDefault();
-
         const createClubForm = document.forms["clubApplyform"];
-        console.log(createClubForm);
-
         let motivation = createClubForm.elements["motivation"].value;
-
         let introduction = createClubForm.elements["introduction"].value;
         
         
-        // 유효성 검사
+        // 유효성 검사 (글자수 세기, 글자수 넘어가면 경고 문구 보여주고 더이상 타이핑 되지 않도록 하기)
         
-
+      // 가입 신청 요청
         try {
           const res = await axios({
             method: "POST",
