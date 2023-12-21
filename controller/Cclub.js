@@ -10,6 +10,7 @@ const {
   Sequelize,
 } = require("../models/Index");
 const { trace } = require("../routes");
+const { Op } = require("sequelize");
 const jwt = require("jsonwebtoken");
 
 // Club
@@ -65,7 +66,8 @@ exports.getClubAdminEdit = async (req, res) => {
     });
     const clubmembers = await Club_members.findAll({
       where: {
-        [Sequelize.Op.and]: [{ club_id: club_id }, { ismember: "true" }],
+        club_id: club_id,
+        isMember: "true",
       },
     });
     res.render("clubAdmin/clubAdminEdit", {
@@ -163,7 +165,7 @@ exports.postCreateClub = async (req, res) => {
       userid_num: userid_num,
       motivation: "",
       introduction: "",
-      isMember: true,
+      isMember: "true",
     });
     res.send(newClub);
   } catch (err) {
