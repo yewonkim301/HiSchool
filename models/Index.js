@@ -80,12 +80,12 @@ Club_members_wait.belongsTo(User, {
 });
 
 /// 임시 ///
-Club_members_wait.hasOne(Club_members,{
+Club_members_wait.hasOne(Club_members, {
   foreignKey: "members_id",
 });
-Club_members.belongsTo(Club_members_wait,{
+Club_members.belongsTo(Club_members_wait, {
   foreignKey: "members_id",
-})
+});
 
 ////
 

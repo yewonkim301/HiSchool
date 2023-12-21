@@ -171,7 +171,7 @@ exports.getClubPosts = async (req, res) => {
     });
     res.render("myclub/myclubPostMain", {
       data: posts,
-      club_id: req.params.club_id // club_id를 별도로 전달
+      club_id: req.params.club_id, // club_id를 별도로 전달
     });
   } catch (err) {
     console.error(err);
@@ -184,6 +184,7 @@ exports.getClubPosts = async (req, res) => {
 exports.getClubPost = async (req, res) => {
   try {
     const { club_id, post_id } = req.params;
+    console.log("params > ", req.params);
     // 게시글
     const clubPost = await Club_post.findOne({
       where: {
@@ -281,17 +282,16 @@ exports.createPostComment = async (req, res) => {
   console.log("받은 데이터:", req.body);
   try {
     const { club_id, post_id } = req.params;
-    const { comment_name, content } = req.body;
+    const { content } = req.body;
     const { userid, userid_num } = jwt.verify(
       req.cookies.jwt,
       process.env.JWT_SECRET
     );
-    // ? comment_name : 세션에 저장되어 있는 로그인한 유저의 정보에서 찾아야 함
     const newClubPostComment = await Club_post_comment.create({
-      club_id: club_id,
+      club_id: Number(club_id),
       post_id: post_id,
-      userid: userid,
-      comment_name: comment_name,
+      userid: userid_num,
+      comment_name: userid,
       content: content,
     });
 
@@ -404,7 +404,7 @@ exports.getCreateClubPost = async (req, res) => {
 
 // POST /myclubNewPost/:club_id : 동아리 게시글 생성
 exports.createClubPost = async (req, res) => {
-  console.log('createClubPost 실행: clubid', req.params.club_id);
+  console.log("createClubPost 실행: clubid", req.params.club_id);
 
   try {
     const { club_id } = req.params;
@@ -417,7 +417,7 @@ exports.createClubPost = async (req, res) => {
       content: content,
       image: image,
     });
-    console.log('생성 완료');
+    console.log("생성 완료");
     res.send(newPost);
   } catch (error) {
     console.error(error);
