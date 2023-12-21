@@ -21,7 +21,7 @@
 
 
 
-    <input type="text" name="userid_num" id="userid_num">
+    <input type="hidden" name="userid_num" id="userid_num">
 
 
 
@@ -38,18 +38,24 @@
   </div>
   <button type="button" class="btn btn-secondary" onclick="transferClubLeader()">위임하기</button>
   <script>
-    console.log('<%=data%>');
+
     const userid_num=document.querySelector('#userid_num');
 
    function selectClubLeader(userid_num){
     document.querySelector('#userid_num').value = userid_num;
    }
    async function transferClubLeader(){
-    selectedMember = document.querySelector('#userid_num').value
+    const selectedMember = document.querySelector('#userid_num').value;
+    if (!selectedMember){
+      alert('위임할 부원을 선택해주세요');
+      return;
+    }
+    else{
+
     try {
           const res = await axios({
             method: "PATCH",
-            url: `/clubAdminTransfer/<%=data.club_id%>/${selectedMember}`,
+            url: `/clubAdminTransfer/<%=club_id%>/${selectedMember}`,
             data: {
               changeLeader:true
             },
@@ -57,7 +63,7 @@
           // console.log(res);
           if (res.data.isSuccess) {
             alert("변경되었습니다");
-            window.location.href = "/clubAdminEdit/<%=data.club_id%>";
+            window.location.href = "/clubAdminEdit/<%=club_id%>";
           } else {
             alert("오류가 발생했습니다. 다시 시도해주세요");
           }
@@ -65,6 +71,7 @@
           console.log("clubAdminTransfer 에서 axios error > ", error);
         }
       }
+    }
 
    
   </script>
