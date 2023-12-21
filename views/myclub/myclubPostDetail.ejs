@@ -32,17 +32,18 @@
 
          <button onclick="submitComment(event)">댓글등록</button>
          <button onclick="editComment()">댓글수정</button>
-         <button onclick="deletePostComment()">댓글삭제</button>
+         <!-- <button onclick="deletePostComment('<%=clubPostComment.comment_id %>')">댓글삭제</button> -->
          <!-- 댓글 들어갈곳 -->
          <div class="list" id="commentList">
             <% clubPostComment.forEach(function(comment) { %>
-               <div class="comment">
+               <div class="comment-<%=comment.comment_id %>">
                   <p>
                      <%= comment.comment_name %>
                   </p>
                   <p>
                      <%= comment.content %>
                   </p>
+                  <button onclick="deletePostComment('<%= comment.comment_id %>')">댓글삭제</button>
                   <!-- 여기에 추가적인 댓글 정보나 버튼 등을 삽입할 수 있습니다. -->
                </div>
                <% }); %>
@@ -52,50 +53,103 @@
 
 
          <script>
+
+
+
+            console.log("<%=clubPostComment[0].comment_name%>");
             console.log("<%=clubPostComment[0].content%>");
 
 
             const club_id = "<%=data.club_id%>";
             const post_id = "<%=data.post_id%>";
+            const comment_name = "<%=clubPostComment.comment_name%>";
+            const content = "<%=clubPostComment.content%>";
+            const comment = document.getElementById('comment')
+
+               // const comment_id = "<%=clubPostComment.comment_id %>";
+
+
+               <% clubPostComment.forEach(function (comment) { %>
+                  console.log("댓글 ID:", "<%= comment.comment_id %>");
+    <% }); %>;
+
+
+            console.log(comment_name);
+            console.log(content);
+
+
+            // 글 입력칸
+
 
             // 댓글 등록
             function submitComment(event) {
-               event.preventDefault();
                const commentContent = document.getElementById('commentInput').value;
-
-               axios.post(`/myclubPostDetail/${club_id}/${post_id}/`, {
-                  comment_name: "test", // 실제 사용자 이름 또는 ID
-                  content: commentContent
-               })
-                  .then(res => {
-                     console.log("댓글 등록 완료", res.data);
-
+               event.preventDefault(); ``;
+               // 사용자에게 댓글 등록을 확인
+               const isConfirmed = confirm("댓글을 등록하시겠습니까?");
+               if (isConfirmed) {
+                  axios.post(`/myclubPostDetail/${club_id}/${post_id}/`, {
+                     comment_name: "test", // 실제 사용자 이름 또는 ID
+                     content: commentContent
                   })
-                  .catch(error => {
-                     console.error("댓글 등록 에러:", error);
-                  });
+                     .then(res => {
+                        console.log("댓글 등록 완료", res.data);
+                        // 새로운 댓글을 목록에 추가
+                        const commentList = document.getElementById('commentList');
+                        const newCommentDiv = document.createElement('div');
+                        newCommentDiv.classList.add('comment ');
+                        newCommentDiv.innerHTML = `
+            <p>${res.data.comment_name}</p>
+            <p>${res.data.content}</p>
+        `;
+
+                        commentList.appendChild(newCommentDiv);
+                     })
+                     .catch(error => {
+                        console.error("댓글 등록 에러:", error);
+                     });
+               }
             }
+
 
 
             // 댓글 수정
-            function editComment(commentId) {
-               // 댓글 수정 로직
-               console.log("댓글 수정", commentId);
-               // 여기에 댓글 수정 로직을 구현하세요.
-            }
+            // function editComment(comment_id) {
+            //    axios.post(`/myclubPostDetail/${club_id}/${post_id}/`, {
+            //       comment_name: "test", // 실제 사용자 이름 또는 ID
+            //       content: commentContent
+            //    });
+            //    // 댓글 수정 로직
+            //    console.log("댓글 수정", comment_id);
+            //    // 여기에 댓글 수정 로직을 구현하세요.
+            // }
 
             // 댓글 삭제
-            function deleteComment(commentId) {
-               axios.delete(`/api/comments/${club_id}/${post_id}/${commentId}`)
+            function deletePostComment(comment_id) {
+               const commentElement = document.querySelector(`.comment-${comment_id}`);
+               axios.delete(`/myclubPostDetail/${club_id}/${post_id}/${comment_id}`)
                   .then(res => {
-                     console.log("댓글 삭제 완료", res.data);
+
+                     console.log(commentElement);
+
+                     console.log(res);
+                     if (res.isDeleted) {
+                        // 삭제 성공 시, 페이지에서 해당 댓글 요소 제거
+                        commentElement.remove();
+                     } else {
+                        // 삭제 실패 처리
+                     }
                   })
-                  .catch(error => {
-                     console.error("댓글 삭제 에러:", error);
+                  .catch(err => {
+                     console.error("댓글 삭제 에러:", err);
                   });
+
+
             }
 
-            // 기존의 patchPostComment 및 deletePostComment 함수
+
+
+
          </script>
 </body>
 

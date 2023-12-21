@@ -219,6 +219,7 @@ exports.getClubPost = async (req, res) => {
     //     comment_id:
     //   },
     // });
+    console.log(clubPostComment);
 
     res.render("myclub/myclubPostDetail", {
       data: clubPost,
@@ -301,7 +302,6 @@ exports.createPostComment = async (req, res) => {
       process.env.JWT_SECRET
     );
     const newClubPostComment = await Club_post_comment.create({
-      club_id: club_id,
       post_id: post_id,
       userid: userid_num,
       comment_name: userid,
@@ -326,7 +326,6 @@ exports.patchPostComment = async (req, res) => {
       },
       {
         where: {
-          club_id: club_id,
           post_id: post_id,
           comment_id: comment_id,
         },
@@ -343,9 +342,9 @@ exports.patchPostComment = async (req, res) => {
 exports.deletePostComment = async (req, res) => {
   try {
     const { comment_id, post_id, club_id } = req.params;
+    console.log(req.params);
     const isDeleted = await Club_post_comment.destroy({
       where: {
-        club_id: club_id,
         post_id: post_id,
         comment_id: comment_id,
       },
