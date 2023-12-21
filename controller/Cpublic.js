@@ -681,26 +681,12 @@ exports.getClubMember = async (req, res) => {
       },
       // include: [{ model: User }],
     });
-
-    const getusers = await Club_members.findAll({
-      attributes: ["userid_num"],
-      where: {
-        club_id: club_id,
-        isMember: "false",
-      },
-    });
-
-    let getusersid = [];
-    getusers.forEach((element) => {
-      getusersid.push(element.dataValues.userid_num);
-    });
-
-    let userInfo = [];
-    getusersid.forEach(async (element) => {
-      console.log(element);
-      let info = await User.findOne({ where: { userid_num: element } });
-      await userInfo.push(info.name);
-    });
+    const userInfo = await User.findOne({
+      attributes:["name"],
+      where:{
+        userid_num: userid_num
+      }
+    })
 
     res.render("clubAdmin/clubAdminMemberDetail", { data: getMember, userInfo, club_id});
   } catch (err) {
