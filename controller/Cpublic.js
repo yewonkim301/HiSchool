@@ -545,11 +545,13 @@ exports.getClubMembersApplyList = async (req, res) => {
     })
     let userInfo = [];
     getusersid.forEach(async (element) => {
+      console.log(element)
       let info = await User.findOne({where: {userid_num: element}});
       console.log("info >>>>>>>>", info.nickname);
-      await userInfo.push(info.name);
+      await userInfo.push(info.name);console.log("userinfo >>>>>>>>>>>>>", userInfo);
     })
-    console.log("userinfo >>>>>>>>>>>>>", userInfo);
+    
+    console.log("getuserid >>>>>>>>>>>>>", getusersid);
     if (!getApplyList) {
       res.render("clubAdmin/clubAdminApplyList");
     } else {
