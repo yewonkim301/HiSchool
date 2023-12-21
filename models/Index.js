@@ -27,7 +27,6 @@ const Dm = require("./Dm")(sequelize, Sequelize);
 
 const Club = require("./Club")(sequelize, Sequelize);
 const Club_members = require("./Club_members")(sequelize, Sequelize);
-const Club_members_wait = require("./Club_members_wait")(sequelize, Sequelize);
 const Club_schedule = require("./Club_schedule")(sequelize, Sequelize);
 const Club_post = require("./Club_post")(sequelize, Sequelize);
 const Club_post_comment = require("./Club_post_comment")(sequelize, Sequelize);
@@ -60,82 +59,26 @@ Public_post.belongsTo(User, {
 });
 
 // User C_members => 1:N
-User.hasMany(Club_members_wait, {
+User.hasMany(Club_members, {
   foreignKey: "userid_num",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
-Club_members_wait.belongsTo(User, {
+Club_members.belongsTo(User, {
   foreignKey: "userid_num",
 });
 
-Club.hasMany(Club_members_wait, {
+Club.hasMany(Club_members, {
   foreignKey: "club_id",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
 
-Club_members_wait.belongsTo(User, {
+Club_members.belongsTo(User, {
   foreignKey: "club_id",
 });
-
-/// 임시 ///
-Club_members_wait.hasOne(Club_members, {
-  foreignKey: "members_id",
-});
-Club_members.belongsTo(Club_members_wait, {
-  foreignKey: "members_id",
-});
-
-////
-
-Club_members_wait.hasOne(Club_members, {
-  foreignKey: "club_id",
-  // onUpdate: "CASCADE",
-  // onDelete: "CASCADE",
-});
-Club_members.belongsTo(Club_members_wait, {
-  foreignKey: "club_id",
-});
-
-Club_members_wait.hasOne(Club_members, {
-  foreignKey: "userid_num",
-  // onUpdate: "CASCADE",
-  // onDelete: "CASCADE",
-});
-Club_members.belongsTo(Club_members_wait, {
-  foreignKey: "userid_num",
-});
-
-// Club C_members => 1:N
-// Club.hasMany(Club_members, {
-//   foreignKey: "club_id",
-//   onDelete: "CASCADE",
-//   onUpdate: "CASCADE",
-// });
-// Club_members.belongsTo(Club, {
-//   foreignKey: "club_id",
-// });
-
-// User.hasMany(Club_members, {
-//   foreignKey: "userid_num",
-//   onDelete: "CASCADE",
-//   onUpdate: "CASCADE",
-// });
-// Club_members.belongsTo(User, {
-//   foreignKey: "userid_num",
-// });
 
 // Public_post P_Comment => 1:N
-Public_post.hasMany(Public_post_comment, {
-  foreignKey: "userid_num",
-  onDelete: "CASCADE",
-  onUpdate: "CASCADE",
-});
-Public_post_comment.belongsTo(Public_post, {
-  foreignKey: "userid_num",
-});
-
 Public_post.hasMany(Public_post_comment, {
   foreignKey: "post_id",
   onDelete: "CASCADE",
@@ -156,15 +99,6 @@ Public_post_comment_like.belongsTo(Public_post_comment, {
   foreignKey: "comment_id",
 });
 
-Public_post_comment.hasMany(Public_post_comment_like, {
-  foreignKey: "post_id",
-  onDelete: "CASCADE",
-  onUpdate: "CASCADE",
-});
-Public_post_comment_like.belongsTo(Public_post_comment, {
-  foreignKey: "post_id",
-});
-
 // Club C_post => 1:N
 Club.hasMany(Club_post, {
   foreignKey: "club_id",
@@ -173,16 +107,6 @@ Club.hasMany(Club_post, {
 });
 Club_post.belongsTo(Club, {
   foreignKey: "club_id",
-});
-
-// User C_post => 1:N
-User.hasMany(Club_post, {
-  foreignKey: "userid_num",
-  onDelete: "CASCADE",
-  onUpdate: "CASCADE",
-});
-Club_post.belongsTo(User, {
-  foreignKey: "userid_num",
 });
 
 // C_Post C_P_Comment => 1:N
@@ -195,45 +119,7 @@ Club_post_comment.belongsTo(Club_post, {
   foreignKey: "post_id",
 });
 
-Club_post.hasMany(Club_post_comment, {
-  foreignKey: "club_id",
-  onDelete: "CASCADE",
-  onUpdate: "CASCADE",
-});
-
-Club_post_comment.belongsTo(Club_post, {
-  foreignKey: "club_id",
-});
-
-// Club_post.hasMany(Club_post_comment, {
-//   foreignKey: "userid",
-//   onDelete: "CASCADE",
-//   onUpdate: "CASCADE",
-// });
-// Club_post_comment.belongsTo(Club_post, {
-//   foreignKey: "userid",
-// });
-
 // C_P_comment C_P_C_like => 1:N
-Club_post_comment.hasMany(Club_post_comment_like, {
-  foreignKey: "post_id",
-  onDelete: "CASCADE",
-  onUpdate: "CASCADE",
-});
-Club_post_comment_like.belongsTo(Club_post_comment, {
-  foreignKey: "post_id",
-});
-
-Club_post_comment.hasMany(Club_post_comment_like, {
-  foreignKey: "club_id",
-  onDelete: "CASCADE",
-  onUpdate: "CASCADE",
-});
-
-Club_post_comment_like.belongsTo(Club_post_comment, {
-  foreignKey: "club_id",
-});
-
 Club_post_comment.hasMany(Club_post_comment_like, {
   foreignKey: "comment_id",
   onDelete: "CASCADE",
@@ -281,7 +167,6 @@ db.Public_post_comment_like = Public_post_comment_like;
 db.Club = Club;
 db.Club_chat = Club_chat;
 db.Club_members = Club_members;
-db.Club_members_wait = Club_members_wait;
 db.Club_post = Club_post;
 db.Club_post_comment = Club_post_comment;
 db.Club_post_comment_like = Club_post_comment_like;
