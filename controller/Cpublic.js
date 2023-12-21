@@ -523,15 +523,33 @@ exports.createClubMembers = async (req, res) => {
 // GET /clubAdminApplyList/:club_id 클럽에 가입신청한 사람들 전체조회
 exports.getClubMembersApplyList = async (req, res) => {
   try {
-    const { club_id, userid_num } = req.params;
+    const { club_id,  } = req.params;
 
     const getApplyList = await Club_members.findAll({
       where: {
         club_id: club_id,
         isMember: "false"
       },
-      include: [{ model: User }],
     });
+    const getusers =  await Club_members.findAll({
+      attributes: ["userid_num"],
+      where: {
+        club_id: club_id,
+        isMember: "false"
+      },
+    })
+    let getusersid=[];
+    getusers.forEach((element) => {
+      console.log("여기!!!!!!!!!!!!!>>>>>>",element.dataValues.userid_num)
+      getusersid.push(element.dataValues.userid_num)
+    })
+    let userInfo = [];
+    getusersid.forEach(async (element) => {
+      let info = await User.findOne({where: {userid_num: element}});
+      console.log("info >>>>>>>>", info.nickname);
+      await userInfo.push(info.name);
+    })
+    console.log("userinfo >>>>>>>>>>>>>", userInfo);
     if (!getApplyList) {
       res.render("clubAdmin/clubAdminApplyList");
     } else {
