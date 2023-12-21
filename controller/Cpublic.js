@@ -388,12 +388,17 @@ exports.getClubAdminApplyDetail = async (req, res) => {
         userid_num: userid_num,
         isMember: "false"
       },
-      include: [{ model: User }],
+      // include: [{ model: User }],
     });
+    const userInfo = await User.findOne({
+      attributes: ["name", "school","classid", "grade"],
+      where:{
+        userid_num: userid_num
+      }
+    })
+    console.log("여기 봐봐 !!!>>>>>>>>>>", userInfo);
     console.log("여기!!!!!!", getClubAdminApplyDetail);
-    res.render("clubAdmin/clubAdminApplyDetail", {
-      data: getClubAdminApplyDetail,
-    });
+    res.render("clubAdmin/clubAdminApplyDetail", getClubAdminApplyDetail, userInfo);
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -548,7 +553,8 @@ exports.getClubMembersApplyList = async (req, res) => {
       console.log(element)
       let info = await User.findOne({where: {userid_num: element}});
       console.log("info >>>>>>>>", info.nickname);
-      await userInfo.push(info.name);console.log("userinfo >>>>>>>>>>>>>", userInfo);
+      await userInfo.push(info.name);
+      console.log("userinfo >>>>>>>>>>>>>", userInfo);
     })
     
     console.log("getuserid >>>>>>>>>>>>>", getusersid);
