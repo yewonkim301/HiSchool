@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>하이스쿨</title>
     <link rel="stylesheet" href="/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
 
   <body>
@@ -39,7 +40,13 @@
       <div>
         <!-- <img src={createObjectURL} alt="" /> -->
         <h4>Select Image</h4>
-        <input name="myImage" type="file" id="fileUpload" onChange="uploadToClient()" />
+        <input
+          name="myImage"
+          type="file"
+          id="fileUpload"
+          onChange="uploadToClient()"
+          multiple
+        />
 
         <div>
           <button type="submit" onClick="uploadImgClient()">
@@ -61,10 +68,9 @@
     </div>
 
     <script>
-
-      let createObjectURL = null
-      let image = null
-      const uploadFiles = document.querySelector('#fileUpload')
+      let createObjectURL = null;
+      let image = null;
+      const uploadFiles = document.querySelector("#fileUpload");
 
       function uploadToClient(e) {
         // 기존에 첨부한 이미지가 있을 경우 createObjectUrl 해제
@@ -79,10 +85,11 @@
         https://developer.mozilla.org/ko/docs/Web/API/File
         */
 
+        console.log(uploadFiles);
         if (uploadFiles.files && uploadFiles.files[0]) {
           const i = uploadFiles.files[0];
           image = i;
-
+          console.log(image);
           /*
           화면 상단에 현재 input에 추가한 파일 표시
           실제 S3 업로드X, 클라이언트에서만 처리하는 것으로
@@ -90,16 +97,14 @@
           mdn : https://developer.mozilla.org/ko/docs/Web/API/URL/createObjectURL
           */
           // setCreateObjectURL(URL.createObjectURL(i));
-          createObjectURL = URL.createObjectURL(i)
+          createObjectURL = URL.createObjectURL(i);
         }
-      };
+      }
 
-
-
-            // 클라이언트에서 업로드 (aws-sdk getsignedurl 이용)
-            // const uploadImgClient = async () => {
-            async function uploadImgClient() {
-              /*
+      // 클라이언트에서 업로드 (aws-sdk getsignedurl 이용)
+      // const uploadImgClient = async () => {
+      async function uploadImgClient() {
+        /*
                     aws-sdk-3버전의 getSignedUrl 이용
                     1단계 : signed url을 받아온다
                     2단계 : 받아온 url에 put으로 요청을 해서 업로드 한다
@@ -109,43 +114,69 @@
                     주의 사항 : S3 버킷에 CORS 설정을 해줘야 한다
                     */
 
-              // url 가져오는 데 필요한 데이터 정리
-              // s3에서 구분할 이미지 이름(경로), 타입만 있으면 됨
-              const body = {
-                name:
-                  "client/" +
-                  Math.random().toString(36).substring(2, 11) +
-                  image.name,
-                type: image.type,
-              };
+        // url 가져오는 데 필요한 데이터 정리
+        // s3에서 구분할 이미지 이름(경로), 타입만 있으면 됨
+        // const body = {
+        //   name:
+        //     // "client/" +
+        //     Math.random().toString(36).substring(2, 11) +
+        //     image.name,
+        //   type: image.type,
+        // };
+        // console.log('body >>>>>>>>', body);
 
-              try {
-                // 1단계 : signed url 가져오기
-                const urlRes = await fetch(`http://localhost:8000/s3upload`, {
-                  method: "POST",
-                  body: JSON.stringify(body),
-                });
-                const data = await urlRes.json();
-                const signedUrl = data.url;
+        try {
+          // 1단계 : signed url 가져오기
+          // console.log(JSON.stringify(body));
+          // const urlRes = await fetch(`/s3upload`, {
+          //   method: "POST",
+          //   body: JSON.stringify(body),
+          // });
+          // const data = await urlRes.json();
+          // const signedUrl = data.url;
 
-                console.log(signedUrl);
+          const result = axios({
+            method: "POST",
+            url: "/s3upload",
+            data: {
+              name:
+                // "client/" +
+                Math.random().toString(36).substring(2, 11) + image.name,
+              type: image.type,
+            },
+          });
 
-                // 2단계 : 가져온 url로 put 요청 보내기
-                // 이미 파일 이름이나 경로 등은 url 받아올 때 지정을 다 해놨으므로,
-                // image 파일 객체와 Content-type 정보만 넣어서 보냄
-                const uploadRes = await fetch(signedUrl, {
-                  method: "PUT",
-                  body: image,
-                  headers: {
-                    "Content-type": image.type,
-                  },
-                });
+          const axiosResult = await result;
+          const signedUrl = axiosResult.data;
+          console.log("signedURL", signedUrl);
 
-                console.log(uploadRes);
-              } catch (err) {
-                console.log(err);
-              }
-            };
+          // 2단계 : 가져온 url로 put 요청 보내기
+          // 이미 파일 이름이나 경로 등은 url 받아올 때 지정을 다 해놨으므로,
+          // image 파일 객체와 Content-type 정보만 넣어서 보냄
+
+          // const uploadRes = await fetch(signedUrl, {
+          //   method: "PUT",
+          //   body: image,
+          //   headers: {
+          //     "Content-type": image.type,
+          //   },
+          // });
+
+          const uploadRes = await axios({
+            method: "PUT",
+            url: signedUrl,
+            data: image,
+            headers: {
+              "Content-Type": image.type,
+            },
+          });
+          console.log("uploadRes : ", uploadRes);
+
+          console.log(uploadRes);
+        } catch (err) {
+          console.log(err);
+        }
+      }
     </script>
   </body>
 </html>
