@@ -2,6 +2,12 @@ const PublicPostCommentLike = (Sequelize, DataTypes) => {
     const model = Sequelize.define(
         "publicPostCommentLike",
         {
+            id: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
+                autoIncrement: true,
+                primaryKey: true,
+            },
             like_id: {
                 type: DataTypes.STRING(20),
                 allowNull: false,
@@ -9,7 +15,7 @@ const PublicPostCommentLike = (Sequelize, DataTypes) => {
         },
         {
             freezeTableName: true,
-            timestamp: true,
+            timestamp: false,
         }
     )
     return model;
