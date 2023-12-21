@@ -22,6 +22,10 @@ const ClubPost = (Sequelize, DataTypes) => {
         type: DataTypes.JSON,
         allowNull: true,
       },
+      name: {
+        type: DataTypes.STRING(100),
+        allowNull: false,
+      },
     },
     {
       tableName: "clubPost",
