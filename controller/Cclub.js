@@ -64,7 +64,9 @@ exports.getClubAdminEdit = async (req, res) => {
       where: { userid_num: leaderId.dataValues.leader_id },
     });
     const clubmembers = await Club_members.findAll({
-      where: { club_id: club_id },
+      where: {
+        [Op.and]: [{ club_id: club_id }, { ismember: "true" }],
+      },
     });
     res.render("clubAdmin/clubAdminEdit", {
       clubAdminEdit,
@@ -188,29 +190,29 @@ exports.getClubPost = async (req, res) => {
     // 게시글
     const clubPost = await Club_post.findOne({
       where: {
-        club_id: club_id,
         post_id: post_id,
       },
     });
     // 게시글에 달린 댓글들
     const clubPostComment = await Club_post_comment.findAll({
       where: {
-        club_id: club_id,
         post_id: post_id,
       },
+      include: [{ model: Club_post_comment_like }],
     });
+    // const howManyComment = await clubPostComment.length;
+
     // 댓글마다 있는 좋아요
-    const clubPostCommentLike = await Club_post_comment_like.findAll({
-      where: {
-        club_id: club_id,
-        post_id: post_id,
-      },
-    });
+    // const clubPostCommentLike = await Club_post_comment_like.findAll({
+    //   where: {
+    //     comment_id:
+    //   },
+    // });
 
     res.render("myclub/myclubPostDetail", {
       data: clubPost,
       clubPostComment,
-      clubPostCommentLike,
+      // clubPostCommentLike,
     });
   } catch (err) {
     console.error(err);
@@ -410,12 +412,16 @@ exports.createClubPost = async (req, res) => {
     const { club_id } = req.params;
     const { title, content, image } = req.body;
     const { userid_num } = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
+    console.log(club_id, title, content, image);
+    const getName = await User.findOne({
+      where: { userid_num: userid_num },
+    });
     const newPost = await Club_post.create({
       club_id: club_id,
-      userid: userid_num,
       title: title,
       content: content,
       image: image,
+      name: getName.dataValues.name,
     });
     console.log("생성 완료");
     res.send(newPost);
