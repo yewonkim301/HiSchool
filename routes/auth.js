@@ -3,10 +3,9 @@ const passport = require("passport");
 const bcrypt = require("bcrypt");
 const { isNotLoggedIn, isLoggedIn } = require("./middlewares");
 const { User } = require("./../models/Index");
-const jwt = require('jsonwebtoken')
-const dotenv = require('dotenv')
-dotenv.config()
-
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
+dotenv.config();
 
 const router = express.Router();
 
@@ -28,7 +27,7 @@ router.post("/register", isNotLoggedIn, async (req, res, next) => {
       school,
       phone,
       profile_img: "tmp",
-      nickname: "tmp",
+      nickname: Math.random(),
       birthday,
       name,
       grade,
@@ -45,7 +44,7 @@ router.post("/register", isNotLoggedIn, async (req, res, next) => {
 // 로그인
 router.post("/login", isNotLoggedIn, (req, res, next) => {
   passport.authenticate("local", (authError, user, info) => {
-    console.log('/login user : ', user);
+    console.log("/login user : ", user);
     if (authError) {
       console.error(authError);
       return next(authError);
@@ -57,32 +56,27 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
     return req.login(user, (loginError) => {
       if (loginError) {
         console.error(loginError);
-        console.log('로그인 에러');
+        console.log("로그인 에러");
         return next(loginError);
       }
 
       const payload = {
         userid: req.body.userid,
-        userid_num: user.userid_num
-      }
+        userid_num: user.userid_num,
+      };
 
-      const token = jwt.sign(
-        JSON.stringify(payload),
-        process.env.JWT_SECRET,
-      );
+      const token = jwt.sign(JSON.stringify(payload), process.env.JWT_SECRET);
 
       return res
-      .cookie('jwt', token, {
-        httpOnly: true,
-        secure: false, // https 사용시 true 설정해줄것
-      })
-      .status(200)
-      .send({ isLoggedIn:true });
+        .cookie("jwt", token, {
+          httpOnly: true,
+          secure: false, // https 사용시 true 설정해줄것
+        })
+        .status(200)
+        .send({ isLoggedIn: true });
     });
-  })(req, res, next); 
+  })(req, res, next);
 });
-
-
 
 //로그아웃
 router.get("/logout", isLoggedIn, (req, res) => {
