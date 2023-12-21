@@ -426,6 +426,7 @@ exports.getAllMembers = async (req, res) => {
         isMember: "true",
       },
     });
+
     // 회원 전체 조회
     const getusers = await Club_members.findAll({
       attributes: ["userid_num"],
@@ -450,6 +451,7 @@ exports.getAllMembers = async (req, res) => {
 
 
     res.render("clubAdmin/clubAdminTransfer", { data: getAllMembersShow, userInfo });
+
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");

@@ -21,7 +21,7 @@
 
 
 
-    <input type="hidden" name="userid_num" id="userid_num">
+    <input type="text" name="userid_num" id="userid_num">
 
 
 
@@ -29,8 +29,8 @@
   <div class="content">
     <!-- 회원 카드 목록 -->
     <div class="card" onclick="selectClubLeader('<%=data[i].userid_num%>')">
-      <p class="member-name"><%=data[i].name%></p>
-      <p class="join-date"><%=data[i].date%></p>
+      <p class="member-name" onclick="selectClubLeader('<%=data[i].userid_num%>')"><%=userInfo[i]%></p>
+      <p class="join-date" onclick="selectClubLeader('<%=data[i].userid_num%>')"><%=data[i].updatedAt%></p>
     </div>
     <!-- 추가 회원 카드 반복 -->
   </div>
