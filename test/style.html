@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
@@ -7,14 +7,70 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.1/feather.min.js"
     integrity="sha512-4lykFR6C2W55I60sYddEGjieC2fU79R7GUtaqr3DzmNbo0vSaO1MfUjMoTFYYuedjfEix6uV9jVTtRCSBU/Xiw=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <link rel="stylesheet" href="./디자인.css">
-  <title>컴포넌트</title>
+  <title>Document</title>
+  <link rel="stylesheet" href="../static/style.css">
+  <link rel="stylesheet" href="디자인.css">
   <style>
-
   </style>
 </head>
 
 <body>
+  <!--- 버튼 종류 --->
+
+  <div class="cta">cta? 이것은 뭐지</div>
+  <!--  큰 버튼 btn primary-->
+  <div class="btn btn-primary">primary버튼</div>
+  <br><br>
+  <!-- 작은 버튼 btn primary-->
+  <div class="btn-sm btn-primary">primary버튼 </div>
+  <hr>
+  <br><br>
+  <!-- 큰 btn secondary-->
+  <button class="btn btn-secondary">secondary 버튼</button>
+  <br><br>
+  <!-- 작은버튼 btn-sm secondary-->
+  <button class="btn-sm btn-secondary">secondary 버튼</button>
+  <br><br>
+
+  <br><br>
+  <!-- 큰 btn secondary-->
+  <button class="btn btn-secondary">secondary 버튼</button>
+  <br><br>
+  <!-- 작은버튼 btn-sm secondary-->
+  <button class="btn-sm btn-secondary">secondary 버튼</button>
+  <br><br>
+
+  <!-- 큰 btn neutral-->
+  <button class="btn btn-neutral">neutral 버튼</button>
+  <br><br>
+  <!-- 작은버튼 btn-sm neutral-->
+  <button class="btn-sm btn-neutral">neutral 버튼</button>
+  <br><br>
+
+  <!-- 큰 btn ghost-->
+  <button class="btn btn-ghost">ghost 버튼</button>
+  <br><br>
+  <!-- 작은 btn ghost-->
+  <button class="btn-sm btn-ghost">ghost 버튼</button>
+  <br><br>
+
+  <!--- 버튼 종류 끝 --->
+
+  <!-- 검색기능?? -->
+  <br><br>
+  <form class="">
+    <div class="input">
+      <label for="test">라벨</label>
+      <input type="text" class=" textField" id="test" placeholder="플레이스홀더">
+      <span class="helpText">도움말</span>
+      </input>
+      <button class="btn btn-secondary">secondary 버튼</button>
+    </div>
+  </form>
+  <br><br>
+
+  <!-- 검색기능 끝 -->
+  <br><br>
   <div class="search-container">
     <div class="search-bar">
       <input type="text" class="search-input" placeholder="플레이스홀더">
@@ -23,6 +79,7 @@
       </a>
     </div>
   </div>
+
   <div class="search-container">
     <p class="label">라벨 </p>
     <div class="search-bar">
@@ -52,19 +109,16 @@
     </div>
   </div>
 
-
   <div class="search-option-container">
     <p class="label">라벨 </p>
     <button class="search-option ">옵션1</button>
     <button class="search-option ">옵션2</button>
     <button class="search-option ">옵션3</button>
   </div>
+  <br><br>
 
+  <!-- 해시태그 예시입니다. 클릭 이벤트와 백엔드 연결을 위한 클래스를 추가할 수 있습니다. -->
   <div class="hashtags">
-
-    <!-- 해시태그 예시입니다. 클릭 이벤트와 백엔드 연결을 위한 클래스를 추가할 수 있습니다. -->
-
-
     <span class="hashtag">#거리 30Km 이내</span>
     <span class="hashtag">#분야 과학</span>
     <span class="hashtag">#지역 서울 마포구</span>
@@ -77,49 +131,19 @@
     <div class="list-content"> 내용</div>
   </div>
 
-  <div class="list-additional">
-    <div class="list-additional-main">
-      <div class="list-additional-title"> 제목</div>
-      <div class="list-additional-content"> 내용</div>
+  <div class="list">
+    <div class="list-additional">
+      <div class="list-additional-main">
+        <div class="list-additional-title"> 제목</div>
+        <div class="list-additional-content"> 내용</div>
+      </div>
+      <div class="additional-info"> 부가내용</div>
     </div>
-
-    <div class="additional-info"> 부가내용</div>
   </div>
 
 
 
-
-  <!-- 231218 디자인 컴포넌트 -->
-  <button class="btn btn-primary">primary 버튼</button><br><br>
-  <button class="btn btn-secondary">secondary 버튼</button>
-
-  <form class="">
-    <div class="input">
-      <label for="test">라벨</label>
-      <input type="text" class=" textField" id="test">
-      <span class="helpText">도움말</span>
-      </input>
-      <button class="btn btn-secondary">secondary 버튼</button>
-    </div>
-
-    <label for="test">라벨</label>
-    <input type="text" class="input textField" id="test">
-    <span class="helpText">도움말</span>
-    </input>
-    <button class="btn btn-secondary">secondary 버튼</button>
-
-
-  </form>
-
   <input type="text" class="input textField">
-
-
-
-
-
-
-
-
 
   <script>feather.replace()</script>
 </body>

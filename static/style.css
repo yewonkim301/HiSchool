@@ -90,7 +90,7 @@ meter {
 /* revert for bug in Chromium browsers
    - fix for the content editable attribute will work properly.
    - webkit-user-select: auto; added for Safari in case of using user-select:none on wrapper element */
-:where([contenteditable]:not([contenteditable="false"])) {
+:where([contenteditable]:not([contenteditable='false'])) {
   -moz-user-modify: read-write;
   -webkit-user-modify: read-write;
   overflow-wrap: break-word;
@@ -99,7 +99,7 @@ meter {
 }
 
 /* apply back the draggable feature - exist only in Chromium and Safari */
-:where([draggable="true"]) {
+:where([draggable='true']) {
   -webkit-user-drag: element;
 }
 
@@ -117,12 +117,12 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type="number"] {
+input[type='number'] {
   -moz-appearance: textfield;
 }
 
 /* 스타일 정의 */
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
 
 :root {
   --spacing-1: 12px;
@@ -165,10 +165,13 @@ input[type="number"] {
   --color-red-900: #7f1d1d;
   --color-red-950: #450a0a;
 
-  font-family: "Pretendard Variable", Pretendard, -apple-system,
-    BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI",
-    "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  --color-ghost-50: #eff6ff;
+  --color-ghost-100: #dbeafe;
+
+  font-family: 'Pretendard Variable', Pretendard, -apple-system,
+    BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI',
+    'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
 }
 
 body {
@@ -187,7 +190,6 @@ body {
   height: fit-content;
   margin-bottom: 100px;
 }
-
 
 .row2 {
   display: flex;
@@ -218,10 +220,17 @@ body {
   text-align: center;
 }
 
+.btn-sm {
+  cursor: pointer;
+  width: 30%;
+  font-size: 16px;
+  text-align: center;
+}
+
 .btn-primary {
   padding: var(--spacing-1) var(--spacing-2);
   background-color: var(--color-primary-500);
-  color: white;
+  color: var(--color-primary-50);
   border: none;
   border-radius: 4px;
   box-shadow: 0px 2px 8px 0px rgba(47, 128, 237, 0.2);
@@ -232,6 +241,23 @@ body {
   background-color: white;
   border: solid 1px var(--color-primary-500);
   color: var(--color-primary-500);
+  border-radius: 4px;
+  box-shadow: 0px 2px 8px 0px rgba(47, 128, 237, 0.2);
+}
+
+.btn-neutral {
+  padding: var(--spacing-1) var(--spacing-2);
+  background-color: var(--color-gray-500);
+  border: solid 1px var(--color-gray-500);
+  color: var(--color-gray-50);
+  border-radius: 4px;
+  box-shadow: 0px 2px 8px 0px rgba(47, 128, 237, 0.2);
+}
+.btn-ghost {
+  padding: var(--spacing-1) var(--spacing-2);
+  background-color: var();
+  border: solid 1px var(--color-ghost-50);
+  color: var(--color-ghost-100);
   border-radius: 4px;
   box-shadow: 0px 2px 8px 0px rgba(47, 128, 237, 0.2);
 }
@@ -413,3 +439,106 @@ button {
   font-size: var(--spacing-3);
   color: var(--color-gray-400);
 }
+
+/* 여기는 피그마 input  시작  */
+.search-container {
+  width: 50%;
+  padding: 20px;
+  border-radius: 50px;
+}
+
+.label {
+  color: #aaa;
+  font-size: 15px;
+  margin-bottom: 11p;
+}
+
+.search-bar {
+  width: 100%;
+  margin: 0 auto;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 20px;
+  border: none;
+  outline: none;
+}
+
+.search-icon {
+  padding-right: 15px;
+  color: #aaa;
+  font-size: 1.5em;
+  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.search-option {
+  background-color: white;
+  border: none;
+  outline: none;
+  padding: 10px 30px;
+  margin-right: 25px;
+  color: #aaa;
+  font-size: 15px;
+  margin-bottom: 11px;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.search-bar-option {
+  max-width: 50%;
+
+  text-align: center;
+}
+
+/* 여기는 피그마 input 끝 */
+
+/* 여기는 피그마 radio 시작 */
+.search-option-container {
+  width: 100%;
+  padding: 20px;
+}
+/* 여기는 피그마 radio 끝 */
+
+/* 2번 list */
+.list-additional {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.list-additional-main {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.list-additional-title {
+  align-self: stretch;
+  font-size: var(--spacing-2);
+  color: var(--color-gray-600);
+}
+
+.list-additional-content {
+  align-self: stretch;
+  font-size: 14px;
+  color: var(--color-gray-400);
+}
+
+.additional-info {
+  font-size: var(--spacing-3);
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  color: #6b7280;
+}
+
+/* 2번 list 끝 */
