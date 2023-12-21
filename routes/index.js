@@ -255,11 +255,11 @@ router.get(
   controllerPublic.getAllMembers
 );
 
-// DELETE /clubAdminTransfer/:club_id 회장 신청 거절
+// PATCH /clubAdminTransfer/:club_id 회장 위임 전달
 router.delete(
   "/clubAdminTransfer/:club_id",
   isLoggedIn,
-  controllerPublic.deleteClubAdminTransfer
+  controllerPublic.updateClubAdminTransfer
 );
 
 // myclub

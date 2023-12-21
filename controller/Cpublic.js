@@ -432,25 +432,23 @@ exports.getAllMembers = async (req, res) => {
   }
 };
 
-// DELETE /clubAdminTransfer/:club_id 신청 거절
-exports.deleteClubAdminTransfer = async (req, res) => {
+// PATCH /clubAdminTransfer/:club_id 신청 거절
+exports.updateClubAdminTransfer = async (req, res) => {
   try {
     const { club_id } = req.params;
-    const { userid, userid_num } = jwt.verify(
-      req.cookies.jwt,
-      process.env.JWT_SECRET
-    );
-    const deleteMember = await Club_members.destroy({
-      where: {
-        club_id: club_id,
-        userid_num: userid_num,
-        isMember: "false"
+    const {userid_num} = req.body
+    const updateLeader = await Club.update({
+      leader_id : userid_num
       },
+      {
+        where: {
+        club_id: club_id,
+      }
     });
-    if (deleteMember) {
-      res.send({ isDeleted: true });
+    if (updateLeader) {
+      res.send({ isSuccess: true });
     } else {
-      res.send({ isDeleted: false });
+      res.send({ isSuccess: false });
     }
   } catch (err) {
     console.error(err);
