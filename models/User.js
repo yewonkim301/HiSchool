@@ -5,11 +5,13 @@ const User = (Sequelize, DataTypes) => {
                 type: DataTypes.INTEGER,
                 allowNull: false,
                 primaryKey:true,
-                autoIncrement: true
+                autoIncrement: true,
+                unique: true
             },
             userid:{
                 type: DataTypes.STRING(20),
                 allowNull: false,
+                unique: true,
             },
             password:{
                 type: DataTypes.STRING(200),
@@ -22,6 +24,7 @@ const User = (Sequelize, DataTypes) => {
             phone: {
                 type: DataTypes.STRING(12),
                 allowNull: false,
+                unique: true,
             },
             profile_img:{
                 type: DataTypes.STRING(200),
@@ -30,6 +33,7 @@ const User = (Sequelize, DataTypes) => {
             nickname:{
                 type: DataTypes.STRING(50),
                 allowNull: false,
+                unique: true,
             },
             birthday:{
                 type : DataTypes.STRING(10),
@@ -49,7 +53,7 @@ const User = (Sequelize, DataTypes) => {
             }
         },{
             freezeTableName: true,
-            timestamps: false
+            timestamps: true
         }
     )
     return model;
