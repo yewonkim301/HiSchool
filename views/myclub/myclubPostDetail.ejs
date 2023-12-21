@@ -31,12 +31,12 @@
          </div>
 
          <button onclick="submitComment(event)">댓글등록</button>
-         <button onclick="editComment()">댓글수정</button>
+
          <!-- <button onclick="deletePostComment('<%=clubPostComment.comment_id %>')">댓글삭제</button> -->
          <!-- 댓글 들어갈곳 -->
          <div class="list" id="commentList">
             <% clubPostComment.forEach(function(comment) { %>
-               <div class="comment-<%=comment.comment_id %>">
+               <div class="comment comment-<%=comment.comment_id %>">
                   <p>
                      <%= comment.comment_name %>
                   </p>
@@ -44,9 +44,14 @@
                      <%= comment.content %>
                   </p>
                   <button onclick="deletePostComment('<%= comment.comment_id %>')">댓글삭제</button>
+                  <button onclick="showEditField('<%= comment.comment_id %>', '<%= comment.content %>')">댓글수정</button>
                   <!-- 여기에 추가적인 댓글 정보나 버튼 등을 삽입할 수 있습니다. -->
                </div>
                <% }); %>
+                  <div id="editCommentSection" style="display: none;">
+                     <input type="text" id="editCommentInput" placeholder="댓글 수정">
+                     <button onclick="submitEdit()">수정 완료</button>
+                  </div>
          </div>
 
 
@@ -56,22 +61,16 @@
 
 
 
-            console.log("<%=clubPostComment[0].comment_name%>");
-            console.log("<%=clubPostComment[0].content%>");
+
 
 
             const club_id = "<%=data.club_id%>";
             const post_id = "<%=data.post_id%>";
             const comment_name = "<%=clubPostComment.comment_name%>";
             const content = "<%=clubPostComment.content%>";
-            const comment = document.getElementById('comment')
+            const comment = document.getElementById('comment');
 
-               // const comment_id = "<%=clubPostComment.comment_id %>";
-
-
-               <% clubPostComment.forEach(function (comment) { %>
-                  console.log("댓글 ID:", "<%= comment.comment_id %>");
-    <% }); %>;
+            // const comment_id = "<%=clubPostComment.comment_id %>";
 
 
             console.log(comment_name);
@@ -82,9 +81,9 @@
 
 
             // 댓글 등록
-            function submitComment(event) {
+            function submitComment() {
                const commentContent = document.getElementById('commentInput').value;
-               event.preventDefault(); ``;
+
                // 사용자에게 댓글 등록을 확인
                const isConfirmed = confirm("댓글을 등록하시겠습니까?");
                if (isConfirmed) {
@@ -94,56 +93,155 @@
                   })
                      .then(res => {
                         console.log("댓글 등록 완료", res.data);
+
                         // 새로운 댓글을 목록에 추가
                         const commentList = document.getElementById('commentList');
                         const newCommentDiv = document.createElement('div');
-                        newCommentDiv.classList.add('comment ');
-                        newCommentDiv.innerHTML = `
-            <p>${res.data.comment_name}</p>
-            <p>${res.data.content}</p>
-        `;
+                        newCommentDiv.classList.add('comment');
 
+                        // 댓글 작성자 이름을 나타내는 p 태그 생성
+                        const nameParagraph = document.createElement('p');
+                        nameParagraph.textContent = res.data.comment_name;
+
+                        // 댓글 내용을 나타내는 p 태그 생성
+                        const contentParagraph = document.createElement('p');
+                        contentParagraph.textContent = res.data.content;
+                        contentParagraph.classList.add('comment-content'); // 클래스 추가
+
+                        // div에 p 태그들 추가
+                        newCommentDiv.appendChild(nameParagraph);
+                        newCommentDiv.appendChild(contentParagraph);
+
+                        // 코멘트 목록에 새로운 코멘트 div 추가
                         commentList.appendChild(newCommentDiv);
+                        console.log(contentParagraph); // 클래스를 추가한 후 요소를 콘솔에 출력
+
+                        location.reload();
                      })
                      .catch(error => {
                         console.error("댓글 등록 에러:", error);
                      });
+
+               }
+
+            }
+
+
+            function editCommentContent(comment_id, newContent) {
+               // 해당 댓글의 내용을 나타내는 요소를 찾음
+               const commentContentElement = document.querySelector(`.comment-${comment_id}`);
+               console.log(commentContentElement);
+               if (commentContentElement) {
+                  // 새로운 내용으로 업데이트
+                  commentContentElement.textContent = newContent;
+               } else {
+                  console.error('댓글 내용을 찾을 수 없음');
                }
             }
 
 
+            let currentEditingCommentId = null;
 
-            // 댓글 수정
-            // function editComment(comment_id) {
-            //    axios.post(`/myclubPostDetail/${club_id}/${post_id}/`, {
-            //       comment_name: "test", // 실제 사용자 이름 또는 ID
-            //       content: commentContent
-            //    });
-            //    // 댓글 수정 로직
-            //    console.log("댓글 수정", comment_id);
-            //    // 여기에 댓글 수정 로직을 구현하세요.
+            function showEditField(comment_id, currentContent) {
+               currentEditingCommentId = comment_id; // 전역 변수 업데이트
+               // 현재 수정 중인 댓글 ID를 저장
+
+
+               // 수정 입력 필드에 현재 댓글 내용 설정
+               const editInput = document.getElementById('editCommentInput');
+               editInput.value = currentContent;
+
+               // 수정 영역 보이기
+               document.getElementById('editCommentSection').style.display = 'block';
+            }
+            function submitEdit() {
+               if (currentEditingCommentId === null) {
+                  console.error('수정할 댓글이 지정되지 않음');
+                  return;
+               }
+
+               const editedContent = document.getElementById('editCommentInput').value;
+
+               axios.patch(`/myclubPostDetail/${club_id}/${post_id}/${currentEditingCommentId}`, {
+                  content: editedContent
+               })
+                  .then(res => {
+
+                     if (res.data) {
+                        // 댓글 내용만 업데이트
+                        const commentContentElement = document.querySelector(`.comment-${currentEditingCommentId}`);
+                        console.log(commentContentElement);
+                        console.log('<%=clubPostComment%>');
+                        if (commentContentElement) {
+                           commentContentElement.textContent = editedContent;
+                        }
+                        // 수정 영역 숨기기
+                        document.getElementById('editCommentSection').style.display = 'none';
+
+                        // 페이지 새로고침
+                        location.reload();
+                     } else {
+                        console.error('댓글 수정 실패');
+                     }
+                  })
+                  .catch(error => {
+                     console.error('댓글 수정 에러:', error);
+                  });
+            }
+
+
+            // function submitEdit() {
+            //    if (currentEditingCommentId === null) {
+            //       console.error('수정할 댓글이 지정되지 않음');
+            //       return;
+            //    }
+
+            //    const editedContent = document.getElementById('editCommentInput').value;
+
+            //    axios.patch(`/myclubPostDetail/${club_id}/${post_id}/${currentEditingCommentId}`, {
+            //       content: editedContent
+            //    })
+            //       .then(res => {
+            //          console.log('<%=clubPostComment%>');
+            //          if (res.data) {
+            //             // 페이지의 댓글 내용 업데이트
+            //             const commentElement = document.querySelector(`.comment-${currentEditingCommentId}`);
+            //             if (commentElement) {
+            //                commentElement.textContent = editedContent;
+            //             }
+            //             // 수정 영역 숨기기
+            //             document.getElementById('editCommentSection').style.display = 'none';
+            //          } else {
+            //             console.error('댓글 수정 실패');
+            //          }
+            //       })
+            //       .catch(error => {
+            //          console.error('댓글 수정 에러:', error);
+            //       });
             // }
 
             // 댓글 삭제
+
             function deletePostComment(comment_id) {
-               const commentElement = document.querySelector(`.comment-${comment_id}`);
-               axios.delete(`/myclubPostDetail/${club_id}/${post_id}/${comment_id}`)
-                  .then(res => {
-
-                     console.log(commentElement);
-
-                     console.log(res);
-                     if (res.isDeleted) {
-                        // 삭제 성공 시, 페이지에서 해당 댓글 요소 제거
-                        commentElement.remove();
-                     } else {
-                        // 삭제 실패 처리
-                     }
-                  })
-                  .catch(err => {
-                     console.error("댓글 삭제 에러:", err);
-                  });
-
+               const isConfirmed = confirm("댓글을 삭제하시겠습니까?");
+               if (isConfirmed) {
+                  const commentElement = document.querySelector(`.comment-${comment_id}`);
+                  axios.delete(`/myclubPostDetail/${club_id}/${post_id}/${comment_id}`)
+                     .then(res => {
+                        console.log(commentElement);
+                        console.log(res);
+                        if (res.isDeleted) {
+                           // 삭제 성공 시, 페이지에서 해당 댓글 요소 제거
+                           commentElement.remove();
+                        } else {
+                           // 삭제 실패 처리
+                        }
+                        location.reload();
+                     })
+                     .catch(err => {
+                        console.error("댓글 삭제 에러:", err);
+                     });
+               }
 
             }
 
