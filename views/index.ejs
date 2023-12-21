@@ -9,25 +9,143 @@
 
   <body>
     <div class="container">
-      <%- include('./component/header')%>
+      <di%- include('./component/header')%>
       <br />
       <a href="./clubSchedule">달력테스트버튼</a>
       <br />
       <a href="/home">홈 화면으로 이동</a>
       <a href="./myClubPostMain">동아리게시판</a>
-      <br>
+      <br />
 
       <form action="/upload" enctype="multipart/form-data" method="post">
         <label for="profileImg">이미지 업로드</label>
-        <input type="file" name="profileImg" id="profileImg" multiple>
+        <input type="file" name="profileImg" id="profileImg" multiple />
         <input type="submit" value="Upload" />
       </form>
-      <br>
+      <br />
+      <br />
+      <br />
+
+      <form enctype="multipart/form-data" id="uploadForm">
+        <label for="file">File:</label>
+        <input type="file" name="file" required /> <br />
+        <input type="submit" name="submit" value="Upload to Amazon S3" />
+      </form>
+
+      <br />
+      <br />
+      <br />
+
+      <div>
+        <!-- <img src={createObjectURL} alt="" /> -->
+        <h4>Select Image</h4>
+        <input name="myImage" type="file" id="fileUpload" onChange="uploadToClient()" />
+
+        <div>
+          <button type="submit" onClick="uploadImgClient()">
+            클라이언트에서 바로 업로드
+          </button>
+          <button type="submit" onClick="uploadToFs()">
+            form, fs로 업로드
+          </button>
+          <button type="submit" onClick="uploadImgMulter()">
+            미들웨어, multer로 업로드
+          </button>
+        </div>
+      </div>
 
       <div class="cta">
         <a href="/register" class="btn btn-secondary">회원가입</a>
         <a href="/login" class="btn btn-primary">로그인</a>
       </div>
     </div>
+
+    <script>
+
+      let createObjectURL = null
+      let image = null
+      const uploadFiles = document.querySelector('#fileUpload')
+
+      function uploadToClient(e) {
+        // 기존에 첨부한 이미지가 있을 경우 createObjectUrl 해제
+        if (createObjectURL) {
+          URL.revokeObjectUrl(createObjectURL);
+        }
+        /*
+        input에 이미지 파일을 첨부하게 되면 e.target.files 배열에 이미지가 추가된다.
+        단일 파일을 추가할 것이므로 0번 인덱스만 이용
+
+        e.target.files[0]은 File객체로 Blob의 일종이다 자세한 것은 mdn 참고
+        https://developer.mozilla.org/ko/docs/Web/API/File
+        */
+
+        if (uploadFiles.files && uploadFiles.files[0]) {
+          const i = uploadFiles.files[0];
+          image = i;
+
+          /*
+          화면 상단에 현재 input에 추가한 파일 표시
+          실제 S3 업로드X, 클라이언트에서만 처리하는 것으로
+          URL.createObjectURL : file객체를 이용하여 임시 url 생성하여 이미지 표시한다
+          mdn : https://developer.mozilla.org/ko/docs/Web/API/URL/createObjectURL
+          */
+          // setCreateObjectURL(URL.createObjectURL(i));
+          createObjectURL = URL.createObjectURL(i)
+        }
+      };
+
+
+
+            // 클라이언트에서 업로드 (aws-sdk getsignedurl 이용)
+            // const uploadImgClient = async () => {
+            async function uploadImgClient() {
+              /*
+                    aws-sdk-3버전의 getSignedUrl 이용
+                    1단계 : signed url을 받아온다
+                    2단계 : 받아온 url에 put으로 요청을 해서 업로드 한다
+
+                    특징 : client에서 바로 올리므로 서버에 이미지 데이터가 안넘어간다
+                    (폼데이터를 api로 넘기는 부분이 어려운데 해당 부분 생략이 가능하다)
+                    주의 사항 : S3 버킷에 CORS 설정을 해줘야 한다
+                    */
+
+              // url 가져오는 데 필요한 데이터 정리
+              // s3에서 구분할 이미지 이름(경로), 타입만 있으면 됨
+              const body = {
+                name:
+                  "client/" +
+                  Math.random().toString(36).substring(2, 11) +
+                  image.name,
+                type: image.type,
+              };
+
+              try {
+                // 1단계 : signed url 가져오기
+                const urlRes = await fetch(`http://localhost:8000/s3upload`, {
+                  method: "POST",
+                  body: JSON.stringify(body),
+                });
+                const data = await urlRes.json();
+                const signedUrl = data.url;
+
+                console.log(signedUrl);
+
+                // 2단계 : 가져온 url로 put 요청 보내기
+                // 이미 파일 이름이나 경로 등은 url 받아올 때 지정을 다 해놨으므로,
+                // image 파일 객체와 Content-type 정보만 넣어서 보냄
+                const uploadRes = await fetch(signedUrl, {
+                  method: "PUT",
+                  body: image,
+                  headers: {
+                    "Content-type": image.type,
+                  },
+                });
+
+                console.log(uploadRes);
+              } catch (err) {
+                console.log(err);
+              }
+            };
+    </script>
   </body>
 </html>

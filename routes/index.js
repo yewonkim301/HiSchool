@@ -15,6 +15,60 @@ const s3bucketList = require('../middleware/s3bucketList')
 const s3objectList = require('../middleware/s3objectList')
 const s3fileUpload = require('../middleware/s3fileUpload')
 
+const  { S3Client, GetObjectCommand, PutObjectCommand, DeleteObjectCommand } = require("@aws-sdk/client-s3");
+const { createPresignedPost } = require("@aws-sdk/s3-presigned-post")
+
+
+const s3 = new S3Client({
+  credentials: {
+    accessKeyId: process.env.AWS_S3_KEY_ID,
+    secretAccessKey: process.env.AWS_S3_ACCESS_KEY,
+    // bucket: process.env.AWS_S3_BUCKET,
+  },
+  region: process.env.AWS_S3_REGION,
+});
+
+
+const { v4: uuidv4 } = require('uuid');
+
+
+router.post('/s3upload', async(req, res) => {
+
+})
+
+
+
+// file signedUrl 가져오기
+module.exports = async function getSignedFileUrl(data) {
+  const params = {
+    Bucket: process.env.AWS_S3_BUCKET,
+    Key: data.name,
+  };
+  const command = new PutObjectCommand(params);
+  const url = await getSignedUrl(s3, command, {
+    expiresIn: 3600,
+  });
+  return url;
+}
+
+
+// 파일 업로드
+module.exports = async function uploadFile(fileBuffer, fileName, mimetype) {
+  const uploadParams = {
+    Bucket: awsS3Bucket,
+    Key: fileName,
+    Body: fileBuffer,
+    ContentType: mimetype,
+  };
+
+  const res = await s3.send(new PutObjectCommand(uploadParams));
+  return res.$metadata.httpStatusCode;
+}
+
+
+
+
+
 
 
 router.post('/upload', async (req, res) => {

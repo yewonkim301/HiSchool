@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const db = require("./models/Index.js");
+const cors = require('cors')
 // const { sequelize } = require('./models/Index.js');
 
 const dotenv = require("dotenv");
@@ -19,6 +20,7 @@ app.set("views", "./views");
 app.use(express.static(path.join(__dirname, "static")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cors())
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(cookieParser(process.env.COOKIE_SECRET)); // 쿠키를 활성화하는 코드
