@@ -8,7 +8,7 @@ const {
   User,
 } = require("../models/Index");
 const jwt = require("jsonwebtoken");
-const { OP } = require("sequelize")
+const { OP } = require("sequelize");
 
 // ===== publicPost =====
 
@@ -386,18 +386,19 @@ exports.getClubAdminApplyDetail = async (req, res) => {
       where: {
         club_id: club_id,
         userid_num: userid_num,
-        isMember: "false"
+        isMember: "false",
       },
       // include: [{ model: User }],
     });
     const userInfo = await User.findOne({
-      attributes: ["name", "school","classid", "grade"],
-      where:{
-        userid_num: userid_num
-      }
-    })
+      attributes: ["name", "school", "classid", "grade"],
+      where: {
+        userid_num: userid_num,
+      },
+    });
     console.log("여기 봐봐 !!!>>>>>>>>>>", userInfo);
     console.log("여기!!!!!!", getClubAdminApplyDetail);
+
     res.render("clubAdmin/clubAdminApplyDetail", {getClubAdminApplyDetail, userInfo});
   } catch (err) {
     console.error(err);
@@ -422,7 +423,7 @@ exports.getAllMembers = async (req, res) => {
     const getAllMembersShow = await Club_members.findAll({
       where: {
         club_id: club_id,
-        isMember: "true"
+        isMember: "true",
       },
     });
     res.render("clubAdmin/clubAdminTransfer", { data: getAllMembersShow });
@@ -436,6 +437,7 @@ exports.getAllMembers = async (req, res) => {
 exports.updateClubAdminTransfer = async (req, res) => {
   try {
     const { club_id } = req.params;
+
     const {userid_num} = req.body
     const updateLeader = await Club.update({
       leader_id : userid_num
@@ -484,7 +486,7 @@ exports.clubApplyinfo = async (req, res) => {
       motivation: motivation,
       introduction: introduction,
       userid_num: userid_num,
-      isMember: "false"
+      isMember: "false",
     });
     res.send({ isApplySuccess: true });
   } catch (err) {
@@ -503,6 +505,7 @@ exports.createClubMembers = async (req, res) => {
     const { club_id, userid_num } = req.params;
     const { motivation, introduction, applyResult } = req.body;
     if (applyResult) {
+
       const newMembers = await Club_members.update({
         // club_id: club_id,
         // motivation: motivation,
@@ -516,6 +519,7 @@ exports.createClubMembers = async (req, res) => {
         }
       }
       );
+
       if (newMembers) {
         isApplySuccess = true;
       } else {
@@ -532,39 +536,42 @@ exports.createClubMembers = async (req, res) => {
 // GET /clubAdminApplyList/:club_id 클럽에 가입신청한 사람들 전체조회
 exports.getClubMembersApplyList = async (req, res) => {
   try {
-    const { club_id  } = req.params;
+    const { club_id } = req.params;
 
     const getApplyList = await Club_members.findAll({
       where: {
         club_id: club_id,
-        isMember: "false"
+        isMember: "false",
       },
     });
-    const getusers =  await Club_members.findAll({
+    const getusers = await Club_members.findAll({
       attributes: ["userid_num"],
       where: {
         club_id: club_id,
-        isMember: "false"
+        isMember: "false",
       },
-    })
-    let getusersid=[];
+    });
+    let getusersid = [];
     getusers.forEach((element) => {
-      console.log("여기!!!!!!!!!!!!!>>>>>>",element.dataValues.userid_num)
-      getusersid.push(element.dataValues.userid_num)
-    })
+      console.log("여기!!!!!!!!!!!!!>>>>>>", element.dataValues.userid_num);
+      getusersid.push(element.dataValues.userid_num);
+    });
     let userInfo = [];
     getusersid.forEach(async (element) => {
-      console.log(element)
-      let info = await User.findOne({where: {userid_num: element}});
+      console.log(element);
+      let info = await User.findOne({ where: { userid_num: element } });
       console.log("info >>>>>>>>", info.nickname);
       await userInfo.push(info.name);
       console.log("userinfo >>>>>>>>>>>>>", userInfo);
-    })
-    
+    });
+
     console.log("getuserid >>>>>>>>>>>>>", getusersid);
-    
-    res.render("clubAdmin/clubAdminApplyList", { getApplyList, userInfo,club_id:club_id });
-    
+
+    res.render("clubAdmin/clubAdminApplyList", {
+      getApplyList,
+      userInfo,
+      club_id: club_id,
+    });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -579,7 +586,7 @@ exports.deleteApplyDetail = async (req, res) => {
       where: {
         userid_num: userid_num,
         club_id: club_id,
-        isMember: "false"
+        isMember: "false",
       },
     });
     if (destroyApplyDetail) {
@@ -600,7 +607,7 @@ exports.getClubMembers = async (req, res) => {
     const getMembers = await Club_members.findAll({
       where: {
         club_id: club_id,
-        isMember: "true"
+        isMember: "true",
       },
       // include: [{ model: User }],
     });
@@ -646,7 +653,7 @@ exports.getClubMember = async (req, res) => {
       where: {
         club_id: club_id,
         userid_num: userid_num,
-        isMember: "true"
+        isMember: "true",
       },
       include: [{ model: User }],
     });
@@ -662,18 +669,18 @@ exports.deleteMembers = async (req, res) => {
   try {
     // 삭제 버튼클릭시 값이 넘어온다.
     const { club_id, userid_num } = req.params;
-      const destroyMembers = await Club_members.destroy({
-        where: {
-          club_id: club_id,
-          userid_num: userid_num,
-          isMember: "true"
-        },
-      });
-      if (destroyMembers) {
-        res.send({ isDeleted: true });
-      } else {
-        res.send({ isDeleted: false });
-      }
+    const destroyMembers = await Club_members.destroy({
+      where: {
+        club_id: club_id,
+        userid_num: userid_num,
+        isMember: "true",
+      },
+    });
+    if (destroyMembers) {
+      res.send({ isDeleted: true });
+    } else {
+      res.send({ isDeleted: false });
+    }
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -747,17 +754,38 @@ exports.home = async (req, res) => {
       req.cookies.jwt,
       process.env.JWT_SECRET
     );
-    const getClubs = await Club.findAll();
+    const getClubs = await Club.findAll({
+      limit: 3,
+      order: [["club_id", "DESC"]],
+    });
 
-    const myClubs = await Club_members.findAll({
+    const myclubList = await Club_members.findAll({
+      attributes: ["club_id"],
       where: {
         userid_num: userid_num,
-        isMember: "true"
+        isMember: "true",
       },
-      // include: [{ model: User }],
     });
-    // console.log(myClubs);
-    res.render("home", { data: getClubs, myClubs });
+    console.log("myclubList >>>>>>", myclubList);
+
+    let myclubs = [];
+    myclubList.forEach((element) => {
+      console.log("여기!!!!!!!!!!!!!>>>>>>", element.club_id);
+      myclubs.push(element.club_id);
+      console.log("home myclubs >>>>>>", myclubs);
+    });
+    let clubInfo = [];
+    myclubs.forEach(async (element) => {
+      console.log("여기!!!!!!!!!!!!!>>>>>>", element);
+      clubInfo.push(
+        await Club.findOne({
+          where: { club_id: element },
+        })
+      );
+      console.log("home clubInfo >>>>>>", clubInfo);
+    });
+
+    res.render("home", { getClubs, clubInfo });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
