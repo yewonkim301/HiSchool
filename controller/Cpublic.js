@@ -426,6 +426,7 @@ exports.getAllMembers = async (req, res) => {
         isMember: "true",
       },
     });
+    console.log('여기>>>>>>>>>',getAllMembersShow)
     res.render("clubAdmin/clubAdminTransfer", { data: getAllMembersShow });
   } catch (err) {
     console.error(err);
