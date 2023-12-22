@@ -715,3 +715,12 @@ button {
   color: #007bff;
   border-color: #007bff;
 }
+
+/* hashtag */
+/* test용 코드(수정 필요)---------------------------------------------- */
+.hashtag{
+  padding: 3px;
+  margin-right: 10px;
+  border-radius: 5px;
+  background-color: var(--color-gray-200);
+}
