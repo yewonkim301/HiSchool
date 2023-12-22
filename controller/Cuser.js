@@ -97,7 +97,10 @@ exports.s3upload = async(req, res) => {
         name: name,
         type: type,
       };
+      console.log("fileParams : ", fileParams);
+
       const signedUrl = await getSignedFileUrl(fileParams);
+      console.log("signedUrl : ", signedUrl);
       return res.send(signedUrl)
     } catch (e) {
       return res.status(500).send({
