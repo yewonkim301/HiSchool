@@ -29,22 +29,24 @@ app.use(
     // 메모리 세션을 활성화하는 코드
     resave: false, // 세션 객체에 수정사항이 없어도 저장할까를 정하는 코드
     saveUninitialized: false, // 처음의 빈 세션 객체라도 저장을 할지말지 정하는 코드
+    
     secret: process.env.COOKIE_SECRET,
     cookie: {
       httpOnly: true,
       secure: false, // https를 쓸것인가?
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 유효기간 7일 설정
     },
   })
 );
 
-app.use(
-  session({
-    secret: "#JDKLF439jsdlfsjl",
-    resave: false,
-    saveUninitialized: true,
-    // store: sequelizeSessionStore,
-  })
-);
+// app.use(
+//   session({
+//     secret: "#JDKLF439jsdlfsjl",
+//     resave: false,
+//     saveUninitialized: true,
+//     // store: sequelizeSessionStore,
+//   })
+// );
 
 // passport
 const passport = require("passport");

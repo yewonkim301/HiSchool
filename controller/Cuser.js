@@ -72,6 +72,7 @@ exports.postLogin = async(req, res, next) => {
         .cookie("jwt", token, {
           httpOnly: true,
           secure: false, // https 사용시 true 설정해줄것
+          maxAge: 1000 * 60 * 60 * 24 * 7, // 유효기간 7일 설정
         })
         .cookie('isLoggedIn', true)
         .status(200)
