@@ -6,7 +6,7 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const db = require("./models/Index.js");
-const cors = require('cors')
+const cors = require("cors");
 // const { sequelize } = require('./models/Index.js');
 
 const dotenv = require("dotenv");
@@ -20,7 +20,7 @@ app.set("views", "./views");
 app.use(express.static(path.join(__dirname, "static")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors())
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(cookieParser(process.env.COOKIE_SECRET)); // 쿠키를 활성화하는 코드
@@ -55,11 +55,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // socket
-const { Club_chat } = require("./models/Index");
 const http = require("http");
-const socketIO = require("socket.io");
+const SocketIO = require("socket.io");
 const server = http.createServer(app);
-const io = socketIO(server);
+const io = SocketIO(server);
 
 const swaggerUi = require("swagger-ui-express");
 const swaggerFile = require("./swagger-output");
@@ -74,7 +73,7 @@ let flag = true;
 app.use("/", indexRouter);
 // app.use("/auth", authRouter);
 
-app.get("/clubChat", (req, res) => {
+app.get("/chat", (req, res) => {
   if (flag) {
     flag = false;
     socketRouter.startSocket(io);
@@ -91,10 +90,3 @@ db.sequelize.sync({ force: false }).then(() => {
     console.log(`${PORT}번 포트에서 실행중`);
   });
 });
-
-/*
-socket의 listen 부분이 어디로 들어가야 하는지
-server.listen(PORT, () => {
-  console.log(`http://localhost:${PORT}`);
-})
-*/
