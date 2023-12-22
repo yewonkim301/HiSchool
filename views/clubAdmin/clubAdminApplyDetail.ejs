@@ -28,14 +28,19 @@
       <p class="content-title">자기소개</p>
       <p class="content-detail"><%=getClubAdminApplyDetail.introduction%></p>
 
-      <button onclick="approve()">승인</button><br />
+      <button type="button" class="btn btn-primary" onclick="approve()">승인</button><br /><br><br>
       <button onclick="reject()">거절</button>
     </div>
 
     <script>
 
+      function printout() {
+        console.log('sdfhosdfiosdjfoisd')
+      }
+
       async function approve() {
         try {
+          console.log("approve!!")
           const res = await axios({
             method: "PATCH",
             url: "/clubAdminApplyDetail/<%=getClubAdminApplyDetail.club_id%>/<%=getClubAdminApplyDetail.userid_num%>",
@@ -62,9 +67,6 @@
           const res = await axios({
             method: "DELETE",
             url: "/clubAdminApplyDetail/<%=getClubAdminApplyDetail.club_id%>/<%=getClubAdminApplyDetail.userid_num%>",
-            data: {
-              ApplyResult: false,
-            },
           });
           console.log(res);
           if (res.data.isDeleted) {
