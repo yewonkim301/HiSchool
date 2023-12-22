@@ -17,7 +17,8 @@ const { Sequelize } = require('sequelize');
 exports.getPost = async (req, res) => {
   try {
     const Posts = await Public_post.findAll();
-    res.render("/publicPost/publicPostMain", { data: Posts });
+    res.render("publicPost/publicPostMain", { data: Posts });
+
   } catch {
     console.error(err);
     res.send("Internal Server Error!");
@@ -27,7 +28,7 @@ exports.getPost = async (req, res) => {
 // GET /publicNewPost 게시물 생성 페이지 로드
 exports.getNewPost = async (req, res) => {
   try {
-    res.render("/publicPost/publicNewPost");
+    res.render("publicPost/publicNewPost");
   } catch {
     console.error(err);
     res.send("Internal Server Error!");
@@ -83,7 +84,7 @@ exports.getPostDetail = async (req, res) => {
     // const getPostCommentLike = await Public_post_comment_like.findAll({
     //   where: {  },
     // });
-    res.render("/publicPost/publicPostDetail", {
+    res.render("publicPost/publicPostDetail", {
       data: getPost,
       getPostComment,
       getPostCommentLike,
@@ -288,7 +289,7 @@ exports.dm = async (req, res) => {
         ],
       },
     });
-    res.render("/support/dm", getDm);
+    res.render("support/dm", getDm);
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -307,7 +308,7 @@ exports.newDm = async (req, res) => {
       userid_num: userid_num,
       to_nickname: nickname,
     });
-    res.render("/mypage/mypageProfile", { data: createDm });
+    res.render("mypage/mypageProfile", { data: createDm });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -323,7 +324,7 @@ exports.getDmDetail = async (req, res) => {
         note_id: note_id,
       },
     });
-    res.render("/support/dmDetail", { data: getRoom });
+    res.render("support/dmDetail", { data: getRoom });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -428,6 +429,12 @@ exports.getAllMembers = async (req, res) => {
       where: {
         club_id: club_id,
         isMember: "true",
+        motivation: {
+          [Sequelize.Op.not]: null,
+        },
+        introduction: {
+          [Sequelize.Op.not]: null,
+        },
       },
     });
     // 회원 전체 조회
@@ -435,7 +442,13 @@ exports.getAllMembers = async (req, res) => {
       attributes: ["userid_num"],
       where: {
         club_id: club_id,
-        isMember: "true"
+        isMember: "true",
+        motivation: {
+          [Sequelize.Op.not]: null,
+        },
+        introduction: {
+          [Sequelize.Op.not]: null,
+        },
       }
     });
 
