@@ -13,9 +13,14 @@
     <button onclick="moveClubChat()">채팅</button>
     <a href="/myclubSchedule/<%=data.club_id%>">동아리 일정</a>
     <a href="/myclubPostMain/<%=data.club_id%>">동아리 게시판</a>
-    <a href="/clubAdminMain/<%=data.club_id%>">동아리 관리</a>
+    <a id="admin" href="/clubAdminMain/<%=data.club_id%>">동아리 관리</a>
 
     <script>
+      // 동아리 관리자만 동아리 관리 링크 활성화
+      if(isLeader){
+        const admin = document.querySelector('#admin');
+        admin.style.display = 'none'
+      }
       function moveClubChat() {
         //   window.location.href = `/clubChat/<%=data.club_id%>`;
         //   window.location.href = `/clubChat`;
