@@ -552,7 +552,7 @@ button {
 }
 /* 여기는 피그마 radio 끝 */
 
-/* 2번 list */
+/* 2번 list 시작(.list listTwoLineShadow */
 .list-additional {
   display: flex;
   align-items: center;
@@ -585,8 +585,9 @@ button {
   color: #6b7280;
 }
 
-/* 2번 list 끝 */
+/* 2번 list 끝(.list listTwoLineShadow */
 
+/* 3번 list (.list listCommentLike) 시작 */
 .content-box {
   background-color: #ffffff;
   padding: 15px;
@@ -630,4 +631,40 @@ button {
   font-size: 12px;
   color: #999999;
   text-align: right;
+}
+
+/* 3번 list (.list listCommentLike) 끝 */
+
+/* badge */
+.badge-container {
+  display: flex;
+  gap: 10px;
+}
+
+.badge-button {
+  background-color: #fff;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  padding: 10px 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: background-color 0.3s, box-shadow 0.3s;
+  font-size: 16px;
+  color: #555;
+  display: flex;
+  align-items: center;
+}
+
+.badge-button .badge-count {
+  margin-left: 5px;
+}
+
+.badge-button:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.badge-button.active {
+  background-color: #e7f0fd;
+  color: #007bff;
+  border-color: #007bff;
 }
