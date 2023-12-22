@@ -817,6 +817,14 @@ exports.home = async (req, res) => {
         isMember: "true",
       },
     });
+
+    const foundUser = await User.findOne({
+      where: {
+        userid: userid
+      }
+    })
+
+    
     // console.log("myclubList >>>>>>", myclubList);
 
     let myclubs = [];
@@ -838,7 +846,7 @@ exports.home = async (req, res) => {
     console.log("home clubInfo 내가 가입한 동아리 >>>>>>", clubInfo);
     console.log("home getClubs 전체 동아리 >>>>>>", getClubs);
 
-    await res.render("home", { getClubs, clubInfo });
+    await res.render("home", { getClubs, clubInfo, foundUser });
     console.log(
       "asdjfoisjoifjoewjfoiesjfoesjfesjfoiesjoiesjefjsofjesoi",
       clubInfo

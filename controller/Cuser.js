@@ -73,6 +73,7 @@ exports.postLogin = async(req, res, next) => {
           httpOnly: true,
           secure: false, // https 사용시 true 설정해줄것
         })
+        .cookie('isLoggedIn', true)
         .status(200)
         .send({ isLoggedIn: true });
     });
