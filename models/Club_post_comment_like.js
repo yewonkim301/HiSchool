@@ -8,8 +8,8 @@ const ClubPostCommentLike = (Sequelize, DataTypes) => {
         allowNull: false,
         autoIncrement: true,
       },
-      like_id: {
-        type: DataTypes.STRING(20),
+      likeid_num: {
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
     },

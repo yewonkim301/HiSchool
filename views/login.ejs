@@ -30,6 +30,12 @@
           <label for="password">비밀번호</label>
           <input type="password" id="password" class="textField" onkeyup="if(window.event.keyCode==13){handleLogin()}" value="12341234"/>
         </div>
+        <div>
+          <input type="checkbox" id="autoLogin"/>
+          <label for="autoLogin"><span>자동 로그인</span></label>
+        </div>
+
+
       </form>
 
       <div class="cta">
@@ -49,6 +55,7 @@
 
       const form = document.forms['login']
 
+
       async function handleLogin() {
         try {
           const result = axios({
@@ -57,10 +64,13 @@
             data: {
               userid: form.userid.value,
               password: form.password.value,
+              autoLogin: form.autoLogin.checked
             },
           }).then((res) => {
             console.log(res.data.isLoggedIn);
             if(res.data.isLoggedIn === true) {
+              console.log(res.data)
+              alert('로그인 성공')
               localStorage.setItem('token', res.data.token)
               document.location.href = '/home'
             }
