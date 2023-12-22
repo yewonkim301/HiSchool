@@ -6,8 +6,9 @@ const jwt = require("jsonwebtoken");
 // GET /supportMain 고객센터 페이지 로드
 exports.getSupport = async (req, res) => {
     try{
+        let title = "고객센터"
         const getSupport = await Support.findAll();
-        res.render("/support/supportMain", getSupport);
+        res.render("/support/supportMain", getSupport, title);
     }
     catch (err) {
         console.error(err);

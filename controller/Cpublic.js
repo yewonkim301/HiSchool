@@ -16,9 +16,9 @@ const { Sequelize } = require('sequelize');
 // GET /publicPostMain 익명 게시판 정보 가져오기
 exports.getPost = async (req, res) => {
   try {
+    let title = "익명 게시판"
     const Posts = await Public_post.findAll();
-    res.render("publicPost/publicPostMain", { data: Posts });
-
+    res.render("publicPost/publicPostMain", { data: Posts , title});
   } catch {
     console.error(err);
     res.send("Internal Server Error!");
@@ -28,7 +28,8 @@ exports.getPost = async (req, res) => {
 // GET /publicNewPost 게시물 생성 페이지 로드
 exports.getNewPost = async (req, res) => {
   try {
-    res.render("publicPost/publicNewPost");
+    let title = "게시글 작성";
+    res.render("publicPost/publicNewPost", title);
   } catch {
     console.error(err);
     res.send("Internal Server Error!");
@@ -66,6 +67,7 @@ exports.createPost = async (req, res) => {
 // GET /publicPostDetail/:post_id 특정 게시물 조회 // 다시 보자
 exports.getPostDetail = async (req, res) => {
   try {
+    let title = "게시글"
     const { post_id } = req.params;
     const { userid, userid_num } = jwt.verify(
       req.cookies.jwt,
@@ -85,9 +87,10 @@ exports.getPostDetail = async (req, res) => {
     //   where: {  },
     // });
     res.render("publicPost/publicPostDetail", {
-      data: getPost,
+      getPost,
       getPostComment,
       getPostCommentLike,
+      title
     });
   } catch (err) {
     console.error(err);
@@ -104,19 +107,23 @@ exports.createPostComment = async (req, res) => {
       req.cookies.jwt,
       process.env.JWT_SECRET
     );
+
     const getNickname = await User.findOne({
       where: {
-        userid_num: userid_num,
+        userid_num: userid_num, 
       },
     });
+
     const newPublicPostComment = await Public_post_comment.create({
       comment: comment,
       comment_nickname: getNickname.dataValues.nickname,
       post_id: post_id,
-      userid_num: userid_num,
+      userid_num: userid_num
     });
+
     res.send(newPublicPostComment);
-  } catch (err) {
+  } 
+  catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
   }
@@ -127,12 +134,17 @@ exports.createPostCommentLike = async (req, res) => {
   try {
     const { post_id, comment_id } = req.params;
     const { like_id } = req.body;
+
     const publicPostCommentLike = await Public_post_comment_like.create({
       like_id: like_id,
-      comment_id: comment_id,
+      where:{
+        comment_id: comment_id,
+      }
     });
+
     res.send(publicPostCommentLike);
-  } catch (err) {
+  }
+  catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
   }
@@ -276,6 +288,7 @@ exports.deletePostComment = async (req, res) => {
 // GET /dm => dm 가져오기
 exports.dm = async (req, res) => {
   try {
+    let title = "DM";
     const { nickname } = req.body;
     const { userid, userid_num } = jwt.verify(
       req.cookies.jwt,
@@ -289,7 +302,7 @@ exports.dm = async (req, res) => {
         ],
       },
     });
-    res.render("support/dm", getDm);
+    res.render("support/dm", getDm, title);
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -316,6 +329,7 @@ exports.newDm = async (req, res) => {
 };
 
 // GET /dmDetail/:note_id 채팅방 페이지 가져오기
+// 채팅 방에서 title은 안주는게 깔끔할거 같아요
 exports.getDmDetail = async (req, res) => {
   try {
     const { note_id } = this.params;
@@ -382,6 +396,7 @@ exports.deleteDm = async (req, res) => {
 // GET /clubAdminApplyDetail/:club_id/:userid_num 회원 신청자 상세페이지 불러오기
 exports.getClubAdminApplyDetail = async (req, res) => {
   try {
+    let title = "회원 상세페이지";
     const { club_id, userid_num } = req.params;
 
     const getClubAdminApplyDetail = await Club_members.findOne({
@@ -404,6 +419,7 @@ exports.getClubAdminApplyDetail = async (req, res) => {
     res.render("clubAdmin/clubAdminApplyDetail", {
       getClubAdminApplyDetail,
       userInfo,
+      title
     });
   } catch (err) {
     console.error(err);
@@ -414,7 +430,8 @@ exports.getClubAdminApplyDetail = async (req, res) => {
 // GET /clubAdminTransfer 클럽 회장 위임 페이지 가져오기
 exports.getClubAdminTransfer = async (req, res) => {
   try {
-    res.render("clubAdmin/clubAdminTransfer");
+    let title = "클럽권한 위임"
+    res.render("clubAdmin/clubAdminTransfer", title);
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -424,6 +441,7 @@ exports.getClubAdminTransfer = async (req, res) => {
 // GET /clubAdminTransfer/:club_id 클럽 회장 위임페이지 회원 전체 조회
 exports.getAllMembers = async (req, res) => {
   try {
+    let title = "클럽권한 위임"
     const { club_id } = req.params;
     const getAllMembersShow = await Club_members.findAll({
       where: {
@@ -466,7 +484,7 @@ exports.getAllMembers = async (req, res) => {
 
 
 
-    res.render("clubAdmin/clubAdminTransfer", { data: getAllMembersShow, userInfo, club_id});
+    res.render("clubAdmin/clubAdminTransfer", { data: getAllMembersShow, userInfo, club_id, title});
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -505,9 +523,10 @@ exports.updateClubAdminTransfer = async (req, res) => {
 // clubApply/:club_id 동아리 신청페이지
 exports.clubApply = async (req, res) => {
   try {
+    let title = "동아리 신청"
     const { club_id } = req.params;
     console.log(club_id);
-    res.render("club/clubApply", { data: club_id });
+    res.render("club/clubApply", { data: club_id , title});
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -537,22 +556,15 @@ exports.clubApplyinfo = async (req, res) => {
   }
 };
 
-// GET /club
-
 // PATCH /clubAdminApplyDetail/:club_id/:userid_num 동아리 가입 신청
 exports.createClubMembers = async (req, res) => {
   try {
-    // const {userid_num} = req.params.userid_num;
     let isApplySuccess;
     const { club_id, userid_num } = req.params;
     const { motivation, introduction, applyResult } = req.body;
     if (applyResult) {
       const newMembers = await Club_members.update(
         {
-          // club_id: club_id,
-          // motivation: motivation,
-          // introduction: introduction,
-          // userid_num: userid_num,
           isMember: "true",
         },
         {
@@ -579,6 +591,7 @@ exports.createClubMembers = async (req, res) => {
 // GET /clubAdminApplyList/:club_id 클럽에 가입신청한 사람들 전체조회
 exports.getClubMembersApplyList = async (req, res) => {
   try {
+    let title = "동아리 신청자";
     const { club_id } = req.params;
 
     const getApplyList = await Club_members.findAll({
@@ -610,6 +623,7 @@ exports.getClubMembersApplyList = async (req, res) => {
         getApplyList,
         userInfo,
         club_id: club_id,
+        title
       });
     });
 
@@ -647,6 +661,7 @@ exports.deleteApplyDetail = async (req, res) => {
 // GET /clubAdminMemberlist/:club_id 클럽 회원 전체 조회
 exports.getClubMembers = async (req, res) => {
   try {
+    let title = "동아리 전체 회원";
     const { club_id } = req.params;
     const getMembers = await Club_members.findAll({
       // attributes: {
@@ -695,7 +710,7 @@ exports.getClubMembers = async (req, res) => {
       if (!getMembers) {
         res.render("clubAdmin/clubAdminMemberList");
       } else {
-        res.render("clubAdmin/clubAdminMemberList", { data: getMembers , userInfo, club_id});
+        res.render("clubAdmin/clubAdminMemberList", { data: getMembers , userInfo, club_id, title});
       }
     });
     
@@ -709,6 +724,7 @@ exports.getClubMembers = async (req, res) => {
 // GET /clubAdminMemberDetail/:club_id/:userid_num 회원 상세정보 보기
 exports.getClubMember = async (req, res) => {
   try {
+    let title = "동아리 부원 정보"
     const { club_id, userid_num } = req.params;
     const getMember = await Club_members.findOne({
       where: {
@@ -725,7 +741,7 @@ exports.getClubMember = async (req, res) => {
       }
     })
 
-    res.render("clubAdmin/clubAdminMemberDetail", { data: getMember, userInfo, club_id});
+    res.render("clubAdmin/clubAdminMemberDetail", { data: getMember, userInfo, club_id, title});
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
