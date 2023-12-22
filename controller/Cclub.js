@@ -441,7 +441,7 @@ exports.postClubPostCommentLike = async (req, res) => {
   }
 };
 
-// DELETE /myclubPostDetail/:club_id/:post_id/:comment_id/:likeid_nume
+// DELETE /myclubPostDetail/:club_id/:post_id/:comment_id/:likeid_num
 exports.deleteClubPostCommentLike = async (req, res) => {
   try {
     const { club_id, post_id, comment_id, likeid_num } = req.params;

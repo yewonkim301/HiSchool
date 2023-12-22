@@ -9,7 +9,7 @@ const PublicPostCommentLike = (Sequelize, DataTypes) => {
         primaryKey: true,
       },
       likeid_num: {
-        type: DataTypes.STRING(20),
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
     },

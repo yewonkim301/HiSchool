@@ -8,7 +8,7 @@ const ClubPostCommentLike = (Sequelize, DataTypes) => {
         allowNull: false,
         autoIncrement: true,
       },
-      userid_num: {
+      likeid_num: {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
