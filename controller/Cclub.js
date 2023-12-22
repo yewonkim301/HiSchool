@@ -211,20 +211,20 @@ exports.getClubPost = async (req, res) => {
       },
       include: [{ model: Club_post_comment_like }],
     });
-    // const howManyComment = await clubPostComment.length;
+    const howManyComment = await clubPostComment.length;
 
-    // 댓글마다 있는 좋아요
-    // const clubPostCommentLike = await Club_post_comment_like.findAll({
-    //   where: {
-    //     comment_id:
-    //   },
-    // });
+    // 댓글마다 있는 좋아요;
+    const clubPostCommentLike = await Club_post_comment_like.findAll({
+      where: {
+        comment_id: comment_id
+      }
+    });
     console.log(clubPostComment);
 
     res.render("myclub/myclubPostDetail", {
       data: clubPost,
       clubPostComment,
-      // clubPostCommentLike,
+      clubPostCommentLike,
     });
   } catch (err) {
     console.error(err);

@@ -18,6 +18,7 @@
             </h2>
             <p>
                <%= data.content %>
+                  <i class="like-btn" onclick="likeBtn()">좋아요</i>
             </p>
             <!-- 게시글 작성 시간 등의 메타 정보도 추가 있습니다. -->
          </div>
@@ -62,22 +63,23 @@
 
 
 
-
-
             const club_id = "<%=data.club_id%>";
             const post_id = "<%=data.post_id%>";
             const comment_name = "<%=clubPostComment.comment_name%>";
             const content = "<%=clubPostComment.content%>";
             const comment = document.getElementById('comment');
 
-            // const comment_id = "<%=clubPostComment.comment_id %>";
+
 
 
             console.log(comment_name);
             console.log(content);
 
 
-            // 글 입력칸
+            // 좋아요 입력칸
+            function likeBtn() {
+               axios.post(`/myclubPostDetail/${club_id}/${post_id}/${comment_id}`);
+            }
 
 
             // 댓글 등록
@@ -245,6 +247,9 @@
 
             }
 
+            function editPost() {
+               window.location.href = `/myclubEditPost/${club_id}/${post_id}`;
+            }
 
 
 
