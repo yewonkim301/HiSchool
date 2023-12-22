@@ -199,6 +199,10 @@ exports.getClubPost = async (req, res) => {
   try {
     const { club_id, post_id } = req.params;
     console.log("params > ", req.params);
+    const { userid, userid_num } = jwt.verify(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
     // 게시글
     const clubPost = await Club_post.findOne({
       where: {
@@ -212,12 +216,16 @@ exports.getClubPost = async (req, res) => {
       },
       include: [{ model: Club_post_comment_like }],
     });
-    const howManyComment = await clubPostComment.length;
+
+    const commentId = await Club_post_comment.findAll({
+      attributes: ["comment_id"],
+      where: { post_id: post_id }
+    });
 
     // 댓글마다 있는 좋아요;
     const clubPostCommentLike = await Club_post_comment_like.findAll({
       where: {
-        // comment_id: comment_id,
+        comment_id: comment_id,
       },
     });
     console.log(clubPostComment);
@@ -225,7 +233,7 @@ exports.getClubPost = async (req, res) => {
     res.render("myclub/myclubPostDetail", {
       data: clubPost,
       clubPostComment,
-      clubPostCommentLike,
+      clubPostCommentLike, commentId, userid_num
     });
   } catch (err) {
     console.error(err);
