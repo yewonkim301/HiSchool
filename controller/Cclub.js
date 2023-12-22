@@ -163,8 +163,8 @@ exports.postCreateClub = async (req, res) => {
     const newMember = await Club_members.create({
       club_id: newClub.dataValues.club_id,
       userid_num: userid_num,
-      motivation: NULL,
-      introduction: NULL,
+      // motivation: NULL,
+      // introduction:
       isMember: "true",
     });
     console("자기소개 들어가???!!!!! >>>>>>>>>>>>", newMember);
