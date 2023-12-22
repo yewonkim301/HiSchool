@@ -163,10 +163,11 @@ exports.postCreateClub = async (req, res) => {
     const newMember = await Club_members.create({
       club_id: newClub.dataValues.club_id,
       userid_num: userid_num,
-      motivation: "",
-      introduction: "",
+      motivation: NULL,
+      introduction: NULL,
       isMember: "true",
     });
+    console("자기소개 들어가???!!!!! >>>>>>>>>>>>", newMember);
     res.send(newClub);
   } catch (err) {
     console.error(err);

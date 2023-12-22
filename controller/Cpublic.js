@@ -635,9 +635,18 @@ exports.getClubMembers = async (req, res) => {
   try {
     const { club_id } = req.params;
     const getMembers = await Club_members.findAll({
+      attributes: {
+        exclude: ['leader_id']
+      },
       where: {
         club_id: club_id,
         isMember: "true",
+        motivation: {
+          [Sequelize.Op.not]: NULL
+        },
+        introduction: {
+          [Sequelize.Op.not]: NULL
+        }
       },
       // include: [{ model: User }],
     });
@@ -645,24 +654,27 @@ exports.getClubMembers = async (req, res) => {
       attributes: ["userid_num"],
       where: {
         club_id: club_id,
-
-        isMember: "true"
+        isMember: "true",
+        motivation: {
+          [Sequelize.Op.not]: NULL
+        },
+        introduction: {
+          [Sequelize.Op.not]: NULL
+        }
       }
     });
     let getUserInfo = [];
     // getUsers에서 가져온 클럽에 속한 유저 userid_num 값들을 forEach문으로
     getUsers.forEach((element) => {
-      console.log("여기!!!!!!!!!!!!!>>>>>>", element.dataValues.userid_num);
       getUserInfo.push(element.dataValues.userid_num);
     });
+
 
     let userInfo = [];
     getUserInfo.forEach(async (element) => {
       console.log(element);
       let info = await User.findOne({ where: { userid_num: element } });
-      console.log("info >>>>>>>>", info.nickname);
       await userInfo.push(info.name);
-      console.log("userinfo >>>>>>>>>>>>>", userInfo);
       if (!getMembers) {
         res.render("clubAdmin/clubAdminMemberList");
       } else {
