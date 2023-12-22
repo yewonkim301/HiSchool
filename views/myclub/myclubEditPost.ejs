@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <!-- 생략 (head 내용) -->
 
-]
 <head>
   <!-- 생략 (head 내용) -->
-  <!-- axios CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-</head>
+
+  ]
+
+  <head>
+    <!-- 생략 (head 내용) -->
+    <!-- axios CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
 
 <body>
   <%- include('../component/header') %>
@@ -27,26 +29,36 @@
           <label for="image">이미지 URL</label>
           <input type="text" id="image" value="<%= data.image %>">
         </div> -->
-        <button type="button" onclick="submitEdit('<%= data.post_id %>')">수정하기</button>
+        <button type="button" onclick="submitEdit()">수정하기</button>
 
       </form>
-      <button class="btn btn-primary" onclick="deletepost('<%= data.post_id%>')">삭제</button>
+      <button class="btn btn-primary" onclick="deletepost()">삭제</button>
     </div>
 
     <script>
-      function submitEdit(post_id) {
+
+
+      const club_id = "<%=data.club_id%>";
+      const post_id = "<%=data.post_id%>";
+
+      console.log(club_id);
+
+      function submitEdit() {
         const title = document.getElementById('title').value;
         const content = document.getElementById('content').value;
         // const image = document.getElementById('image').value;
 
-        axios.patch(`/myclubEditPost/1/${post_id}`, {
+
+
+        axios.patch(`/myclubEditPost/${club_id}/${post_id}`, {
           title: title,
           content: content,
           // image: image
+
         })
           .then(function (res) {
             alert('게시글이 수정되었습니다.');
-            window.location.href = `/myclubPostDetail/1/${post_id}`;
+            window.location.href = `/myclubPostDetail/${club_id}/${post_id}`;
           })
           .catch(function (err) {
             console.error('Edit error:', err);
@@ -54,13 +66,13 @@
           });
       }
 
-      function deletepost(post_id) {
+      function deletepost() {
         if (confirm('게시글을 삭제하시겠습니까?')) {
-          axios.delete(`/myclubEditPost/1/${post_id}`)
+          axios.delete(`/myclubEditPost/${club_id}/${post_id}`)
             .then(function (res) {
               if (res.data) {
                 alert('게시글이 삭제되었습니다.');
-                window.location.href = '/myClubPostMain/1'; // 게시글 목록으로 리디렉션
+                window.location.href = `/myClubPostMain/${club_id}`; // 게시글 목록으로 리디렉션
               } else {
                 alert('게시글 삭제에 실패했습니다.');
               }
@@ -72,5 +84,6 @@
         }
       }
     </script>
-  </body>
+</body>
+
 </html>

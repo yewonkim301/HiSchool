@@ -87,7 +87,7 @@
         axios
           .post(`http://localhost:8000/myClubSchedule/${1}`)
           .then((response) => {
-            schedules = response.data; 
+            schedules = response.data;
             updateScheduleList();
           })
           .catch((error) => {
