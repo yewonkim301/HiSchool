@@ -49,6 +49,8 @@ router.get("/login", isNotLoggedIn, (req, res) => {
   res.render("login");
 });
 
+// router.get('/login', isNotLoggedIn, controllerUser.getLogin)
+
 router.post("/login", isNotLoggedIn, controllerUser.postLogin);
 
 router.get("/register", isNotLoggedIn, (req, res) => {
