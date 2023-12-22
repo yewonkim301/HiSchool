@@ -18,7 +18,7 @@
             </h2>
             <p>
                <%= data.content %>
-                  <i class="like-btn" onclick="likeBtn()">좋아요</i>
+                  <!-- <i class="like-btn" onclick="likeBtn()">좋아요</i> -->
             </p>
             <!-- 게시글 작성 시간 등의 메타 정보도 추가 있습니다. -->
          </div>
@@ -68,6 +68,7 @@
             const comment_name = "<%=clubPostComment.comment_name%>";
             const content = "<%=clubPostComment.content%>";
             const comment = document.getElementById('comment');
+            comment_id = res.clubPostComment.comment_id;
 
 
 
@@ -78,18 +79,19 @@
 
             // 좋아요 입력칸
             function likeBtn() {
-               axios.post(`/myclubPostDetail/${club_id}/${post_id}/${comment_id}`);
+               console.log("comment_id >>>>>>" , comment_id);
+               axios.post(`/myclubPostDetail/${club_id}/${post_id}`);
             }
 
 
             // 댓글 등록
-            function submitComment() {
+            async function submitComment() {
                const commentContent = document.getElementById('commentInput').value;
 
                // 사용자에게 댓글 등록을 확인
                const isConfirmed = confirm("댓글을 등록하시겠습니까?");
                if (isConfirmed) {
-                  axios.post(`/myclubPostDetail/${club_id}/${post_id}/`, {
+                  await axios.post(`/myclubPostDetail/${club_id}/${post_id}/`, {
                      comment_name: "test", // 실제 사용자 이름 또는 ID
                      content: commentContent
                   })
@@ -97,10 +99,16 @@
                         console.log("댓글 등록 완료", res.data);
 
                         // 새로운 댓글을 목록에 추가
+                     
                         const commentList = document.getElementById('commentList');
                         const newCommentDiv = document.createElement('div');
                         newCommentDiv.classList.add('comment');
-
+                        const newCommentLike = document.createElement('span');
+                        console.log('dfsdfsdfsddfds 105')
+                        // <i class="like-btn" onclick="likeBtn()">좋아요</i>
+                        console.log('107 comment id', comment_id)
+                        console.log('107 res', res.clubPostComment.comment_id)
+                        
                         // 댓글 작성자 이름을 나타내는 p 태그 생성
                         const nameParagraph = document.createElement('p');
                         nameParagraph.textContent = res.data.comment_name;
@@ -111,12 +119,19 @@
                         contentParagraph.classList.add('comment-content'); // 클래스 추가
 
                         // div에 p 태그들 추가
+                        const newLike = document.createElement('span')
+                        newLike.textContent = res.data.comment_name
+
                         newCommentDiv.appendChild(nameParagraph);
                         newCommentDiv.appendChild(contentParagraph);
+                        newCommentLike.innerHTML = `<i id="${comment_id}" class="like-btn" onclick="likeBtn()">좋아요</i>`;
+                        console.log(newCommentLike)
+                        newCommentDiv.appendChild(newCommentLike);
 
                         // 코멘트 목록에 새로운 코멘트 div 추가
                         commentList.appendChild(newCommentDiv);
                         console.log(contentParagraph); // 클래스를 추가한 후 요소를 콘솔에 출력
+
 
                         location.reload();
                      })
