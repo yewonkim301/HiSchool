@@ -250,17 +250,6 @@ exports.getClubPost = async (req, res) => {
 
     console.log("commentIdArray >>>>>", commentIdArray);
 
-    /*
-    let clubInfo = [];
-    for (const element of myclubs) {
-      const club = await Club.findOne({
-        where: { club_id: element },
-      });
-      clubInfo.push(club);
-      console.log("home clubInfo >>>>>>", clubInfo);
-    }
-    */
-
     // 댓글마다 있는 좋아요;
     let clubPostCommentLike = [];
     for (const element of commentIdArray) {
