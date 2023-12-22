@@ -1,40 +1,47 @@
 <!DOCTYPE html>
 <html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <title>동아리 상세</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/clubDetail.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <title>동아리 상세</title>
-  <link rel="stylesheet" href="/style.css">
-  <link rel="stylesheet" href="/clubDetail.css">
-</head>
-
-<body>
+  <body>
     <%- include('../component/header')%>
 
-  <div class="club-details">
-    <h1 class="club-name"><%=data.club_name%></h1>
-    <div style="display: none;" class="club_id"><%=data.club_id%></div>
-    <p class="club-description">동아리 설명: <%=data.description%></p>
-    <div class="club-info">
-      <span class="info-keyword">키워드: <%=data.keyword%></span>
-      <span class="info-members">제한 인원 : <%=data.limit%></span>
-      <span class="info-location">활동 지역: <%=data.location%></span>
+    <div class="club-details">
+      <h1 class="club-name"><%=data.club_name%></h1>
+      <div style="display: none" class="club_id"><%=data.club_id%></div>
+      <p class="club-description">동아리 설명: <%=data.description%></p>
+      <div class="club-info">
+        <span class="info-keyword">키워드: <%=data.keyword%></span>
+        <span class="info-members">제한 인원 : <%=data.limit%></span>
+        <span class="info-location">활동 지역: <%=data.location%></span>
+      </div>
+      <button id="clubApply" class="btn btn-primary" onclick="showApplyForm()">
+        가입 신청
+      </button>
     </div>
-    <button id='clubApply' class="btn btn-primary" onclick="showApplyForm()">가입 신청</button>
-  </div>
-  <script>
-    if(applyDisabled){
-      document.querySelector('#clubApply').disabled = true;
-      document.querySelector('#clubApply').innerText = '동아리는 3개까지만 가입 가능합니다!';
-    }else if(isMember){
-      document.querySelector('#clubApply').disabled = true;
-      document.querySelector('#clubApply').innerText = '이미 가입한 동아리입니다!';
-    }
-    function showApplyForm(){
+    <script>
+      console.log("<%=isMember%>");
+      if ("<%=isMember%>" == "true") {
+        document.querySelector("#clubApply").disabled = true;
+        document.querySelector("#clubApply").innerText =
+          "이미 가입한 동아리입니다!";
+      } else if ("<%=isMember%>" == "false") {
+        document.querySelector("#clubApply").disabled = true;
+        document.querySelector("#clubApply").innerText =
+          "이미 가입신청된 동아리입니다!";
+      } else if ("<%=clubNum.length%>" >= 3) {
+        document.querySelector("#clubApply").disabled = true;
+        document.querySelector("#clubApply").innerText =
+          "동아리는 3개까지만 가입 가능합니다!";
+      }
+      function showApplyForm() {
         const url = `/clubApply/<%=data.club_id%>`;
-        window.location.href=url;
-    }
-  </script>
-</body>
-
+        window.location.href = url;
+      }
+    </script>
+  </body>
 </html>
