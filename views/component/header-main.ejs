@@ -7,7 +7,12 @@
     <title>Document</title>
     <!-- feather-icons CDN -->
     <script src="https://unpkg.com/feather-icons"></script>
-    <style></style>
+    <style>
+      .logo {
+        cursor: pointer;
+        user-select: none;
+      }
+    </style>
   </head>
   <body>
     <header class="header">
@@ -20,11 +25,16 @@
           <i data-feather="x"></i>
         </div>
 
-        <div class="logo">하이스쿨</div>
+        <% if(typeof title !== 'undefined' && title) { %>
+        <div class="logo"><%= title %></div>
+        <% } else { %>
+        <div class="logo" onclick="toPage('/Home')">하이스쿨</div>
+        <% } %>
+
         <div class="menu-bar">
           <a href="/home"><div>홈</div></a>
-          <a href="#"><div>자유게시판</div></a>
-          <a href="#"><div>마이페이지</div></a>
+          <a href="/publicPostMain"><div>자유게시판</div></a>
+          <a href="/mypageMain"><div>마이페이지</div></a>
           <a href="#"><div>고객센터</div></a>
         </div>
         <div class="nav-btn">
@@ -39,10 +49,10 @@
     <div id="sidebar" class="sidebar">
       <!-- <div  onclick="toggleSidebar()">
       <i data-feather="menu"></i></div> -->
-      <a href="/home">홈</a>
-      <a href="#">자유게시판</a>
-      <a href="#">마이페이지</a>
-      <a href="#">고객센터</a>
+      <a href="/home"><div>홈</div></a>
+      <a href="/publicPostMain"><div>자유게시판</div></a>
+      <a href="/mypageMain"><div>마이페이지</div></a>
+      <a href="#"><div>고객센터</div></a>
 
       <!-- 추가적인 관리 항목 링크들 -->
     </div>
@@ -57,8 +67,9 @@
     </script>
 
     <script>
-
-
+      function toPage(link) {
+        document.location.href = link;
+      }
     </script>
   </body>
 </html>
