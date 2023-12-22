@@ -89,7 +89,7 @@
             type="file"
             id="fileUpload"
             accept="image/*"
-            onchange="readURL(this)"
+            onchange="readURL(this); uploadToClient();"
             class="file-upload-input"
           />
           <!-- <button class="file-upload-button">이미지 선택</button> -->
@@ -291,7 +291,7 @@
       async function uploadImgClient() {
         console.log('uploadImgClient 실행');
         try {
-          const result = axios({
+          const result = await axios({
             method: "POST",
             url: "/s3upload",
             data: {
@@ -302,7 +302,8 @@
             },
           });
 
-          const axiosResult = await result;
+          const axiosResult = result;
+          console.log('axiosResult : ', axiosResult)
           const signedUrl = axiosResult.data;
           console.log("signedURL", signedUrl);
 
