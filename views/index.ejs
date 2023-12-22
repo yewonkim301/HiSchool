@@ -10,12 +10,12 @@
 
   <body>
     <div class="container">
-      <di%- include('./component/header')%>
+      <%- include('./component/header')%>
       <br />
-      <a href="./clubSchedule">달력테스트버튼</a>
+      <!-- <a href="./clubSchedule">달력테스트버튼</a> -->
       <br />
       <a href="/home">홈 화면으로 이동</a>
-      <a href="./myClubPostMain">동아리게시판</a>
+      <!-- <a href="./myClubPostMain">동아리게시판</a> -->
       <br />
 
       <form action="/upload" enctype="multipart/form-data" method="post">
@@ -27,39 +27,6 @@
       <br />
       <br />
 
-      <form enctype="multipart/form-data" id="uploadForm">
-        <label for="file">File:</label>
-        <input type="file" name="file" required /> <br />
-        <input type="submit" name="submit" value="Upload to Amazon S3" />
-      </form>
-
-      <br />
-      <br />
-      <br />
-
-      <div>
-        <!-- <img src={createObjectURL} alt="" /> -->
-        <h4>Select Image</h4>
-        <input
-          name="myImage"
-          type="file"
-          id="fileUpload"
-          onChange="uploadToClient()"
-          multiple
-        />
-
-        <div>
-          <button type="submit" onClick="uploadImgClient()">
-            클라이언트에서 바로 업로드
-          </button>
-          <button type="submit" onClick="uploadToFs()">
-            form, fs로 업로드
-          </button>
-          <button type="submit" onClick="uploadImgMulter()">
-            미들웨어, multer로 업로드
-          </button>
-        </div>
-      </div>
 
       <div class="cta">
         <a href="/register" class="btn btn-secondary">회원가입</a>
@@ -170,7 +137,7 @@
               "Content-Type": image.type,
             },
           });
-          console.log("uploadRes : ", uploadRes);
+          console.log("uploadRes : ", uploadRes.config.url);
 
           console.log(uploadRes);
         } catch (err) {

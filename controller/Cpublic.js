@@ -399,7 +399,10 @@ exports.getClubAdminApplyDetail = async (req, res) => {
     console.log("여기 봐봐 !!!>>>>>>>>>>", userInfo);
     console.log("여기!!!!!!", getClubAdminApplyDetail);
 
-    res.render("clubAdmin/clubAdminApplyDetail", {getClubAdminApplyDetail, userInfo});
+    res.render("clubAdmin/clubAdminApplyDetail", {
+      getClubAdminApplyDetail,
+      userInfo,
+    });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -461,15 +464,17 @@ exports.updateClubAdminTransfer = async (req, res) => {
   try {
     const { club_id } = req.params;
 
-    const {userid_num} = req.body
-    const updateLeader = await Club.update({
-      leader_id : userid_num
+    const { userid_num } = req.body;
+    const updateLeader = await Club.update(
+      {
+        leader_id: userid_num,
       },
       {
         where: {
-        club_id: club_id,
+          club_id: club_id,
+        },
       }
-    });
+    );
     if (updateLeader) {
       res.send({ isSuccess: true });
     } else {
@@ -528,19 +533,20 @@ exports.createClubMembers = async (req, res) => {
     const { club_id, userid_num } = req.params;
     const { motivation, introduction, applyResult } = req.body;
     if (applyResult) {
-
-      const newMembers = await Club_members.update({
-        // club_id: club_id,
-        // motivation: motivation,
-        // introduction: introduction,
-        // userid_num: userid_num,
-        isMember: "true",
-      },{
-        where: {
-          club_id:club_id,
-          userid_num:userid_num
+      const newMembers = await Club_members.update(
+        {
+          // club_id: club_id,
+          // motivation: motivation,
+          // introduction: introduction,
+          // userid_num: userid_num,
+          isMember: "true",
+        },
+        {
+          where: {
+            club_id: club_id,
+            userid_num: userid_num,
+          },
         }
-      }
       );
 
       if (newMembers) {
@@ -637,15 +643,16 @@ exports.getClubMembers = async (req, res) => {
     });
     const getUsers = await Club_members.findAll({
       attributes: ["userid_num"],
-      where:{
+      where: {
         club_id: club_id,
+
         isMember: "true"
       }
     });
     let getUserInfo = [];
-    // getUsers에서 가져온 클럽에 속한 유저 userid_num 값들을 forEach문으로 
-    getUsers.forEach((element) =>{
-      console.log("여기!!!!!!!!!!!!!>>>>>>",element.dataValues.userid_num);
+    // getUsers에서 가져온 클럽에 속한 유저 userid_num 값들을 forEach문으로
+    getUsers.forEach((element) => {
+      console.log("여기!!!!!!!!!!!!!>>>>>>", element.dataValues.userid_num);
       getUserInfo.push(element.dataValues.userid_num);
     });
 
@@ -798,26 +805,32 @@ exports.home = async (req, res) => {
         isMember: "true",
       },
     });
-    console.log("myclubList >>>>>>", myclubList);
+    // console.log("myclubList >>>>>>", myclubList);
 
     let myclubs = [];
     myclubList.forEach((element) => {
-      console.log("여기!!!!!!!!!!!!!>>>>>>", element.club_id);
+      // console.log("여기!!!!!!!!!!!!!>>>>>>", element.club_id);
       myclubs.push(element.club_id);
-      console.log("home myclubs >>>>>>", myclubs);
-    });
-    let clubInfo = [];
-    myclubs.forEach(async (element) => {
-      console.log("여기!!!!!!!!!!!!!>>>>>>", element);
-      clubInfo.push(
-        await Club.findOne({
-          where: { club_id: element },
-        })
-      );
-      console.log("home clubInfo >>>>>>", clubInfo);
+      // console.log("home myclubs >>>>>>", myclubs);
     });
 
-    res.render("home", { getClubs, clubInfo });
+    let clubInfo = [];
+    for (const element of myclubs) {
+      const club = await Club.findOne({
+        where: { club_id: element },
+      });
+      clubInfo.push(club);
+      console.log("home clubInfo >>>>>>", clubInfo);
+    }
+
+    console.log("home clubInfo 내가 가입한 동아리 >>>>>>", clubInfo);
+    console.log("home getClubs 전체 동아리 >>>>>>", getClubs);
+
+    await res.render("home", { getClubs, clubInfo });
+    console.log(
+      "asdjfoisjoifjoewjfoiesjfoesjfesjfoiesjoiesjefjsofjesoi",
+      clubInfo
+    );
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
