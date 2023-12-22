@@ -462,11 +462,12 @@ exports.getAllMembers = async (req, res) => {
       let info = await User.findOne({ where: { userid_num: element } });
       await userInfo.push(info.name);
       console.log("userinfo >>>>>>>>>>>>>", userInfo);
+      res.render("clubAdmin/clubAdminTransfer", { data: getAllMembersShow, userInfo, club_id});
     });
 
 
 
-    res.render("clubAdmin/clubAdminTransfer", { data: getAllMembersShow, userInfo, club_id});
+    
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");

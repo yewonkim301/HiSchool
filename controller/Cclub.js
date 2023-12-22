@@ -39,11 +39,12 @@ exports.getClub = async (req, res) => {
       attributes: ["isMember"],
       where: { userid_num: userid_num },
     });
-    console.log("@@@@@@@@@@@@@@", findmember.dataValues.isMember);
+    console.log("@@@@@@@@@@@@@@", findmember);
     let isMember;
-    if (findmember.dataValues.isMember == "true") isMember = "true";
+    if(!findmember) isMember = "nonApply"
+    else if (findmember.dataValues.isMember == "true") isMember = "true";
     else if (findmember.dataValues.isMember == "false") isMember = "false";
-    else isMember = "nonApply";
+    
     console.log("!!!!!!!!!!!!!!!!", isMember);
     console.log("ismember >>>>>>>>>>>>>>", isMember);
     const clubNum = await Club_members.findAll({
