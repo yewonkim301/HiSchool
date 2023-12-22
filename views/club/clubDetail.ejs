@@ -20,9 +20,16 @@
       <span class="info-members">제한 인원 : <%=data.limit%></span>
       <span class="info-location">활동 지역: <%=data.location%></span>
     </div>
-    <button class="btn btn-primary" onclick="showApplyForm()">가입 신청</button>
+    <button id='clubApply' class="btn btn-primary" onclick="showApplyForm()">가입 신청</button>
   </div>
   <script>
+    if(applyDisabled){
+      document.querySelector('#clubApply').disabled = true;
+      document.querySelector('#clubApply').innerText = '동아리는 3개까지만 가입 가능합니다!';
+    }else if(isMember){
+      document.querySelector('#clubApply').disabled = true;
+      document.querySelector('#clubApply').innerText = '이미 가입한 동아리입니다!';
+    }
     function showApplyForm(){
         const url = `/clubApply/<%=data.club_id%>`;
         window.location.href=url;
