@@ -236,13 +236,12 @@ body {
   border-radius: 4px;
   box-shadow: 0px 2px 8px 0px rgba(47, 128, 237, 0.2);
 }
-.btn-primary:active{
+.btn-primary:active {
   background-color: var(--color-primary-600);
 }
-.btn-primary[disabled]{
+.btn-primary[disabled] {
   background-color: var(--color-primary-200);
 }
-
 
 /* btn-secondary */
 .btn-secondary {
@@ -253,11 +252,11 @@ body {
   border-radius: 4px;
   box-shadow: 0px 2px 8px 0px rgba(47, 128, 237, 0.2);
 }
-.btn-secondary:active{
+.btn-secondary:active {
   border-color: var(--color-primary-600);
   background-color: var(--color-primary-50);
 }
-.btn-secondary[disabled]{
+.btn-secondary[disabled] {
   border-color: var(--color-primary-200);
 }
 
@@ -327,8 +326,6 @@ label {
   box-shadow: 0px 2px 8px 0px rgba(47, 128, 237, 0.2);
 }
 
-
-
 .file-upload-input {
   width: 0.1px;
   height: 0.1px;
@@ -357,8 +354,6 @@ label {
   max-width: 100%;
   height: auto;
 }
-
-
 
 /* 헤더 CSS */
 .header {
@@ -591,3 +586,48 @@ button {
 }
 
 /* 2번 list 끝 */
+
+.content-box {
+  background-color: #ffffff;
+  padding: 15px;
+  border-bottom: 1px solid #aaa;
+  width: 300px;
+  margin: 0 auto;
+}
+
+.title,
+.content,
+.thumbs-up,
+.timestamp {
+  margin-bottom: 10px;
+}
+
+.title {
+  font-size: 24px;
+  color: #333333;
+}
+
+.content {
+  font-size: 16px;
+  color: #666666;
+}
+
+.thumbs-up {
+  display: flex;
+  align-items: center;
+}
+
+.thumb-icon {
+  font-size: 24px;
+}
+
+.thumb-count {
+  font-size: 18px;
+  margin-left: 5px;
+}
+
+.timestamp {
+  font-size: 12px;
+  color: #999999;
+  text-align: right;
+}

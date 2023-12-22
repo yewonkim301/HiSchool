@@ -56,12 +56,7 @@
          </div>
 
 
-
-
          <script>
-
-
-
 
             const club_id = "<%=data.club_id%>";
             const post_id = "<%=data.post_id%>";
@@ -70,6 +65,9 @@
             const comment = document.getElementById('comment');
             comment_id = res.clubPostComment.comment_id;
 
+
+            // 전역변수로 선언한 comment_id  - showEditField 함수에서 바꿀꺼임
+            let currentEditingCommentId = null;
 
 
 
@@ -157,7 +155,7 @@
             }
 
 
-            let currentEditingCommentId = null;
+
 
             function showEditField(comment_id, currentContent) {
                currentEditingCommentId = comment_id; // 전역 변수 업데이트
