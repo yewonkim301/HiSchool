@@ -241,9 +241,9 @@ router.post(
   controllerClub.postClubPostCommentLike
 );
 
-// DElETE /myclubPostDetail/:club_id/:post_id/:comment_id/:like_id
+// DElETE /myclubPostDetail/:club_id/:post_id/:comment_id/:likeid_num
 router.delete(
-  "/myclubPostDetail/:club_id/:post_id/:comment_id/:like_id",
+  "/myclubPostDetail/:club_id/:post_id/:comment_id/:likeid_num",
   isLoggedIn,
   controllerClub.deleteClubPostCommentLike
 );
