@@ -10,11 +10,11 @@ const ClubMembers = (Sequelize, DataTypes) => {
       },
       motivation: {
         type: DataTypes.STRING(400),
-        allowNull: false,
+        allowNull: true,
       },
       introduction: {
         type: DataTypes.STRING(200),
-        allowNull: false,
+        allowNull: true,
       },
       isMember: {
         type: DataTypes.STRING(10),
