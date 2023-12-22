@@ -9,6 +9,7 @@ const {
 } = require("../models/Index");
 const jwt = require("jsonwebtoken");
 const { OP } = require("sequelize");
+const { Sequelize } = require('sequelize');
 
 // ===== publicPost =====
 
@@ -635,32 +636,34 @@ exports.getClubMembers = async (req, res) => {
   try {
     const { club_id } = req.params;
     const getMembers = await Club_members.findAll({
-      attributes: {
-        exclude: ['leader_id']
-      },
+      // attributes: {
+      //   exclude: ['leader_id']
+      // },
       where: {
-        club_id: club_id,
-        isMember: "true",
         motivation: {
-          [Sequelize.Op.not]: NULL
+          [Sequelize.Op.not]: null,
         },
         introduction: {
-          [Sequelize.Op.not]: NULL
-        }
+          [Sequelize.Op.not]: null,
+        },
+        club_id: club_id,
+        isMember: "true",
       },
       // include: [{ model: User }],
     });
+    console.log("클럽 멤버 조회 >>>>>>>>>>>>>", getMembers);
+
     const getUsers = await Club_members.findAll({
       attributes: ["userid_num"],
       where: {
-        club_id: club_id,
-        isMember: "true",
         motivation: {
-          [Sequelize.Op.not]: NULL
+          [Sequelize.Op.not]: null,
         },
         introduction: {
-          [Sequelize.Op.not]: NULL
-        }
+          [Sequelize.Op.not]: null,
+        },
+        club_id: club_id,
+        isMember: "true",
       }
     });
     let getUserInfo = [];
@@ -675,6 +678,7 @@ exports.getClubMembers = async (req, res) => {
       console.log(element);
       let info = await User.findOne({ where: { userid_num: element } });
       await userInfo.push(info.name);
+      console.log("클럽 멤버 이름조회 >>>>>>>>>>>>>", userInfo);
       if (!getMembers) {
         res.render("clubAdmin/clubAdminMemberList");
       } else {
