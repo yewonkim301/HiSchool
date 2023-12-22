@@ -2,14 +2,11 @@ const express = require("express");
 const controllerPublic = require("../controller/Cpublic");
 const controllerClub = require("../controller/Cclub");
 const controllerSupport = require("../controller/Csupport");
-const controllerUser = require('../controller/Cuser')
+const controllerUser = require("../controller/Cuser");
 const router = express.Router();
 const { isNotLoggedIn, isLoggedIn } = require("./../middleware/loginCheck");
 
-
-
 router.post("/s3upload", controllerUser.s3upload);
-
 
 // router.post("/upload", async (req, res) => {
 //   await s3bucketList().then((data) => {
@@ -54,15 +51,11 @@ router.get("/login", isNotLoggedIn, (req, res) => {
 
 router.post("/login", isNotLoggedIn, controllerUser.postLogin);
 
-
 router.get("/register", isNotLoggedIn, (req, res) => {
   res.render("register");
 });
 
-
-router.post("/register", isNotLoggedIn, controllerUser.postRegister)
-
-
+router.post("/register", isNotLoggedIn, controllerUser.postRegister);
 
 // club
 // GET /clubMain : 전체 동아리 조회
@@ -169,8 +162,8 @@ router.get(
 );
 
 // PATCH /clubAdminTransfer/:club_id 회장 위임 전달
-router.delete(
-  "/clubAdminTransfer/:club_id",
+router.patch(
+  "/clubAdminTransfer/:club_id/:userid_num",
   isLoggedIn,
   controllerPublic.updateClubAdminTransfer
 );
@@ -385,10 +378,10 @@ router.post("/dmDetail", isLoggedIn, controllerPublic.postDm);
 router.delete("/dm", isLoggedIn, controllerPublic.deleteDm);
 
 // GET /myclubChat/:club_id 동아리 채팅방 페이지 불러오기
-router.get("/myclubChat/:club_id", isLoggedIn, controllerClub.getClubChat);
+// router.get("/myclubChat/:club_id", isLoggedIn, controllerClub.getClubChat);
 
 // POST /myclubChat/:club_id 동아리 채팅방에서 채팅 보내기
-router.post("/myclubChat/:club_id", isLoggedIn, controllerClub.postClubChat);
+// router.post("/myclubChat/:club_id", isLoggedIn, controllerClub.postClubChat);
 
 // GET /myclubList 내가 가입한 동아리 목록 페이지 불러오기
 router.get("/myclubList", isLoggedIn, controllerClub.getMyclubList);
@@ -410,7 +403,7 @@ router.patch("/supportMain", isLoggedIn, controllerSupport.postSupportComment);
 router.delete("/supportMain", isLoggedIn, controllerSupport.deleteSupport);
 
 // GET /clubChat
-router.get("/clubChat/:club_id", controllerClub.clubChat);
+// router.get("/", controllerClub.clubChat);
 
 // GET /home 홈 화면 로드(전체 동아리, 유저가 가입되어 있는 동아이 정보)
 router.get("/home", isLoggedIn, controllerPublic.home);

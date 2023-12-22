@@ -211,20 +211,20 @@ exports.getClubPost = async (req, res) => {
       },
       include: [{ model: Club_post_comment_like }],
     });
-    // const howManyComment = await clubPostComment.length;
+    const howManyComment = await clubPostComment.length;
 
-    // 댓글마다 있는 좋아요
-    // const clubPostCommentLike = await Club_post_comment_like.findAll({
-    //   where: {
-    //     comment_id:
-    //   },
-    // });
+    // 댓글마다 있는 좋아요;
+    const clubPostCommentLike = await Club_post_comment_like.findAll({
+      where: {
+        comment_id: comment_id
+      }
+    });
     console.log(clubPostComment);
 
     res.render("myclub/myclubPostDetail", {
       data: clubPost,
       clubPostComment,
-      // clubPostCommentLike,
+      clubPostCommentLike,
     });
   } catch (err) {
     console.error(err);
@@ -320,9 +320,13 @@ exports.createPostComment = async (req, res) => {
 
 // PATCH /myclubPostDetail/:club_id/:post_id/:comment_id : 동아리 게시글 댓글 수정
 exports.patchPostComment = async (req, res) => {
+
   try {
     const { comment_id, post_id, club_id } = req.params;
-    const { content } = req.body.content;
+    const { content } = req.body;
+    console.log('댓글 수정 데이터 받음>>>>>>>>>>>>>>>>>', req.params);
+    console.log('댓글 수정 데이터 받음>>>>>>>>>>>>>>>>>', content);
+
     const clubPostComment = await Club_post_comment.update(
       {
         content: content,
