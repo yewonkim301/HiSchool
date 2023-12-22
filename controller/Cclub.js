@@ -31,7 +31,28 @@ exports.getClub = async (req, res) => {
     const club = await Club.findOne({
       where: { club_id: req.params.club_id },
     });
-    res.render("club/clubDetail", { data: club });
+    const { userid, userid_num } = jwt.verify(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
+    const findmember = await Club_members.findOne({
+      attributes: ["isMember"],
+      where: { userid_num: userid_num },
+    });
+    console.log("@@@@@@@@@@@@@@", findmember.dataValues.isMember);
+    let isMember;
+    if (findmember.dataValues.isMember == "true") isMember = "true";
+    else if (findmember.dataValues.isMember == "false") isMember = "false";
+    else isMember = "nonApply";
+    console.log("!!!!!!!!!!!!!!!!", isMember);
+    console.log("ismember >>>>>>>>>>>>>>", isMember);
+    const clubNum = await Club_members.findAll({
+      where: {
+        userid_num: userid_num,
+        isMember: "true",
+      },
+    });
+    res.render("club/clubDetail", { data: club, isMember, clubNum });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -616,10 +637,10 @@ exports.getMyclubMain = async (req, res) => {
     process.env.JWT_SECRET
   );
   const myClub = await Club.findOne({ where: { club_id: club_id } });
-  let isAdmin;
-  if (myClub.leader_id == userid_num) isAdmin = true;
-  else isAdmin = false;
-  res.render("myclub/myclubMain", { data: myClub, isAdmin });
+  let isLeader;
+  if (myClub.leader_id == userid_num) isLeader = true;
+  else isLeader = false;
+  res.render("myclub/myclubMain", { data: myClub, isLeader });
 };
 
 // GET /clubChat
