@@ -363,6 +363,7 @@ exports.createPostComment = async (req, res) => {
       post_id: post_id,
       comment_name: getName.dataValues.name,
       content: content,
+      userid_num: userid_num,
     });
 
     res.send(newClubPostComment);
@@ -431,7 +432,7 @@ exports.postClubPostCommentLike = async (req, res) => {
     );
     const clubPostCommentLike = await Club_post_comment_like.create({
       comment_id: comment_id,
-      like_id: userid_num,
+      likeid_num: userid_num,
     });
     res.send(clubPostCommentLike);
   } catch (err) {
@@ -440,14 +441,14 @@ exports.postClubPostCommentLike = async (req, res) => {
   }
 };
 
-// DELETE /myclubPostDetail/:club_id/:post_id/:comment_id/:like_id
+// DELETE /myclubPostDetail/:club_id/:post_id/:comment_id/:likeid_nume
 exports.deleteClubPostCommentLike = async (req, res) => {
   try {
-    const { club_id, post_id, comment_id, like_id } = req.params;
+    const { club_id, post_id, comment_id, likeid_num } = req.params;
     const isDeleted = await Club_post_comment_like.destroy({
       where: {
         comment_id: comment_id,
-        like_id: like_id,
+        likeid_num: likeid_num,
       },
     });
     if (isDeleted) {
