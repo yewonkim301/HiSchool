@@ -240,21 +240,32 @@ exports.getClubPost = async (req, res) => {
 
     const commentId = await Club_post_comment.findAll({
       attributes: ["comment_id"],
-      where: { post_id: post_id }
+      where: { post_id: post_id },
     });
 
-    // 댓글마다 있는 좋아요;
-    const clubPostCommentLike = await Club_post_comment_like.findAll({
-      where: {
-        comment_id: comment_id,
-      },
+    let commentIdArray = [];
+    await commentId.forEach((element) => {
+      commentIdArray.push(element.dataValues.comment_id);
     });
-    console.log(clubPostComment);
+
+    console.log("commentIdArray >>>>>", commentIdArray);
+
+    // 댓글마다 있는 좋아요;
+    let clubPostCommentLike = [];
+    for (const element of commentIdArray) {
+      const like = await Club_post_comment_like.findAll({
+        where: { comment_id: element },
+      });
+      clubPostCommentLike.push(like);
+      console.log("@@@@@ clubPostCommentLike", clubPostCommentLike);
+    }
 
     res.render("myclub/myclubPostDetail", {
       data: clubPost,
       clubPostComment,
-      clubPostCommentLike, commentId, userid_num
+      clubPostCommentLike,
+      commentId,
+      userid_num,
     });
   } catch (err) {
     console.error(err);
