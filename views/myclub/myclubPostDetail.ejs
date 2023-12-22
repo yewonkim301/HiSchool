@@ -63,7 +63,7 @@
             const comment_name = "<%=clubPostComment.comment_name%>";
             const content = "<%=clubPostComment.content%>";
             const comment = document.getElementById('comment');
-            comment_id = res.clubPostComment.comment_id;
+            let comment_id;
 
 
             // 전역변수로 선언한 comment_id  - showEditField 함수에서 바꿀꺼임
@@ -102,10 +102,9 @@
                         const newCommentDiv = document.createElement('div');
                         newCommentDiv.classList.add('comment');
                         const newCommentLike = document.createElement('span');
-                        console.log('dfsdfsdfsddfds 105')
-                        // <i class="like-btn" onclick="likeBtn()">좋아요</i>
-                        console.log('107 comment id', comment_id)
-                        console.log('107 res', res.clubPostComment.comment_id)
+                        
+                        comment_id = res.data.comment_id;
+                        console.log('107 res', comment_id)
                         
                         // 댓글 작성자 이름을 나타내는 p 태그 생성
                         const nameParagraph = document.createElement('p');
@@ -117,8 +116,8 @@
                         contentParagraph.classList.add('comment-content'); // 클래스 추가
 
                         // div에 p 태그들 추가
-                        const newLike = document.createElement('span')
-                        newLike.textContent = res.data.comment_name
+                        // const newLike = document.createElement('span')
+                        // newLike.textContent = res.data.comment_name
 
                         newCommentDiv.appendChild(nameParagraph);
                         newCommentDiv.appendChild(contentParagraph);
@@ -131,7 +130,7 @@
                         console.log(contentParagraph); // 클래스를 추가한 후 요소를 콘솔에 출력
 
 
-                        location.reload();
+                        // location.reload();
                      })
                      .catch(error => {
                         console.error("댓글 등록 에러:", error);
