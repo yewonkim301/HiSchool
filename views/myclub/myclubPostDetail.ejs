@@ -6,6 +6,20 @@
 
    <!-- axios CDN -->
    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+   <!-- font-awesome -->
+   <script src="https://kit.fontawesome.com/6206d712ce.js" crossorigin="anonymous"></script>
+   <!-- 아이콘 CDN feather -->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.1/feather.min.js"
+      integrity="sha512-4lykFR6C2W55I60sYddEGjieC2fU79R7GUtaqr3DzmNbo0vSaO1MfUjMoTFYYuedjfEix6uV9jVTtRCSBU/Xiw=="
+      crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+   <style>
+      .heart-active {
+         color: red;
+         /* 또는 원하는 색상 */
+      }
+   </style>
 </head>
 
 <body>
@@ -20,33 +34,46 @@
                <%= data.content %>
                   <!-- <i class="like-btn" onclick="likeBtn()">좋아요</i> -->
             </p>
+            <!-- 여기에 좋아요 개수 표시 -->
+
+            </p>
+            </p>
             <!-- 게시글 작성 시간 등의 메타 정보도 추가 있습니다. -->
          </div>
-
          <button class="btn btn-primary" onclick="editPost('<%= data.post_id %>')">수정</button>
-
-
          <div class="comment-section">
             <input type="text" id="commentInput" placeholder="댓글을 입력하세요">
-
          </div>
-
-         <button onclick="submitComment(event)">댓글등록</button>
+         <button onclick="submitComment()">댓글등록</button>
 
          <!-- <button onclick="deletePostComment('<%=clubPostComment.comment_id %>')">댓글삭제</button> -->
          <!-- 댓글 들어갈곳 -->
          <div class="list" id="commentList">
             <% clubPostComment.forEach(function(comment) { %>
-               <div class="comment comment-<%=comment.comment_id %>">
+               <div class="comment comment-<%= comment.comment_id %>">
                   <p>
                      <%= comment.comment_name %>
                   </p>
                   <p>
                      <%= comment.content %>
                   </p>
+
+                  </p>
+
+                  <!-- 사용자 이름과 내용이 같은 경우: 수정 및 삭제 버튼만 표시 -->
                   <button onclick="deletePostComment('<%= comment.comment_id %>')">댓글삭제</button>
                   <button onclick="showEditField('<%= comment.comment_id %>', '<%= comment.content %>')">댓글수정</button>
-                  <!-- 여기에 추가적인 댓글 정보나 버튼 등을 삽입할 수 있습니다. -->
+
+                  <!-- 그렇지 않은 경우: 좋아요 버튼 표시 -->
+
+                  <!-- 좋아요 버튼 -->
+                  <button onclick="likeBtn('<%= comment.comment_id %>')">
+                     <i id="heart-icon-<%= comment.comment_id %>" class="fas fa-heart"></i>
+                  </button>
+                  <span id="like-count-<%= comment.comment_id %>">
+                     <%= comment.like_id %>
+                  </span>
+                  <!-- 여기에 추가적인 댓글 정보나 버튼 등을 삽입 -->
                </div>
                <% }); %>
                   <div id="editCommentSection" style="display: none;">
@@ -55,33 +82,84 @@
                   </div>
          </div>
 
+         <!-- <div class="list" id="commentList">
+            <% clubPostComment.forEach(function(comment) { %>
+               <div class="comment comment-<%= comment.dataValues.comment_id %>">
+                  <p>
+                     <%= comment.dataValues.comment_name %>
+                  </p>
+                  <p>
+                     <%= comment.dataValues.content %>
+                  </p>
+
+                   여기에 댓글 작성자의 이름을 표시하는 버튼 추가 
+         <button>
+            <%= comment.dataValues.comment_name %>
+         </button>
+      </div>
+      <% }); %>
+         </div> -->
+
 
          <script>
 
+            // <% clubPostComment.forEach(function (comment) { %>
+            //    console.log('<%= comment.comment_name %> == <%= userid_num %>: ', <%= comment.comment_name === comment.content %>);
+            //     <% }); %>
+
+
+
+
+
             const club_id = "<%=data.club_id%>";
             const post_id = "<%=data.post_id%>";
-            const comment_name = "<%=clubPostComment.comment_name%>";
-            const content = "<%=clubPostComment.content%>";
+
+            const content = "<%=clubPostComment%>";
             const comment = document.getElementById('comment');
-            let comment_id;
 
 
-            // 전역변수로 선언한 comment_id  - showEditField 함수에서 바꿀꺼임
-            let currentEditingCommentId = null;
 
 
-            console.log(post_id);
-            console.log(comment_name);
-            console.log(content);
 
+
+            // console.log(like_id);
+            // // 전역변수로 선언한 comment_id  - showEditField 함수에서 바꿀꺼임
+            // let currentEditingCommentId = null;
+
+            // console.log(post_id);
+            // console.log(comment_name);
+            // console.log(content);
+
+            // console.log(`commentId, ${commentId}`);
+            // console.log(comment_id2);
+            // console.log(content);
+            // console.log(user_nam);
 
             // 좋아요 입력칸
-            function likeBtn() {
-               console.log("comment_id >>>>>>", comment_id);
-               axios.post(`/myclubPostDetail/${club_id}/${post_id}`);
+            // function likeBtn() {
+            //    console.log("comment_id >>>>>>", comment_id);
+            //    axios.post(`/ myclubPostDetail / ${ club_id } / ${ post_id }`);
+            // }
+
+
+            function likeBtn(comment_id) {
+               const heartIcon = document.getElementById('heart-icon-' + comment_id);
+               heartIcon.classList.toggle('heart-active');
+
+
+               axios.post(`/myclubPostDetail/${club_id}/${post_id}/${comment_id}`)
+                  .then(response => {
+                     console.log(response.data);
+                     const likeId = response.data.like_id;
+                     console.log(likeId); // 콘솔에서 확인
+                     // 응답 데이터 구조 확인
+                     // 예상하는 좋아요 카운트를 response.data에서 가져와 화면에 업데이트
+                     document.getElementById('like-count-' + comment_id).innerText = likeId;
+                  })
+                  .catch(error => {
+                     console.log('Error occurred:', error);
+                  });
             }
-
-
             // 댓글 등록
             async function submitComment() {
                const commentContent = document.getElementById('commentInput').value;
@@ -121,7 +199,7 @@
 
                         newCommentDiv.appendChild(nameParagraph);
                         newCommentDiv.appendChild(contentParagraph);
-                        newCommentLike.innerHTML = `<i id="${comment_id}" class="like-btn" onclick="likeBtn()">좋아요</i>`;
+                        // newCommentLike.innerHTML = `<i id="${comment_id}" class= "like-btn" onclick = "likeBtn()" > 좋아요</i > `;
                         console.log(newCommentLike);
                         newCommentDiv.appendChild(newCommentLike);
 
@@ -164,6 +242,7 @@
                // 수정 입력 필드에 현재 댓글 내용 설정
                const editInput = document.getElementById('editCommentInput');
                editInput.value = currentContent;
+               console.log(editInput.value);
 
                // 수정 영역 보이기
                document.getElementById('editCommentSection').style.display = 'block';
@@ -212,14 +291,14 @@
 
             //    const editedContent = document.getElementById('editCommentInput').value;
 
-            //    axios.patch(`/myclubPostDetail/${club_id}/${post_id}/${currentEditingCommentId}`, {
+            //    axios.patch(`/ myclubPostDetail / ${ club_id } / ${ post_id } / ${ currentEditingCommentId }`, {
             //       content: editedContent
             //    })
             //       .then(res => {
             //          console.log('<%=clubPostComment%>');
             //          if (res.data) {
             //             // 페이지의 댓글 내용 업데이트
-            //             const commentElement = document.querySelector(`.comment-${currentEditingCommentId}`);
+            //             const commentElement = document.querySelector(`.comment - ${ currentEditingCommentId }`);
             //             if (commentElement) {
             //                commentElement.textContent = editedContent;
             //             }
@@ -266,6 +345,8 @@
 
 
          </script>
+
+         <script>feather.replace()</script>
 </body>
 
 </html>

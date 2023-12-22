@@ -9,17 +9,19 @@ const {
 } = require("../models/Index");
 const jwt = require("jsonwebtoken");
 const { OP } = require("sequelize");
-const { Sequelize } = require('sequelize');
+const { Sequelize } = require("sequelize");
 
 // ===== publicPost =====
 
 // GET /publicPostMain 익명 게시판 정보 가져오기
 exports.getPost = async (req, res) => {
   try {
+
     let link = "/home" //홈페이지 이동
     let title = "익명 게시판"
     const Posts = await Public_post.findAll();
     res.render("publicPost/publicPostMain", { data: Posts , title, link});
+
   } catch {
     console.error(err);
     res.send("Internal Server Error!");
@@ -114,7 +116,7 @@ exports.createPostComment = async (req, res) => {
 
     const getNickname = await User.findOne({
       where: {
-        userid_num: userid_num, 
+        userid_num: userid_num,
       },
     });
 
@@ -122,12 +124,11 @@ exports.createPostComment = async (req, res) => {
       comment: comment,
       comment_nickname: getNickname.dataValues.nickname,
       post_id: post_id,
-      userid_num: userid_num
+      userid_num: userid_num,
     });
 
     res.send(newPublicPostComment);
-  } 
-  catch (err) {
+  } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
   }
@@ -137,18 +138,17 @@ exports.createPostComment = async (req, res) => {
 exports.createPostCommentLike = async (req, res) => {
   try {
     const { post_id, comment_id } = req.params;
-    const { like_id } = req.body;
+    const { likeid_num } = req.body;
 
     const publicPostCommentLike = await Public_post_comment_like.create({
-      like_id: like_id,
-      where:{
+      likeid_num: likeid_num,
+      where: {
         comment_id: comment_id,
-      }
+      },
     });
 
     res.send(publicPostCommentLike);
-  }
-  catch (err) {
+  } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
   }
@@ -216,14 +216,14 @@ exports.patchPostComment = async (req, res) => {
 exports.patchPostCommentLike = async (req, res) => {
   try {
     const { post_id, comment_id } = req.params;
-    const { like_id } = req.body;
+    const { likeid_num } = req.body;
     const { userid, userid_num } = jwt.verify(
       req.cookies.jwt,
       process.env.JWT_SECRET
     );
     const updatePostCommentLike = await Public_post_comment_like.update(
       {
-        like_id: like_id,
+        likeid_num: likeid_num,
       },
       {
         where: {
@@ -441,6 +441,7 @@ exports.getClubAdminTransfer = async (req, res) => {
     let link = "/clubAdminEdit"; //클럽 설정페이지
     let title = "클럽권한 위임";
     res.render("clubAdmin/clubAdminTransfer", title, link);
+
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -451,6 +452,7 @@ exports.getClubAdminTransfer = async (req, res) => {
 exports.getAllMembers = async (req, res) => {
   try {
     let link = "/clubAdminEdit"; //클럽 설정 페이지
+
     let title = "클럽권한 위임";
     const { club_id } = req.params;
     const getAllMembersShow = await Club_members.findAll({
@@ -477,7 +479,7 @@ exports.getAllMembers = async (req, res) => {
         introduction: {
           [Sequelize.Op.not]: null,
         },
-      }
+      },
     });
 
     let getusersid = [];
@@ -491,8 +493,6 @@ exports.getAllMembers = async (req, res) => {
       await userInfo.push(info.name);
       console.log("userinfo >>>>>>>>>>>>>", userInfo);
     });
-
-
 
     res.render("clubAdmin/clubAdminTransfer", { data: getAllMembersShow, userInfo, club_id, title, link});
   } catch (err) {
@@ -641,8 +641,6 @@ exports.getClubMembersApplyList = async (req, res) => {
     });
 
     console.log("getuserid >>>>>>>>>>>>>", getusersid);
-
-    
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -706,14 +704,13 @@ exports.getClubMembers = async (req, res) => {
         },
         club_id: club_id,
         isMember: "true",
-      }
+      },
     });
     let getUserInfo = [];
     // getUsers에서 가져온 클럽에 속한 유저 userid_num 값들을 forEach문으로
     getUsers.forEach((element) => {
       getUserInfo.push(element.dataValues.userid_num);
     });
-
 
     let userInfo = [];
     getUserInfo.forEach(async (element) => {
@@ -727,8 +724,6 @@ exports.getClubMembers = async (req, res) => {
         res.render("clubAdmin/clubAdminMemberList", { data: getMembers , userInfo, club_id, title, link});
       }
     });
-    
-   
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -739,6 +734,7 @@ exports.getClubMembers = async (req, res) => {
 exports.getClubMember = async (req, res) => {
   try {
     let link = "/clubAdminMemberList"; // 클럽 회원 전체 리스트 페이지로 이동
+
     let title = "동아리 부원 정보";
     const { club_id, userid_num } = req.params;
     const getMember = await Club_members.findOne({
@@ -750,13 +746,14 @@ exports.getClubMember = async (req, res) => {
       // include: [{ model: User }],
     });
     const userInfo = await User.findOne({
-      attributes:["name"],
-      where:{
-        userid_num: userid_num
-      }
-    })
+      attributes: ["name"],
+      where: {
+        userid_num: userid_num,
+      },
+    });
 
     res.render("clubAdmin/clubAdminMemberDetail", { data: getMember, userInfo, club_id, title, link});
+
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -867,6 +864,13 @@ exports.home = async (req, res) => {
         isMember: "true",
       },
     });
+
+    const foundUser = await User.findOne({
+      where: {
+        userid: userid,
+      },
+    });
+
     // console.log("myclubList >>>>>>", myclubList);
 
     let myclubs = [];
@@ -888,7 +892,7 @@ exports.home = async (req, res) => {
     console.log("home clubInfo 내가 가입한 동아리 >>>>>>", clubInfo);
     console.log("home getClubs 전체 동아리 >>>>>>", getClubs);
 
-    await res.render("home", { getClubs, clubInfo });
+    await res.render("home", { getClubs, clubInfo, foundUser });
     console.log(
       "asdjfoisjoifjoewjfoiesjfoesjfesjfoiesjoiesjefjsofjesoi",
       clubInfo

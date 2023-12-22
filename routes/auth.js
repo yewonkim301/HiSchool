@@ -41,6 +41,20 @@ router.post("/register", isNotLoggedIn, async (req, res, next) => {
   }
 });
 
+
+
+router.get('/login', isNotLoggedIn, async (req, res) => {
+  const { userid_num } = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
+  console.log("userid_num : ", userid_num);
+
+  const user = await User.findOne({ where: { userid_num: userid_num } })
+
+  console.log(user);
+
+  res.render('login', { user: user })
+
+})
+
 // 로그인
 router.post("/login", isNotLoggedIn, (req, res, next) => {
   passport.authenticate("local", (authError, user, info) => {

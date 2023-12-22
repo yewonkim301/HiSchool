@@ -49,6 +49,8 @@ router.get("/login", isNotLoggedIn, (req, res) => {
   res.render("login");
 });
 
+// router.get('/login', isNotLoggedIn, controllerUser.getLogin)
+
 router.post("/login", isNotLoggedIn, controllerUser.postLogin);
 
 router.get("/register", isNotLoggedIn, (req, res) => {
@@ -239,9 +241,9 @@ router.post(
   controllerClub.postClubPostCommentLike
 );
 
-// DElETE /myclubPostDetail/:club_id/:post_id/:comment_id/:like_id
+// DElETE /myclubPostDetail/:club_id/:post_id/:comment_id/:likeid_num
 router.delete(
-  "/myclubPostDetail/:club_id/:post_id/:comment_id/:like_id",
+  "/myclubPostDetail/:club_id/:post_id/:comment_id/:likeid_num",
   isLoggedIn,
   controllerClub.deleteClubPostCommentLike
 );

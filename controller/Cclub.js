@@ -18,7 +18,7 @@ const jwt = require("jsonwebtoken");
 exports.getClubs = async (req, res) => {
   try {
     const Clubs = await Club.findAll();
-    res.render("club/clubMain", { data: Clubs });
+    res.render("club/clubMain", { data: Clubs, title: "전체 동아리" });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -52,7 +52,12 @@ exports.getClub = async (req, res) => {
         isMember: "true",
       },
     });
-    res.render("club/clubDetail", { data: club, isMember, clubNum });
+    res.render("club/clubDetail", {
+      data: club,
+      isMember,
+      clubNum,
+      title: "동아리",
+    });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -63,7 +68,10 @@ exports.getClub = async (req, res) => {
 exports.getClubAdminMain = async (req, res) => {
   try {
     const { club_id } = req.params;
-    res.render("clubAdmin/clubAdminMain", { data: club_id });
+    res.render("clubAdmin/clubAdminMain", {
+      data: club_id,
+      title: "관리 페이지",
+    });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -95,6 +103,7 @@ exports.getClubAdminEdit = async (req, res) => {
       clubAdminEdit,
       leaderName,
       clubmembers,
+      title: "동아리 정보 관리",
     });
   } catch (err) {
     console.error(err);
@@ -157,7 +166,7 @@ exports.deleteClub = async (req, res) => {
 // GET /createClub : 동아리 생성
 exports.getCreateClub = async (req, res) => {
   try {
-    res.render("club/createClub");
+    res.render("club/createClub", { title: "동아리 개설" });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -207,6 +216,7 @@ exports.getClubPosts = async (req, res) => {
     res.render("myclub/myclubPostMain", {
       data: posts,
       club_id: req.params.club_id, // club_id를 별도로 전달
+      title: "게시판",
     });
   } catch (err) {
     console.error(err);
@@ -240,21 +250,32 @@ exports.getClubPost = async (req, res) => {
 
     const commentId = await Club_post_comment.findAll({
       attributes: ["comment_id"],
-      where: { post_id: post_id }
+      where: { post_id: post_id },
     });
 
-    // 댓글마다 있는 좋아요;
-    const clubPostCommentLike = await Club_post_comment_like.findAll({
-      where: {
-        comment_id: comment_id,
-      },
+    let commentIdArray = [];
+    await commentId.forEach((element) => {
+      commentIdArray.push(element.dataValues.comment_id);
     });
-    console.log(clubPostComment);
+
+    console.log("commentIdArray >>>>>", commentIdArray);
+
+    // 댓글마다 있는 좋아요;
+    let clubPostCommentLike = [];
+    for (const element of commentIdArray) {
+      const like = await Club_post_comment_like.findAll({
+        where: { comment_id: element },
+      });
+      clubPostCommentLike.push(like);
+      console.log("@@@@@ clubPostCommentLike", clubPostCommentLike);
+    }
 
     res.render("myclub/myclubPostDetail", {
       data: clubPost,
       clubPostComment,
-      clubPostCommentLike, commentId, userid_num
+      clubPostCommentLike,
+      commentId,
+      userid_num,
     });
   } catch (err) {
     console.error(err);
@@ -269,7 +290,10 @@ exports.getClubEditPost = async (req, res) => {
     const clubPost = await Club_post.findOne({
       where: { club_id: club_id, post_id: post_id },
     });
-    res.render("myclub/myclubEditPost", { data: clubPost });
+    res.render("myclub/myclubEditPost", {
+      data: clubPost,
+      title: "게시글 수정",
+    });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -339,6 +363,7 @@ exports.createPostComment = async (req, res) => {
       post_id: post_id,
       comment_name: getName.dataValues.name,
       content: content,
+      userid_num: userid_num,
     });
 
     res.send(newClubPostComment);
@@ -407,7 +432,7 @@ exports.postClubPostCommentLike = async (req, res) => {
     );
     const clubPostCommentLike = await Club_post_comment_like.create({
       comment_id: comment_id,
-      like_id: userid_num,
+      likeid_num: userid_num,
     });
     res.send(clubPostCommentLike);
   } catch (err) {
@@ -416,14 +441,14 @@ exports.postClubPostCommentLike = async (req, res) => {
   }
 };
 
-// DELETE /myclubPostDetail/:club_id/:post_id/:comment_id/:like_id
+// DELETE /myclubPostDetail/:club_id/:post_id/:comment_id/:likeid_num
 exports.deleteClubPostCommentLike = async (req, res) => {
   try {
-    const { club_id, post_id, comment_id, like_id } = req.params;
+    const { club_id, post_id, comment_id, likeid_num } = req.params;
     const isDeleted = await Club_post_comment_like.destroy({
       where: {
         comment_id: comment_id,
-        like_id: like_id,
+        likeid_num: likeid_num,
       },
     });
     if (isDeleted) {
@@ -442,7 +467,7 @@ exports.getCreateClubPost = async (req, res) => {
   try {
     // 수정
     const { club_id } = req.params;
-    res.render("myclub/myclubNewPost", { data: club_id });
+    res.render("myclub/myclubNewPost", { data: club_id, title: "게시글 작성" });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -484,7 +509,10 @@ exports.getClubSchedules = async (req, res) => {
     const clubSchedules = await Club_schedule.findAll({
       where: { club_id: club_id },
     });
-    res.render("./myclub/myclubSchedule", { data: clubSchedules });
+    res.render("./myclub/myclubSchedule", {
+      data: clubSchedules,
+      title: "일정",
+    });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -631,7 +659,7 @@ exports.getMyclubList = async (req, res) => {
       ],
     },
   });
-  res.render("myclub/myclubList", { data: myclubList });
+  res.render("myclub/myclubList", { data: myclubList, title: "내 동아리" });
 };
 
 // GET /myclubMain/:club_id 내가 가입한 동아리의 메인 페이지 불러오기
