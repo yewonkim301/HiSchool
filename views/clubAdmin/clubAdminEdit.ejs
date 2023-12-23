@@ -49,26 +49,30 @@
       <button onclick="patchClubInfo()" class="btn btn-primary">수정</button>
     </div>
 
-    <script>
+    <button onclick="deleteClubInfo()" class="btn-sm btn-primary">삭제</button><br><br>
+    <button onclick="patchClubInfo()" class="btn btn-primary">수정</button>
+  </div>
 
-      console.log('<%=clubAdminEdit%>');
-      console.log('<%=leaderName.name%>');
-      console.log('<%=clubmembers.length%>');
-      // club
+  <script>
+const data1 = '<%- JSON.stringify(data) %>';
+  console.log(data1);
 
+    // club
 
-      function trasferLeader() {
-        window.location.href = "/clubAdminTransfer/<%=clubAdminEdit.club_id%>";
-      }
-      async function patchClubInfo() {
-        const newName = document.getElementById('editClubName').value;
-        const newDescription = document.getElementById('editClubDescription').value;
-        const newLimit = document.getElementById('editClubLimit').value;
-        const newKeyword = document.getElementById('editClubKeyword').value;
-        console.log(newName, newDescription, newLimit, newKeyword);
+    
+   function trasferLeader(){
+      window.location.href= "/clubAdminTransfer/<%=clubAdminEdit.club_id%>"
+   }
+   async function patchClubInfo(){
+    const newName = document.getElementById('editClubName').value;
+    const newDescription = document.getElementById('editClubDescription').value;
+    const newLimit = document.getElementById('editClubLimit').value;
+    const newKeyword = document.getElementById('editClubKeyword').value;
+    console.log(newName,newDescription,newLimit,newKeyword)
+ 
 
+    try {
 
-        try {
           const res = await axios({
             method: "PATCH",
             url: `/clubAdminEdit/<%=clubAdminEdit.club_id%>`,

@@ -89,7 +89,7 @@ exports.getClubAdminEdit = async (req, res) => {
   try {
     let link = "/clubAdminMain"; //클럽 관리 페이지로 이동
     const { club_id } = req.params;
-    const clubAdminEdit = await Club.findOne({
+    const clubAdminEditDB = await Club.findOne({
       where: { club_id: club_id },
     });
     const leaderId = await Club.findOne({
@@ -106,12 +106,14 @@ exports.getClubAdminEdit = async (req, res) => {
         isMember: "true",
       },
     });
+    const clubAdminEdit = clubAdminEditDB.toJSON();
     res.render("clubAdmin/clubAdminEdit", {
       clubAdminEdit,
-      leaderName,
-      clubmembers,
-      title: "동아리 정보 관리",
+    leaderName,
+    clubmembers,
+    title: "동아리 정보 관리",
       link
+
     });
   } catch (err) {
     console.error(err);
