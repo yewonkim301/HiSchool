@@ -45,7 +45,7 @@ exports.postRegister = async(req, res, next) => {
 
 exports.postLogin = async(req, res, next) => {
   passport.authenticate("local", (authError, user, info) => {
-    console.log("/login user : ", user);
+    // console.log("/login user : ", user);
     if (authError) {
       console.error(authError);
       return next(authError);

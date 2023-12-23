@@ -47,8 +47,8 @@ exports.getClub = async (req, res) => {
     else if (findmember.dataValues.isMember == "true") isMember = "true";
     else if (findmember.dataValues.isMember == "false") isMember = "false";
     
-    console.log("!!!!!!!!!!!!!!!!", isMember);
-    console.log("ismember >>>>>>>>>>>>>>", isMember);
+    // console.log("!!!!!!!!!!!!!!!!", isMember);
+    // console.log("ismember >>>>>>>>>>>>>>", isMember);
     const clubNum = await Club_members.findAll({
       where: {
         userid_num: userid_num,
@@ -197,7 +197,7 @@ exports.postCreateClub = async (req, res) => {
       keyword: keyword,
       description: description,
     });
-    console.log("res >>>>>>>>>", newClub.dataValues.club_id);
+    // console.log("res >>>>>>>>>", newClub.dataValues.club_id);
 
     const newMember = await Club_members.create({
       club_id: newClub.dataValues.club_id,
@@ -206,7 +206,7 @@ exports.postCreateClub = async (req, res) => {
       // introduction:
       isMember: "true",
     });
-    console("자기소개 들어가???!!!!! >>>>>>>>>>>>", newMember);
+    // console("자기소개 들어가???!!!!! >>>>>>>>>>>>", newMember);
     res.send(newClub);
   } catch (err) {
     console.error(err);
@@ -270,7 +270,7 @@ exports.getClubPost = async (req, res) => {
       commentIdArray.push(element.dataValues.comment_id);
     });
 
-    console.log("commentIdArray >>>>>", commentIdArray);
+    // console.log("commentIdArray >>>>>", commentIdArray);
 
     // 댓글마다 있는 좋아요;
     let clubPostCommentLike = [];
@@ -393,8 +393,8 @@ exports.patchPostComment = async (req, res) => {
   try {
     const { comment_id, post_id, club_id } = req.params;
     const { content } = req.body;
-    console.log("댓글 수정 데이터 받음>>>>>>>>>>>>>>>>>", req.params);
-    console.log("댓글 수정 데이터 받음>>>>>>>>>>>>>>>>>", content);
+    // console.log("댓글 수정 데이터 받음>>>>>>>>>>>>>>>>>", req.params);
+    // console.log("댓글 수정 데이터 받음>>>>>>>>>>>>>>>>>", content);
 
     const clubPostComment = await Club_post_comment.update(
       {

@@ -427,8 +427,8 @@ exports.getClubAdminApplyDetail = async (req, res) => {
         userid_num: userid_num,
       },
     });
-    console.log("여기 봐봐 !!!>>>>>>>>>>", userInfo);
-    console.log("여기!!!!!!", getClubAdminApplyDetail);
+    // console.log("여기 봐봐 !!!>>>>>>>>>>", userInfo);
+    // console.log("여기!!!!!!", getClubAdminApplyDetail);
 
     res.render("clubAdmin/clubAdminApplyDetail", {
       getClubAdminApplyDetail,
@@ -498,7 +498,7 @@ exports.getAllMembers = async (req, res) => {
       console.log(element);
       let info = await User.findOne({ where: { userid_num: element } });
       await userInfo.push(info.name);
-      console.log("userinfo >>>>>>>>>>>>>", userInfo);
+      // console.log("userinfo >>>>>>>>>>>>>", userInfo);
       res.render("clubAdmin/clubAdminTransfer", { data: getAllMembersShow, userInfo, club_id});
     });
 
@@ -631,16 +631,16 @@ exports.getClubMembersApplyList = async (req, res) => {
     });
     let getusersid = [];
     getusers.forEach((element) => {
-      console.log("여기!!!!!!!!!!!!!>>>>>>", element.dataValues.userid_num);
+      // console.log("여기!!!!!!!!!!!!!>>>>>>", element.dataValues.userid_num);
       getusersid.push(element.dataValues.userid_num);
     });
     let userInfo = [];
     getusersid.forEach(async (element) => {
       console.log(element);
       let info = await User.findOne({ where: { userid_num: element } });
-      console.log("info >>>>>>>>", info.nickname);
+      // console.log("info >>>>>>>>", info.nickname);
       await userInfo.push(info.name);
-      console.log("userinfo >>>>>>>>>>>>>", userInfo);
+      // console.log("userinfo >>>>>>>>>>>>>", userInfo);
       res.render("clubAdmin/clubAdminApplyList", {
         getApplyList,
         userInfo,
@@ -650,7 +650,7 @@ exports.getClubMembersApplyList = async (req, res) => {
       });
     });
 
-    console.log("getuserid >>>>>>>>>>>>>", getusersid);
+    // console.log("getuserid >>>>>>>>>>>>>", getusersid);
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -701,7 +701,7 @@ exports.getClubMembers = async (req, res) => {
       },
       // include: [{ model: User }],
     });
-    console.log("클럽 멤버 조회 >>>>>>>>>>>>>", getMembers);
+    // console.log("클럽 멤버 조회 >>>>>>>>>>>>>", getMembers);
 
     const getUsers = await Club_members.findAll({
       attributes: ["userid_num"],
@@ -727,7 +727,7 @@ exports.getClubMembers = async (req, res) => {
       console.log(element);
       let info = await User.findOne({ where: { userid_num: element } });
       await userInfo.push(info.name);
-      console.log("클럽 멤버 이름조회 >>>>>>>>>>>>>", userInfo);
+      // console.log("클럽 멤버 이름조회 >>>>>>>>>>>>>", userInfo);
       if (!getMembers) {
         res.render("clubAdmin/clubAdminMemberList");
       } else {
@@ -807,7 +807,7 @@ exports.getMyPage = async (req, res) => {
         userid: userid,
       },
     });
-    res.render("/mypage/mypageMain", { data: myPageMain, link });
+    res.render("mypage/mypageMain", { data: myPageMain, link });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -926,7 +926,7 @@ exports.getMyPageProfile = async (req, res) => {
         nickname: nickname,
       },
     });
-    res.render("/mypage/mypageProfile", { data: myPageMainProfile, link });
+    res.render("mypage/mypageProfile", { data: myPageMainProfile, link });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -975,17 +975,14 @@ exports.home = async (req, res) => {
         where: { club_id: element },
       });
       clubInfo.push(club);
-      console.log("home clubInfo >>>>>>", clubInfo);
+      // console.log("home clubInfo >>>>>>", clubInfo);
     }
 
-    console.log("home clubInfo 내가 가입한 동아리 >>>>>>", clubInfo);
-    console.log("home getClubs 전체 동아리 >>>>>>", getClubs);
+    // console.log("home clubInfo 내가 가입한 동아리 >>>>>>", clubInfo);
+    // console.log("home getClubs 전체 동아리 >>>>>>", getClubs);
 
     await res.render("home", { getClubs, clubInfo, foundUser });
-    console.log(
-      "asdjfoisjoifjoewjfoiesjfoesjfesjfoiesjoiesjefjsofjesoi",
-      clubInfo
-    );
+    
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
