@@ -5,9 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>마이페이지</title>
     <link rel="stylesheet" href="/style.css" />
-    <style>
-      
-    </style>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style></style>
   </head>
 
   <body>
@@ -31,33 +30,82 @@
       <form name="profile">
         <div class="input">
           <label for="name">이름</label>
-          <input type="text" class="textField" id="name" value="<%= data.name%>" />
+          <input
+            type="text"
+            class="textField"
+            id="name"
+            value="<%= data.name%>"
+          />
         </div>
         <div class="input">
           <label for="phone">전화번호</label>
-          <input type="text" class="textField" id="phone" value="<%= data.phone %>" />
+          <input
+            type="text"
+            class="textField"
+            id="phone"
+            value="<%= data.phone %>"
+          />
         </div>
         <div class="input">
           <label for="school">학교</label>
-          <input type="text" class="textField" id="school" value="<%= data.school %>" />
+          <input
+            type="text"
+            class="textField"
+            id="school"
+            value="<%= data.school %>"
+          />
         </div>
       </form>
       <div class="cta">
-        <button class="btn btn-primary" style="background-color: red;" onclick="handleDelete()">탈퇴</button>
+        <% if (Leader || Leader2 || Leader3) { %>
+          <label for="deleteButton">가입된 동아리가 존재합니다. <br>동아리 탈퇴 후 회원탈퇴를 해주세요.</label>
+          <button
+          class="btn btn-primary"
+          id="deleteButton"
+          style="background-color: rgba(255, 0, 0, 0.188) "
+          onclick="handleDelete()"
+          disabled
+        >
+          탈퇴
+        </button>
+          <% } else { %>
+        <button
+          class="btn btn-primary"
+          style="background-color: red"
+          onclick="handleDelete()"
+        >
+          탈퇴
+        </button>
+        <% } %>
+
         <button class="btn btn-primary">수정하기</button>
       </div>
     </div>
-    
+
     <script>
-      const form = document.forms['profile']
+      const form = document.forms["profile"];
 
       async function handleDelete() {
+        confirm("정말 탈퇴하실까요?");
+
         const result = await axios({
           method: "DELETE",
-          url: "/mypageMain"
-        })
+          url: "/mypageMain",
+        });
 
-        console.log('회원 탈퇴 완료', result);
+        console.log(result)
+
+        confirm('탈퇴 실행할까요?')
+
+
+
+          if (result.isDeleted) {
+            alert("회원 탈퇴 완료");
+            console.log("회원 탈퇴 완료", result);
+          } else {
+            alert("회원 탈퇴 실패");
+          }
+        
       }
     </script>
   </body>
