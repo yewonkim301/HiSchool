@@ -519,9 +519,8 @@ exports.getAllMembers = async (req, res) => {
 // PATCH /clubAdminTransfer/:club_id 신청 거절
 exports.updateClubAdminTransfer = async (req, res) => {
   try {
-    const { club_id } = req.params;
+    const { club_id, userid_num } = req.params;
 
-    const { userid_num } = req.body;
     const updateLeader = await Club.update(
       {
         leader_id: userid_num,
