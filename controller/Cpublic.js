@@ -837,6 +837,29 @@ exports.deleteMyID = async (req, res) => {
   }
 };
 
+// PATCH /mypageMain //마이페이지 수정
+exports.updateMyPageMain = async (req,res) => {
+  try{
+    const { userid, userid_num } = jwt.verify(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
+    const {name, school, phone, image} =req.body;
+    const update = await User.update({
+      name : name,
+      school: school,
+      phone: phone,
+      image: image
+    },{
+      where: userid_num
+    })
+  }
+  catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+}
+
 // GET /mypageMainProfile/:nickname 내 페이지 가져오기 ver.닉네임
 exports.getMyPageProfile = async (req, res) => {
   try {
