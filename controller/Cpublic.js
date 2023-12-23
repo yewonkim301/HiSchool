@@ -817,6 +817,9 @@ exports.getMyPage = async (req, res) => {
 // DELETE /mypageMain/
 exports.deleteMyID = async (req, res) => {
   try {
+    let Leader;
+    let Leader2;
+    let Leader3;
     const { userid, userid_num } = jwt.verify(
       req.cookies.jwt,
       process.env.JWT_SECRET
@@ -826,10 +829,63 @@ exports.deleteMyID = async (req, res) => {
         userid_num: userid_num,
       },
     });
+
+    // 탈퇴전 동아리 리더인지 아닌지 체크
+
+    // 해당 유저가 가지고 있는 모든 Club_id를 가지고 온다.
+    const getClubId = await Club_members.findAll({
+      attributes: ["club_id"],
+      where:{
+        userid_num: userid_num
+      }
+    });
+
+    // 가입할 수 있는, 창설할 수 있는 클럽은 최대 3개이다. 구조분해로 넣어준다.
+    const {club1, club2, club3} = getClubId;
+
+    // 구조분해한 변수로 leader_id를 가지고 있는지 찾는다.
+    const getLeaderid1 = await Club.findOne({
+      attributes: ["leader_id"],
+      where:{
+        club_id: club1
+      }
+    });
+    const getLeaderid2 = await Club.findOne({
+      attributes: ["leader_id"],
+      where:{
+        club_id: club2
+      }
+    });
+    const getLeaderid3 = await Club.findOne({
+      attributes: ["leader_id"],
+      where:{
+        club_id: club3
+      }
+    });
+    if(getLeaderid1 = userid_num){
+      Leader = true
+    }else{
+      Leader = false
+    }
+
+    if(getLeaderid2 = userid_num){
+      Leader2 = true
+    }else{
+      Leader2 = false
+    }
+
+    if(getLeaderid3 = userid_num){
+      Leader3 = true
+    }else{
+      Leader3 = false
+    }
+    
+
+
     if (destroyMyID) {
-      res.send({ isDeleted: true });
+      res.send({ isDeleted: true , Leader, Leader2, Leader3});
     } else {
-      res.send({ isDeleted: false });
+      res.send({ isDeleted: false , Leader, Leader2, Leader3});
     }
   } catch (err) {
     console.error(err);
