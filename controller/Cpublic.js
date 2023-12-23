@@ -139,9 +139,13 @@ exports.createPostCommentLike = async (req, res) => {
   try {
     const { post_id, comment_id } = req.params;
     const { likeid_num } = req.body;
+    const { userid, userid_num } = jwt.verify(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
 
     const publicPostCommentLike = await Public_post_comment_like.create({
-      likeid_num: likeid_num,
+      likeid_num: userid_num,
       where: {
         comment_id: comment_id,
       },
@@ -202,6 +206,7 @@ exports.patchPostComment = async (req, res) => {
         where: {
           comment_id: comment_id,
           post_id: post_id,
+          userid_num: userid_num
         },
       }
     );
@@ -250,6 +255,7 @@ exports.deletePost = async (req, res) => {
     const deletePost = await Public_post.destroy({
       where: {
         post_id: post_id,
+        userid_num:userid_num
       },
     });
     if (deletePost) {
@@ -275,6 +281,7 @@ exports.deletePostComment = async (req, res) => {
       where: {
         post_id: post_id,
         comment_id: comment_id,
+        likeid_num: userid_num
       },
     });
     if (deletePostComment) {
