@@ -17,8 +17,9 @@ const jwt = require("jsonwebtoken");
 // GET /clubMain : 전체 동아리 조회
 exports.getClubs = async (req, res) => {
   try {
+    let link = "/home" //홈으로 이동
     const Clubs = await Club.findAll();
-    res.render("club/clubMain", { data: Clubs, title: "전체 동아리" });
+    res.render("club/clubMain", { data: Clubs, title: "전체 동아리", link });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -28,6 +29,7 @@ exports.getClubs = async (req, res) => {
 // GET /clubDetail/:club_id : 동아리 하나 상세 조회
 exports.getClub = async (req, res) => {
   try {
+    let link = "/clubMain" // 전체 클럽화면으로 이동
     const club = await Club.findOne({
       where: { club_id: req.params.club_id },
     });
@@ -45,8 +47,8 @@ exports.getClub = async (req, res) => {
     else if (findmember.dataValues.isMember == "true") isMember = "true";
     else if (findmember.dataValues.isMember == "false") isMember = "false";
     
-    console.log("!!!!!!!!!!!!!!!!", isMember);
-    console.log("ismember >>>>>>>>>>>>>>", isMember);
+    // console.log("!!!!!!!!!!!!!!!!", isMember);
+    // console.log("ismember >>>>>>>>>>>>>>", isMember);
     const clubNum = await Club_members.findAll({
       where: {
         userid_num: userid_num,
@@ -58,6 +60,7 @@ exports.getClub = async (req, res) => {
       isMember,
       clubNum,
       title: "동아리",
+      link
     });
   } catch (err) {
     console.error(err);
@@ -68,10 +71,12 @@ exports.getClub = async (req, res) => {
 // GET /clubAdminMain/:club_id : 동아리 관리페이지 불러오기
 exports.getClubAdminMain = async (req, res) => {
   try {
+    let link = "/myclubMain";
     const { club_id } = req.params;
     res.render("clubAdmin/clubAdminMain", {
       data: club_id,
       title: "관리 페이지",
+      link
     });
   } catch (err) {
     console.error(err);
@@ -82,6 +87,7 @@ exports.getClubAdminMain = async (req, res) => {
 // GET /clubAdminEdit/:club_id : 동아리 수정페이지 불러오기
 exports.getClubAdminEdit = async (req, res) => {
   try {
+    let link = "/clubAdminMain"; //클럽 관리 페이지로 이동
     const { club_id } = req.params;
     const clubAdminEditDB = await Club.findOne({
       where: { club_id: club_id },
@@ -101,16 +107,13 @@ exports.getClubAdminEdit = async (req, res) => {
       },
     });
     const clubAdminEdit = clubAdminEditDB.toJSON();
-    res.render("clubAdmin/clubAdminEdit", {data:{
+    res.render("clubAdmin/clubAdminEdit", {
       clubAdminEdit,
-      leaderName,
-      clubmembers,
-      title: "동아리 정보 관리",
-    },clubAdminEdit,
     leaderName,
     clubmembers,
     title: "동아리 정보 관리",
-      
+      link
+
     });
   } catch (err) {
     console.error(err);
@@ -173,7 +176,8 @@ exports.deleteClub = async (req, res) => {
 // GET /createClub : 동아리 생성
 exports.getCreateClub = async (req, res) => {
   try {
-    res.render("club/createClub", { title: "동아리 개설" });
+    let link = "/clubMain" // 클럽 메인 페이지로 이동
+    res.render("club/createClub", { title: "동아리 개설" , link});
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -195,7 +199,7 @@ exports.postCreateClub = async (req, res) => {
       keyword: keyword,
       description: description,
     });
-    console.log("res >>>>>>>>>", newClub.dataValues.club_id);
+    // console.log("res >>>>>>>>>", newClub.dataValues.club_id);
 
     const newMember = await Club_members.create({
       club_id: newClub.dataValues.club_id,
@@ -204,7 +208,7 @@ exports.postCreateClub = async (req, res) => {
       // introduction:
       isMember: "true",
     });
-    console("자기소개 들어가???!!!!! >>>>>>>>>>>>", newMember);
+    // console("자기소개 들어가???!!!!! >>>>>>>>>>>>", newMember);
     res.send(newClub);
   } catch (err) {
     console.error(err);
@@ -216,6 +220,7 @@ exports.postCreateClub = async (req, res) => {
 // GET /myclubPostMain/:club_id : 동아리 게시글 전체 조회
 exports.getClubPosts = async (req, res) => {
   try {
+    let link = "/myclubMain"; // 해당클럽 메인페이지로 이동
     const posts = await Club_post.findAll({
       where: { club_id: req.params.club_id },
       //clubClubId 수정 전
@@ -224,6 +229,7 @@ exports.getClubPosts = async (req, res) => {
       data: posts,
       club_id: req.params.club_id, // club_id를 별도로 전달
       title: "게시판",
+      link
     });
   } catch (err) {
     console.error(err);
@@ -235,6 +241,7 @@ exports.getClubPosts = async (req, res) => {
 // 게시글 전달할 때, 게시글마다의 댓글과 좋아요 수 함께 전달
 exports.getClubPost = async (req, res) => {
   try {
+    let link = "/myclubPostMain"; //전체 게시물로 이동
     const { club_id, post_id } = req.params;
     console.log("params > ", req.params);
     const { userid, userid_num } = jwt.verify(
@@ -265,7 +272,7 @@ exports.getClubPost = async (req, res) => {
       commentIdArray.push(element.dataValues.comment_id);
     });
 
-    console.log("commentIdArray >>>>>", commentIdArray);
+    // console.log("commentIdArray >>>>>", commentIdArray);
 
     // 댓글마다 있는 좋아요;
     let clubPostCommentLike = [];
@@ -283,6 +290,7 @@ exports.getClubPost = async (req, res) => {
       clubPostCommentLike,
       commentId,
       userid_num,
+      link
     });
   } catch (err) {
     console.error(err);
@@ -293,6 +301,7 @@ exports.getClubPost = async (req, res) => {
 // GET /myclubEditPost/:club_id/:post_id 동아리 게시글 수정 페이지 불러오기
 exports.getClubEditPost = async (req, res) => {
   try {
+    let link = "/mypageMain" // 프로필에 있는 내가 쓴 글 페이지 이동으로 이동할 거기 때문에
     const { club_id, post_id } = req.params;
     const clubPost = await Club_post.findOne({
       where: { club_id: club_id, post_id: post_id },
@@ -300,6 +309,7 @@ exports.getClubEditPost = async (req, res) => {
     res.render("myclub/myclubEditPost", {
       data: clubPost,
       title: "게시글 수정",
+      link
     });
   } catch (err) {
     console.error(err);
@@ -385,8 +395,8 @@ exports.patchPostComment = async (req, res) => {
   try {
     const { comment_id, post_id, club_id } = req.params;
     const { content } = req.body;
-    console.log("댓글 수정 데이터 받음>>>>>>>>>>>>>>>>>", req.params);
-    console.log("댓글 수정 데이터 받음>>>>>>>>>>>>>>>>>", content);
+    // console.log("댓글 수정 데이터 받음>>>>>>>>>>>>>>>>>", req.params);
+    // console.log("댓글 수정 데이터 받음>>>>>>>>>>>>>>>>>", content);
 
     const clubPostComment = await Club_post_comment.update(
       {
@@ -473,8 +483,9 @@ exports.deleteClubPostCommentLike = async (req, res) => {
 exports.getCreateClubPost = async (req, res) => {
   try {
     // 수정
+    let link = "/myclubPostMain";
     const { club_id } = req.params;
-    res.render("myclub/myclubNewPost", { data: club_id, title: "게시글 작성" });
+    res.render("myclub/myclubNewPost", { data: club_id, title: "게시글 작성" , link});
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -512,6 +523,7 @@ exports.createClubPost = async (req, res) => {
 // GET /myclubSchedule/:club_id : 동아리 일정 전체 조회
 exports.getClubSchedules = async (req, res) => {
   try {
+    let link = "/myclubMain" // 클럽 메인페이지 이동
     const { club_id } = req.params;
     const clubSchedules = await Club_schedule.findAll({
       where: { club_id: club_id },
@@ -519,6 +531,7 @@ exports.getClubSchedules = async (req, res) => {
     res.render("./myclub/myclubSchedule", {
       data: clubSchedules,
       title: "일정",
+      link
     });
   } catch (err) {
     console.error(err);
@@ -612,11 +625,12 @@ exports.deleteClubSchedule = async (req, res) => {
 // GET /myclubChat/:club_id : 동아리 채팅방 조회
 exports.getClubChat = async (req, res) => {
   try {
+    let link = "myclubMain";
     const { club_id } = req.params;
     const clubChat = await Club_chat.findAll({
       where: { club_id: club_id },
     });
-    res.render("myclub/socketTest", { club_id });
+    res.render("myclub/socketTest", { club_id, link });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -648,6 +662,7 @@ exports.postClubChat = async (req, res) => {
 
 // GET /myclubList 내가 가입한 동아리 목록 페이지 불러오기
 exports.getMyclubList = async (req, res) => {
+  let link = "/home"
   const { userid, userid_num } = jwt.verify(
     req.cookies.jwt,
     process.env.JWT_SECRET
@@ -666,11 +681,12 @@ exports.getMyclubList = async (req, res) => {
       ],
     },
   });
-  res.render("myclub/myclubList", { data: myclubList, title: "내 동아리" });
+  res.render("myclub/myclubList", { data: myclubList, title: "내 동아리", link});
 };
 
 // GET /myclubMain/:club_id 내가 가입한 동아리의 메인 페이지 불러오기
 exports.getMyclubMain = async (req, res) => {
+  let link = "/myclubList"
   console.log(req.params);
   const { club_id } = req.params;
   console.log(club_id);
@@ -683,7 +699,7 @@ exports.getMyclubMain = async (req, res) => {
   let isLeader;
   if (myClub.leader_id == userid_num) isLeader = true;
   else isLeader = false;
-  res.render("myclub/myclubMain", { data: myClub, isLeader });
+  res.render("myclub/myclubMain", { data: myClub, isLeader, link });
 };
 
 // GET /clubChat

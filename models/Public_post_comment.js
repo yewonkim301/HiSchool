@@ -14,6 +14,10 @@ const PublicPostComment = (Sequelize, DataTypes) => {
             comment_nickname:{
                 type: DataTypes.STRING(50),
                 allowNull: false,
+            },
+            userid_num: {
+                type: DataTypes.INTEGER,
+                allowNull: false,
             }
         },
         {

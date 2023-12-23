@@ -16,12 +16,10 @@ const { Sequelize } = require("sequelize");
 // GET /publicPostMain 익명 게시판 정보 가져오기
 exports.getPost = async (req, res) => {
   try {
-
-    let link = "/home" //홈페이지 이동
-    let title = "익명 게시판"
+    let link = "/home"; //홈페이지 이동
+    let title = "익명 게시판";
     const Posts = await Public_post.findAll();
-    res.render("publicPost/publicPostMain", { data: Posts , title, link});
-
+    res.render("publicPost/publicPostMain", { data: Posts, title, link });
   } catch {
     console.error(err);
     res.send("Internal Server Error!");
@@ -31,7 +29,7 @@ exports.getPost = async (req, res) => {
 // GET /publicNewPost 게시물 생성 페이지 로드
 exports.getNewPost = async (req, res) => {
   try {
-    let link = "/publicPostMain" // 익명게시판 이동
+    let link = "/publicPostMain"; // 익명게시판 이동
     let title = "게시글 작성";
     res.render("publicPost/publicNewPost", title, link);
   } catch {
@@ -72,7 +70,7 @@ exports.createPost = async (req, res) => {
 exports.getPostDetail = async (req, res) => {
   try {
     let link = "/publicPostMain"; // 전체 게시물로 이동
-    let title = "게시글"
+    let title = "게시글";
     const { post_id } = req.params;
     const { userid, userid_num } = jwt.verify(
       req.cookies.jwt,
@@ -96,7 +94,7 @@ exports.getPostDetail = async (req, res) => {
       getPostComment,
       getPostCommentLike,
       title,
-      link
+      link,
     });
   } catch (err) {
     console.error(err);
@@ -139,9 +137,13 @@ exports.createPostCommentLike = async (req, res) => {
   try {
     const { post_id, comment_id } = req.params;
     const { likeid_num } = req.body;
+    const { userid, userid_num } = jwt.verify(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
 
     const publicPostCommentLike = await Public_post_comment_like.create({
-      likeid_num: likeid_num,
+      likeid_num: userid_num,
       where: {
         comment_id: comment_id,
       },
@@ -202,6 +204,7 @@ exports.patchPostComment = async (req, res) => {
         where: {
           comment_id: comment_id,
           post_id: post_id,
+          userid_num: userid_num,
         },
       }
     );
@@ -250,6 +253,7 @@ exports.deletePost = async (req, res) => {
     const deletePost = await Public_post.destroy({
       where: {
         post_id: post_id,
+        userid_num: userid_num,
       },
     });
     if (deletePost) {
@@ -275,6 +279,7 @@ exports.deletePostComment = async (req, res) => {
       where: {
         post_id: post_id,
         comment_id: comment_id,
+        likeid_num: userid_num,
       },
     });
     if (deletePostComment) {
@@ -292,7 +297,7 @@ exports.deletePostComment = async (req, res) => {
 // GET /dm => dm 가져오기
 exports.dm = async (req, res) => {
   try {
-    let link = "/home" // DM방으로 가는 경로가 여러가지 아닌가요? ex) 홈 => DM, 다른 곳에서 DM표시 클릭
+    let link = "/home"; // DM방으로 가는 경로가 여러가지 아닌가요? ex) 홈 => DM, 다른 곳에서 DM표시 클릭
     let title = "DM";
     const { nickname } = req.body;
     const { userid, userid_num } = jwt.verify(
@@ -344,7 +349,7 @@ exports.getDmDetail = async (req, res) => {
         note_id: note_id,
       },
     });
-    res.render("support/dmDetail", { data: getRoom , link});
+    res.render("support/dmDetail", { data: getRoom, link });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -402,7 +407,7 @@ exports.deleteDm = async (req, res) => {
 // GET /clubAdminApplyDetail/:club_id/:userid_num 회원 신청자 상세페이지 불러오기
 exports.getClubAdminApplyDetail = async (req, res) => {
   try {
-    let link = "/clubAdminApplyList" //클럽 신청자 리스트 페이지
+    let link = "/clubAdminApplyList"; //클럽 신청자 리스트 페이지
     let title = "회원 상세페이지";
     const { club_id, userid_num } = req.params;
 
@@ -420,14 +425,14 @@ exports.getClubAdminApplyDetail = async (req, res) => {
         userid_num: userid_num,
       },
     });
-    console.log("여기 봐봐 !!!>>>>>>>>>>", userInfo);
-    console.log("여기!!!!!!", getClubAdminApplyDetail);
+    // console.log("여기 봐봐 !!!>>>>>>>>>>", userInfo);
+    // console.log("여기!!!!!!", getClubAdminApplyDetail);
 
     res.render("clubAdmin/clubAdminApplyDetail", {
       getClubAdminApplyDetail,
       userInfo,
       title,
-      link
+      link,
     });
   } catch (err) {
     console.error(err);
@@ -441,7 +446,6 @@ exports.getClubAdminTransfer = async (req, res) => {
     let link = "/clubAdminEdit"; //클럽 설정페이지
     let title = "클럽권한 위임";
     res.render("clubAdmin/clubAdminTransfer", title, link);
-
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -491,13 +495,21 @@ exports.getAllMembers = async (req, res) => {
       console.log(element);
       let info = await User.findOne({ where: { userid_num: element } });
       await userInfo.push(info.name);
-      console.log("userinfo >>>>>>>>>>>>>", userInfo);
-      res.render("clubAdmin/clubAdminTransfer", { data: getAllMembersShow, userInfo, club_id});
+      // console.log("userinfo >>>>>>>>>>>>>", userInfo);
+      res.render("clubAdmin/clubAdminTransfer", {
+        data: getAllMembersShow,
+        userInfo,
+        club_id,
+      });
     });
 
-
-    res.render("clubAdmin/clubAdminTransfer", { data: getAllMembersShow, userInfo, club_id, title, link});
-
+    res.render("clubAdmin/clubAdminTransfer", {
+      data: getAllMembersShow,
+      userInfo,
+      club_id,
+      title,
+      link,
+    });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -537,10 +549,10 @@ exports.updateClubAdminTransfer = async (req, res) => {
 exports.clubApply = async (req, res) => {
   try {
     let link = "/clubMain"; // 전체 클럽 페이지
-    let title = "동아리 신청"
+    let title = "동아리 신청";
     const { club_id } = req.params;
     console.log(club_id);
-    res.render("club/clubApply", { data: club_id , title, link});
+    res.render("club/clubApply", { data: club_id, title, link });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -624,26 +636,26 @@ exports.getClubMembersApplyList = async (req, res) => {
     });
     let getusersid = [];
     getusers.forEach((element) => {
-      console.log("여기!!!!!!!!!!!!!>>>>>>", element.dataValues.userid_num);
+      // console.log("여기!!!!!!!!!!!!!>>>>>>", element.dataValues.userid_num);
       getusersid.push(element.dataValues.userid_num);
     });
     let userInfo = [];
     getusersid.forEach(async (element) => {
       console.log(element);
       let info = await User.findOne({ where: { userid_num: element } });
-      console.log("info >>>>>>>>", info.nickname);
+      // console.log("info >>>>>>>>", info.nickname);
       await userInfo.push(info.name);
-      console.log("userinfo >>>>>>>>>>>>>", userInfo);
+      // console.log("userinfo >>>>>>>>>>>>>", userInfo);
       res.render("clubAdmin/clubAdminApplyList", {
         getApplyList,
         userInfo,
         club_id: club_id,
         title,
-        link
+        link,
       });
     });
 
-    console.log("getuserid >>>>>>>>>>>>>", getusersid);
+    // console.log("getuserid >>>>>>>>>>>>>", getusersid);
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -675,7 +687,7 @@ exports.deleteApplyDetail = async (req, res) => {
 // GET /clubAdminMemberlist/:club_id 클럽 회원 전체 조회
 exports.getClubMembers = async (req, res) => {
   try {
-    let link = "/clubAdminMain" // 클럽 관리자 페이지
+    let link = "/clubAdminMain"; // 클럽 관리자 페이지
     let title = "동아리 전체 회원";
     const { club_id } = req.params;
     const getMembers = await Club_members.findAll({
@@ -694,7 +706,7 @@ exports.getClubMembers = async (req, res) => {
       },
       // include: [{ model: User }],
     });
-    console.log("클럽 멤버 조회 >>>>>>>>>>>>>", getMembers);
+    // console.log("클럽 멤버 조회 >>>>>>>>>>>>>", getMembers);
 
     const getUsers = await Club_members.findAll({
       attributes: ["userid_num"],
@@ -720,11 +732,17 @@ exports.getClubMembers = async (req, res) => {
       console.log(element);
       let info = await User.findOne({ where: { userid_num: element } });
       await userInfo.push(info.name);
-      console.log("클럽 멤버 이름조회 >>>>>>>>>>>>>", userInfo);
+      // console.log("클럽 멤버 이름조회 >>>>>>>>>>>>>", userInfo);
       if (!getMembers) {
         res.render("clubAdmin/clubAdminMemberList");
       } else {
-        res.render("clubAdmin/clubAdminMemberList", { data: getMembers , userInfo, club_id, title, link});
+        res.render("clubAdmin/clubAdminMemberList", {
+          data: getMembers,
+          userInfo,
+          club_id,
+          title,
+          link,
+        });
       }
     });
   } catch (err) {
@@ -755,8 +773,13 @@ exports.getClubMember = async (req, res) => {
       },
     });
 
-    res.render("clubAdmin/clubAdminMemberDetail", { data: getMember, userInfo, club_id, title, link});
-
+    res.render("clubAdmin/clubAdminMemberDetail", {
+      data: getMember,
+      userInfo,
+      club_id,
+      title,
+      link,
+    });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -790,17 +813,120 @@ exports.deleteMembers = async (req, res) => {
 // GET /mypageMain/ 내 페이지 가져오기 ver.동아리
 exports.getMyPage = async (req, res) => {
   try {
+    let Leader;
+    let Leader2;
+    let Leader3;
+
     link = "/home"; //홈으로 이동
     const { userid, userid_num } = jwt.verify(
       req.cookies.jwt,
       process.env.JWT_SECRET
     );
+
+    console.log("Cpublic userid_num", userid_num);
+
     const myPageMain = await User.findOne({
       where: {
         userid: userid,
       },
     });
-    res.render("/mypage/mypageMain", { data: myPageMain, link });
+
+    // 탈퇴전 동아리 리더인지 아닌지 체크
+
+    // 해당 유저가 가지고 있는 모든 Club_id를 가지고 온다.
+    const getClubId = await Club_members.findAll({
+      attributes: ["club_id"],
+      where: {
+        userid_num: userid_num,
+      },
+    });
+
+    // console.log("getClubId", getClubId);
+
+    // 가입할 수 있는, 창설할 수 있는 클럽은 최대 3개이다. 구조분해로 넣어준다.
+    // const { club1, club2, club3 } = getClubId.club_id;
+    let clubs = [];
+    for (const element of getClubId) {
+      // console.log(element.dataValues.club_id);
+      clubs.push(element.dataValues.club_id);
+    }
+
+    // console.log("clubs>>>>>>", clubs);
+
+    // 여기서 club1, club2, club3을 clubs 배열의 처음 세 요소로 가정합니다.
+    // 배열의 길이가 3보다 작을 경우 undefined가 할당될 수 있습니다.
+    const [club1, club2, club3] = clubs;
+
+    // console.log("club1", club1);
+    // console.log("club2", club2);
+    // console.log("club3", club3);
+
+    // 구조분해한 변수로 leader_id를 가지고 있는지 찾는다.
+
+    let getLeaderid1;
+    let getLeaderid2;
+    let getLeaderid3;
+
+    if (club1 !== undefined) {
+      getLeaderid1 = await Club.findOne({
+        attributes: ["leader_id"],
+        where: {
+          club_id: club1,
+        },
+      });
+    }
+
+    if (club2 !== undefined) {
+      getLeaderid2 = await Club.findOne({
+        attributes: ["leader_id"],
+        where: {
+          club_id: club2,
+        },
+      });
+    }
+
+    if (club3 !== undefined) {
+      getLeaderid3 = await Club.findOne({
+        attributes: ["leader_id"],
+        where: {
+          club_id: club3,
+        },
+      });
+    }
+
+    // console.log("getLeaderid", getLeaderid1);
+    // console.log("getLeaderid", getLeaderid2);
+    // console.log("getLeaderid", getLeaderid3);
+
+    if (getLeaderid1 == undefined) {
+      Leader = false;
+    } else if (getLeaderid1.leader_id == userid_num) {
+      Leader = true;
+    }
+
+    // console.log("Leader", Leader);
+
+    if (getLeaderid2 == undefined) {
+      Leader2 = false;
+    } else if (getLeaderid2.leader_id == userid_num) {
+      Leader2 = true;
+    }
+
+    if (getLeaderid3 == undefined) {
+      Leader3 = false;
+    } else if (getLeaderid3.leader_id == userid_num) {
+      Leader3 = true;
+    }
+
+    // console.log("Leader3", Leader3);
+
+    res.render("mypage/mypageMain", {
+      data: myPageMain,
+      link,
+      Leader,
+      Leader2,
+      Leader3,
+    });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -819,11 +945,37 @@ exports.deleteMyID = async (req, res) => {
         userid_num: userid_num,
       },
     });
+
     if (destroyMyID) {
       res.send({ isDeleted: true });
     } else {
       res.send({ isDeleted: false });
     }
+  } catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+};
+
+// PATCH /mypageMain //마이페이지 수정
+exports.updateMyPageMain = async (req, res) => {
+  try {
+    const { userid, userid_num } = jwt.verify(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
+    const { name, school, phone, image } = req.body;
+    const update = await User.update(
+      {
+        name: name,
+        school: school,
+        phone: phone,
+        image: image,
+      },
+      {
+        where: userid_num,
+      }
+    );
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -840,7 +992,7 @@ exports.getMyPageProfile = async (req, res) => {
         nickname: nickname,
       },
     });
-    res.render("/mypage/mypageProfile", { data: myPageMainProfile, link });
+    res.render("mypage/mypageProfile", { data: myPageMainProfile, link });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -889,17 +1041,13 @@ exports.home = async (req, res) => {
         where: { club_id: element },
       });
       clubInfo.push(club);
-      console.log("home clubInfo >>>>>>", clubInfo);
+      // console.log("home clubInfo >>>>>>", clubInfo);
     }
 
-    console.log("home clubInfo 내가 가입한 동아리 >>>>>>", clubInfo);
-    console.log("home getClubs 전체 동아리 >>>>>>", getClubs);
+    // console.log("home clubInfo 내가 가입한 동아리 >>>>>>", clubInfo);
+    // console.log("home getClubs 전체 동아리 >>>>>>", getClubs);
 
     await res.render("home", { getClubs, clubInfo, foundUser });
-    console.log(
-      "asdjfoisjoifjoewjfoiesjfoesjfesjfoiesjoiesjefjsofjesoi",
-      clubInfo
-    );
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");

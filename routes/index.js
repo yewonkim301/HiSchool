@@ -288,7 +288,10 @@ router.delete(
 router.get("/mypageMain", isLoggedIn, controllerPublic.getMyPage);
 
 // DELETE /mypageMain 유저 탈퇴
-router.get("/mypageMain", isLoggedIn, controllerPublic.deleteMyID);
+router.delete("/mypageMain", isLoggedIn, controllerPublic.deleteMyID);
+
+// PATCH /mypageMain //마이페이지 수정
+router.patch("/mypageMain", isLoggedIn, controllerPublic.updateMyPageMain);
 
 // GET /mypageProfile/:nickname 마이페이지 정보 가져오기 ver.닉네임
 router.get(
