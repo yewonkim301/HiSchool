@@ -83,7 +83,7 @@ exports.getClubAdminMain = async (req, res) => {
 exports.getClubAdminEdit = async (req, res) => {
   try {
     const { club_id } = req.params;
-    const clubAdminEdit = await Club.findOne({
+    const clubAdminEditDB = await Club.findOne({
       where: { club_id: club_id },
     });
     const leaderId = await Club.findOne({
@@ -100,11 +100,17 @@ exports.getClubAdminEdit = async (req, res) => {
         isMember: "true",
       },
     });
-    res.render("clubAdmin/clubAdminEdit", {
+    const clubAdminEdit = clubAdminEditDB.toJSON();
+    res.render("clubAdmin/clubAdminEdit", {data:{
       clubAdminEdit,
       leaderName,
       clubmembers,
       title: "동아리 정보 관리",
+    },clubAdminEdit,
+    leaderName,
+    clubmembers,
+    title: "동아리 정보 관리",
+      
     });
   } catch (err) {
     console.error(err);
