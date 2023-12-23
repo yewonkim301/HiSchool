@@ -15,57 +15,60 @@
 
 
 <body>
-   <%- include('../component/header')%>
-  <div class="content">
-    <div class="group">
-      <h2>동아리 이름</h2>
-      <input  id="editClubName" class=" textField" value="<%=clubAdminEdit.club_name%>">
-    </div>
-    <div class="group">
-      <h2>동아리 설명</h2>
-      <input id="editClubDescription" class=" textField" value="<%=clubAdminEdit.description%>">
-    </div>
-    
-    <div class="group">
-      <h2>관리자</h2>
-      <p><%=leaderName.name%></p>
-      <button class="btn-sm btn-primary" onclick="trasferLeader()">위임</button>
-    </div>
-    <div class="group">
-      <h2>회원수</h2>
-      <p><%=clubmembers.length%>/<input id="editClubLimit" value="<%=clubAdminEdit.limit%>"></input>
-    </p>
-      
-    </div>
-    
-    <div class="group">
-      <h2>키워드</h2>
-      <input class=" textField" id="editClubKeyword" value="<%=clubAdminEdit.keyword%>">
-    </div>
-    <button onclick="deleteClubInfo()" class="btn-sm btn-primary">삭제</button><br><br>
-    <button onclick="patchClubInfo()" class="btn btn-primary">수정</button>
-  </div>
+  <%- include('../component/header')%>
+    <div class="content">
+      <div class="group">
+        <h2>동아리 이름</h2>
+        <input id="editClubName" class=" textField" value="<%=clubAdminEdit.club_name%>">
+      </div>
+      <div class="group">
+        <h2>동아리 설명</h2>
+        <input id="editClubDescription" class=" textField" value="<%=clubAdminEdit.description%>">
+      </div>
 
-  <script>
+      <div class="group">
+        <h2>관리자</h2>
+        <p>
+          <%=leaderName.name%>
+        </p>
+        <button class="btn-sm btn-primary" onclick="trasferLeader()">위임</button>
+      </div>
+      <div class="group">
+        <h2>회원수</h2>
+        <p>
+          <%=clubmembers.length%>/<input id="editClubLimit" value="<%=clubAdminEdit.limit%>"></input>
+        </p>
 
-    console.log('<%=clubAdminEdit%>');
-    console.log('<%=leaderName.name%>');
-    console.log('<%=clubmembers.length%>');
-    // club
+      </div>
 
-    
-   function trasferLeader(){
-      window.location.href= "/clubAdminTransfer/<%=clubAdminEdit.club_id%>"
-   }
-   async function patchClubInfo(){
-    const newName = document.getElementById('editClubName').value;
-    const newDescription = document.getElementById('editClubDescription').value;
-    const newLimit = document.getElementById('editClubLimit').value;
-    const newKeyword = document.getElementById('editClubKeyword').value;
-    console.log(newName,newDescription,newLimit,newKeyword)
- 
+      <div class="group">
+        <h2>키워드</h2>
+        <input class=" textField" id="editClubKeyword" value="<%=clubAdminEdit.keyword%>">
+      </div>
+      <button onclick="deleteClubInfo()" class="btn-sm btn-primary">삭제</button><br><br>
+      <button onclick="patchClubInfo()" class="btn btn-primary">수정</button>
+    </div>
 
-    try {
+    <script>
+
+      console.log('<%=clubAdminEdit%>');
+      console.log('<%=leaderName.name%>');
+      console.log('<%=clubmembers.length%>');
+      // club
+
+
+      function trasferLeader() {
+        window.location.href = "/clubAdminTransfer/<%=clubAdminEdit.club_id%>";
+      }
+      async function patchClubInfo() {
+        const newName = document.getElementById('editClubName').value;
+        const newDescription = document.getElementById('editClubDescription').value;
+        const newLimit = document.getElementById('editClubLimit').value;
+        const newKeyword = document.getElementById('editClubKeyword').value;
+        console.log(newName, newDescription, newLimit, newKeyword);
+
+
+        try {
           const res = await axios({
             method: "PATCH",
             url: `/clubAdminEdit/<%=clubAdminEdit.club_id%>`,
@@ -74,20 +77,20 @@
               leader_id: '<%=clubAdminEdit.leader_id%>',
               limit: newLimit,
               location: '<%=clubAdminEdit.location%>',
-              field:'<%=clubAdminEdit.field%>',
+              field: '<%=clubAdminEdit.field%>',
               keyword: newKeyword,
               description: newDescription
             },
           });
           console.log(res);
-          
+
         } catch (error) {
           console.log("createAdminEdit 에서 axios error > ", error);
         }
 
-   }
-   async function deleteClubInfo(){
-    try {
+      }
+      async function deleteClubInfo() {
+        try {
           const res = await axios({
             method: "DELETE",
             url: `/clubAdminEdit/<%=clubAdminEdit.club_id%>`,
@@ -97,13 +100,14 @@
           });
           console.log(res);
           alert('삭제되었습니다!');
-          window.location.href='/home'
-          
+          window.location.href = '/home';
+
         } catch (error) {
           console.log("createAdminEdit 에서 axios error > ", error);
         }
 
-   }
-  </script>
+      }
+    </script>
 </body>
+
 </html>
