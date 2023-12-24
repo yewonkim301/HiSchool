@@ -6,7 +6,9 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const db = require("./models/Index.js");
-const cors = require("cors");
+// const cors = require("cors");
+const http = require("http");
+const SocketIO = require("socket.io");
 // const { sequelize } = require('./models/Index.js');
 
 const dotenv = require("dotenv");
@@ -14,13 +16,16 @@ dotenv.config();
 
 const PORT = process.env.PORT;
 
+const server = http.createServer(app);
+const io = SocketIO(server);
+
 app.set("view engine", "ejs");
 app.set("views", "./views");
 
 app.use(express.static(path.join(__dirname, "static")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors());
+// app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(cookieParser(process.env.COOKIE_SECRET)); // 쿠키를 활성화하는 코드
@@ -29,7 +34,7 @@ app.use(
     // 메모리 세션을 활성화하는 코드
     resave: false, // 세션 객체에 수정사항이 없어도 저장할까를 정하는 코드
     saveUninitialized: false, // 처음의 빈 세션 객체라도 저장을 할지말지 정하는 코드
-    
+
     secret: process.env.COOKIE_SECRET,
     cookie: {
       httpOnly: true,
@@ -57,10 +62,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // socket
-const http = require("http");
-const SocketIO = require("socket.io");
-const server = http.createServer(app);
-const io = SocketIO(server);
 
 const swaggerUi = require("swagger-ui-express");
 const swaggerFile = require("./swagger-output");
@@ -70,11 +71,11 @@ app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 const indexRouter = require("./routes");
 // const authRouter = require("./routes/auth");
 const socketRouter = require("./routes/socket");
-let flag = true;
 
 app.use("/", indexRouter);
 // app.use("/auth", authRouter);
 
+let flag = true;
 app.get("/chat", (req, res) => {
   if (flag) {
     flag = false;
