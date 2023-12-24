@@ -117,10 +117,18 @@
       <div id="eventsContainer">
         <% if (data && data.length) { %> <% data.forEach(function(schedule) { %>
         <div class="schedule" id="<%= schedule.schedule_id %>">
-          <h3><%= schedule.title %></h3>
-          <p>Date: <%= schedule.date %></p>
-          <p>Time: <%= schedule.time %></p>
-          <p>Content: <%= schedule.content %></p>
+          <h3 id="title<%= schedule.schedule_id %>"><%= schedule.title %></h3>
+          <p id="date<%= schedule.schedule_id %>">Date: <%= schedule.date %></p>
+          <p id="time<%= schedule.schedule_id %>">Time: <%= schedule.time %></p>
+          <p id="content<%= schedule.schedule_id %>">
+            Content: <%= schedule.content %>
+          </p>
+          <button
+            type="button"
+            onclick="patchSchedule('<%= schedule.schedule_id %>')"
+          >
+            수정
+          </button>
           <button
             type="button"
             onclick="deleteSchedule('<%= schedule.schedule_id %>')"
@@ -156,7 +164,8 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       "
     >
-      <h2>일정 추가</h2>
+      <!-- <h2>일정 추가</h2> -->
+      <h2 id="modalName"></h2>
       <form id="scheduleForm">
         <input type="hidden" id="modalDate" />
         <label for="modalTime">시간:</label>
@@ -165,7 +174,8 @@
         <input type="text" id="modalTitle" required /><br />
         <label for="modalContent">내용:</label>
         <textarea id="modalContent" required></textarea><br />
-        <button type="submit">저장</button>
+        <button type="submit" id="saveBtn">저장</button>
+        <button type="button" id="resaveBtn" onclick="patch()">수정</button>
       </form>
       <button onclick="closeModal()">닫기</button>
     </div>
@@ -234,8 +244,12 @@
       // --------------------- 일정을 추가할수 있는 시작 끝
       // 모달 열기
       function openModal(date) {
+        document.getElementById("modalName").innerText = "일정 추가";
+
         document.getElementById("modalDate").value = date;
         document.getElementById("scheduleModal").style.display = "block";
+        document.getElementById("saveBtn").style.display = "block";
+        document.getElementById("resaveBtn").style.display = "none";
       }
 
       // 모달 닫기
@@ -341,6 +355,60 @@
       updateCalendar(currentMonth, currentYear);
 
       // 달력을 표시해주는 함수 끝
+
+      let patchId; // 수정할 schedule_id 값 저장
+
+      // 일정 수정
+      function patchSchedule(schedule_id) {
+        document.getElementById("scheduleModal").style.display = "block";
+        document.getElementById("modalName").innerText = "일정 수정";
+
+        document.getElementById("saveBtn").style.display = "none";
+        document.getElementById("resaveBtn").style.display = "block";
+
+        patchId = schedule_id;
+
+        // 저장된 값 불러오기
+        document.getElementById("modalDate").value = document
+          .getElementById(`date${schedule_id}`)
+          .innerText.split(" ")[1];
+        console.log(document.getElementById("modalDate").value);
+        document.getElementById("modalTime").value = document
+          .getElementById(`time${schedule_id}`)
+          .innerText.split(" ")[1];
+        document.getElementById("modalTitle").value = document.getElementById(
+          `title${schedule_id}`
+        ).innerText;
+        document.getElementById("modalContent").value = document
+          .getElementById(`content${schedule_id}`)
+          .innerText.split(" ")[1];
+      }
+
+      function patch() {
+        const isConfirmed = confirm("일정을 수정하시겠습니까?");
+        const date = document.getElementById("modalDate").value;
+        const time = document.getElementById("modalTime").value;
+        const title = document.getElementById("modalTitle").value;
+        const content = document.getElementById("modalContent").value;
+        if (isConfirmed) {
+          axios({
+            method: "patch",
+            url: `/myclubSchedule/1/${patchId}`,
+            data: {
+              date: date,
+              time: time,
+              title: title,
+              content: content,
+            },
+          })
+            .then((res) => {
+              location.reload();
+            })
+            .catch((err) => {
+              console.error("댓글 수정 에러:", err);
+            });
+        }
+      }
 
       // 일정 삭제
       function deleteSchedule(schedule_id) {
