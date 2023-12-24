@@ -4,42 +4,11 @@ const controllerClub = require("../controller/Cclub");
 const controllerSupport = require("../controller/Csupport");
 const controllerUser = require("../controller/Cuser");
 const router = express.Router();
-const { isNotLoggedIn, isLoggedIn } = require("./../middleware/loginCheck");
+const { isNotLoggedIn, isLoggedIn, preventIndex } = require("./../middleware/loginCheck");
 
 router.post("/s3upload", controllerUser.s3upload);
 
-// router.post("/upload", async (req, res) => {
-//   await s3bucketList().then((data) => {
-//     // res
-//     // .status(200)
-//     // .json({
-//     //   message: "Success",
-//     //   data
-//     // })
-//     console.log(data);
-//   });
-//   await s3objectList().then((data) => {
-//     console.log(data);
-//   });
-//   await s3fileUpload().then((data) => {
-//     console.log(data);
-//     // res.send(data)
-//   });
-//   await s3objectList()
-//     .then((data) => {
-//       console.log(data);
-//       res.send("업로드 완료!");
-//     })
-
-//     .catch((error) => {
-//       res.status(400).json({
-//         message: "An error occurred.",
-//         error,
-//       });
-//     });
-// });
-
-router.get("/", (req, res) => {
+router.get("/", preventIndex, (req, res) => {
   res.render("index");
 });
 
@@ -49,9 +18,9 @@ router.get("/login", isNotLoggedIn, (req, res) => {
   res.render("login");
 });
 
-// router.get('/login', isNotLoggedIn, controllerUser.getLogin)
-
 router.post("/login", isNotLoggedIn, controllerUser.postLogin);
+
+router.get("/logout", isLoggedIn, controllerUser.getLogout);
 
 router.get("/register", isNotLoggedIn, (req, res) => {
   res.render("register");

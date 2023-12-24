@@ -12,20 +12,19 @@
 
 <body>
 
-   <%- include('../component/header')%>
-   <button type="button" onclick="showProfile()" class="btn btn-secondary">프로필 보기(연결 필요)</button>
-  <div class="content">
-    <p class="content-title">이름</p>
-    <p class="content-detail"><%= userInfo.name %></p>
-
-    <p class="content-title">지원동기</p>
-    <p class="content-detail"><%= data.motivation %></p>
-
-    <p class="content-title">자기소개</p>
-    <p class="content-detail"><%= data.introduction %></p>
-
-    <button class="submit-button"  onclick="outMember('<%=data.userid_num%>')">강퇴</button>
-  </div>
+   <div class="container">
+     <%- include('../component/header')%>
+     <button type="button" onclick="showProfile()" class="btn btn-secondary">프로필 보기(연결 필요)</button>
+       <div class="content">
+      <p class="content-title">이름</p>
+      <p class="content-detail"><%= userInfo.name %></p>
+      <p class="content-title">지원동기</p>
+      <p class="content-detail"><%= data.motivation %></p>
+      <p class="content-title">자기소개</p>
+      <p class="content-detail"><%= data.introduction %></p>
+      <button class="submit-button"  onclick="outMember('<%=data.userid_num%>')">강퇴</button>
+       </div>
+   </div>
 
 <script>
   console.log('<%=club_id%>')

@@ -8,12 +8,13 @@
   </head>
 
   <body>
-    <h1>동아리 메인</h1>
-
-    <button onclick="moveClubChat()">채팅</button>
-    <a href="/myclubSchedule/<%=data.club_id%>">동아리 일정</a>
-    <a href="/myclubPostMain/<%=data.club_id%>">동아리 게시판</a>
-    <a id="admin" href="/clubAdminMain/<%=data.club_id%>">동아리 관리</a>
+    <div class="container">
+      <h1>동아리 메인</h1>
+      <button onclick="moveClubChat()">채팅</button>
+      <a href="/myclubSchedule/<%=data.club_id%>">동아리 일정</a>
+      <a href="/myclubPostMain/<%=data.club_id%>">동아리 게시판</a>
+      <a id="admin" href="/clubAdminMain/<%=data.club_id%>">동아리 관리</a>
+    </div>
 
     <script>
       // 동아리 관리자만 동아리 관리 링크 활성화

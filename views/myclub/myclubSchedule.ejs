@@ -93,72 +93,72 @@
 </head>
 
 <body>
-  <div class="calendar-container">
-    <div class="calendar-controls">
-      <button onclick="moveMonth(-1)">이전</button>
-      <span id="current-month-year"></span>
-      <button onclick="moveMonth(1)">다음</button>
+  <div class="container">
+    <div class="calendar-container">
+      <div class="calendar-controls">
+        <button onclick="moveMonth(-1)">이전</button>
+        <span id="current-month-year"></span>
+        <button onclick="moveMonth(1)">다음</button>
+      </div>
+      <table class="calendar">
+        <thead>
+          <tr>
+            <th class="weekend">일</th>
+            <th>월</th>
+            <th>화</th>
+            <th>수</th>
+            <th>목</th>
+            <th>금</th>
+            <th>토</th>
+          </tr>
+        </thead>
+        <tbody id="calendar-body">
+          <!-- 달력의 행은 여기에 들어갑니다 -->
+        </tbody>
+      </table>
+      <div id="eventsContainer">
+        <% if (data && data.length) { %>
+          <% data.forEach(function(schedule) { %>
+            <div class="schedule">
+              <h3>
+                <%= schedule.title %>
+              </h3>
+              <p>Date: <%= schedule.date %>
+              </p>
+              <p>Time: <%= schedule.time %>
+              </p>
+              <p>Content: <%= schedule.content %>
+              </p>
+            </div>
+            <% }); %>
+              <% } else { %>
+                <p class="no-events">등록된 일정이 없습니다</p>
+                <% } %>
+                  <!-- <ul>
+                    <% for (const schedule of data) { %>
+                      <li>
+                        <%= schedule.date %>: <%= schedule.title %> Content: <%= schedule.content %>
+                      </li>
+                      <% } %>
+                  </ul> -->
+      </div>
     </div>
-    <table class="calendar">
-      <thead>
-        <tr>
-          <th class="weekend">일</th>
-          <th>월</th>
-          <th>화</th>
-          <th>수</th>
-          <th>목</th>
-          <th>금</th>
-          <th>토</th>
-        </tr>
-      </thead>
-      <tbody id="calendar-body">
-        <!-- 달력의 행은 여기에 들어갑니다 -->
-      </tbody>
-    </table>
-    <div id="eventsContainer">
-      <% if (data && data.length) { %>
-        <% data.forEach(function(schedule) { %>
-          <div class="schedule">
-            <h3>
-              <%= schedule.title %>
-            </h3>
-            <p>Date: <%= schedule.date %>
-            </p>
-            <p>Time: <%= schedule.time %>
-            </p>
-            <p>Content: <%= schedule.content %>
-            </p>
-          </div>
-          <% }); %>
-            <% } else { %>
-              <p class="no-events">등록된 일정이 없습니다</p>
-              <% } %>
-                <!-- <ul>
-                  <% for (const schedule of data) { %>
-                    <li>
-                      <%= schedule.date %>: <%= schedule.title %> Content: <%= schedule.content %>
-                    </li>
-                    <% } %>
-                </ul> -->
+    <!----------------------- 일정을 추가하는 모달 ---------------------->
+    <div id="scheduleModal"
+      style="display:none; position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+      <h2>일정 추가</h2>
+      <form id="scheduleForm">
+        <input type="hidden" id="modalDate">
+        <label for="modalTime">시간:</label>
+        <input type="time" id="modalTime" required><br>
+        <label for="modalTitle">제목:</label>
+        <input type="text" id="modalTitle" required><br>
+        <label for="modalContent">내용:</label>
+        <textarea id="modalContent" required></textarea><br>
+        <button type="submit">저장</button>
+      </form>
+      <button onclick="closeModal()">닫기</button>
     </div>
-
-  </div>
-
-  <!----------------------- 일정을 추가하는 모달 ---------------------->
-  <div id="scheduleModal"
-    style="display:none; position: fixed; left: 50%; top: 50%; transform: translate(-50%, -50%); background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-    <h2>일정 추가</h2>
-    <form id="scheduleForm">
-      <input type="hidden" id="modalDate">
-      <label for="modalTime">시간:</label>
-      <input type="time" id="modalTime" required><br>
-      <label for="modalTitle">제목:</label>
-      <input type="text" id="modalTitle" required><br>
-      <label for="modalContent">내용:</label>
-      <textarea id="modalContent" required></textarea><br>
-      <button type="submit">저장</button>
-    </form>
-    <button onclick="closeModal()">닫기</button>
   </div>
 
   <!----------------------- 일정을 추가하는 모달 끝 ---------------------->

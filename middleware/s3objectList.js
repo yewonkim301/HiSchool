@@ -23,7 +23,7 @@ const s3objectList = async () => {
   try {
     let isTruncated = true;
 
-    console.log("Your bucket contains the following objects:\n");
+    console.log("버킷에 담겨있는 항목:\n");
     let contents = "";
 
     while (isTruncated) {

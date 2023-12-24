@@ -10,6 +10,7 @@ const {
 const jwt = require("jsonwebtoken");
 const { OP } = require("sequelize");
 const { Sequelize } = require("sequelize");
+const { isLoggedIn } = require("../middleware/loginCheck");
 
 // ===== publicPost =====
 
@@ -1040,7 +1041,7 @@ exports.home = async (req, res) => {
     // console.log("home clubInfo 내가 가입한 동아리 >>>>>>", clubInfo);
     // console.log("home getClubs 전체 동아리 >>>>>>", getClubs);
 
-    await res.render("home", { getClubs, clubInfo, foundUser });
+    await res.render("home", { allClubs: getClubs, myClubs: clubInfo, foundUser });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");

@@ -23,55 +23,44 @@
 </head>
 
 <body>
-   <%- include('../component/header') %>
-      <div class="board">
-         <!-- 게시글 세부 내용 -->
-         <div class="post-detail">
-            <h2>
-               <%= data.title %>
-            </h2>
-            <p>
-               <%= data.content %>
-                  <!-- <i class="like-btn" onclick="likeBtn()">좋아요</i> -->
-            </p>
-            <!-- 여기에 좋아요 개수 표시 -->
-
-            </p>
-            </p>
-            <!-- 게시글 작성 시간 등의 메타 정보도 추가 있습니다. -->
-         </div>
-         <button class="btn btn-primary" onclick="editPost('<%= data.post_id %>')">수정</button>
-         <div class="comment-section">
-            <input type="text" id="commentInput" placeholder="댓글을 입력하세요">
-         </div>
-         <button onclick="submitComment()">댓글등록</button>
-
-         <!-- <button onclick="deletePostComment('<%=clubPostComment.comment_id %>')">댓글삭제</button> -->
-         <!-- 댓글 들어갈곳 -->
-         <div class="list" id="commentList">
-            <% clubPostComment.forEach(function(comment, i) { %>
-               <div class="comment comment-<%= comment.comment_id %>">
-                  <p>
-                     <%= comment.comment_name %>
-                  </p>
-                  <p>
-                     <%= comment.content %>
-                  </p>
-
-                  <% if (comment.userid_num===userid_num) { %>
-                     <!-- 현재 사용자가 댓글 작성자인 경우: 수정 및 삭제 버튼 표시 -->
-                     <button onclick="deletePostComment('<%= comment.comment_id %>')">댓글삭제</button>
-                     <button
-                        onclick="showEditField('<%= comment.comment_id %>', '<%= comment.content %>')">댓글수정</button>
-                     <button
-                        onclick="toggleLike('<%= comment.comment_id %>','<%= comment.userid_num %>', '<%= clubPostCommentLike[i].length %>', this)">
-                        <i id="heart-icon-<%= comment.comment_id %>" class="fas fa-heart"></i>
-                        <span class="like-num">
-                           <%= clubPostCommentLike[i].length %>
-                        </span>
-                     </button>
-                     <% } else { %>
-                        <!-- 그렇지 않은 경우: 좋아요 버튼 표시 -->
+   <div class="container">
+      <%- include('../component/header') %>
+         <div class="board">
+            <!-- 게시글 세부 내용 -->
+            <div class="post-detail">
+               <h2>
+                  <%= data.title %>
+               </h2>
+               <p>
+                  <%= data.content %>
+                     <!-- <i class="like-btn" onclick="likeBtn()">좋아요</i> -->
+               </p>
+               <!-- 여기에 좋아요 개수 표시 -->
+               </p>
+               </p>
+               <!-- 게시글 작성 시간 등의 메타 정보도 추가 있습니다. -->
+            </div>
+            <button class="btn btn-primary" onclick="editPost('<%= data.post_id %>')">수정</button>
+            <div class="comment-section">
+               <input type="text" id="commentInput" placeholder="댓글을 입력하세요">
+            </div>
+            <button onclick="submitComment()">댓글등록</button>
+            <!-- <button onclick="deletePostComment('<%=clubPostComment.comment_id %>')">댓글삭제</button> -->
+            <!-- 댓글 들어갈곳 -->
+            <div class="list" id="commentList">
+               <% clubPostComment.forEach(function(comment, i) { %>
+                  <div class="comment comment-<%= comment.comment_id %>">
+                     <p>
+                        <%= comment.comment_name %>
+                     </p>
+                     <p>
+                        <%= comment.content %>
+                     </p>
+                     <% if (comment.userid_num===userid_num) { %>
+                        <!-- 현재 사용자가 댓글 작성자인 경우: 수정 및 삭제 버튼 표시 -->
+                        <button onclick="deletePostComment('<%= comment.comment_id %>')">댓글삭제</button>
+                        <button
+                           onclick="showEditField('<%= comment.comment_id %>', '<%= comment.content %>')">댓글수정</button>
                         <button
                            onclick="toggleLike('<%= comment.comment_id %>','<%= comment.userid_num %>', '<%= clubPostCommentLike[i].length %>', this)">
                            <i id="heart-icon-<%= comment.comment_id %>" class="fas fa-heart"></i>
@@ -79,14 +68,24 @@
                               <%= clubPostCommentLike[i].length %>
                            </span>
                         </button>
-                        <% } %>
-               </div>
-               <% }); %>
-                  <div id="editCommentSection" style="display: none;">
-                     <input type="text" id="editCommentInput" placeholder="댓글 수정">
-                     <button onclick="submitEdit()">수정 완료</button>
+                        <% } else { %>
+                           <!-- 그렇지 않은 경우: 좋아요 버튼 표시 -->
+                           <button
+                              onclick="toggleLike('<%= comment.comment_id %>','<%= comment.userid_num %>', '<%= clubPostCommentLike[i].length %>', this)">
+                              <i id="heart-icon-<%= comment.comment_id %>" class="fas fa-heart"></i>
+                              <span class="like-num">
+                                 <%= clubPostCommentLike[i].length %>
+                              </span>
+                           </button>
+                           <% } %>
                   </div>
-         </div>
+                  <% }); %>
+                     <div id="editCommentSection" style="display: none;">
+                        <input type="text" id="editCommentInput" placeholder="댓글 수정">
+                        <button onclick="submitEdit()">수정 완료</button>
+                     </div>
+            </div>
+   </div>
 
          <script>
 
