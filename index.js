@@ -72,7 +72,7 @@ app.get("/chat", (req, res) => {
 });
 
 app.get("*", (req, res) => {
-  // console.log("error");
+  res.render('404')
 }); // error 페이지 ?
 
 db.sequelize.sync({ force: false }).then(() => {

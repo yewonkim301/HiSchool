@@ -24,23 +24,21 @@
       <h2 class="label">내 동아리</h2>
       <div class="list-container">
         <% for(i = 0; i < myClubs.length; i++) { %>
-        <div class="list">
-          <a href="/myclubPostMain/<%= myClubs[i].club_id %>">
+          <a class='list'  href="/myclubMain/<%= myClubs[i].club_id %>">
             <span><%= myClubs[i].club_name %></span>
             <span><%= myClubs[i].location %></span>
             <span><%= myClubs[i].description %></span>
           </a>
-        </div>
         <% } %>
       </div>
       <h2 class="label">전체 동아리</h2>
       <div class="list-container">
         <% for(i = 0; i < allClubs.length; i++) { %>
-        <div class="list">
+        <a class="list" href="/clubDetail/<%= allClubs[i].club_id %>">
           <span><%= allClubs[i].club_name %></span>
           <span><%= allClubs[i].location %></span>
           <span><%= allClubs[i].description %></span>
-        </div>
+        </a>
         <% } %>
       </div>
       <br>

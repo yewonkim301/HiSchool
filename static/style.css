@@ -182,7 +182,6 @@ input[type="number"] {
     BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI",
     "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
-
 }
 
 body {
@@ -190,7 +189,6 @@ body {
   margin: 0 auto;
   padding: 0;
   max-width: 600px;
-  
 }
 
 .container {
@@ -232,7 +230,6 @@ body {
   font-size: 16px;
   text-align: center;
   padding: var(--spacing-1) var(--spacing-2);
-
 }
 
 .btn-sm {
@@ -285,10 +282,10 @@ body {
 .btn-ghost {
   padding: var(--spacing-1) var(--spacing-2);
   background-color: var();
-  border: 1px solid var(--gray-200, #E5E7EB);
-  color: var(--gray-400, #9CA3AF);
+  border: 1px solid var(--gray-200, #e5e7eb);
+  color: var(--gray-400, #9ca3af);
   border-radius: 4px;
-  box-shadow: 0px 1px 8px 0px rgba(19, 19, 19, 0.10);
+  box-shadow: 0px 1px 8px 0px rgba(19, 19, 19, 0.1);
 }
 
 /* 텍스트필드 - input */
@@ -372,11 +369,10 @@ label {
 /*# input[type='checkbox'] */
 input[type="checkbox"] {
   display: none;
-  
 }
 
 input[type="checkbox"] + label {
-  cursor:pointer;
+  cursor: pointer;
   user-select: none;
 }
 
@@ -405,7 +401,6 @@ input[type="checkbox"]:checked + label:before {
   background-color: var(--color-primary-500);
 }
 
-
 /*# 헤더 CSS */
 .header {
   position: fixed;
@@ -418,7 +413,7 @@ input[type="checkbox"]:checked + label:before {
   align-items: center;
   background-color: white;
   z-index: 500;
-  padding: 0 20px;
+  padding: 0 4px;
   box-sizing: border-box;
   border-bottom: 1px solid var(--color-gray-300);
 }
@@ -434,8 +429,6 @@ input[type="checkbox"]:checked + label:before {
   align-items: center;
   gap: 20px;
   color: var(--color-gray-500);
-
-
 }
 
 .menu-bar a:hover {
@@ -446,16 +439,18 @@ input[type="checkbox"]:checked + label:before {
 .nav-btn {
   display: flex;
   align-items: center;
-  gap: 12px
+  gap: 12px;
+  width: fit-content;
+  flex-basis: 200px;
+  justify-content: end;
 }
 
-.header-profile.desktop{
+.header-profile.desktop {
   display: flex;
   gap: 8px;
   align-items: center;
   /* flex-basis: content; */
   flex-grow: 0;
-  flex-basis: 200px;
 }
 
 .header-profile.mobile {
@@ -465,9 +460,16 @@ input[type="checkbox"]:checked + label:before {
   gap: 8px;
 }
 
+.profileImg-container {
+  display: flex;
+  justify-content: center;
+}
+
 .logo {
   cursor: pointer;
   user-select: none;
+  font-size: large;
+  font-weight: 700;
   display: flex;
   align-self: center;
   /* flex-basis: content; */
@@ -476,10 +478,13 @@ input[type="checkbox"]:checked + label:before {
 }
 
 .menu-icon,
-.settings-icon,
+.right-icon,
 .close-menu {
   cursor: pointer;
+  padding: 16px;
 }
+
+
 
 .close-menu {
   position: relative;
@@ -497,6 +502,7 @@ input[type="checkbox"]:checked + label:before {
   display: none;
   position: fixed;
   top: 70px;
+  left: 0;
   height: 0px;
   background-color: #ffffff;
   text-align: center;
@@ -507,7 +513,6 @@ input[type="checkbox"]:checked + label:before {
   transition: height 0.5s;
 }
 
-
 .sidebar a {
   width: 100%;
   font-size: 16px;
@@ -516,7 +521,6 @@ input[type="checkbox"]:checked + label:before {
   padding: 12px 0;
   flex-direction: column;
   transition: all 0.5s;
-
 }
 
 .sidebar a:hover {
@@ -545,13 +549,13 @@ input[type="checkbox"]:checked + label:before {
 .shade {
   position: fixed;
   top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
   z-index: 100;
   background-color: #0000008e;
   backdrop-filter: blur(5px);
 }
-
 
 @media screen and (max-width: 800px) {
   .header {
@@ -565,6 +569,10 @@ input[type="checkbox"]:checked + label:before {
   }
   .header-profile.desktop {
     display: none;
+  }
+  .logo {
+    flex-basis: content;
+    color: var(--color-gray-700);
   }
 }
 @media screen and (min-width: 801px) {
@@ -803,7 +811,7 @@ input[type="checkbox"]:checked + label:before {
 
 /* hashtag */
 /* test용 코드(수정 필요)---------------------------------------------- */
-.hashtag{
+.hashtag {
   padding: 3px;
   margin-right: 10px;
   border-radius: 5px;

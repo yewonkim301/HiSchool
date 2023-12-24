@@ -7,15 +7,7 @@
     <title>Document</title>
     <!-- feather-icons CDN -->
     <script src="https://unpkg.com/feather-icons"></script>
-    <style>
-      .logo {
-        cursor: pointer;
-        user-select: none;
-        color: var(--color-primary-500);
-        font-size: large;
-        font-weight: 700;
-      }
-    </style>
+    <style></style>
   </head>
   <body>
     <header class="header">
@@ -41,32 +33,32 @@
           <a href="#">고객센터</a>
         </div>
 
-        <% if(typeof isLoggedIn !== 'undefined' && isLoggedIn) { %>
+        <div class="nav-btn">
           <div class="header-profile desktop">
-          <span><%= foundUser.name %>님</span>
-        <% if (foundUser.profile_img) { %>
-        <img
-          src="<%= foundUser.profile_img %>"
-          alt="프로필 이미지"
-          width="28"
-        />
-        <% } else { %>
-          <img
-          src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png"
-          alt="프로필 이미지"
-          width="28"
-          />
-          <% } %>
-          <div class="nav-btn">
-            <button
+            <% if(typeof isLoggedIn !== 'undefined' && isLoggedIn) { %>
+            <span><%= foundUser.name %>님</span>
+            <% if (foundUser.profile_img) { %>
+            <img
+              src="<%= foundUser.profile_img %>"
+              alt="프로필 이미지"
+              width="28"
+            />
+            <% } else { %>
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png"
+              alt="프로필 이미지"
+              width="28"
+            />
+            <% } %>
+          </div>
+          <button
             class="btn-sm btn-secondary"
             type="button"
             onclick="handleLogout()"
-            >
+          >
             로그아웃
           </button>
         </div>
-      </div>
         <% } else { %>
         <div class="nav-btn">
           <button class="btn-sm btn-secondary" type="button">회원가입</button>
@@ -90,15 +82,25 @@
       <a href="#">고객센터</a>
 
       <div class="header-profile mobile">
-      <span><%= foundUser.name %>님</span>
-      <% if (foundUser.profile_img) { %>
-      <img src="<%= foundUser.profile_img %>" alt="프로필 이미지" width="50" />
-      <% } else { %>
-      <img
-        src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png"
-        alt="프로필 이미지"
-        width="50"
-      />
+        
+        <% if (foundUser.profile_img) { %>
+        <div class="profileImg-container">
+          <img
+            src="<%= foundUser.profile_img %>"
+            alt="프로필 이미지"
+            width="50"
+          />
+        </div>
+        <% } else { %>
+        <div class="profileImg-container">
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png"
+            alt="프로필 이미지"
+            width="50"
+          />
+        </div>
+        <span><%= foundUser.name %>님</span> 
+      </div>
       <% } %> <% if(typeof isLoggedIn !== 'undefined' && isLoggedIn) { %>
       <div class="menu-buttons">
         <button
@@ -115,7 +117,6 @@
         <button class="btn-sm btn-secondary" type="button">로그인</button>
       </div>
       <% } %>
-    </div>
     </div>
     <div class="shade hidden"></div>
 

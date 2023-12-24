@@ -71,7 +71,7 @@ exports.getClub = async (req, res) => {
 // GET /clubAdminMain/:club_id : 동아리 관리페이지 불러오기
 exports.getClubAdminMain = async (req, res) => {
   try {
-    let link = "/myclubMain";
+    let link = `/myclubMain/${req.params.club_id}`;
     const { club_id } = req.params;
     res.render("clubAdmin/clubAdminMain", {
       data: club_id,
@@ -86,8 +86,9 @@ exports.getClubAdminMain = async (req, res) => {
 
 // GET /clubAdminEdit/:club_id : 동아리 수정페이지 불러오기
 exports.getClubAdminEdit = async (req, res) => {
+  console.log('getClubAdminEdit', req.params);
   try {
-    let link = "/clubAdminMain"; //클럽 관리 페이지로 이동
+    let link = `/clubAdminMain/${req.params.club_id}`; //클럽 관리 페이지로 이동
     const { club_id } = req.params;
     const clubAdminEditDB = await Club.findOne({
       where: { club_id: club_id },
@@ -221,8 +222,9 @@ exports.postCreateClub = async (req, res) => {
 //Club_post
 // GET /myclubPostMain/:club_id : 동아리 게시글 전체 조회
 exports.getClubPosts = async (req, res) => {
+  console.log('Cclub js 225 getClubPosts req.params', req.params);
   try {
-    let link = "/myclubMain"; // 해당클럽 메인페이지로 이동
+    let link = `/myclubMain/${req.params.club_id}`; // 해당클럽 메인페이지로 이동
     const posts = await Club_post.findAll({
       where: { club_id: req.params.club_id },
       //clubClubId 수정 전
@@ -243,7 +245,7 @@ exports.getClubPosts = async (req, res) => {
 // 게시글 전달할 때, 게시글마다의 댓글과 좋아요 수 함께 전달
 exports.getClubPost = async (req, res) => {
   try {
-    let link = "/myclubPostMain"; //전체 게시물로 이동
+    let link = `/myclubPostMain/${req.params.club_id}`; //전체 게시물로 이동
     const { club_id, post_id } = req.params;
     console.log("params > ", req.params);
     const { userid, userid_num } = jwt.verify(
@@ -537,7 +539,7 @@ exports.getClubSchedules = async (req, res) => {
     res.render("./myclub/myclubSchedule", {
       data: clubSchedules,
       title: "일정",
-      link,
+      // link,
     });
   } catch (err) {
     console.error(err);
@@ -696,7 +698,7 @@ exports.getMyclubList = async (req, res) => {
 
 // GET /myclubMain/:club_id 내가 가입한 동아리의 메인 페이지 불러오기
 exports.getMyclubMain = async (req, res) => {
-  let link = "/myclubList";
+  let link = "/home";
   console.log(req.params);
   const { club_id } = req.params;
   console.log(club_id);

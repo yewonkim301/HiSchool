@@ -502,7 +502,7 @@ exports.getAllMembers = async (req, res) => {
         userInfo,
         club_id,
         title,
-        link
+        link,
       });
     });
   } catch (err) {
@@ -611,7 +611,7 @@ exports.createClubMembers = async (req, res) => {
 // GET /clubAdminApplyList/:club_id 클럽에 가입신청한 사람들 전체조회
 exports.getClubMembersApplyList = async (req, res) => {
   try {
-    let link = "/clubAdminMain"; //클럽 관리자 페이지
+    let link = `/clubAdminMain/${req.params.club_id}`; //클럽 관리자 페이지
     let title = "동아리 신청자";
     const { club_id } = req.params;
 
@@ -621,6 +621,12 @@ exports.getClubMembersApplyList = async (req, res) => {
         isMember: "false",
       },
     });
+
+    // console.log(
+    //   "Cpublic.js 625 getClubMembersApplyList getApplyList 실행 완료",
+    //   getApplyList
+    // );
+
     const getusers = await Club_members.findAll({
       attributes: ["userid_num"],
       where: {
@@ -628,18 +634,43 @@ exports.getClubMembersApplyList = async (req, res) => {
         isMember: "false",
       },
     });
+
+    // console.log(
+    //   "Cpublic.js 636 getClubMembersApplyList getusers 실행 완료",
+    //   getusers
+    // );
+
     let getusersid = [];
+
     getusers.forEach((element) => {
       // console.log("여기!!!!!!!!!!!!!>>>>>>", element.dataValues.userid_num);
       getusersid.push(element.dataValues.userid_num);
     });
+
+    // console.log("Cpublic.js 646 getusers forEach", getusersid);
+
     let userInfo = [];
-    getusersid.forEach(async (element) => {
-      console.log(element);
-      let info = await User.findOne({ where: { userid_num: element } });
-      // console.log("info >>>>>>>>", info.nickname);
-      await userInfo.push(info.name);
-      // console.log("userinfo >>>>>>>>>>>>>", userInfo);
+
+
+
+    if(getusersid == []) {
+      getusersid.forEach(async (element) => {
+        console.log(element);
+        let info = await User.findOne({ where: { userid_num: element } });
+        // console.log("info >>>>>>>>", info.nickname);
+        userInfo.push(info.name);
+        // console.log("userinfo >>>>>>>>>>>>>", userInfo);
+  
+        res.render("clubAdmin/clubAdminApplyList", {
+          getApplyList,
+          userInfo,
+          club_id: club_id,
+          title,
+          link,
+        });
+      });
+    } else {
+
       res.render("clubAdmin/clubAdminApplyList", {
         getApplyList,
         userInfo,
@@ -647,7 +678,8 @@ exports.getClubMembersApplyList = async (req, res) => {
         title,
         link,
       });
-    });
+    }
+    
 
     // console.log("getuserid >>>>>>>>>>>>>", getusersid);
   } catch (err) {
@@ -681,7 +713,7 @@ exports.deleteApplyDetail = async (req, res) => {
 // GET /clubAdminMemberlist/:club_id 클럽 회원 전체 조회
 exports.getClubMembers = async (req, res) => {
   try {
-    let link = "/clubAdminMain"; // 클럽 관리자 페이지
+    let link = `/clubAdminMain/${req.params.club_id}`; // 클럽 관리자 페이지
     let title = "동아리 전체 회원";
     const { club_id } = req.params;
     const getMembers = await Club_members.findAll({
@@ -689,28 +721,33 @@ exports.getClubMembers = async (req, res) => {
       //   exclude: ['leader_id']
       // },
       where: {
-        motivation: {
-          [Sequelize.Op.not]: null,
-        },
-        introduction: {
-          [Sequelize.Op.not]: null,
-        },
+        // motivation: {
+        //   [Sequelize.Op.not]: null,
+        // },
+        // introduction: {
+        //   [Sequelize.Op.not]: null,
+        // },
         club_id: club_id,
         isMember: "true",
       },
       // include: [{ model: User }],
     });
-    // console.log("클럽 멤버 조회 >>>>>>>>>>>>>", getMembers);
+
+    // console.log('clubAdminMemberList 실행');
+    // console.log(
+    //   "Cpublic.js 707 clubAdminMemberList getMembers >>>>>>>>>>>>>",
+    //   getMembers
+    // );
 
     const getUsers = await Club_members.findAll({
       attributes: ["userid_num"],
       where: {
-        motivation: {
-          [Sequelize.Op.not]: null,
-        },
-        introduction: {
-          [Sequelize.Op.not]: null,
-        },
+        // motivation: {
+        //   [Sequelize.Op.not]: null,
+        // },
+        // introduction: {
+        //   [Sequelize.Op.not]: null,
+        // },
         club_id: club_id,
         isMember: "true",
       },
@@ -721,12 +758,18 @@ exports.getClubMembers = async (req, res) => {
       getUserInfo.push(element.dataValues.userid_num);
     });
 
+    // console.log("getUserInfo [] : ", getUserInfo);
+
+    // console.log("getUsers까지 실행 완료");
+
     let userInfo = [];
-    getUserInfo.forEach(async (element) => {
+    for (const element of getUserInfo) {
       console.log(element);
       let info = await User.findOne({ where: { userid_num: element } });
-      await userInfo.push(info.name);
+      userInfo.push(info.name);
       // console.log("클럽 멤버 이름조회 >>>>>>>>>>>>>", userInfo);
+      // console.log("getUserInfo까지 실행 완료");
+
       if (!getMembers) {
         res.render("clubAdmin/clubAdminMemberList");
       } else {
@@ -738,7 +781,7 @@ exports.getClubMembers = async (req, res) => {
           link,
         });
       }
-    });
+    }
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -1041,7 +1084,11 @@ exports.home = async (req, res) => {
     // console.log("home clubInfo 내가 가입한 동아리 >>>>>>", clubInfo);
     // console.log("home getClubs 전체 동아리 >>>>>>", getClubs);
 
-    await res.render("home", { allClubs: getClubs, myClubs: clubInfo, foundUser });
+    await res.render("home", {
+      allClubs: getClubs,
+      myClubs: clubInfo,
+      foundUser,
+    });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
