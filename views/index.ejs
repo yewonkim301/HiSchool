@@ -6,26 +6,39 @@
     <title>하이스쿨</title>
     <link rel="stylesheet" href="/style.css" />
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+      .logo {
+        display: flex;
+        justify-content: center;
+        font-size: 40px;
+        font-weight: 800;
+        color: var(--color-primary-500);
+      }
+    </style>
   </head>
 
   <body>
     <div class="container">
-      <%- include('./component/header')%>
       <br />
       <!-- <a href="./clubSchedule">달력테스트버튼</a> -->
       <br />
-      <a href="/home">홈 화면으로 이동</a>
+      <!-- <a href="/home">홈 화면으로 이동</a> -->
       <!-- <a href="./myClubPostMain">동아리게시판</a> -->
       <br />
 
-      <form action="/upload" enctype="multipart/form-data" method="post">
+      <!-- <form action="/upload" enctype="multipart/form-data" method="post">
         <label for="profileImg">이미지 업로드</label>
-        <input type="file" name="profileImg" id="profileImg" multiple />
+        <input type="file" name="profileImg" id="profileImg" dmultiple />
         <input type="submit" value="Upload" />
-      </form>
+      </form> -->
       <br />
       <br />
       <br />
+      <div class="logo">
+        <span>
+          하이스쿨
+        </span>
+      </div>
 
 
       <div class="cta">

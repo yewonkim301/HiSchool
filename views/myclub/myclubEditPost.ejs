@@ -13,27 +13,28 @@
   </head>
 
 <body>
-  <%- include('../component/header') %>
-    <div class="board">
-      <!-- 수정 폼 -->
-      <form id="editForm">
-        <div>
-          <label for="title">제목</label>
-          <input type="text" id="title" value="<%= data.title %>">
-        </div>
-        <div>
-          <label for="content">내용</label>
-          <textarea id="content"><%= data.content %></textarea>
-        </div>
-        <!-- <div>
-          <label for="image">이미지 URL</label>
-          <input type="text" id="image" value="<%= data.image %>">
-        </div> -->
-        <button type="button" onclick="submitEdit()">수정하기</button>
-
-      </form>
-      <button class="btn btn-primary" onclick="deletepost()">삭제</button>
-    </div>
+  <div class="container">
+    <%- include('../component/header') %>
+      <div class="board">
+        <!-- 수정 폼 -->
+        <form id="editForm">
+          <div>
+            <label for="title">제목</label>
+            <input type="text" id="title" value="<%= data.title %>">
+          </div>
+          <div>
+            <label for="content">내용</label>
+            <textarea id="content"><%= data.content %></textarea>
+          </div>
+          <!-- <div>
+            <label for="image">이미지 URL</label>
+            <input type="text" id="image" value="<%= data.image %>">
+          </div> -->
+          <button type="button" onclick="submitEdit()">수정하기</button>
+        </form>
+        <button class="btn btn-primary" onclick="deletepost()">삭제</button>
+      </div>
+  </div>
 
     <script>
 
