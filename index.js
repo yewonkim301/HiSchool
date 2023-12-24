@@ -5,12 +5,19 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const db = require("./models/Index.js");
+
 const cors = require("cors");
+const http = require("http");
+const SocketIO = require("socket.io");
+// const { sequelize } = require('./models/Index.js');
 
 const dotenv = require("dotenv");
 dotenv.config();
 
 const PORT = process.env.PORT;
+
+const server = http.createServer(app);
+const io = SocketIO(server);
 
 app.set("view engine", "ejs");
 app.set("views", "./views");
@@ -18,7 +25,7 @@ app.set("views", "./views");
 app.use(express.static(path.join(__dirname, "static")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cors());
+// app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(cookieParser(process.env.COOKIE_SECRET));
@@ -26,7 +33,6 @@ app.use(
   session({
     resave: false,
     saveUninitialized: false,
-    
     secret: process.env.COOKIE_SECRET,
     cookie: {
       httpOnly: true,
@@ -45,10 +51,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // socket
-const http = require("http");
-const SocketIO = require("socket.io");
-const server = http.createServer(app);
-const io = SocketIO(server);
 
 const swaggerUi = require("swagger-ui-express");
 const swaggerFile = require("./swagger-output");
@@ -57,10 +59,10 @@ app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerFile));
 
 const indexRouter = require("./routes");
 const socketRouter = require("./routes/socket");
-let flag = true;
 
 app.use("/", indexRouter);
 
+let flag = true;
 app.get("/chat", (req, res) => {
   if (flag) {
     flag = false;

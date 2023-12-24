@@ -160,14 +160,14 @@ router.post(
 
 // DELETE /myclubSchedule/:club_id/:schedule_id : 동아리 일정 삭제
 router.delete(
-  "/myClubSchedule/:club_id/:schedule_id",
+  "/myclubSchedule/:club_id/:schedule_id",
   isLoggedIn,
   controllerClub.deleteClubSchedule
 );
 
 // PATCH /myclubSchedule/:club_id/:date/:schedule_id : 동아리 일정 수정
 router.patch(
-  "/myClubSchedule/:club_id/:schedule_id",
+  "/myclubSchedule/:club_id/:schedule_id",
   isLoggedIn,
   controllerClub.patchClubSchedule
 );

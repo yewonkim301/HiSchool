@@ -1,5 +1,19 @@
 <!DOCTYPE html>
 <html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>인터랙티브 달력</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+      body {
+        font-family: "Noto Sans KR", sans-serif;
+        background: #e9ecef;
+        margin: 0;
+        padding: 0;
+      }
+
 
 <head>
   <meta charset="UTF-8">
@@ -163,184 +177,418 @@
 
   <!----------------------- 일정을 추가하는 모달 끝 ---------------------->
 
-  <script>
 
+      .calendar-controls {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+      }
 
+      .calendar-controls button {
+        border: none;
+        background: #4dabf7;
+        color: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
 
+      .calendar {
+        border-collapse: collapse;
+        width: 100%;
+      }
 
-    // 서버로부터 받은 데이터를 JavaScript 변수에 할당
-    const clubSchedules = `clubSchedules: <%-JSON.stringify(data) %>`;
+      .calendar th {
+        background-color: #f1f3f5;
+        color: #495057;
+        padding: 10px;
+        font-weight: normal;
+      }
 
+      .calendar td {
+        padding: 15px;
+        text-align: center;
+        font-size: 14px;
+        border-bottom: 1px solid #dee2e6;
+      }
 
+      .calendar td:not(:last-child) {
+        border-right: 1px solid #dee2e6;
+      }
 
-    console.log(clubSchedules);
+      .calendar .weekend {
+        color: #f03e3e;
+      }
 
+      .calendar .empty {
+        background: #f8f9fa;
+      }
 
-    // 일정 폼 제출 핸들러
-    document.getElementById('scheduleForm').addEventListener('submit', function (event) {
-      event.preventDefault();
+      .no-events {
+        text-align: center;
+        padding: 15px;
+        font-size: 14px;
+        color: #868e96;
+      }
 
-      // 모달 폼에서 데이터 추출
-      // date -> 날짜 / time -> 원하는 시간 / title -> 제목 / content -> 내용
-      const date = document.getElementById('modalDate').value;
-      const time = document.getElementById('modalTime').value;
-      const title = document.getElementById('modalTitle').value;
-      const content = document.getElementById('modalContent').value;
+      .calendar .today {
+        background-color: #4dabf7;
+        color: white;
+        border-radius: 50%;
+      }
 
+      /* 클릭하면 테투리 파랗게 변함 */
+      .selected-date {
+        border: 2px solid blue !important;
 
+        /* 선택된 날짜의 테두리 스타일 */
+      }
+    </style>
+  </head>
 
-      // 서버에 POST 요청 전송
-      axios.post(`/myclubSchedule/1`, {
-        date: date,
-        time: time,
-        title: title,
-        content: content
-      })
-        .then(res => {
-          const club_id = res.data.club_id;
-          console.log(res);
-          // 일정 추가 성공 시 로직
-          console.log('일정이 추가되었습니다:', res.data);
-          // addEventToCalendar(res.data); // 달력에 이벤트 추가
-          closeModal(); // 모달 닫기 함수 실행
-          location.reload();
-        })
-        .catch(err => {
-          console.error('일정 추가 실패:', err);
+  <body>
+    <div class="calendar-container">
+      <div class="calendar-controls">
+        <button onclick="moveMonth(-1)">이전</button>
+        <span id="current-month-year"></span>
+        <button onclick="moveMonth(1)">다음</button>
+      </div>
+      <table class="calendar">
+        <thead>
+          <tr>
+            <th class="weekend">일</th>
+            <th>월</th>
+            <th>화</th>
+            <th>수</th>
+            <th>목</th>
+            <th>금</th>
+            <th>토</th>
+          </tr>
+        </thead>
+        <tbody id="calendar-body">
+          <!-- 달력의 행은 여기에 들어갑니다 -->
+        </tbody>
+      </table>
+      <div id="eventsContainer">
+        <% if (data && data.length) { %> <% data.forEach(function(schedule) { %>
+        <div class="schedule" id="<%= schedule.schedule_id %>">
+          <h3 id="title<%= schedule.schedule_id %>"><%= schedule.title %></h3>
+          <p id="date<%= schedule.schedule_id %>">Date: <%= schedule.date %></p>
+          <p id="time<%= schedule.schedule_id %>">Time: <%= schedule.time %></p>
+          <p id="content<%= schedule.schedule_id %>">
+            Content: <%= schedule.content %>
+          </p>
+          <button
+            type="button"
+            onclick="patchSchedule('<%= schedule.schedule_id %>')"
+          >
+            수정
+          </button>
+          <button
+            type="button"
+            onclick="deleteSchedule('<%= schedule.schedule_id %>')"
+          >
+            삭제
+          </button>
+        </div>
+        <% }); %> <% } else { %>
+        <p class="no-events">등록된 일정이 없습니다</p>
+        <% } %>
+        <!-- <ul>
+                  <% for (const schedule of data) { %>
+                    <li>
+                      <%= schedule.date %>: <%= schedule.title %> Content: <%= schedule.content %>
+                    </li>
+                    <% } %>
+                </ul> -->
+      </div>
+    </div>
+
+    <!----------------------- 일정을 추가하는 모달 ---------------------->
+    <div
+      id="scheduleModal"
+      style="
+        display: none;
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      "
+    >
+      <!-- <h2>일정 추가</h2> -->
+      <h2 id="modalName"></h2>
+      <form id="scheduleForm">
+        <input type="hidden" id="modalDate" />
+        <label for="modalTime">시간:</label>
+        <input type="time" id="modalTime" required /><br />
+        <label for="modalTitle">제목:</label>
+        <input type="text" id="modalTitle" required /><br />
+        <label for="modalContent">내용:</label>
+        <textarea id="modalContent" required></textarea><br />
+        <button type="submit" id="saveBtn">저장</button>
+        <button type="button" id="resaveBtn" onclick="patch()">수정</button>
+      </form>
+      <button onclick="closeModal()">닫기</button>
+    </div>
+
+    <!----------------------- 일정을 추가하는 모달 끝 ---------------------->
+
+    <script>
+      // 서버로부터 받은 데이터를 JavaScript 변수에 할당
+      const clubSchedules = `clubSchedules: <%-JSON.stringify(data) %>`;
+
+      console.log(clubSchedules);
+
+      // 일정 폼 제출 핸들러
+      document
+        .getElementById("scheduleForm")
+        .addEventListener("submit", function (event) {
+          event.preventDefault();
+
+          // 모달 폼에서 데이터 추출
+          // date -> 날짜 / time -> 원하는 시간 / title -> 제목 / content -> 내용
+          const date = document.getElementById("modalDate").value;
+          const time = document.getElementById("modalTime").value;
+          const title = document.getElementById("modalTitle").value;
+          const content = document.getElementById("modalContent").value;
+
+          // 서버에 POST 요청 전송
+          axios
+            .post(`/myclubSchedule/1`, {
+              date: date,
+              time: time,
+              title: title,
+              content: content,
+            })
+            .then((res) => {
+              const club_id = res.data.club_id;
+              console.log(res);
+              // 일정 추가 성공 시 로직
+              console.log("일정이 추가되었습니다:", res.data);
+              // addEventToCalendar(res.data); // 달력에 이벤트 추가
+              closeModal(); // 모달 닫기 함수 실행
+              location.reload();
+            })
+            .catch((err) => {
+              console.error("일정 추가 실패:", err);
+            });
         });
-    });
 
-    // ---------- 달력에 일정 추가 함수 
-    // function addEventToCalendar(event) {
-    //   // 이벤트 컨테이너 찾기
-    //   const eventsContainer = document.getElementById('eventsContainer');
-    //   eventsContainer.style.display = 'block'; // 이벤트 컨테이너 보이기
+      // ---------- 달력에 일정 추가 함수
+      // function addEventToCalendar(event) {
+      //   // 이벤트 컨테이너 찾기
+      //   const eventsContainer = document.getElementById('eventsContainer');
+      //   eventsContainer.style.display = 'block'; // 이벤트 컨테이너 보이기
 
-    //   // '등록된 일정 없음' 메시지 숨기기
-    //   document.getElementById('noEventsMessage').style.display = 'none';
+      //   // '등록된 일정 없음' 메시지 숨기기
+      //   document.getElementById('noEventsMessage').style.display = 'none';
 
-    //   // 새로운 이벤트 요소 생성 및 추가 ->>>> 하단에 일정 날짜, 내용, 시간
-    //   const eventElement = document.createElement('div');
-    //   eventElement.textContent = `${event.date}: ${event.title}: ${event.content}: ${event.time}`;
-    //   eventsContainer.appendChild(eventElement);
+      //   // 새로운 이벤트 요소 생성 및 추가 ->>>> 하단에 일정 날짜, 내용, 시간
+      //   const eventElement = document.createElement('div');
+      //   eventElement.textContent = `${event.date}: ${event.title}: ${event.content}: ${event.time}`;
+      //   eventsContainer.appendChild(eventElement);
 
-    //   // 달력 업데이트
-    //   updateCalendar(currentMonth, currentYear);
-    // }
+      //   // 달력 업데이트
+      //   updateCalendar(currentMonth, currentYear);
+      // }
 
-    // --------------------- 일정을 추가할수 있는 시작 끝
-    // 모달 열기
-    function openModal(date) {
-      document.getElementById('modalDate').value = date;
-      document.getElementById('scheduleModal').style.display = 'block';
-    }
+      // --------------------- 일정을 추가할수 있는 시작 끝
+      // 모달 열기
+      function openModal(date) {
+        document.getElementById("modalName").innerText = "일정 추가";
 
-    // 모달 닫기
-    function closeModal() {
-      document.getElementById('scheduleModal').style.display = 'none';
-    }
-    // --------------------- 일정을 추가할수 있는 모달 끝
-
-
-
-    // 날짜 클릭했을때 기능 추가 
-
-    function onDateClick(dateStr) {
-      // 모든 날짜에서 'selected-date' 클래스 제거 (테두리 파랑색으로)
-      document.querySelectorAll('.calendar td').forEach(td => {
-        td.classList.remove('selected-date');
-      });
-
-      // 선택된 날짜에 'selected-date' 클래스 추가 (테두리 파랑색으로)
-      const selectedDate = document.querySelector(`.calendar td[onclick="onDateClick('${dateStr}')"]`);
-      if (selectedDate) {
-        selectedDate.classList.add('selected-date');
+        document.getElementById("modalDate").value = date;
+        document.getElementById("scheduleModal").style.display = "block";
+        document.getElementById("saveBtn").style.display = "block";
+        document.getElementById("resaveBtn").style.display = "none";
       }
 
-      openModal(dateStr); // 모달 열기
-      console.log('Selected date:', dateStr);
-    }
+      // 모달 닫기
+      function closeModal() {
+        document.getElementById("scheduleModal").style.display = "none";
+      }
+      // --------------------- 일정을 추가할수 있는 모달 끝
 
+      // 날짜 클릭했을때 기능 추가
 
+      function onDateClick(dateStr) {
+        // 모든 날짜에서 'selected-date' 클래스 제거 (테두리 파랑색으로)
+        document.querySelectorAll(".calendar td").forEach((td) => {
+          td.classList.remove("selected-date");
+        });
 
-
-
-
-
-
-
-    // function fetchClubSchedules() {
-    //   axios.get(`/myclubSchedule/${1}`)
-    //     .then(response => {
-    //       updateCalendar(currentMonth, currentYear, clubSchedules); // 달력 업데이트
-    //     })
-    //     .catch(error => {
-    //       console.error('Error fetching club schedules:', error);
-    //     });
-    // }
-
-
-
-    // 달력을 표시해주는 함수
-
-    let currentYear = new Date().getFullYear();
-    let currentMonth = new Date().getMonth();
-
-    function daysInMonth(month, year) {
-      return new Date(year, month + 1, 0).getDate();
-    }
-
-    function updateCalendar(month, year) {
-
-
-      const startDay = new Date(year, month, 1).getDay();
-      const numDays = daysInMonth(month, year);
-      const today = new Date();
-
-      document.getElementById('current-month-year').innerText = `${year}년 ${month + 1}월`;
-
-      let calendarHtml = '';
-      let day = 1;
-
-      for (let i = 0; i < 6; i++) {
-        calendarHtml += '<tr>';
-        for (let j = 0; j < 7; j++) {
-          if (i === 0 && j < startDay) {
-            calendarHtml += '<td class="empty"></td>';
-          } else if (day > numDays) {
-            calendarHtml += '<td class="empty"></td>';
-          } else {
-            const isToday = day === today.getDate() && month === today.getMonth() && year === today.getFullYear();
-            const cls = isToday ? 'today' : (j === 0 ? 'weekend' : '');
-            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-
-            calendarHtml += `<td class="${cls}" onclick="onDateClick('${dateStr}')">${day}</td>`;
-            day++;
-          }
+        // 선택된 날짜에 'selected-date' 클래스 추가 (테두리 파랑색으로)
+        const selectedDate = document.querySelector(
+          `.calendar td[onclick="onDateClick('${dateStr}')"]`
+        );
+        if (selectedDate) {
+          selectedDate.classList.add("selected-date");
         }
-        calendarHtml += '</tr>';
+
+        openModal(dateStr); // 모달 열기
+        console.log("Selected date:", dateStr);
       }
 
-      document.getElementById('calendar-body').innerHTML = calendarHtml;
+      // function fetchClubSchedules() {
+      //   axios.get(`/myclubSchedule/${1}`)
+      //     .then(response => {
+      //       updateCalendar(currentMonth, currentYear, clubSchedules); // 달력 업데이트
+      //     })
+      //     .catch(error => {
+      //       console.error('Error fetching club schedules:', error);
+      //     });
+      // }
 
-    }
+      // 달력을 표시해주는 함수
 
-    function moveMonth(step) {
-      currentMonth += step;
+      let currentYear = new Date().getFullYear();
+      let currentMonth = new Date().getMonth();
 
-      if (currentMonth < 0) { currentMonth = 11; currentYear--; } else if (currentMonth > 11) {
-        currentMonth = 0;
-        currentYear++;
+      function daysInMonth(month, year) {
+        return new Date(year, month + 1, 0).getDate();
       }
 
+      function updateCalendar(month, year) {
+        const startDay = new Date(year, month, 1).getDay();
+        const numDays = daysInMonth(month, year);
+        const today = new Date();
+
+        document.getElementById("current-month-year").innerText = `${year}년 ${
+          month + 1
+        }월`;
+
+        let calendarHtml = "";
+        let day = 1;
+
+        for (let i = 0; i < 6; i++) {
+          calendarHtml += "<tr>";
+          for (let j = 0; j < 7; j++) {
+            if (i === 0 && j < startDay) {
+              calendarHtml += '<td class="empty"></td>';
+            } else if (day > numDays) {
+              calendarHtml += '<td class="empty"></td>';
+            } else {
+              const isToday =
+                day === today.getDate() &&
+                month === today.getMonth() &&
+                year === today.getFullYear();
+              const cls = isToday ? "today" : j === 0 ? "weekend" : "";
+              const dateStr = `${year}-${String(month + 1).padStart(
+                2,
+                "0"
+              )}-${String(day).padStart(2, "0")}`;
+
+              calendarHtml += `<td class="${cls}" onclick="onDateClick('${dateStr}')">${day}</td>`;
+              day++;
+            }
+          }
+          calendarHtml += "</tr>";
+        }
+
+        document.getElementById("calendar-body").innerHTML = calendarHtml;
+      }
+
+      function moveMonth(step) {
+        currentMonth += step;
+
+        if (currentMonth < 0) {
+          currentMonth = 11;
+          currentYear--;
+        } else if (currentMonth > 11) {
+          currentMonth = 0;
+          currentYear++;
+        }
+
+        updateCalendar(currentMonth, currentYear);
+      }
+
+      // 초기 달력 업데이트
       updateCalendar(currentMonth, currentYear);
-    }
 
-    // 초기 달력 업데이트
-    updateCalendar(currentMonth, currentYear);
+      // 달력을 표시해주는 함수 끝
 
-    // 달력을 표시해주는 함수 끝
-  </script>
-</body>
+      let patchId; // 수정할 schedule_id 값 저장
 
+      // 일정 수정
+      function patchSchedule(schedule_id) {
+        document.getElementById("scheduleModal").style.display = "block";
+        document.getElementById("modalName").innerText = "일정 수정";
+
+        document.getElementById("saveBtn").style.display = "none";
+        document.getElementById("resaveBtn").style.display = "block";
+
+        patchId = schedule_id;
+
+        // 저장된 값 불러오기
+        document.getElementById("modalDate").value = document
+          .getElementById(`date${schedule_id}`)
+          .innerText.split(" ")[1];
+        console.log(document.getElementById("modalDate").value);
+        document.getElementById("modalTime").value = document
+          .getElementById(`time${schedule_id}`)
+          .innerText.split(" ")[1];
+        document.getElementById("modalTitle").value = document.getElementById(
+          `title${schedule_id}`
+        ).innerText;
+        document.getElementById("modalContent").value = document
+          .getElementById(`content${schedule_id}`)
+          .innerText.split(" ")[1];
+      }
+
+      function patch() {
+        const isConfirmed = confirm("일정을 수정하시겠습니까?");
+        const date = document.getElementById("modalDate").value;
+        const time = document.getElementById("modalTime").value;
+        const title = document.getElementById("modalTitle").value;
+        const content = document.getElementById("modalContent").value;
+        if (isConfirmed) {
+          axios({
+            method: "patch",
+            url: `/myclubSchedule/1/${patchId}`,
+            data: {
+              date: date,
+              time: time,
+              title: title,
+              content: content,
+            },
+          })
+            .then((res) => {
+              location.reload();
+            })
+            .catch((err) => {
+              console.error("댓글 수정 에러:", err);
+            });
+        }
+      }
+
+      // 일정 삭제
+      function deleteSchedule(schedule_id) {
+        const isConfirmed = confirm("일정을 삭제하시겠습니까?");
+        if (isConfirmed) {
+          const scheduleElement = document.getElementById(`${schedule_id}`);
+          axios({
+            method: "delete",
+            url: `/myclubSchedule/1/${schedule_id}`,
+          })
+            .then((res) => {
+              console.log(res);
+              if (res.isDeleted) {
+                // 삭제 성공 시, 페이지에서 해당 댓글 요소 제거
+                scheduleElement.remove();
+              } else {
+                // 삭제 실패 처리
+              }
+              location.reload();
+            })
+            .catch((err) => {
+              console.error("댓글 삭제 에러:", err);
+            });
+        }
+      }
+    </script>
+  </body>
 </html>
