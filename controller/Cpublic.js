@@ -500,15 +500,9 @@ exports.getAllMembers = async (req, res) => {
         data: getAllMembersShow,
         userInfo,
         club_id,
+        title,
+        link
       });
-    });
-
-    res.render("clubAdmin/clubAdminTransfer", {
-      data: getAllMembersShow,
-      userInfo,
-      club_id,
-      title,
-      link,
     });
   } catch (err) {
     console.error(err);

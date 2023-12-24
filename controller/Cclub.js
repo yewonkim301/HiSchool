@@ -106,7 +106,10 @@ exports.getClubAdminEdit = async (req, res) => {
         isMember: "true",
       },
     });
+
     const clubAdminEdit = clubAdminEditDB.toJSON();
+    console.log(clubAdminEdit);
+    
     res.render("clubAdmin/clubAdminEdit", {
       clubAdminEdit,
     leaderName,
@@ -115,6 +118,7 @@ exports.getClubAdminEdit = async (req, res) => {
       link
 
     });
+  
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");

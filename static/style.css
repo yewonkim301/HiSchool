@@ -281,10 +281,10 @@ body {
 .btn-ghost {
   padding: var(--spacing-1) var(--spacing-2);
   background-color: var();
-  border: solid 1px var(--color-ghost-50);
-  color: var(--color-ghost-100);
+  border: 1px solid var(--gray-200, #E5E7EB);
+  color: var(--gray-400, #9CA3AF);
   border-radius: 4px;
-  box-shadow: 0px 2px 8px 0px rgba(47, 128, 237, 0.2);
+  box-shadow: 0px 1px 8px 0px rgba(19, 19, 19, 0.10);
 }
 
 /* 텍스트필드 - input */
