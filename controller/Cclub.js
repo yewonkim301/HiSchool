@@ -583,8 +583,7 @@ exports.postClubSchedule = async (req, res) => {
 exports.patchClubSchedule = async (req, res) => {
   try {
     const { club_id, schedule_id } = req.params;
-    const { date, time, title, content } = req.body; // newDate -> 일정의 날짜도 변경이 가능할 경우 필요
-    console.log(req.body);
+    const { date, time, title, content } = req.body;
     const clubSchedule = await Club_schedule.update(
       {
         date: date,
