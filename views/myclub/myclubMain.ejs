@@ -19,7 +19,7 @@
 
     <script>
       // 동아리 관리자만 동아리 관리 링크 활성화
-      if(isLeader){
+      if('<%=isLeader%>'){
         const admin = document.querySelector('#admin');
         admin.style.display = 'none'
       }
