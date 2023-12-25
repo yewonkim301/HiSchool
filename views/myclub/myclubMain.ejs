@@ -19,8 +19,11 @@
 
     <script>
       // 동아리 관리자만 동아리 관리 링크 활성화
-      if('<%=isLeader%>'){
-        const admin = document.querySelector('#admin');
+      const admin = document.querySelector('#admin');
+      if('<%=isLeader%>'==='true'){
+        admin.style.display = 'block'
+      }
+      else{
         admin.style.display = 'none'
       }
       function moveClubChat() {
