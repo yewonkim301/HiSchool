@@ -537,9 +537,20 @@ exports.getClubSchedules = async (req, res) => {
     const clubSchedules = await Club_schedule.findAll({
       where: { club_id: club_id },
     });
+    const date = await Club_schedule.findAll({
+      order: ["date"],
+      attributes: ["date"],
+      where: { club_id: club_id },
+    });
+    let scheduleDate = [];
+    date.forEach((element) => {
+      scheduleDate.push(element.dataValues.date);
+    });
     res.render("./myclub/myclubSchedule", {
       data: clubSchedules,
       title: "일정",
+      scheduleDate,
+      club_id,
       // link,
     });
   } catch (err) {
