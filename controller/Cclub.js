@@ -86,7 +86,7 @@ exports.getClubAdminMain = async (req, res) => {
 
 // GET /clubAdminEdit/:club_id : 동아리 수정페이지 불러오기
 exports.getClubAdminEdit = async (req, res) => {
-  console.log('getClubAdminEdit', req.params);
+  console.log("getClubAdminEdit", req.params);
   try {
     let link = `/clubAdminMain/${req.params.club_id}`; //클럽 관리 페이지로 이동
     const { club_id } = req.params;
@@ -222,7 +222,7 @@ exports.postCreateClub = async (req, res) => {
 //Club_post
 // GET /myclubPostMain/:club_id : 동아리 게시글 전체 조회
 exports.getClubPosts = async (req, res) => {
-  console.log('Cclub js 225 getClubPosts req.params', req.params);
+  console.log("Cclub js 225 getClubPosts req.params", req.params);
   try {
     let link = `/myclubMain/${req.params.club_id}`; // 해당클럽 메인페이지로 이동
     const posts = await Club_post.findAll({
@@ -536,9 +536,20 @@ exports.getClubSchedules = async (req, res) => {
     const clubSchedules = await Club_schedule.findAll({
       where: { club_id: club_id },
     });
+    const date = await Club_schedule.findAll({
+      order: ["date"],
+      attributes: ["date"],
+      where: { club_id: club_id },
+    });
+    let scheduleDate = [];
+    date.forEach((element) => {
+      scheduleDate.push(element.dataValues.date);
+    });
     res.render("./myclub/myclubSchedule", {
       data: clubSchedules,
       title: "일정",
+      scheduleDate,
+      club_id,
       // link,
     });
   } catch (err) {
