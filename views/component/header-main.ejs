@@ -1,108 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/style.css" />
-    <title>Document</title>
-    <!-- feather-icons CDN -->
-    <script src="https://unpkg.com/feather-icons"></script>
-    <style></style>
-  </head>
-  <body>
-    <header class="header">
-      <nav class="navbar">
-        <div class="menu-icon" onclick="toggleSidebar()">
-          <i data-feather="menu"></i>
-        </div>
+<link rel="stylesheet" href="/style.css" />
+<script src="https://unpkg.com/feather-icons"></script>
 
-        <div class="close-menu" onclick="toggleSidebar()">
-          <i data-feather="x"></i>
-        </div>
+<header class="header">
+  <nav class="navbar">
+    <div class="menu-icon" onclick="toggleSidebar()">
+      <i data-feather="menu"></i>
+    </div>
 
-        <% if(typeof title !== 'undefined' && title) { %>
-        <div class="logo"><%= title %></div>
-        <% } else { %>
-        <div class="logo" onclick="toPage('/home')">하이스쿨</div>
-        <% } %>
+    <div class="close-menu" onclick="toggleSidebar()">
+      <i data-feather="x"></i>
+    </div>
 
-        <div class="menu-bar">
-          <a href="/home">홈</a>
-          <a href="/publicPostMain">자유게시판</a>
-          <a href="/mypageMain">마이페이지</a>
-          <a href="#">고객센터</a>
-        </div>
+    <% if(typeof title !== 'undefined' && title) { %>
+    <div class="logo"><%= title %></div>
+    <% } else { %>
+    <div class="logo" onclick="toPage('/home')">하이스쿨</div>
 
-        <div class="nav-btn">
-          <div class="header-profile desktop">
-            <% if(typeof isLoggedIn !== 'undefined' && isLoggedIn) { %>
-            <span><%= foundUser.name %>님</span>
-            <% if (foundUser.profile_img) { %>
-            <img
-              src="<%= foundUser.profile_img %>"
-              alt="프로필 이미지"
-              width="28"
-            />
-            <% } else { %>
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png"
-              alt="프로필 이미지"
-              width="28"
-            />
-            <% } %>
-          </div>
-          <button
-            class="btn-sm btn-secondary"
-            type="button"
-            onclick="handleLogout()"
-          >
-            로그아웃
-          </button>
-        </div>
-        <% } else { %>
-        <div class="nav-btn">
-          <button class="btn-sm btn-secondary" type="button">회원가입</button>
-          <button class="btn-sm btn-secondary" type="button">로그인</button>
-        </div>
-        <% } %>
+    <% } %>
 
-        <div class="right-icon">
-          <i data-feather="send"></i>
-        </div>
-      </nav>
-    </header>
-    <!--# 모바일 -->
-
-    <div id="sidebar" class="sidebar">
-      <!-- <div  onclick="toggleSidebar()">
-      <i data-feather="menu"></i></div> -->
+    <div class="menu-bar">
       <a href="/home">홈</a>
       <a href="/publicPostMain">자유게시판</a>
       <a href="/mypageMain">마이페이지</a>
       <a href="#">고객센터</a>
+    </div>
 
-      <div class="header-profile mobile">
-        
-        <% if (foundUser.profile_img) { %>
-        <div class="profileImg-container">
-          <img
-            src="<%= foundUser.profile_img %>"
-            alt="프로필 이미지"
-            width="50"
-          />
+    <div class="nav-btn">
+      <div class="header-profile desktop">
+        <% if(typeof isLoggedIn !== 'undefined' && isLoggedIn) { %>
+          <span><%= foundUser.name %>님</span>
+          <% if(typeof signedFile !== 'undefined' && signedFile) { %>
+            <img
+              src="<%= signedFile %>"
+              alt="프로필 이미지"
+              width="28"
+              height="28"
+              style="border-radius: 100px"
+            />
+          <% } else { %>
+            <img src="./icons/profile_img.png" alt="프로필 이미지" width="28" />
+          <% } %>
         </div>
-        <% } else { %>
-        <div class="profileImg-container">
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png"
-            alt="프로필 이미지"
-            width="50"
-          />
-        </div>
-        <span><%= foundUser.name %>님</span> 
-      </div>
-      <% } %> <% if(typeof isLoggedIn !== 'undefined' && isLoggedIn) { %>
-      <div class="menu-buttons">
         <button
           class="btn-sm btn-secondary"
           type="button"
@@ -111,43 +49,90 @@
           로그아웃
         </button>
       </div>
-      <% } else { %>
-      <div class="menu-buttons">
-        <button class="btn-sm btn-secondary" type="button">회원가입</button>
-        <button class="btn-sm btn-secondary" type="button">로그인</button>
-      </div>
-      <% } %>
+    <% } else { %>
+    <div class="nav-btn">
+      <button class="btn-sm btn-secondary" type="button">회원가입</button>
+      <button class="btn-sm btn-secondary" type="button">로그인</button>
     </div>
-    <div class="shade hidden" onclick="closeMenu()"></div>
+    <% } %>
 
-    <script>
-      function toggleSidebar() {
-        document.getElementById("sidebar").classList.toggle("active");
-        document.querySelector(".close-menu").classList.toggle("visible");
-        document.querySelector(".menu-icon").classList.toggle("hidden");
-        document.querySelector(".shade").classList.toggle("visible");
-      }
-      feather.replace();
+    <div class="right-icon">
+      <i data-feather="send"></i>
+    </div>
+  </nav>
+</header>
 
-      function closeMenu() {
-        document.querySelector('.sidebar').classList.toggle("active")
-        document.querySelector(".shade").classList.toggle("visible");
-      }
-    </script>
 
-    <script>
-      function toPage(link) {
-        document.location.href = link;
-      }
+<div id="sidebar" class="sidebar">
+  <!-- <div  onclick="toggleSidebar()">
+      <i data-feather="menu"></i></div> -->
+  <a href="/home">홈</a>
+  <a href="/publicPostMain">자유게시판</a>
+  <a href="/mypageMain">마이페이지</a>
+  <a href="#">고객센터</a>
 
-      async function handleLogout() {
-        const result = await axios({
-          method: "GET",
-          url: "/logout",
-        });
-        console.log(result);
-        document.location.href = "/";
-      }
-    </script>
-  </body>
-</html>
+  <div class="header-profile mobile">
+    <% if(typeof signedFile !== 'undefined' && signedFile) { %>
+    <div class="profileImg-container">
+      <img
+        src="<%= signedFile %>"
+        alt="프로필 이미지"
+        width="50"
+        height="50"
+        style="border-radius: 100px"
+      />
+    </div>
+    <% } else { %>
+    <div class="profileImg-container">
+      <img src="./icons/profile_img.png" alt="프로필 이미지" width="50" />
+    </div>
+    <% if(typeof foundUser !== 'undefined' && foundUser) { %>
+    <span><%= foundUser.name %>님</span>
+    <% } %>
+  </div>
+  <% } %> 
+  <% if(typeof isLoggedIn !== 'undefined' && isLoggedIn) { %>
+  <div class="menu-buttons">
+    <button class="btn-sm btn-secondary" type="button" onclick="handleLogout()">
+      로그아웃
+    </button>
+  </div>
+  <% } else { %>
+  <div class="menu-buttons">
+    <button class="btn-sm btn-secondary" type="button">회원가입</button>
+    <button class="btn-sm btn-secondary" type="button">로그인</button>
+  </div>
+  <% } %>
+</div>
+</div>
+<div class="shade hidden" onclick="closeMenu()"></div>
+
+<script>
+  function toggleSidebar() {
+    document.getElementById("sidebar").classList.toggle("active");
+    document.querySelector(".close-menu").classList.toggle("visible");
+    document.querySelector(".menu-icon").classList.toggle("hidden");
+    document.querySelector(".shade").classList.toggle("visible");
+  }
+  feather.replace();
+
+  function closeMenu() {
+    document.querySelector(".sidebar").classList.toggle("active");
+    document.querySelector(".shade").classList.toggle("visible");
+  }
+</script>
+
+<script>
+  function toPage(link) {
+    document.location.href = link;
+  }
+
+  async function handleLogout() {
+    const result = await axios({
+      method: "GET",
+      url: "/logout",
+    });
+    console.log(result);
+    document.location.href = "/";
+  }
+</script>

@@ -43,15 +43,17 @@
         <% if(typeof isLoggedIn !== 'undefined' && isLoggedIn) { %>
           <div class="header-profile desktop">
           <span><%= foundUser.name %>님</span>
-        <% if (foundUser.profile_img) { %>
+          <% if(typeof signedFile !== 'undefined' && signedFile) { %>
         <img
-          src="<%= foundUser.profile_img %>"
+          src="<%= signedFile %>"
           alt="프로필 이미지"
           width="28"
+          height="28"
+          style="border-radius: 100px;"
         />
         <% } else { %>
           <img
-          src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png"
+          src="../icons/profile_img.png"
           alt="프로필 이미지"
           width="28"
           />
@@ -86,24 +88,51 @@
       <a href="/mypageMain">마이페이지</a>
       <a href="#">고객센터</a>
 
-      <% if(typeof isLoggedIn !== 'undefined' && isLoggedIn) { %>
-        <div class="nav-btn">
-          <button
-            class="btn-sm btn-secondary"
-            type="button"
-            onclick="handleLogout()"
-          >
-            로그아웃
-          </button>
+      
+
+      <div class="header-profile mobile">
+        
+        <% if(typeof signedFile !== 'undefined' && signedFile) { %>
+        <div class="profileImg-container">
+          <img
+            src="<%= signedFile %>"
+            alt="프로필 이미지"
+            width="50"
+            height="50"
+            style="border-radius: 100px;"
+          />
         </div>
         <% } else { %>
-        <div class="nav-btn">
-          <button class="btn-sm btn-secondary" type="button">회원가입</button>
-          <button class="btn-sm btn-secondary" type="button">로그인</button>
+        <div class="profileImg-container">
+          <img
+            src="../icons/profile_img.png"
+            alt="프로필 이미지"
+            width="50"
+          />
         </div>
+        <% if(typeof foundUser !== 'undefined' && foundUser) { %>
+        <span><%= foundUser.name %>님</span> 
         <% } %>
+      </div>
+      <% } %> 
+      <% if(typeof isLoggedIn !== 'undefined' && isLoggedIn) { %>
+      <div class="menu-buttons">
+        <button
+          class="btn-sm btn-secondary"
+          type="button"
+          onclick="handleLogout()"
+        >
+          로그아웃
+        </button>
+      </div>
+      <% } else { %>
+      <div class="menu-buttons">
+        <button class="btn-sm btn-secondary" type="button">회원가입</button>
+        <button class="btn-sm btn-secondary" type="button">로그인</button>
+      </div>
+      <% } %>
     </div>
-    <div class="shade hidden">
+    <div class="shade hidden" onclick="closeMenu()"></div>
       
     </div>
 

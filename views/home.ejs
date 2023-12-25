@@ -2,45 +2,46 @@
 <html lang="ko">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>홈 화면</title>
-    <link rel="stylesheet" href="/style.css" />
-    <link rel="stylesheet" href="/home.css" />
+    <!-- <link rel="stylesheet" href="/home.css" /> -->
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.0/dist/js.cookie.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   </head>
 
   <body>
-    <%- include('./component/header-main') %>
     <div class="container">
+      <%- include('./component/header-main') %>
       <!-- <a href="/clubAdminMain">동아리 관리 페이지(test)</a> -->
 
-      
       <h2 class="label">내 동아리</h2>
       <div class="list-container">
+        <% if(typeof myClubs !== 'undefined' && myClubs) { %> 
         <% for(i = 0; i < myClubs.length; i++) { %>
-          <a class='list'  href="/myclubMain/<%= myClubs[i].club_id %>">
-            <span class="list-title"><%= myClubs[i].club_name %></span>
-            <span class="list-content"><%= myClubs[i].location %></span>
-            <span class="list-content"><%= myClubs[i].description %></span>
-          </a>
+        <a class="list" href="/myclubMain/<%= myClubs[i].club_id %>">
+          <span class="list-title"><%= myClubs[i].club_name %></span>
+          <span class="list-content"><%= myClubs[i].location %></span>
+          <span class="list-content"><%= myClubs[i].description %></span>
+        </a>
+        <% } %> 
         <% } %>
       </div>
-      <br>
+      <br />
       <h2 class="label">전체 동아리</h2>
       <div class="list-container">
+        <% if(typeof allClubs !== 'undefined' && allClubs) { %> 
         <% for(i = 0; i < allClubs.length; i++) { %>
         <a class="list" href="/clubDetail/<%= allClubs[i].club_id %>">
           <span class="list-title"><%= allClubs[i].club_name %></span>
           <span class="list-content"><%= allClubs[i].location %></span>
           <span class="list-content"><%= allClubs[i].description %></span>
         </a>
+        <% } %> 
         <% } %>
       </div>
 
-        <a href="/clubMain">전체보기</a><br>
-        <a href="/chat">챗 테스트</a>
-
-
-
+      <a href="/clubMain">전체보기</a><br />
+      <a href="/chat">챗 테스트</a>
+    </div>
   </body>
 </html>
