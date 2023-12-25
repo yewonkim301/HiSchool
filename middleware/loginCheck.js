@@ -4,7 +4,7 @@ exports.isLoggedIn = async (req, res, next) => {
   if (req.isAuthenticated()) {
     res.locals.isLoggedIn = req.isAuthenticated();
     const { name, profile_img } = req.user;
-    console.log('loginCheck profile_img : ', profile_img);
+    // console.log('loginCheck profile_img : ', profile_img);
     if (profile_img == '' || profile_img == undefined) {
       const signedFile = null
       res.locals.foundUser = { name, signedFile };
