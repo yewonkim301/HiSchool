@@ -86,8 +86,8 @@
     <div class="container">
       <%- include('../component/header')%>
       <div class="profile-header">
-        <% if (data.profile_img) { %>
-        <img src="<%= data.profile_img %>" alt="프로필 이미지" width="60" />
+        <% if (profileImg) { %>
+        <img src="<%= profileImg %>" alt="프로필 이미지" width="60" />
         <% } else { %>
         <img
           src="./icons/profile_img.png"
