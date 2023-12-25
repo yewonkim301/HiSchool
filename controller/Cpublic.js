@@ -840,25 +840,11 @@ exports.getMyPage = async (req, res) => {
       },
     });
 
-    // console.log("getClubId", getClubId);
-
-    // 가입할 수 있는, 창설할 수 있는 클럽은 최대 3개이다. 구조분해로 넣어준다.
-    // const { club1, club2, club3 } = getClubId.club_id;
     let clubs = [];
     for (const element of getClubId) {
-      // console.log(element.dataValues.club_id);
       clubs.push(element.dataValues.club_id);
     }
-
-    // console.log("clubs>>>>>>", clubs);
-
-    // 여기서 club1, club2, club3을 clubs 배열의 처음 세 요소로 가정합니다.
-    // 배열의 길이가 3보다 작을 경우 undefined가 할당될 수 있습니다.
     const [club1, club2, club3] = clubs;
-
-    // console.log("club1", club1);
-    // console.log("club2", club2);
-    // console.log("club3", club3);
 
     // 구조분해한 변수로 leader_id를 가지고 있는지 찾는다.
 
@@ -893,17 +879,11 @@ exports.getMyPage = async (req, res) => {
       });
     }
 
-    // console.log("getLeaderid", getLeaderid1);
-    // console.log("getLeaderid", getLeaderid2);
-    // console.log("getLeaderid", getLeaderid3);
-
     if (getLeaderid1 == undefined) {
       Leader = false;
     } else if (getLeaderid1.leader_id == userid_num) {
       Leader = true;
     }
-
-    // console.log("Leader", Leader);
 
     if (getLeaderid2 == undefined) {
       Leader2 = false;
@@ -916,8 +896,6 @@ exports.getMyPage = async (req, res) => {
     } else if (getLeaderid3.leader_id == userid_num) {
       Leader3 = true;
     }
-
-    // console.log("Leader3", Leader3);
 
     res.render("mypage/mypageMain", {
       data: myPageMain,
