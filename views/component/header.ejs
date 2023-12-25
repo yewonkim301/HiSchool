@@ -8,12 +8,7 @@
     <!-- feather-icons CDN -->
     <script src="https://unpkg.com/feather-icons"></script>
     <style>
-      .logo {
-        cursor: pointer;
-        user-select: none;
-      }
 
-      
     </style>
   </head>
   <body>
@@ -45,15 +40,44 @@
           <a href="/mypageMain"><div>마이페이지</div></a>
           <a href="#"><div>고객센터</div></a>
         </div>
-        <div class="nav-btn">
-          <a href="/register">회원가입</a>
-          <a href="/login">로그인</a>
+        <% if(typeof isLoggedIn !== 'undefined' && isLoggedIn) { %>
+          <div class="header-profile desktop">
+          <span><%= foundUser.name %>님</span>
+        <% if (foundUser.profile_img) { %>
+        <img
+          src="<%= foundUser.profile_img %>"
+          alt="프로필 이미지"
+          width="28"
+        />
+        <% } else { %>
+          <img
+          src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png"
+          alt="프로필 이미지"
+          width="28"
+          />
+          <% } %>
+          <div class="nav-btn">
+            <button
+            class="btn-sm btn-secondary"
+            type="button"
+            onclick="handleLogout()"
+            >
+            로그아웃
+          </button>
         </div>
-        <div class="settings-icon">
-          <i data-feather="send"></i>
+      </div>
+        <% } else { %>
+        <div class="nav-btn">
+          <button class="btn-sm btn-secondary" type="button">회원가입</button>
+          <button class="btn-sm btn-secondary" type="button">로그인</button>
+        </div>
+        <% } %>
+
+        <div class="right-icon" style="width: 24px; height: 24px">
         </div>
       </nav>
     </header>
+    
     <div id="sidebar" class="sidebar">
       <!-- <div  onclick="toggleSidebar()">
       <i data-feather="menu"></i></div> -->
@@ -62,7 +86,25 @@
       <a href="/mypageMain">마이페이지</a>
       <a href="#">고객센터</a>
 
-      <!-- 추가적인 관리 항목 링크들 -->
+      <% if(typeof isLoggedIn !== 'undefined' && isLoggedIn) { %>
+        <div class="nav-btn">
+          <button
+            class="btn-sm btn-secondary"
+            type="button"
+            onclick="handleLogout()"
+          >
+            로그아웃
+          </button>
+        </div>
+        <% } else { %>
+        <div class="nav-btn">
+          <button class="btn-sm btn-secondary" type="button">회원가입</button>
+          <button class="btn-sm btn-secondary" type="button">로그인</button>
+        </div>
+        <% } %>
+    </div>
+    <div class="shade hidden">
+      
     </div>
 
     <script>
@@ -70,6 +112,7 @@
         document.getElementById("sidebar").classList.toggle("active");
         document.querySelector(".close-menu").classList.toggle("visible");
         document.querySelector(".menu-icon").classList.toggle("hidden");
+        document.querySelector(".shade").classList.toggle("visible")
       }
       feather.replace();
     </script>
@@ -77,6 +120,17 @@
     <script>
       function toPage(link) {
         document.location.href = link;
+      }
+
+
+      async function handleLogout() {
+        const result = await axios({
+          method: "GET",
+          url: "/logout"
+        })
+        console.log(result);
+        document.location.href = "/"
+        
       }
     </script>
   </body>

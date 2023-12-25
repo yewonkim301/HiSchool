@@ -17,7 +17,7 @@ const jwt = require("jsonwebtoken");
 // GET /clubMain : 전체 동아리 조회
 exports.getClubs = async (req, res) => {
   try {
-    let link = "/home" //홈으로 이동
+    let link = "/home"; //홈으로 이동
     const Clubs = await Club.findAll();
     res.render("club/clubMain", { data: Clubs, title: "전체 동아리", link });
   } catch (err) {
@@ -29,7 +29,7 @@ exports.getClubs = async (req, res) => {
 // GET /clubDetail/:club_id : 동아리 하나 상세 조회
 exports.getClub = async (req, res) => {
   try {
-    let link = "/clubMain" // 전체 클럽화면으로 이동
+    let link = "/clubMain"; // 전체 클럽화면으로 이동
     const club = await Club.findOne({
       where: { club_id: req.params.club_id },
     });
@@ -43,10 +43,10 @@ exports.getClub = async (req, res) => {
     });
     console.log("@@@@@@@@@@@@@@", findmember);
     let isMember;
-    if(!findmember) isMember = "nonApply"
+    if (!findmember) isMember = "nonApply";
     else if (findmember.dataValues.isMember == "true") isMember = "true";
     else if (findmember.dataValues.isMember == "false") isMember = "false";
-    
+
     // console.log("!!!!!!!!!!!!!!!!", isMember);
     // console.log("ismember >>>>>>>>>>>>>>", isMember);
     const clubNum = await Club_members.findAll({
@@ -60,7 +60,7 @@ exports.getClub = async (req, res) => {
       isMember,
       clubNum,
       title: "동아리",
-      link
+      // link,
     });
   } catch (err) {
     console.error(err);
@@ -71,12 +71,12 @@ exports.getClub = async (req, res) => {
 // GET /clubAdminMain/:club_id : 동아리 관리페이지 불러오기
 exports.getClubAdminMain = async (req, res) => {
   try {
-    let link = "/myclubMain";
+    let link = `/myclubMain/${req.params.club_id}`;
     const { club_id } = req.params;
     res.render("clubAdmin/clubAdminMain", {
       data: club_id,
       title: "관리 페이지",
-      link
+      link,
     });
   } catch (err) {
     console.error(err);
@@ -86,8 +86,9 @@ exports.getClubAdminMain = async (req, res) => {
 
 // GET /clubAdminEdit/:club_id : 동아리 수정페이지 불러오기
 exports.getClubAdminEdit = async (req, res) => {
+  console.log("getClubAdminEdit", req.params);
   try {
-    let link = "/clubAdminMain"; //클럽 관리 페이지로 이동
+    let link = `/clubAdminMain/${req.params.club_id}`; //클럽 관리 페이지로 이동
     const { club_id } = req.params;
     const clubAdminEditDB = await Club.findOne({
       where: { club_id: club_id },
@@ -109,16 +110,14 @@ exports.getClubAdminEdit = async (req, res) => {
 
     const clubAdminEdit = clubAdminEditDB.toJSON();
     console.log(clubAdminEdit);
-    
+
     res.render("clubAdmin/clubAdminEdit", {
       clubAdminEdit,
-    leaderName,
-    clubmembers,
-    title: "동아리 정보 관리",
-      link
-
+      leaderName,
+      clubmembers,
+      title: "동아리 정보 관리",
+      link,
     });
-  
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -180,8 +179,8 @@ exports.deleteClub = async (req, res) => {
 // GET /createClub : 동아리 생성
 exports.getCreateClub = async (req, res) => {
   try {
-    let link = "/clubMain" // 클럽 메인 페이지로 이동
-    res.render("club/createClub", { title: "동아리 개설" , link});
+    let link = "/clubMain"; // 클럽 메인 페이지로 이동
+    res.render("club/createClub", { title: "동아리 개설", link });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -223,8 +222,9 @@ exports.postCreateClub = async (req, res) => {
 //Club_post
 // GET /myclubPostMain/:club_id : 동아리 게시글 전체 조회
 exports.getClubPosts = async (req, res) => {
+  console.log("Cclub js 225 getClubPosts req.params", req.params);
   try {
-    let link = "/myclubMain"; // 해당클럽 메인페이지로 이동
+    let link = `/myclubMain/${req.params.club_id}`; // 해당클럽 메인페이지로 이동
     const posts = await Club_post.findAll({
       where: { club_id: req.params.club_id },
       //clubClubId 수정 전
@@ -233,7 +233,7 @@ exports.getClubPosts = async (req, res) => {
       data: posts,
       club_id: req.params.club_id, // club_id를 별도로 전달
       title: "게시판",
-      link
+      link,
     });
   } catch (err) {
     console.error(err);
@@ -245,7 +245,7 @@ exports.getClubPosts = async (req, res) => {
 // 게시글 전달할 때, 게시글마다의 댓글과 좋아요 수 함께 전달
 exports.getClubPost = async (req, res) => {
   try {
-    let link = "/myclubPostMain"; //전체 게시물로 이동
+    let link = `/myclubPostMain/${req.params.club_id}`; //전체 게시물로 이동
     const { club_id, post_id } = req.params;
     console.log("params > ", req.params);
     const { userid, userid_num } = jwt.verify(
@@ -294,7 +294,8 @@ exports.getClubPost = async (req, res) => {
       clubPostCommentLike,
       commentId,
       userid_num,
-      link
+      title: clubPost.title,
+      link,
     });
   } catch (err) {
     console.error(err);
@@ -305,7 +306,7 @@ exports.getClubPost = async (req, res) => {
 // GET /myclubEditPost/:club_id/:post_id 동아리 게시글 수정 페이지 불러오기
 exports.getClubEditPost = async (req, res) => {
   try {
-    let link = "/mypageMain" // 프로필에 있는 내가 쓴 글 페이지 이동으로 이동할 거기 때문에
+    let link = "/mypageMain"; // 프로필에 있는 내가 쓴 글 페이지 이동으로 이동할 거기 때문에
     const { club_id, post_id } = req.params;
     const clubPost = await Club_post.findOne({
       where: { club_id: club_id, post_id: post_id },
@@ -313,7 +314,7 @@ exports.getClubEditPost = async (req, res) => {
     res.render("myclub/myclubEditPost", {
       data: clubPost,
       title: "게시글 수정",
-      link
+      link,
     });
   } catch (err) {
     console.error(err);
@@ -487,9 +488,13 @@ exports.deleteClubPostCommentLike = async (req, res) => {
 exports.getCreateClubPost = async (req, res) => {
   try {
     // 수정
-    let link = "/myclubPostMain";
+    let link = `/myclubPostMain/${req.params.club_id}`;
     const { club_id } = req.params;
-    res.render("myclub/myclubNewPost", { data: club_id, title: "게시글 작성" , link});
+    res.render("myclub/myclubNewPost", {
+      data: club_id,
+      title: "게시글 작성",
+      link,
+    });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -527,15 +532,26 @@ exports.createClubPost = async (req, res) => {
 // GET /myclubSchedule/:club_id : 동아리 일정 전체 조회
 exports.getClubSchedules = async (req, res) => {
   try {
-    let link = "/myclubMain" // 클럽 메인페이지 이동
+    let link = "/myclubMain"; // 클럽 메인페이지 이동
     const { club_id } = req.params;
     const clubSchedules = await Club_schedule.findAll({
       where: { club_id: club_id },
     });
+    const date = await Club_schedule.findAll({
+      order: ["date"],
+      attributes: ["date"],
+      where: { club_id: club_id },
+    });
+    let scheduleDate = [];
+    date.forEach((element) => {
+      scheduleDate.push(element.dataValues.date);
+    });
     res.render("./myclub/myclubSchedule", {
       data: clubSchedules,
       title: "일정",
-      link
+      scheduleDate,
+      club_id,
+      // link,
     });
   } catch (err) {
     console.error(err);
@@ -577,14 +593,14 @@ exports.postClubSchedule = async (req, res) => {
   }
 };
 
-// PATCH /myclubSchedule/:club_id/:date/:schedule_id : 동아리 일정 수정
+// PATCH /myclubSchedule/:club_id /:schedule_id : 동아리 일정 수정
 exports.patchClubSchedule = async (req, res) => {
   try {
-    const { club_id, date, schedule_id } = req.params;
-    const { newDate, time, title, content } = req.body; // newDate -> 일정의 날짜도 변경이 가능할 경우 필요
-    const clubSchedule = await Club_schedule.upadate(
+    const { club_id, schedule_id } = req.params;
+    const { date, time, title, content } = req.body;
+    const clubSchedule = await Club_schedule.update(
       {
-        date: newDate,
+        date: date,
         time: time,
         title: title,
         content: content,
@@ -666,7 +682,7 @@ exports.postClubChat = async (req, res) => {
 
 // GET /myclubList 내가 가입한 동아리 목록 페이지 불러오기
 exports.getMyclubList = async (req, res) => {
-  let link = "/home"
+  let link = "/home";
   const { userid, userid_num } = jwt.verify(
     req.cookies.jwt,
     process.env.JWT_SECRET
@@ -685,12 +701,16 @@ exports.getMyclubList = async (req, res) => {
       ],
     },
   });
-  res.render("myclub/myclubList", { data: myclubList, title: "내 동아리", link});
+  res.render("myclub/myclubList", {
+    data: myclubList,
+    title: "내 동아리",
+    link,
+  });
 };
 
 // GET /myclubMain/:club_id 내가 가입한 동아리의 메인 페이지 불러오기
 exports.getMyclubMain = async (req, res) => {
-  let link = "/myclubList"
+  let link = "/home";
   console.log(req.params);
   const { club_id } = req.params;
   console.log(club_id);

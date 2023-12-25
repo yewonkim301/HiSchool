@@ -11,15 +11,18 @@
 </head>
 
 <body>
-   <!-- 글쓰기 폼 -->
-   <form id="post-form" name="add-post">
-      <h2>게시글 작성</h2>
-      <input type="text" id="post-title" name="title" placeholder="제목을 입력하세요" />
-      <textarea id="post-content" name="content" placeholder="내용을 입력하세요"></textarea>
-      <button type="button" class="btn-primary" onclick="addpost()">
-         등록하기
-      </button>
-   </form>
+   <%- include('../component/header') %>
+   <div class="container">
+      <!-- 글쓰기 폼 -->
+      <form id="post-form" name="add-post">
+         <h2>게시글 작성</h2>
+         <input type="text" id="post-title" name="title" placeholder="제목을 입력하세요" />
+         <textarea id="post-content" name="content" placeholder="내용을 입력하세요"></textarea>
+         <button type="button" class="btn-primary" onclick="addpost()">
+            등록하기
+         </button>
+      </form>
+   </div>
 
    <script>
       const form = document.forms["add-post"];

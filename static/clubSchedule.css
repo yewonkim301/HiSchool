@@ -54,13 +54,6 @@
   width: 50%;
 }
 
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  background-color: #fff;
-}
 
 .navbar {
   display: flex;

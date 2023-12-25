@@ -24,6 +24,7 @@
 </head>
 
 <body>
+
     <%- include('../component/header')%>
     <main class="container">
         <div class="search-bar">
@@ -80,6 +81,7 @@
         <div class="list" onclick="showDetail(event)" >
     
           <div class="list-title" id="<%=data[i].location%>" >
+
             <%= data[i].club_name%>
             <span style="display: none;"  class="club_id"><%=data[i].club_id%>
             </span>
@@ -89,6 +91,7 @@
             <span style="display: none;"  class="club_id"><%=data[i].club_id%>
             </span>
           </div>
+
       </div>
         <% } %>
       </div>
