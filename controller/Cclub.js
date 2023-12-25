@@ -60,7 +60,7 @@ exports.getClub = async (req, res) => {
       isMember,
       clubNum,
       title: "동아리",
-      link,
+      // link,
     });
   } catch (err) {
     console.error(err);
@@ -86,7 +86,7 @@ exports.getClubAdminMain = async (req, res) => {
 
 // GET /clubAdminEdit/:club_id : 동아리 수정페이지 불러오기
 exports.getClubAdminEdit = async (req, res) => {
-  console.log('getClubAdminEdit', req.params);
+  console.log("getClubAdminEdit", req.params);
   try {
     let link = `/clubAdminMain/${req.params.club_id}`; //클럽 관리 페이지로 이동
     const { club_id } = req.params;
@@ -222,7 +222,7 @@ exports.postCreateClub = async (req, res) => {
 //Club_post
 // GET /myclubPostMain/:club_id : 동아리 게시글 전체 조회
 exports.getClubPosts = async (req, res) => {
-  console.log('Cclub js 225 getClubPosts req.params', req.params);
+  console.log("Cclub js 225 getClubPosts req.params", req.params);
   try {
     let link = `/myclubMain/${req.params.club_id}`; // 해당클럽 메인페이지로 이동
     const posts = await Club_post.findAll({
@@ -294,6 +294,7 @@ exports.getClubPost = async (req, res) => {
       clubPostCommentLike,
       commentId,
       userid_num,
+      title: clubPost.title,
       link,
     });
   } catch (err) {
@@ -487,7 +488,7 @@ exports.deleteClubPostCommentLike = async (req, res) => {
 exports.getCreateClubPost = async (req, res) => {
   try {
     // 수정
-    let link = "/myclubPostMain";
+    let link = `/myclubPostMain/${req.params.club_id}`;
     const { club_id } = req.params;
     res.render("myclub/myclubNewPost", {
       data: club_id,

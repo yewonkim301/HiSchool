@@ -9,9 +9,7 @@
   <link rel="stylesheet" href="/style.css">
 
   <style>
- #editClubLeaderName, #editClubLimit{
-  width: 30%;
- }
+ 
  #transfer{
   display: flex;
   align-items: center;
@@ -30,7 +28,7 @@
 
 
 <body>
-  <div class="container">
+  
     <%- include('../component/header')%>
     <div class="container">
       <div class="input">
@@ -52,16 +50,15 @@
         <div class="member">
           <div class="input">
             <label>회원수</label>
-            <span>
+            <div>
               <%=clubmembers.length%> 명
-            </span>
+            </div>
             </div>
             <div class="input">
-            <label>제한 회원수</label>
-            <span>
-              <input id="editClubLimit" class="textField" value="<%=clubAdminEdit.limit%>"> 명
-            </span>
-    
+              <label for="editClubLimit">제한 회원수</label>
+              <div class="unit" style="flex-direction: row; display: flex; gap:12px; align-items: center;">
+                <input id="editClubLimit" class="textField" value="<%=clubAdminEdit.limit%>"><span>명</span>
+              </div>
           </div>
         </div>
     
@@ -75,7 +72,7 @@
     </div>
     
     </div>
-  </div>
+
 
   <script>
     console.log('<%=clubAdminEdit%>');

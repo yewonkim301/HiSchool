@@ -791,7 +791,7 @@ exports.getClubMembers = async (req, res) => {
 // GET /clubAdminMemberDetail/:club_id/:userid_num 회원 상세정보 보기
 exports.getClubMember = async (req, res) => {
   try {
-    let link = "/clubAdminMemberList"; // 클럽 회원 전체 리스트 페이지로 이동
+    let link = `/clubAdminMemberList/${req.params.club_id}`; // 클럽 회원 전체 리스트 페이지로 이동
 
     let title = "동아리 부원 정보";
     const { club_id, userid_num } = req.params;
@@ -804,7 +804,7 @@ exports.getClubMember = async (req, res) => {
       // include: [{ model: User }],
     });
     const userInfo = await User.findOne({
-      attributes: ["name"],
+      attributes: ["name", "nickname", "school", "profile_img"],
       where: {
         userid_num: userid_num,
       },
@@ -1029,7 +1029,13 @@ exports.getMyPageProfile = async (req, res) => {
         nickname: nickname,
       },
     });
-    res.render("mypage/mypageProfile", { data: myPageMainProfile, link });
+
+    const clubProfile = await Club_members.findOne({
+      where: {
+        userid_num: myPageMainProfile.userid_num,
+      }
+    })
+    res.render("mypage/mypageProfile", { data: myPageMainProfile, clubProfile });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
