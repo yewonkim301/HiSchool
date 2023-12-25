@@ -11,6 +11,7 @@ const jwt = require("jsonwebtoken");
 const { OP } = require("sequelize");
 const { Sequelize } = require("sequelize");
 const { isLoggedIn } = require("../middleware/loginCheck");
+const { deleteFile } = require('./../middleware/s3fileUpload')
 
 // ===== publicPost =====
 
@@ -996,28 +997,63 @@ exports.deleteMyID = async (req, res) => {
 
 // PATCH /mypageMain //마이페이지 수정
 exports.updateMyPageMain = async (req, res) => {
+  console.log('Cpublic 999 updateMyPageMain 호출');
   try {
     const { userid, userid_num } = jwt.verify(
       req.cookies.jwt,
       process.env.JWT_SECRET
     );
-    const { name, school, phone, image } = req.body;
+    const { name, school, phone, birthday, profile_img, grade, classid } = req.body;
+
+    if(profile_img) {
+      // 기존에 테이블에 있던 S3의 이미지 삭제 명령
+      const extProfileImg = await User.findOne({
+        where: {
+          userid_num: userid_num,
+        }
+      })
+      console.log('Cpublic 1015 찾은 프로필 이미지 : ', extProfileImg.profile_img);
+
+      deleteFile(extProfileImg.profile_img)
+
+    }
+
     const update = await User.update(
       {
         name: name,
         school: school,
         phone: phone,
-        image: image,
+        profile_img: profile_img,
+        birthday: birthday,
+        grade: grade,
+        classid: classid,
       },
       {
-        where: userid_num,
+        where: {
+          userid_num: userid_num,
+        }
       }
     );
+    if (update) {
+      res.send({ isUpdated: true, msg: '프로필 수정 완료' });
+    }
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
   }
 };
+
+
+// // PATCH /mypageMainProfile // 프로필 사진 수정
+// exports.updateMyPageProfileImg = async(req, res) => {
+//   try {
+
+//   } catch(err) {
+//     console.error(err);
+//     res.send("Internal Server Error!");
+//   }
+// }
+
 
 // GET /mypageMainProfile/:nickname 내 페이지 가져오기 ver.닉네임
 exports.getMyPageProfile = async (req, res) => {

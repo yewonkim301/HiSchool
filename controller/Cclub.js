@@ -29,6 +29,7 @@ exports.getClubs = async (req, res) => {
 // GET /clubDetail/:club_id : 동아리 하나 상세 조회
 exports.getClub = async (req, res) => {
   try {
+
     let link = "/clubMain"; // 전체 클럽화면으로 이동
     const club = await Club.findOne({
       where: { club_id: req.params.club_id },
@@ -37,6 +38,10 @@ exports.getClub = async (req, res) => {
       req.cookies.jwt,
       process.env.JWT_SECRET
     );
+
+    
+
+
     const findmember = await Club_members.findOne({
       attributes: ["isMember"],
       where: { userid_num: userid_num },
@@ -222,13 +227,33 @@ exports.postCreateClub = async (req, res) => {
 //Club_post
 // GET /myclubPostMain/:club_id : 동아리 게시글 전체 조회
 exports.getClubPosts = async (req, res) => {
-  console.log("Cclub js 225 getClubPosts req.params", req.params);
+  // console.log("Cclub js 225 getClubPosts req.params", req.params);
+
+  
+
+
   try {
     let link = `/myclubMain/${req.params.club_id}`; // 해당클럽 메인페이지로 이동
+
+
+    // 동아리에 사용자의 아이디가 없을 경우 403 페이지 렌더
+    const { userid_num } = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
+
+    const club_id = req.params.club_id;
+
+    const foundClub = await Club_members.findOne({
+      where: { club_id: club_id },
+    })
+
+    if(foundClub.userid_num !== userid_num) {
+      return res.status(403).render("403");
+    }
+
     const posts = await Club_post.findAll({
       where: { club_id: req.params.club_id },
       //clubClubId 수정 전
     });
+
     res.render("myclub/myclubPostMain", {
       data: posts,
       club_id: req.params.club_id, // club_id를 별도로 전달
@@ -700,14 +725,23 @@ exports.getMyclubList = async (req, res) => {
 // GET /myclubMain/:club_id 내가 가입한 동아리의 메인 페이지 불러오기
 exports.getMyclubMain = async (req, res) => {
   let link = "/home";
-  console.log(req.params);
+  // console.log(req.params);
   const { club_id } = req.params;
-  console.log(club_id);
-  console.log({ club_id });
+  // console.log(club_id);
+  // console.log({ club_id });
   const { userid, userid_num } = jwt.verify(
     req.cookies.jwt,
     process.env.JWT_SECRET
   );
+
+  const foundClub = await Club_members.findOne({
+    where: { club_id: club_id },
+  })
+
+  if(foundClub.userid_num !== userid_num) {
+    return res.status(403).render('403');
+  }
+
   const myClub = await Club.findOne({ where: { club_id: club_id } });
   let isLeader;
   if (myClub.leader_id == userid_num) isLeader = true;
