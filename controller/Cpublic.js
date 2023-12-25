@@ -1038,6 +1038,8 @@ exports.getMyPageProfile = async (req, res) => {
   try {
     let link = "/publicPostMain"; // 익명게시판에서 사용자의 프로필로 이동하는 것이기 때문에? 잘 모르겠네요,,
     const { nickname } = req.params;
+
+    console.log('Cpublic 1042 nickname :', nickname)
     const myPageMainProfile = await User.findOne({
       where: {
         nickname: nickname,
