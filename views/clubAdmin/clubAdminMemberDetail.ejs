@@ -6,25 +6,39 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <title>회원 등록</title>
+  <style>
+    #memberOut{
+      background-color: red;
+    }
+
+  </style>
   <link rel="stylesheet" href="/style.css">
-  <link rel="stylesheet" href="/clubAdminMemberDetail.css">
+ 
+  
 </head>
 
 <body>
 
    <%- include('../component/header')%>
-   <button type="button" onclick="showProfile()" class="btn btn-secondary">프로필 보기(연결 필요)</button>
-  <div class="content">
-    <p class="content-title">이름</p>
-    <p class="content-detail"><%= userInfo.name %></p>
+   <button type="button" onclick="showProfile()" class="btn btn-ghost">프로필 보기</button>
+  <div class="input">
+    <label for="name">이름</label>
+    <input id="name" class="textField" value="<%= userInfo.name %>"></input></div>
 
-    <p class="content-title">지원동기</p>
-    <p class="content-detail"><%= data.motivation %></p>
+    <div class="input">
+    <label for="motivation">지원동기</label>
+    <input id="motivation" class="textField" value="<%= data.motivation %>"></input></div>
 
-    <p class="content-title">자기소개</p>
-    <p class="content-detail"><%= data.introduction %></p>
+    <div class="input">
+    <label for="introduction">자기소개</label>
+    <input id="introduction" class="textField" value="<%= data.introduction %>"></input></div>
 
-    <button class="submit-button"  onclick="outMember('<%=data.userid_num%>')">강퇴</button>
+   
+
+    <div class="cta">
+      <button id="memberOut" class="btn btn-primary "  onclick="outMember('<%=data.userid_num%>')">강퇴</button>
+    </div>
+    
   </div>
 
 <script>
@@ -51,6 +65,10 @@ if(confirm('정말 강퇴하시겠습니까?')){
    
 
     
+  }
+
+  const showProfile=()=>{
+    window.location.href='/mypageProfile/<%=data.userid_num%>'
   }
 </script>
 </body>

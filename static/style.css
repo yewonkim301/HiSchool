@@ -534,7 +534,7 @@ button {
 
 /* 여기는 피그마 input  시작  */
 .search-container {
-  width: 50%;
+  width: 100%;
   padding: 20px;
   border-radius: 50px;
 }
@@ -565,7 +565,7 @@ button {
 .search-icon {
   padding-right: 15px;
   color: #aaa;
-  font-size: 1.5em;
+  font-size: 3em;
   text-decoration: none;
   display: flex;
   justify-content: center;
