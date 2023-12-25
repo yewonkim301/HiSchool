@@ -11,7 +11,7 @@ const jwt = require("jsonwebtoken");
 const { OP } = require("sequelize");
 const { Sequelize } = require("sequelize");
 const { isLoggedIn } = require("../middleware/loginCheck");
-const { deleteFile } = require('./../middleware/s3fileUpload')
+const { deleteFile, getSignedFile } = require('../middleware/s3')
 
 // ===== publicPost =====
 
@@ -990,10 +990,11 @@ exports.updateMyPageMain = async (req, res) => {
           userid_num: userid_num,
         }
       })
-      console.log('Cpublic 1015 찾은 프로필 이미지 : ', extProfileImg.profile_img);
+      console.log('Cpublic 1015 찾은 프로필 이미지 : ', extProfileImg, extProfileImg.profile_img);
 
-      deleteFile(extProfileImg.profile_img)
-
+      if(extProfileImg.profile_img) {
+        deleteFile(extProfileImg.profile_img)
+      }
     }
 
     const update = await User.update(

@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const { User } = require("../models/Index");
 
 const dotenv = require("dotenv").config();
-const { getSignedFileUrl } = require("./../middleware/s3fileUpload");
+const { getSignedFileUrl } = require("../middleware/s3");
 
 
 exports.getRegister = async (req, res, next) => {

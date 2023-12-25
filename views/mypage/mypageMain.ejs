@@ -15,11 +15,11 @@
     <div class="container" style="margin-bottom: 300px;">
       <%- include('../component/header')%>
       <div class="profile-header" onclick="changeProfileImg()">
-        <% if (data.profile_img) { %>
-        <img src="<%= data.profile_img %>" alt="프로필 이미지" width="50" />
+        <% if (signedFile) { %>
+        <img src="<%= signedFile %>" alt="프로필 이미지" width="50" />
         <% } else { %>
         <img
-          src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png"
+          src="./icons/profile_img.png"
           alt="프로필 이미지"
           width="50"
         />
@@ -195,7 +195,7 @@
             data: {
               name:
                 // "client/" +
-                Math.random().toString(36).substring(2, 11) + image.name,
+                Math.random().toString(36).substring(2, 32),
               type: image.type,
             },
           });
@@ -239,9 +239,8 @@
 
         if (uploadedFileOriginUrl) {
           console.log('presignedURL 있어요')
-          const parts = uploadedFileOriginUrl.split("?");
-          const uploadedFileUrl = parts[0];
-          profile_img = uploadedFileUrl;
+          const parts = uploadedFileOriginUrl.split('/');
+          profile_img = parts[parts.length - 1].split('?')[0];
         } else {
           console.log('presignedURL 없어요')
           profile_img = ''
