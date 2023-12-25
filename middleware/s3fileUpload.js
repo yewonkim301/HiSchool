@@ -40,6 +40,19 @@ module.exports.getSignedFileUrl = async function getSignedFileUrl(data) {
   return url;
 };
 
+module.exports.deleteFile = async function deleteFile(data) {
+  console.log('file delete 시작');
+  const params = {
+    Bucket: process.env.AWS_S3_BUCKET,
+    Key: data.name,
+  };
+  const command = new DeleteObjectCommand(params);
+  console.log('deleteObjectCommand 시작');
+  await s3.send(command);
+  console.log('deleteObjectCommand 성공');
+}
+
+
 
 module.exports.printLog = function printLog() {
   console.log('printlog 실행');
