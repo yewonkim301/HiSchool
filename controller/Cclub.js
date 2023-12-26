@@ -276,7 +276,7 @@ exports.getClubPost = async (req, res) => {
         "title",
         "content",
         "image",
-        "name",
+        "userid_num",
         "updatedAt",
         "club_id",
       ],
@@ -546,9 +546,9 @@ exports.createClubPost = async (req, res) => {
     const { userid_num } = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
     // console.log(club_id, title, content, image);
 
-    const getName = await User.findOne({
-      where: { userid_num: userid_num },
-    });
+    // const getName = await User.findOne({
+    //   where: { userid_num: userid_num },
+    // });
 
     // image는 json 형태로 저장
     const newPost = await Club_post.create({
@@ -556,7 +556,7 @@ exports.createClubPost = async (req, res) => {
       title: title,
       content: content,
       image: image,
-      name: getName.dataValues.name,
+      userid_num: userid_num,
     });
     // console.log("생성 완료");
     res.send(newPost);
