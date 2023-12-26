@@ -36,6 +36,11 @@
                   <%= data.content %>
                      <!-- <i class="like-btn" onclick="likeBtn()">좋아요</i> -->
                </p>
+               <div class="postImages">
+                  <% for(i = 0; i < postImages.length; i++) { %>
+                     <img src="<%= postImages[i] %>" alt="">
+                  <% } %>
+               </div>
                <!-- 여기에 좋아요 개수 표시 -->
                </p>
                </p>
