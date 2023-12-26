@@ -314,6 +314,7 @@ exports.patchPostCommentLike = async (req, res) => {
 };
 
 // ==== 삭제 =====
+// publicEditPost
 // DELETE /publicPostDetail/:post_id 특정 게시물 삭제
 exports.deletePost = async (req, res) => {
   try {
