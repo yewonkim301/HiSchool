@@ -41,8 +41,8 @@
                   <% } %>
                </div>
                <!-- 여기에 좋아요 개수 표시 -->
-               </p>
-               </p>
+               
+               
                <!-- 게시글 작성 시간 등의 메타 정보도 추가 있습니다. -->
             </div>
 
@@ -53,13 +53,14 @@
                <input type="text" id="commentInput" placeholder="댓글을 입력하세요">
             </div>
             <button onclick="submitComment()">댓글등록</button>
-            <!-- <button onclick="deletePostComment('<%=clubPostComment.comment_id %>')">댓글삭제</button> -->
+            <button onclick="deletePostComment('<%=clubPostComment.comment_id %>')">댓글삭제</button>
             <!-- 댓글 들어갈곳 -->
             <div class="list" id="commentList">
                <% for(let i=0; i < clubPostComment.length; i++) { %>
                   <div class="comment comment-<%= clubPostComment[i].comment_id %>">
                      <p>
                         <%= clubPostComment[i].comment_name %>
+                  
                      </p>
                      <p>
                         <%= clubPostComment[i].content %>
@@ -70,22 +71,19 @@
                         <button
                            onclick="showEditField('<%= clubPostComment[i].comment_id %>', '<%= clubPostComment[i].content %>')">댓글수정</button>
                         <% } %>
+                           
 
-                           <% let likePush='false' ; %>
+                           <% let likePush='false' %>
+
                               <% const content=JSON.parse(JSON.stringify(clubPostCommentLike)); %>
 
                                  <% for (let j=0; j < content[i].length; j++) { %>
                                     <% if (content[i][j].likeid_num==userid_num) { %>
                                        <%likePush='true'; %>
-                                          <div>
-                                             <%= likePush %>
-                                          </div>
-                                          <%return;%>
-                                             <%}else{%>
-                                                <div>
-                                                   <%= likePush %>
-                                                </div>
-                                                <%}%>
+                                          
+                                             <%}%>
+                                                
+                                             
                                                    <%}%>
 
 
@@ -108,12 +106,15 @@
                                                             </button>
                                                             <% }%>
                   </div>
-                  <% }; %>
+                  <% } %>
             </div>
          </div>
    </div>
 
    <script>
+
+const abc= JSON.parse(JSON.stringify('<%=clubPostCommentLike%>'));
+console.log('<%=clubPostCommentLike%>');
       const comment = document.getElementById('comment');
 
       const club_id = "<%=data.club_id%>";
@@ -122,6 +123,7 @@
          const heartIcon = document.getElementById('heart-icon-' + comment_id);
          let likeSpan = clickToBtn.querySelector(".like-num");
          const isLiked = heartIcon.classList.contains('heart-active');
+         let currentLikeNum1=Number(likeSpan.innerText);
 
          if (isLiked) {
             // 좋아요 해제 요청
@@ -129,7 +131,8 @@
                .then(response => {
                   if (response.data.isDeleted) {
                      heartIcon.classList.remove('heart-active');
-                     likeSpan.textContent = Number(currentLikeNum);
+                     
+                     likeSpan.textContent = Number(currentLikeNum1)-1;
                   }
                })
                .catch(error => {
@@ -140,7 +143,7 @@
             axios.post(`/myclubPostDetail/${club_id}/${post_id}/${comment_id}`)
                .then(response => {
                   heartIcon.classList.add('heart-active');
-                  likeSpan.textContent = Number(currentLikeNum) + 1;
+                  likeSpan.textContent = Number(currentLikeNum1) + 1;
                })
                .catch(error => {
                   console.error('Error:', error);
