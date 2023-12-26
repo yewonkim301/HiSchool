@@ -15,6 +15,7 @@
     <!-- 아이콘 CDN feather -->
     <script
       src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.1/feather.min.js"
+
       integrity="sha512-4lykFR6C2W55I60sYddEGjieC2fU79R7GUtaqr3DzmNbo0vSaO1MfUjMoTFYYuedjfEix6uV9jVTtRCSBU/Xiw=="
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
@@ -25,6 +26,7 @@
         color: red;
         /* 또는 원하는 색상 */
       }
+
     </style>
   </head>
 
@@ -216,6 +218,7 @@
         }
       }
 
+
       function editCommentContent(comment_id, newContent) {
         // 해당 댓글의 내용을 나타내는 요소를 찾음
         const commentContentElement = document.querySelector(
@@ -229,6 +232,7 @@
           console.error("댓글 내용을 찾을 수 없음");
         }
       }
+
 
       function showEditField(comment_id, currentContent) {
         currentEditingCommentId = comment_id; // 전역 변수 업데이트
@@ -281,6 +285,7 @@
           .catch((error) => {
             console.error("댓글 수정 에러:", error);
           });
+
       }
 
       // 댓글 삭제
@@ -316,6 +321,7 @@
 
 
 
+
       async function handleDeletePost() {
         const isConfirmed = confirm('글을 삭제하시겠습니까?')
         if(isConfirmed) {
@@ -338,3 +344,4 @@
     </script>
   </body>
 </html>
+

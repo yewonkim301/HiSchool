@@ -8,14 +8,20 @@
    <!-- axios CDN -->
    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
    <title>하이스쿨 - 게시글 작성</title>
+   <style>
+      #secret{
+         border: 1px solid black;
+         display: block;
+      }
+   </style>
 </head>
 
 <body>
    <%- include('../component/header') %>
    <div class="container">
       <!-- 글쓰기 폼 -->
-      <form id="support-form" name="support-post">
-         
+      <form id="support-form" name="support-form">
+         <label for="secret"><input value="secret"  type="checkbox" id="secret" checked>비밀글</label>
          <textarea id="support-content" name="content" placeholder="내용을 입력하세요"></textarea>
          <button type="button" class="btn-primary" onclick="addsupport()">
             등록하기
@@ -24,20 +30,23 @@
    </div>
 
    <script>
-      const form = document.forms["support-post"];
+      const form = document.forms["support-form"];
+      console.log(form)
 
 
       function addsupport() {
+         console.log(form.content.value)
+
          axios({
             method: "POST",
-            url: `/supportMain`,
+            url: `/supportNewPost`,
             data: {
+               secret:'true',
                content: form.content.value,
-            },
-         })
-            .then((res) => {
-               console.log(res.data);
-               if (res.status === 200) {
+            }
+         }).then((res) => {
+               console.log(res);
+               if (res.data.isSuccess) {
                   alert("등록완료");
 
                   window.location.href = `/supportMain`;

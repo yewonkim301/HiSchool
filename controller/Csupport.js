@@ -6,10 +6,15 @@ const jwt = require("jsonwebtoken");
 // GET /supportMain 고객센터 페이지 로드
 exports.getSupport = async (req, res) => {
     try{
+        const { userid, userid_num } = jwt.verify(
+            req.cookies.jwt,
+            process.env.JWT_SECRET
+          );
         let link = "/home"
         let title = "고객센터"
         const getSupport = await Support.findAll();
-        res.render("/support/supportMain", getSupport, title, link);
+        console.log(getSupport);
+        res.render("support/supportMain", {getSupport, title, link,userid_num});
     }
     catch (err) {
         console.error(err);
@@ -20,7 +25,7 @@ exports.getSupport = async (req, res) => {
 // GET /supportNewPost 고객 문의 등록 페이지 로드
 exports.getNewSupport = async (req, res) => {
     try{
-        res.render("/support/supportNewPost");
+        res.render("support/supportNewPost");
     }
     catch (err) {
         console.error(err);
@@ -37,10 +42,10 @@ exports.postSupport = async (req, res) => {
         const { content, secret } = req.body
         const newSupport = await Support.create({
             userid_num: userid_num,
-            content: content,
+            qa_content: content,
             secret: secret
         })
-        res.send(newSupport,{isSuccess: true}, link, title);
+        res.send(newSupport,{isSuccess: true, link, title});
     }
     catch (err) {
         console.error(err);
@@ -53,7 +58,7 @@ exports.postSupportComment = async (req,res) => {
     try{
         const {comment} = req.body;
         const postSupportComment = await Support.update({
-            comment: comment
+            qa_comment: comment
         })
         res.send(postSupportComment, {isSuccess:true});
     }
