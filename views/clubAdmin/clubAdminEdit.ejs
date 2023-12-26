@@ -7,54 +7,75 @@
   <title>동아리 정보 관리</title>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <link rel="stylesheet" href="/style.css">
-  <link rel="stylesheet" href="/clubAdminEdit.css">
-  <style>
 
+  <style>
+ 
+ #transfer{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+ }
+ #deleteClub{
+  background-color:red;
+ }
+ .member{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+ }
   </style>
 </head>
 
 
 <body>
-  <%- include('../component/header')%>
-    <div class="content">
-      <div class="group">
-        <h2>동아리 이름</h2>
-        <input id="editClubName" class=" textField" value="<%=clubAdminEdit.club_name%>">
+  
+    <%- include('../component/header')%>
+    <div class="container">
+      <div class="input">
+    
+          <label for="editClubName">동아리 이름</label>
+          <input id="editClubName" class=" textField" value="<%=clubAdminEdit.club_name%>">
+          </div>
+        <div class="input">
+          <label for="editClubDescription">동아리 설명</label>
+          <input id="editClubDescription" class=" textField" value="<%=clubAdminEdit.description%>">
+        </div>
+        <div class="input">
+          <label for="editClubLeaderName">동아리 관리자</label>
+          <div id="transfer"><span id="editClubLeaderName" ><%=leaderName.name%></span>
+    
+          <button  class="btn btn-sm btn-ghost" onclick="trasferLeader()">위임하기</button>
+        </div>
+        </div>
+        <div class="member">
+          <div class="input">
+            <label>회원수</label>
+            <div>
+              <%=clubmembers.length%> 명
+            </div>
+            </div>
+            <div class="input">
+              <label for="editClubLimit">제한 회원수</label>
+              <div class="unit" style="flex-direction: row; display: flex; gap:12px; align-items: center;">
+                <input id="editClubLimit" class="textField" value="<%=clubAdminEdit.limit%>"><span>명</span>
+              </div>
+          </div>
+        </div>
+    
+        <div class="input">
+          <label for="editClubKeyword">키워드</label>
+          <input class=" textField" id="editClubKeyword" value="<%=clubAdminEdit.keyword%>">
+        </div>
+        <button onclick="deleteClubInfo()"  id="deleteClub" class=" btn-sm btn-primary"> 동아리 삭제</button><br><br>
+        <div class="cta"><button onclick="patchClubInfo()" class="btn btn-primary">수정</button></div>
       </div>
-      <div class="group">
-        <h2>동아리 설명</h2>
-        <input id="editClubDescription" class=" textField" value="<%=clubAdminEdit.description%>">
-      </div>
-
-      <div class="group">
-        <h2>관리자</h2>
-        <p>
-          <%=leaderName.name%>
-        </p>
-        <button class="btn-sm btn-primary" onclick="trasferLeader()">위임</button>
-      </div>
-      <div class="group">
-        <h2>회원수</h2>
-        <p>
-          <%=clubmembers.length%>/<input id="editClubLimit" value="<%=clubAdminEdit.limit%>"></input>
-        </p>
-
-      </div>
-
-      <div class="group">
-        <h2>키워드</h2>
-        <input class=" textField" id="editClubKeyword" value="<%=clubAdminEdit.keyword%>">
-      </div>
-      <button onclick="deleteClubInfo()" class="btn-sm btn-primary">삭제</button><br><br>
-      <button onclick="patchClubInfo()" class="btn btn-primary">수정</button>
+    </div>
+    
     </div>
 
-    <button onclick="deleteClubInfo()" class="btn-sm btn-primary">삭제</button><br><br>
-    <button onclick="patchClubInfo()" class="btn btn-primary">수정</button>
-  </div>
 
   <script>
-
+    console.log('<%=clubAdminEdit%>');
 
     // club
 
@@ -86,6 +107,7 @@
             },
           });
           console.log(res);
+          alert('수정되었습니다');
 
         } catch (error) {
           console.log("createAdminEdit 에서 axios error > ", error);
@@ -93,7 +115,8 @@
 
       }
       async function deleteClubInfo() {
-        try {
+        if(confirm("정말로 삭제하시겠습니까?")){
+          try {
           const res = await axios({
             method: "DELETE",
             url: `/clubAdminEdit/<%=clubAdminEdit.club_id%>`,
@@ -108,6 +131,12 @@
         } catch (error) {
           console.log("createAdminEdit 에서 axios error > ", error);
         }
+
+        }
+        else{
+          return;
+        }
+        
 
       }
     </script>

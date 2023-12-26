@@ -17,22 +17,22 @@
 </head>
 
 <body>
-    <%- include('../component/header')%>
-
-
-  <form name="clubApplyform" onsubmit="clubApply(event)">
-    <section class="post-section">
-      <h2>지원동기</h2>
-      <textarea id="motivation" placeholder="최대 100글자" maxlength="100" required></textarea><span class="motivationCount">0</span>/100
-    </section>
-
-    <section class="post-section">
-      <h2>자기소개</h2>
-      <textarea id="introduction" placeholder="최대 100글자" maxlength="100" required></textarea><span class="introductionCount">0</span>/100
-    </section>
-
-    <button type="submit" class="btn-submit">가입 신청</button>
-  </form>
+    <div class="container">
+      <%- include('../component/header')%>
+      
+      
+        <form name="clubApplyform" onsubmit="clubApply(event)">
+      <section class="post-section">
+        <h2>지원동기</h2>
+        <textarea id="motivation" placeholder="최대 100글자" maxlength="100" required></textarea><span class="motivationCount">0</span>/100
+      </section>
+      <section class="post-section">
+        <h2>자기소개</h2>
+        <textarea id="introduction" placeholder="최대 100글자" maxlength="100" required></textarea><span class="introductionCount">0</span>/100
+      </section>
+      <button type="submit" class="btn-submit">가입 신청</button>
+        </form>
+    </div>
   <script>
 
     // 유효성 검사 (글자수 세기, 글자수 넘어가면 경고 문구 보여주고 더이상 타이핑 되지 않도록 하기)
@@ -77,6 +77,7 @@ $('#introduction').keyup(function (e) {
     
     
     async function clubApply(event) {
+
         event.preventDefault();
         const createClubForm = document.forms["clubApplyform"];
         let motivation = createClubForm.elements["motivation"].value;
@@ -97,6 +98,8 @@ $('#introduction').keyup(function (e) {
 
         
       // 가입 신청 요청
+
+      if(confirm('제출 후에는 변경 불가합니다. 정말 신청하시겠습니까?')){
         try {
           const res = await axios({
             method: "POST",
@@ -119,6 +122,11 @@ $('#introduction').keyup(function (e) {
         } catch (error) {
           console.log("createClub 에서 axios error > ", error);
         }
+
+      }else{
+        return;
+      }
+        
       }
   </script>
 </body>

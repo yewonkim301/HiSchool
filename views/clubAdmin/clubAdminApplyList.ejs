@@ -6,29 +6,31 @@
   <title>가입 요청</title>
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="/clubAdminApplyList.css">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 
 <body>
-  <%- include('../component/header')%>
-
-  <main class="request-list">
-    <!-- 가입 요청 목록 -->
-    <% if(getApplyList.length==0){%>
-      <div>가입 요청이 없습니다.</div>
-      <%} else {%>
-    <% for(let i=0; i<getApplyList.length;i++){ %>
-    <div class="request">
-      <div class="request-info">
-        <p class="requester-name"><%=userInfo[i]%></p>
-        <p class="request-text"><%=getApplyList[i].introduction%></p>
+  <div class="container">
+    <%- include('../component/header')%>
+    <main class="request-list">
+      <!-- 가입 요청 목록 -->
+      <% if(getApplyList.length==0){%>
+        <div>가입 요청이 없습니다.</div>
+        <%} else {%>
+      <% for(let i=0; i<getApplyList.length;i++){ %>
+      <div class="request">
+        <div class="request-info">
+          <p class="requester-name"><%=userInfo[i]%></p>
+          <p class="request-text"><%=getApplyList[i].introduction%></p>
+        </div>
+        <button class="<%=getApplyList[i].userid_num%>" onclick="checkDetail('<%=getApplyList[i].userid_num%>')">상세 정보 확인</button>
       </div>
-      <button class="<%=getApplyList[i].userid_num%>" onclick="checkDetail('<%=getApplyList[i].userid_num%>')">상세 정보 확인</button>
-    </div>
     
-    <% } %>
-    <% } %>
-    <!-- 추가 요청들을 여기에 반복 -->
-  </main>
+      <% } %>
+      <% } %>
+      <!-- 추가 요청들을 여기에 반복 -->
+    </main>
+  </div>
   <script>
     console.log('<%=userInfo%>');
     

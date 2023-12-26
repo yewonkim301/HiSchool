@@ -4,42 +4,11 @@ const controllerClub = require("../controller/Cclub");
 const controllerSupport = require("../controller/Csupport");
 const controllerUser = require("../controller/Cuser");
 const router = express.Router();
-const { isNotLoggedIn, isLoggedIn } = require("./../middleware/loginCheck");
+const { isNotLoggedIn, isLoggedIn, preventIndex } = require("./../middleware/loginCheck");
 
 router.post("/s3upload", controllerUser.s3upload);
 
-// router.post("/upload", async (req, res) => {
-//   await s3bucketList().then((data) => {
-//     // res
-//     // .status(200)
-//     // .json({
-//     //   message: "Success",
-//     //   data
-//     // })
-//     console.log(data);
-//   });
-//   await s3objectList().then((data) => {
-//     console.log(data);
-//   });
-//   await s3fileUpload().then((data) => {
-//     console.log(data);
-//     // res.send(data)
-//   });
-//   await s3objectList()
-//     .then((data) => {
-//       console.log(data);
-//       res.send("업로드 완료!");
-//     })
-
-//     .catch((error) => {
-//       res.status(400).json({
-//         message: "An error occurred.",
-//         error,
-//       });
-//     });
-// });
-
-router.get("/", (req, res) => {
+router.get("/", preventIndex, (req, res) => {
   res.render("index");
 });
 
@@ -49,9 +18,9 @@ router.get("/login", isNotLoggedIn, (req, res) => {
   res.render("login");
 });
 
-// router.get('/login', isNotLoggedIn, controllerUser.getLogin)
-
 router.post("/login", isNotLoggedIn, controllerUser.postLogin);
+
+router.get("/logout", isLoggedIn, controllerUser.getLogout);
 
 router.get("/register", isNotLoggedIn, (req, res) => {
   res.render("register");
@@ -191,14 +160,14 @@ router.post(
 
 // DELETE /myclubSchedule/:club_id/:schedule_id : 동아리 일정 삭제
 router.delete(
-  "/myClubSchedule/:club_id/:schedule_id",
+  "/myclubSchedule/:club_id/:schedule_id",
   isLoggedIn,
   controllerClub.deleteClubSchedule
 );
 
 // PATCH /myclubSchedule/:club_id/:date/:schedule_id : 동아리 일정 수정
 router.patch(
-  "/myClubSchedule/:club_id/:schedule_id",
+  "/myclubSchedule/:club_id/:schedule_id",
   isLoggedIn,
   controllerClub.patchClubSchedule
 );
@@ -290,8 +259,14 @@ router.get("/mypageMain", isLoggedIn, controllerPublic.getMyPage);
 // DELETE /mypageMain 유저 탈퇴
 router.delete("/mypageMain", isLoggedIn, controllerPublic.deleteMyID);
 
+
+// // PATCH /mypageMain 프로필 사진 수정
+// router.patch("/mypageMain/profileImg", isLoggedIn, controllerPublic.updateMyPageProfileImg);
+
+
 // PATCH /mypageMain //마이페이지 수정
 router.patch("/mypageMain", isLoggedIn, controllerPublic.updateMyPageMain);
+
 
 // GET /mypageProfile/:nickname 마이페이지 정보 가져오기 ver.닉네임
 router.get(

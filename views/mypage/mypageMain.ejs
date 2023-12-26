@@ -6,27 +6,41 @@
     <title>마이페이지</title>
     <link rel="stylesheet" href="/style.css" />
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <style></style>
+    <style>
+
+    </style>
   </head>
 
   <body>
-    <div class="container">
+    <div class="container" style="margin-bottom: 300px;">
       <%- include('../component/header')%>
-      <div class="profile-header">
-        <% if (data.profile_img) { %>
-        <img src="<%= data.profile_img %>" alt="프로필 이미지" width="50" />
+      <div class="profile-header" onclick="changeProfileImg()">
+        <% if (signedFile) { %>
+        <img src="<%= signedFile %>" alt="프로필 이미지" width="50" />
         <% } else { %>
         <img
-          src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png"
+          src="./icons/profile_img.png"
           alt="프로필 이미지"
           width="50"
         />
         <% } %>
-        <div class="profile-info">
-          <div class="profile-name"><%= data.name %></div>
-          <div class="profile-school"><%= data.school %></div>
-        </div>
       </div>
+
+      <div class="input">
+        <label for="fileUpload">프로필 이미지</label>
+        <input
+          name="myImage"
+          type="file"
+          id="fileUpload"
+          accept="image/*"
+          onchange="readURL(this); uploadToClient();"
+          class="file-upload-input"
+        />
+        <!-- <button class="file-upload-button">이미지 선택</button> -->
+        <span class="file-upload-text">파일을 선택하세요</span>
+        <img id="preview" src="" alt="" />
+      </div>
+
       <form name="profile">
         <div class="input">
           <label for="name">이름</label>
@@ -47,6 +61,15 @@
           />
         </div>
         <div class="input">
+          <label for="birthday">생일</label>
+          <input
+            type="text"
+            class="textField"
+            id="birthday"
+            value="<%= data.birthday %>"
+          />
+        </div>
+        <div class="input">
           <label for="school">학교</label>
           <input
             type="text"
@@ -55,20 +78,41 @@
             value="<%= data.school %>"
           />
         </div>
+        <div class="input">
+          <label for="grade">학년</label>
+          <input
+            type="text"
+            class="textField"
+            id="grade"
+            value="<%= data.grade %>"
+          />
+        </div>
+        <div class="input">
+          <label for="classid">반</label>
+          <input
+            type="text"
+            class="textField"
+            id="classid"
+            value="<%= data.classid %>"
+          />
+        </div>
       </form>
       <div class="cta">
         <% if (Leader || Leader2 || Leader3) { %>
-          <label for="deleteButton">가입된 동아리가 존재합니다. <br>동아리 탈퇴 후 회원탈퇴를 해주세요.</label>
-          <button
+        <label for="deleteButton"
+          >가입된 동아리가 존재합니다. <br />동아리 탈퇴 후 회원탈퇴를
+          해주세요.</label
+        >
+        <button
           class="btn btn-primary"
           id="deleteButton"
-          style="background-color: rgba(255, 0, 0, 0.188) "
+          style="background-color: rgba(255, 0, 0, 0.188)"
           onclick="handleDelete()"
           disabled
         >
           탈퇴
         </button>
-          <% } else { %>
+        <% } else { %>
         <button
           class="btn btn-primary"
           style="background-color: red"
@@ -78,7 +122,7 @@
         </button>
         <% } %>
 
-        <button class="btn btn-primary">수정하기</button>
+        <button class="btn btn-primary" onclick="handleUpdate()">수정하기</button>
       </div>
     </div>
 
@@ -93,19 +137,143 @@
           url: "/mypageMain",
         });
 
-        console.log(result)
+        console.log(result);
 
-        confirm('탈퇴 실행할까요?')
+        confirm("탈퇴 실행할까요?");
+
+        if (result.isDeleted) {
+          alert("회원 탈퇴 완료");
+          console.log("회원 탈퇴 완료", result);
+        } else {
+          alert("회원 탈퇴 실패");
+        }
+      }
+    </script>
+
+    <!--# 프로필 미리보기 -->
+    <script>
+      function readURL(input) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            document.getElementById("preview").src = e.target.result;
+          };
+          reader.readAsDataURL(input.files[0]);
+        } else {
+          document.getElementById("preview").src = "";
+        }
+      }
+    </script>
+
+    <!--# 프로필 이미지 업로드 -->
+    <script>
+      let createObjectURL = null;
+      let image = null;
+      const uploadFiles = document.querySelector("#fileUpload");
+      let uploadedFileUrl = "";
+
+      function uploadToClient(e) {
+        if (createObjectURL) {
+          URL.revokeObjectUrl(createObjectURL);
+        }
+
+        console.log("282 : uploadedFiles", uploadFiles);
+        if (uploadFiles.files && uploadFiles.files[0]) {
+          const i = uploadFiles.files[0];
+          image = i;
+          console.log("286 image", image);
+          createObjectURL = URL.createObjectURL(i);
+        }
+      }
+
+      async function uploadImgClient() {
+        console.log("uploadImgClient 실행");
+        try {
+          const result = await axios({
+            method: "POST",
+            url: "/s3upload",
+            data: {
+              name:
+                // "client/" +
+                Math.random().toString(36).substring(2, 32),
+              type: image.type,
+            },
+          });
+
+          const axiosResult = result;
+          console.log("axiosResult : ", axiosResult);
+          const signedUrl = axiosResult.data;
+          console.log("signedURL", signedUrl);
+
+          const uploadRes = await axios({
+            method: "PUT",
+            url: signedUrl,
+            data: image,
+            headers: {
+              "Content-Type": image.type,
+            },
+          });
+          console.log("uploadRes : ", uploadRes.config.url);
+          uploadedFileUrl = uploadRes.config.url;
+
+          // console.log('first uploadedfileurl', uploadedFileUrl)
+          return uploadedFileUrl;
+        } catch (err) {
+          console.log(err);
+        }
+      }
 
 
 
-          if (result.isDeleted) {
-            alert("회원 탈퇴 완료");
-            console.log("회원 탈퇴 완료", result);
-          } else {
-            alert("회원 탈퇴 실패");
+      async function handleUpdate() {
+        const uploadedFileOriginUrl = await uploadImgClient();
+        console.log('따끈따끈한 업로드된 파일 경로', uploadedFileOriginUrl);
+
+        const name = form.name.value;
+        const school = form.school.value;
+        const grade = form.grade.value;
+        const classid = form.classid.value;
+        const birthday = form.birthday.value;
+        const phone = form.phone.value;
+        let profile_img;
+
+        if (uploadedFileOriginUrl) {
+          console.log('presignedURL 있어요')
+          const parts = uploadedFileOriginUrl.split('/');
+          profile_img = parts[parts.length - 1].split('?')[0];
+        } else {
+          console.log('presignedURL 없어요')
+          profile_img = ''
+        }
+
+        console.log("profile_img", profile_img);
+
+        try {
+          const result = await axios({
+            method: "PATCH",
+            url: "/mypageMain",
+            headers: {
+              // "Content-Type": "application/formData",
+            },
+            data: {
+              name: form.name.value,
+              school: form.school.value,
+              grade: form.grade.value,
+              classid: form.classid.value,
+              birthday: form.birthday.value,
+              phone: form.phone.value,
+              // password: form.password.value,
+              profile_img,
+            },
+          });
+          console.log(result);
+          if (result.data.isUpdated === true) {
+            alert(result.data.msg);
+            document.location.href = "/mypageMain";
           }
-        
+        } catch (err) {
+          console.log(err);
+        }
       }
     </script>
   </body>

@@ -4,44 +4,110 @@
 <head>
   <meta charset="UTF-8">
   <title>검색 및 해시태그</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.1/feather.min.js"
+    integrity="sha512-4lykFR6C2W55I60sYddEGjieC2fU79R7GUtaqr3DzmNbo0vSaO1MfUjMoTFYYuedjfEix6uV9jVTtRCSBU/Xiw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="/club.css">
+  <style>
+    .list:hover{
+      cursor: pointer;
+    }
+
+    #city, #selectLocation{
+      width: 49%;
+  
+    }
+
+  </style>
 </head>
 
 <body>
+
     <%- include('../component/header')%>
-  <div class="search-container">
-    <input type="search" class="search-bar" placeholder="검색">
-    <button type="button" onclick="searchClub()" >검색</button>
-  </div>
+    <main class="container">
+        <div class="search-bar">
+          <input type="text" class="search-input" id="searchText" placeholder="플레이스홀더">
 
-  <div class="hashtags">
-    <!-- 해시태그 예시입니다. 클릭 이벤트와 백엔드 연결을 위한 클래스를 추가할 수 있습니다. -->
-    <span class="hashtag">#거리 30Km 이내</span>
-  </div>
+            <button type="button" onclick="searchName()" class="search-icon">
+              <i data-feather="search" ></i>
+            </button>
+      
+        </div>
+        <div>
+        <select   class='textField' id="city" required>
+          <option value="서울">서울시</option>
+        </select>
+        <select  class='textField' id="selectedLocation" required >
+          <option value="all">전체</option>
+          <option value="마포">마포구</option>
+          <option value="종로">종로구</option>
+          <option value="중">중구</option>
+          <option value="용산">용산구</option>
+          <option value="성동">성동구</option>
+          <option value="노원">노원구</option>
+          <option value="동대문">동대문구</option>
+          <option value="중랑">중랑구</option>
+          <option value="성북">성북구</option>
+          <option value="강북">강북구</option>
+          <option value="도봉">도봉구</option>
+          <option value="은평">은평구</option>
+          <option value="서대문">서대문구</option>
+          <option value="양천">양천구</option>
+          <option value="강서">강서구</option>
+          <option value="금천">금천구</option>
+          <option value="영등포">영등포구</option>
+          <option value="동작">동작구</option>
+          <option value="관악">관악구</option>
+          <option value="서초">서초구</option>
+          <option value="강남">강남구</option>
+          <option value="송파">송파구</option>
+          <option value="강동">강동구</option>
+          <option value="서초">서초구</option>
+          <option value="노원">노원구</option>
 
 
-  <% for(let i=0; i<data.length;i++){ %>
-    <div class="list" onclick="showDetail(event)" >
-
-      <div class="list-title" >
-        <%= data[i].club_name%>
-        <span style="display: none;"  class="club_id"><%=data[i].club_id%>
-        </span>
+        </select>
       </div>
-      <div class="list-content">
-        <%=data[i].description%>
-        <span style="display: none;"  class="club_id"><%=data[i].club_id%>
-        </span>
-      </div>
-  </div>
-    <% } %>
+        
 
+      </main>
+      
+    
+    <div id="searchResult">
+    
+      <% for(let i=0; i<data.length;i++){ %>
+        <div class="list" onclick="showDetail(event)" >
+    
+          <div class="list-title" id="<%=data[i].location%>" >
+
+            <%= data[i].club_name%>
+            <span style="display: none;"  class="club_id"><%=data[i].club_id%>
+            </span>
+          </div>
+          <div class="list-content">
+            <%=data[i].description%>
+            <span style="display: none;"  class="club_id"><%=data[i].club_id%>
+            </span>
+          </div>
+
+      </div>
+        <% } %>
+      </div>
+    
+        
+    
+      <div class="createClub" onclick="createClub()">+</div>
+    </div>
     
 
-  <div class="createClub" onclick="createClub()">+</div>
 
+   
+  
   <script>
+ 
     
 
     function showDetail(event) {
@@ -50,9 +116,6 @@
 
       let selectedClub = clickedDiv.querySelector('.club_id');
       let club_id = selectedClub.innerText;
-      
-      console.log(selectedClub);
-      console.log(club_id);
       window.location.href=`/clubDetail/${club_id}`
       
     }
@@ -60,7 +123,52 @@
   function createClub(){
     window.location.href='/createClub';
   }
+
+  
+  const selectBox = document.getElementById('selectedLocation');
+  const mainDiv = document.getElementById('searchResult');
+  const seachText = document.getElementById('searchText');
+  const listArray = document.getElementsByClassName('list');
+
+  function searchName(){
+    const text = seachText.value;
+
+    for(i=0; i<listArray.length; i++){
+
+      let titleDiv =listArray[i].querySelector('.list-title');
+        if(titleDiv.innerText.includes(text)){
+          listArray[i].style.display='block'
+        }else{
+          listArray[i].style.display='none'
+        }
+        
+      }
+    }
+
+  
+
+
+
+  selectBox.addEventListener('change', function(){
+    const value = selectBox.value;
+    if(value!='all'){
+      
+      
+      for(i=0; i<listArray.length; i++){
+        if(listArray[i].querySelector('.list-title').id == `서울시 ${value}구`){
+          listArray[i].style.display='block'
+        }else{
+          listArray[i].style.display='none'
+        }
+      }
+  }else{
+    mainDiv.style.display='inline';
+  }
+    
+  })
+  
   </script>
+  <script>feather.replace()</script>
 </body>
 
 </html>

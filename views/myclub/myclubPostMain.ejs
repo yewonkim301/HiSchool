@@ -12,20 +12,21 @@
 </head>
 
 <body>
-   <%- include('../component/header') %>
-      <button onclick="createPost()" id="plus-button" class="plus-button">+</button>
-
-      <!-- 게시물 목록 -->
-      <% for(let i=0; i < data.length; i++) { %>
-         <div class="list" onclick="showDetail('<%= data[i].post_id %>')">
-            <div class="list-title">
-               <%= data[i].title %>
+   <div class="container">
+      <%- include('../component/header') %>
+         <button onclick="createPost()" id="plus-button" class="plus-button">+</button>
+         <!-- 게시물 목록 -->
+         <% for(let i=0; i < data.length; i++) { %>
+            <div class="list" onclick="showDetail('<%= data[i].post_id %>')">
+               <div class="list-title">
+                  <%= data[i].title %>
+               </div>
+               <div class="list-content">
+                  <%= data[i].content %>
+               </div>
             </div>
-            <div class="list-content">
-               <%= data[i].content %>
-            </div>
-         </div>
-         <% } %>
+            <% } %>
+   </div>
             <script>
                const club_id = "<%= club_id %>";
 

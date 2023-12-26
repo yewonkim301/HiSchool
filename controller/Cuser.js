@@ -1,17 +1,28 @@
-const express = require("express");
 const passport = require("passport");
 const bcrypt = require("bcrypt");
-const { isNotLoggedIn, isLoggedIn } = require('./../middleware/loginCheck')
 const jwt = require("jsonwebtoken");
 const { User } = require("../models/Index");
 
 const dotenv = require("dotenv").config();
-const { getSignedFileUrl, printLog } = require('./../middleware/s3fileUpload')
+const { getSignedFileUrl } = require("../middleware/s3");
 
 
-exports.postRegister = async(req, res, next) => {
-  const { userid, password, school, phone, birthday, name, grade, classid, profile_img } =
-    req.body;
+exports.getRegister = async (req, res, next) => {
+  res.render("register", { link: '/'});
+}
+
+exports.postRegister = async (req, res, next) => {
+  const {
+    userid,
+    password,
+    school,
+    phone,
+    birthday,
+    name,
+    grade,
+    classid,
+    profile_img,
+  } = req.body;
 
   console.log("profile_img : ", profile_img);
 
@@ -40,10 +51,12 @@ exports.postRegister = async(req, res, next) => {
     console.log(error);
     return next(error);
   }
-}
+};
 
 
-exports.postLogin = async(req, res, next) => {
+
+
+exports.postLogin = async (req, res, next) => {
   passport.authenticate("local", (authError, user, info) => {
     // console.log("/login user : ", user);
     if (authError) {
@@ -68,28 +81,34 @@ exports.postLogin = async(req, res, next) => {
 
       const token = jwt.sign(JSON.stringify(payload), process.env.JWT_SECRET);
 
-      return res
-        .cookie("jwt", token, {
-          httpOnly: true,
-          secure: false, // https 사용시 true 설정해줄것
-          maxAge: 1000 * 60 * 60 * 24 * 7, 
-        })
-        // .cookie('isLoggedIn', true)
-        .status(200)
-        .send({ isLoggedIn: true });
+      return (
+        res
+          .cookie("jwt", token, {
+            httpOnly: true,
+            secure: false, // https 사용시 true 설정해줄것
+            maxAge: 1000 * 60 * 60 * 24 * 7,
+          })
+          .status(200)
+          .send({ isLoggedIn: true })
+      );
     });
   })(req, res, next);
-}
+};
 
 exports.getLogout = async(req, res, next) => {
-  req.logout();
-  req.session.destroy();
-  res.redirect("/");
+  req.logout(function(err) {
+    if (err) { return next(err); }
+    req.session.destroy(() => {
+      res.clearCookie('connect.sid'); 
+      res.clearCookie("jwt");
+      res.redirect('/'); 
+    });
+  });
 }
 
 
 
-exports.s3upload = async(req, res) => {
+exports.s3upload = async (req, res) => {
   // printLog()
 
   if (req.method === "POST") {
@@ -103,12 +122,11 @@ exports.s3upload = async(req, res) => {
 
       const signedUrl = await getSignedFileUrl(fileParams);
       console.log("signedUrl : ", signedUrl);
-      return res.send(signedUrl)
+      return res.send(signedUrl);
     } catch (e) {
       return res.status(500).send({
         message: "make url failed",
       });
     }
   }
-}
-
+};

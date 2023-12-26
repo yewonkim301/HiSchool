@@ -41,6 +41,37 @@ module.exports.getSignedFileUrl = async function getSignedFileUrl(data) {
 };
 
 
+module.exports.getSignedFile = async function getSignedFile(data) {
+  // console.log('file signedUrl 시작');
+  const params = {
+    Bucket: process.env.AWS_S3_BUCKET,
+    Key: data,
+  };
+  const command = new GetObjectCommand(params);
+  // console.log('getObjectCommand 시작');
+  const url = await getSignedUrl(s3, command, {
+    expiresIn: 5,
+  });
+  // console.log('getSignedUrl 성공');
+  return url;
+}
+
+
+
+module.exports.deleteFile = async function deleteFile(data) {
+  console.log('file delete 시작');
+  const params = {
+    Bucket: process.env.AWS_S3_BUCKET,
+    Key: data,
+  };
+  const command = new DeleteObjectCommand(params);
+  console.log('deleteObjectCommand 시작');
+  await s3.send(command);
+  console.log('deleteObjectCommand 성공');
+}
+
+
+
 module.exports.printLog = function printLog() {
   console.log('printlog 실행');
 }
