@@ -42,10 +42,11 @@ exports.postSupport = async (req, res) => {
         const { content, secret } = req.body
         const newSupport = await Support.create({
             userid_num: userid_num,
-            content: content,
-            secret: secret
+            qa_content: content,
+            secret: secret,
+            qa_comment:'답변 전'
         })
-        res.send(newSupport,{isSuccess: true}, link, title);
+        res.send(newSupport,{isSuccess: true, link, title});
     }
     catch (err) {
         console.error(err);
