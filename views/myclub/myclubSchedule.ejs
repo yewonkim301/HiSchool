@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>인터랙티브 달력</title>
-
+    <link rel="stylesheet" href="/myClubPostMain.css" />
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
       body {
@@ -49,7 +49,6 @@
         padding: 10px;
         font-weight: normal;
       }
-
 
       .calendar td {
         padding: 15px;
@@ -103,6 +102,9 @@
   <body>
     <div class="container">
       <%- include('../component/header')%>
+      <button onclick="openModal()" id="plus-button" class="plus-button">
+        +
+      </button>
       <div class="calendar-container">
         <div class="calendar-controls">
           <button onclick="moveMonth(-1)">이전</button>
@@ -126,8 +128,11 @@
           </tbody>
         </table>
         <div id="eventsContainer">
-          <% if (data && data.length) { %> <% data.forEach(function(schedule) {
-          %>
+          <%let checkToday = `${new Date().getFullYear()}-${( new
+          Date().getMonth() + 1 ) .toString() .padStart(2, "0")}-${new
+          Date().getDate().toString().padStart(2, "0")}`;%> <% if (data &&
+          data.length) { %> <% data.forEach(function(schedule) { %> <% if (
+          checkToday == schedule.date) {%>
           <div class="schedule" id="<%= schedule.schedule_id %>">
             <h3 id="title<%= schedule.schedule_id %>"><%= schedule.title %></h3>
             <p id="date<%= schedule.schedule_id %>">
@@ -152,7 +157,7 @@
               삭제
             </button>
           </div>
-          <% }); %> <% } else { %>
+          <% } %> <% }); %> <% } else { %>
           <p class="no-events">등록된 일정이 없습니다</p>
           <% } %>
           <!-- <ul>
@@ -196,7 +201,6 @@
         <button onclick="closeModal()">닫기</button>
       </div>
     </div>
-
 
     <!----------------------- 일정을 추가하는 모달 끝 ---------------------->
 
@@ -268,8 +272,8 @@
       // 모달 열기
       function openModal(date) {
         document.getElementById("modalName").innerText = "일정 추가";
-        document.getElementById("modalDateL").style.display = "none";
-        document.getElementById("modalDate").style.display = "none";
+        // document.getElementById("modalDateL").style.display = "none";
+        // document.getElementById("modalDate").style.display = "none";
         document.getElementById("modalDate").value = date;
         document.getElementById("scheduleModal").style.display = "block";
         document.getElementById("saveBtn").style.display = "block";
@@ -298,8 +302,43 @@
           selectedDate.classList.add("selected-date");
         }
 
-        openModal(dateStr); // 모달 열기
-        console.log("Selected date:", dateStr);
+        // openModal(dateStr); // 모달 열기
+        // document.getElementById("eventsContainer").innerHTML = "";
+        let html = "";
+        const eventsContainer = document.getElementById("eventsContainer");
+        <% for (let i = 0; i < data.length; i++) { %>
+          console.log("<%=data[i].date%>");
+          if (dateStr == "<%= data[i].date %>") {
+            console.log("same");
+            html += `
+          <div class="schedule" id="<%= data[i].schedule_id %>">
+            <h3 id="title<%= data[i].schedule_id %>"><%= data[i].title %></h3>
+            <p id="date<%= data[i].schedule_id %>">
+              Date: <%= data[i].date %>
+            </p>
+            <p id="time<%= data[i].schedule_id %>">
+              Time: <%= data[i].time %>
+            </p>
+            <p id="content<%= data[i].schedule_id %>">
+              Content: <%= data[i].content %>
+            </p>
+            <button
+              type="button"
+              onclick="patchSchedule('<%= data[i].schedule_id %>')"
+            >
+              수정
+            </button>
+            <button
+              type="button"
+              onclick="deleteSchedule('<%= data[i].schedule_id %>')"
+            >
+              삭제
+            </button>
+          </div>`;
+          }
+        <% }%>
+        eventsContainer.innerHTML = html;
+        // console.log("Selected date:", dateStr);
       }
 
       // function fetchClubSchedules() {
@@ -393,8 +432,8 @@
       function patchSchedule(schedule_id) {
         document.getElementById("scheduleModal").style.display = "block";
         document.getElementById("modalName").innerText = "일정 수정";
-        document.getElementById("modalDateL").style.display = "block";
-        document.getElementById("modalDate").style.display = "block";
+        // document.getElementById("modalDateL").style.display = "block";
+        // document.getElementById("modalDate").style.display = "block";
 
         document.getElementById("saveBtn").style.display = "none";
         document.getElementById("resaveBtn").style.display = "block";
