@@ -13,7 +13,7 @@ exports.getSupport = async (req, res) => {
         let link = "/home"
         let title = "고객센터"
         const getSupport = await Support.findAll();
-        console.log(getSupport);
+
         res.render("support/supportMain", {getSupport, title, link,userid_num});
     }
     catch (err) {
@@ -63,12 +63,18 @@ exports.postSupport = async (req, res) => {
 exports.postSupportComment = async (req,res) => {
     try{
         const {qa_id} = req.params;
-        const postSupportComment = await Support.update({
-            qa_comment: comment,
-            where: {
+        const {qa_comment} =req.body;
+        
+
+        const postSupportComment = await Support.update(
+            {
+            qa_comment: qa_comment,
+            },
+            {where: {
                 qa_id: qa_id
             }
         })
+        console.log('>>>>>>>>>>>>>>>>',postSupportComment);
         res.send({postSupportComment, isSuccess:true});
     }
     catch (err) {
