@@ -43,8 +43,7 @@ exports.postSupport = async (req, res) => {
         const newSupport = await Support.create({
             userid_num: userid_num,
             qa_content: content,
-            secret: secret,
-            qa_comment:'답변 전'
+            secret: secret
         })
         res.send(newSupport,{isSuccess: true, link, title});
     }
@@ -59,7 +58,7 @@ exports.postSupportComment = async (req,res) => {
     try{
         const {comment} = req.body;
         const postSupportComment = await Support.update({
-            comment: comment
+            qa_comment: comment
         })
         res.send(postSupportComment, {isSuccess:true});
     }
