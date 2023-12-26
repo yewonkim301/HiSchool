@@ -26,17 +26,17 @@ const s3 = new S3Client({
 
 
 module.exports.getSignedFileUrl = async function getSignedFileUrl(data) {
-  console.log('file signedUrl 시작');
+  // console.log('file signedUrl 시작');
   const params = {
     Bucket: process.env.AWS_S3_BUCKET,
     Key: data.name,
   };
   const command = new PutObjectCommand(params);
-  console.log('putObjectCommand 시작');
+  // console.log('putObjectCommand 시작');
   const url = await getSignedUrl(s3, command, {
     expiresIn: 3600,
   });
-  console.log('getSignedUrl 성공');
+  // console.log('getSignedUrl 성공');
   return url;
 };
 
@@ -59,20 +59,20 @@ module.exports.getSignedFile = async function getSignedFile(data) {
 
 
 module.exports.deleteFile = async function deleteFile(data) {
-  console.log('file delete 시작');
+  // console.log('file delete 시작');
   const params = {
     Bucket: process.env.AWS_S3_BUCKET,
     Key: data,
   };
   const command = new DeleteObjectCommand(params);
-  console.log('deleteObjectCommand 시작');
+  // console.log('deleteObjectCommand 시작');
   await s3.send(command);
-  console.log('deleteObjectCommand 성공');
+  // console.log('deleteObjectCommand 성공');
 }
 
 
 
 module.exports.printLog = function printLog() {
-  console.log('printlog 실행');
+  // console.log('printlog 실행');
 }
 

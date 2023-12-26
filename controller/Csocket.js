@@ -1,7 +1,7 @@
 const roomList = [];
 
 exports.connection = (io, socket) => {
-  console.log("접속 :", socket.id);
+  // console.log("접속 :", socket.id);
   //채팅방 목록 보내기
   socket.emit("roomList", roomList);
 
@@ -28,7 +28,7 @@ exports.connection = (io, socket) => {
   });
 
   socket.on("sendMessage", (message) => {
-    console.log(message);
+    // console.log(message);
     if (message.user === "all") {
       io.to(socket.room).emit(
         "newMessage",

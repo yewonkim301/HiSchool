@@ -14,7 +14,7 @@ const cookieExtractor = (req) => {
 };
 
 module.exports = (passport) => {
-  console.log('passport jwt 검증 시작')
+  // console.log('passport jwt 검증 시작')
   passport.use(
     new JwtStrategy(
       {

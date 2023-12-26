@@ -17,7 +17,7 @@ router.post("/register", isNotLoggedIn, async (req, res, next) => {
   try {
     const exUser = await User.findOne({ where: { userid: userid } });
     if (exUser) {
-      console.log("join Error : 이미 가입된 아이디입니다");
+      // console.log("join Error : 이미 가입된 아이디입니다");
       return res.send("이미 가입된 아이디입니다");
       return res.redirect("/register");
     }
@@ -36,7 +36,7 @@ router.post("/register", isNotLoggedIn, async (req, res, next) => {
     });
     return res.send({ success: true, message: "회원가입 성공" });
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return next(error);
   }
 });
@@ -45,11 +45,11 @@ router.post("/register", isNotLoggedIn, async (req, res, next) => {
 
 router.get('/login', isNotLoggedIn, async (req, res) => {
   const { userid_num } = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
-  console.log("userid_num : ", userid_num);
+  // console.log("userid_num : ", userid_num);
 
   const user = await User.findOne({ where: { userid_num: userid_num } })
 
-  console.log(user);
+  // console.log(user);
 
   res.render('login', { user: user })
 
@@ -58,19 +58,19 @@ router.get('/login', isNotLoggedIn, async (req, res) => {
 // 로그인
 router.post("/login", isNotLoggedIn, (req, res, next) => {
   passport.authenticate("local", (authError, user, info) => {
-    console.log("/login user : ", user);
+    // console.log("/login user : ", user);
     if (authError) {
       console.error(authError);
       return next(authError);
     }
     if (!user) {
-      console.log("유저가 존재하지 않습니다");
+      // console.log("유저가 존재하지 않습니다");
       return res.send("유저 정보가 일치하지 않습니다");
     }
     return req.login(user, (loginError) => {
       if (loginError) {
         console.error(loginError);
-        console.log("로그인 에러");
+        // console.log("로그인 에러");
         return next(loginError);
       }
 

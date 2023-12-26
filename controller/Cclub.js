@@ -46,7 +46,7 @@ exports.getClub = async (req, res) => {
       attributes: ["isMember"],
       where: { userid_num: userid_num },
     });
-    console.log("@@@@@@@@@@@@@@", findmember);
+    // console.log("@@@@@@@@@@@@@@", findmember);
     let isMember;
     if (!findmember) isMember = "nonApply";
     else if (findmember.dataValues.isMember == "true") isMember = "true";
@@ -91,7 +91,7 @@ exports.getClubAdminMain = async (req, res) => {
 
 // GET /clubAdminEdit/:club_id : 동아리 수정페이지 불러오기
 exports.getClubAdminEdit = async (req, res) => {
-  console.log("getClubAdminEdit", req.params);
+  // console.log("getClubAdminEdit", req.params);
   try {
     let link = `/clubAdminMain/${req.params.club_id}`; //클럽 관리 페이지로 이동
     const { club_id } = req.params;
@@ -114,7 +114,7 @@ exports.getClubAdminEdit = async (req, res) => {
     });
 
     const clubAdminEdit = clubAdminEditDB.toJSON();
-    console.log(clubAdminEdit);
+    // console.log(clubAdminEdit);
 
     res.render("clubAdmin/clubAdminEdit", {
       clubAdminEdit,
@@ -270,7 +270,7 @@ exports.getClubPost = async (req, res) => {
   try {
     let link = `/myclubPostMain/${req.params.club_id}`; //전체 게시물로 이동
     const { club_id, post_id } = req.params;
-    console.log("params > ", req.params);
+    // console.log("params > ", req.params);
     const { userid, userid_num } = jwt.verify(
       req.cookies.jwt,
       process.env.JWT_SECRET
@@ -308,7 +308,7 @@ exports.getClubPost = async (req, res) => {
         where: { comment_id: element },
       });
       clubPostCommentLike.push(like);
-      console.log("@@@@@ clubPostCommentLike", clubPostCommentLike);
+      // console.log("@@@@@ clubPostCommentLike", clubPostCommentLike);
     }
 
     res.render("myclub/myclubPostDetail", {
@@ -392,7 +392,7 @@ exports.deletePost = async (req, res) => {
 
 // POST  /myclubPostDetail/:club_id/:post_id : 동아리 게시글 댓글 생성
 exports.createPostComment = async (req, res) => {
-  console.log("받은 데이터:", req.body);
+  // console.log("받은 데이터:", req.body);
   try {
     const { club_id, post_id } = req.params;
     const { content } = req.body;
@@ -448,7 +448,7 @@ exports.patchPostComment = async (req, res) => {
 exports.deletePostComment = async (req, res) => {
   try {
     const { comment_id, post_id, club_id } = req.params;
-    console.log(req.params);
+    // console.log(req.params);
     const isDeleted = await Club_post_comment.destroy({
       where: {
         post_id: post_id,
@@ -526,13 +526,13 @@ exports.getCreateClubPost = async (req, res) => {
 
 // POST /myclubNewPost/:club_id : 동아리 게시글 생성
 exports.createClubPost = async (req, res) => {
-  console.log("createClubPost 실행: clubid", req.params.club_id);
+  // console.log("createClubPost 실행: clubid", req.params.club_id);
 
   try {
     const { club_id } = req.params;
     const { title, content, image } = req.body;
     const { userid_num } = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
-    console.log(club_id, title, content, image);
+    // console.log(club_id, title, content, image);
     const getName = await User.findOne({
       where: { userid_num: userid_num },
     });
@@ -543,7 +543,7 @@ exports.createClubPost = async (req, res) => {
       image: image,
       name: getName.dataValues.name,
     });
-    console.log("생성 완료");
+    // console.log("생성 완료");
     res.send(newPost);
   } catch (error) {
     console.error(error);
@@ -600,7 +600,7 @@ exports.getClubSchedules = async (req, res) => {
 exports.postClubSchedule = async (req, res) => {
   try {
     const { club_id } = req.params;
-    console.log(club_id);
+    // console.log(club_id);
     const { date, time, title, content } = req.body;
     const newClubSchedule = await Club_schedule.create({
       club_id: club_id,

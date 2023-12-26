@@ -15,12 +15,12 @@ const s3bucketList = async () => {
 
   try {
     const { Owner, Buckets } = await client.send(command);
-    console.log(
-      `${Owner.DisplayName} owns ${Buckets.length} bucket${
-        Buckets.length === 1 ? "" : "s"
-      }:`
-    );
-    console.log(`${Buckets.map((b) => ` • ${b.Name}`).join("\n")}`);
+    // console.log(
+    //   `${Owner.DisplayName} owns ${Buckets.length} bucket${
+    //     Buckets.length === 1 ? "" : "s"
+    //   }:`
+    // );
+    // console.log(`${Buckets.map((b) => ` • ${b.Name}`).join("\n")}`);
     return (`${Buckets.map((b) => ` • ${b.Name}`).join("\n")}`)
   } catch (err) {
     console.error(err);

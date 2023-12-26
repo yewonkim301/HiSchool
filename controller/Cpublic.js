@@ -494,7 +494,7 @@ exports.getAllMembers = async (req, res) => {
     });
     let userInfo = [];
     getusersid.forEach(async (element) => {
-      console.log(element);
+      // console.log(element);
       let info = await User.findOne({ where: { userid_num: element } });
       await userInfo.push(info.name);
       // console.log("userinfo >>>>>>>>>>>>>", userInfo);
@@ -546,7 +546,7 @@ exports.clubApply = async (req, res) => {
     let link = "/clubMain"; // 전체 클럽 페이지
     let title = "동아리 신청";
     const { club_id } = req.params;
-    console.log(club_id);
+    // console.log(club_id);
     res.render("club/clubApply", { data: club_id, title, link });
   } catch (err) {
     console.error(err);
@@ -656,7 +656,7 @@ exports.getClubMembersApplyList = async (req, res) => {
 
     if(getusersid == []) {
       getusersid.forEach(async (element) => {
-        console.log(element);
+        // console.log(element);
         let info = await User.findOne({ where: { userid_num: element } });
         // console.log("info >>>>>>>>", info.nickname);
         userInfo.push(info.name);
@@ -765,7 +765,7 @@ exports.getClubMembers = async (req, res) => {
 
     let userInfo = [];
     for (const element of getUserInfo) {
-      console.log(element);
+      // console.log(element);
       let info = await User.findOne({ where: { userid_num: element } });
       userInfo.push(info.name);
       // console.log("클럽 멤버 이름조회 >>>>>>>>>>>>>", userInfo);
@@ -861,7 +861,7 @@ exports.getMyPage = async (req, res) => {
       process.env.JWT_SECRET
     );
 
-    console.log("Cpublic userid_num", userid_num);
+    // console.log("Cpublic userid_num", userid_num);
 
     const myPageMain = await User.findOne({
       where: {
@@ -975,7 +975,7 @@ exports.deleteMyID = async (req, res) => {
 
 // PATCH /mypageMain //마이페이지 수정
 exports.updateMyPageMain = async (req, res) => {
-  console.log('Cpublic 999 updateMyPageMain 호출');
+  // console.log('Cpublic 999 updateMyPageMain 호출');
   try {
     const { userid, userid_num } = jwt.verify(
       req.cookies.jwt,
@@ -990,7 +990,7 @@ exports.updateMyPageMain = async (req, res) => {
           userid_num: userid_num,
         }
       })
-      console.log('Cpublic 1015 찾은 프로필 이미지 : ', extProfileImg, extProfileImg.profile_img);
+      // console.log('Cpublic 1015 찾은 프로필 이미지 : ', extProfileImg, extProfileImg.profile_img);
 
       if(extProfileImg.profile_img) {
         deleteFile(extProfileImg.profile_img)

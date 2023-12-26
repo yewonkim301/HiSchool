@@ -24,12 +24,12 @@ exports.postRegister = async (req, res, next) => {
     profile_img,
   } = req.body;
 
-  console.log("profile_img : ", profile_img);
+  // console.log("profile_img : ", profile_img);
 
   try {
     const exUser = await User.findOne({ where: { userid: userid } });
     if (exUser) {
-      console.log("join Error : 이미 가입된 아이디입니다");
+      // console.log("join Error : 이미 가입된 아이디입니다");
       return res.send("이미 가입된 아이디입니다");
       return res.redirect("/register");
     }
@@ -64,13 +64,13 @@ exports.postLogin = async (req, res, next) => {
       return next(authError);
     }
     if (!user) {
-      console.log("유저가 존재하지 않습니다");
+      // console.log("유저가 존재하지 않습니다");
       return res.send("유저 정보가 일치하지 않습니다");
     }
     return req.login(user, (loginError) => {
       if (loginError) {
         console.error(loginError);
-        console.log("로그인 에러");
+        // console.log("로그인 에러");
         return next(loginError);
       }
 
@@ -118,10 +118,10 @@ exports.s3upload = async (req, res) => {
         name: name,
         type: type,
       };
-      console.log("fileParams : ", fileParams);
+      // console.log("fileParams : ", fileParams);
 
       const signedUrl = await getSignedFileUrl(fileParams);
-      console.log("signedUrl : ", signedUrl);
+      // console.log("signedUrl : ", signedUrl);
       return res.send(signedUrl);
     } catch (e) {
       return res.status(500).send({

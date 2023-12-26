@@ -23,7 +23,7 @@ const s3objectList = async () => {
   try {
     let isTruncated = true;
 
-    console.log("버킷에 담겨있는 항목:\n");
+    // console.log("버킷에 담겨있는 항목:\n");
     let contents = "";
 
     while (isTruncated) {
@@ -34,7 +34,7 @@ const s3objectList = async () => {
       isTruncated = IsTruncated;
       command.input.ContinuationToken = NextContinuationToken;
     }
-    console.log(contents);
+    // console.log(contents);
     return contents;
   } catch (err) {
     console.error(err);

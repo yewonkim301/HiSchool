@@ -12,7 +12,7 @@ const JWTVerify = async (jwtPayload, done) => {
   try {
     // jwtPayload에 유저 정보가 담겨있다.
     // 해당 정보로 유저 식별 로직을 거친다.
-    console.log(jwtPayload);
+    // console.log(jwtPayload);
     UserModel.findOne(jwtPayload.userid)
       .then((user) => {
         return done(null, user);

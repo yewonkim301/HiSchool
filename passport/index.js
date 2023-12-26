@@ -9,12 +9,12 @@ module.exports = (passport) => {
     done(null, user);
   });
   passport.deserializeUser((id, done) => {
-    console.log("deserializeUser 실행");
+    // console.log("deserializeUser 실행");
     // console.log("deserializeUser id : ", id);
     User.findOne({ where: { userid: id.userid } })
       .then((user) => done(null, user))
       .catch((err) => {
-        console.log('오류')
+        // console.log('오류')
         done(err)
       });
   });

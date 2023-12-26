@@ -8,12 +8,12 @@ const region = process.env.S3_REGION;
 const Bucket = process.env.S3_BUCKET;
 
 
-console.log('미들웨어 불러오기 완료')
+// console.log('미들웨어 불러오기 완료')
 
 const parsefile = async (req) => {
-  console.log('parsefile 실행');
+//   console.log('parsefile 실행');
     return new Promise((resolve, reject) => {
-      console.log('Promise 실행');
+    //   console.log('Promise 실행');
         let options = {
             maxFileSize: 100 * 1024 * 1024, //100 MBs converted to bytes,
             allowEmptyFiles: false
@@ -24,20 +24,20 @@ const parsefile = async (req) => {
         form.parse(req, (err, fields, files) => {});
 
         form.on('error', error => {
-            console.log('에러에요');
+            // console.log('에러에요');
             reject(error.message)
         })
         
         form.on('data', data => {
-          console.log('form data 시작');
-          console.log(data);
+        //   console.log('form data 시작');
+        //   console.log(data);
             if (data.name === "successUpload") {
                 resolve(data.value);
             }
         })
         
         form.on('fileBegin', (formName, file) => {
-          console.log('fileBegin');
+        //   console.log('fileBegin');
 
             file.open = async function () {
                 this._writeStream = new Transform({
