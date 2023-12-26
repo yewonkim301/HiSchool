@@ -14,6 +14,10 @@ const Support = (Sequelize, DataTypes) => {
             qa_comment:{
                 type: DataTypes.STRING(300),
                 allowNull: false,
+            },
+            secret: {
+                type: DataTypes.STRING(10),
+                allowNull: true,
             }
         },{
             freezeTableName: true,
