@@ -9,7 +9,48 @@
 <body>
    <%- include('../component/header')%>
    <div class="container">
-      <h1>고객 센터</h1>
+      <%- include('../component/header') %>
+         <button onclick="createPost()" id="plus-button" class="plus-button">+</button>
+         <!-- 게시물 목록 -->
+         <% for(let i=0; i < data.length; i++) { %>
+            <% if (getSupport[i].secret) { %>
+               <div class="list" onclick="showDetail('<%= getSupport[i].qa_id %>','<%= getSupport[i].secret %>','<%= getSupport[i].userid_num %>')">
+                  <div class="list-title">
+                     비밀글입니다.
+                  </div>
+               </div>
+
+
+
+            <% }else{ %>
+            <div class="list" onclick="showDetail('<%= getSupport[i].qa_id %>','<%= getSupport[i].secret %>','<%= getSupport[i].userid_num %>')">
+               <div class="list-title">
+                  <%= getSupport[i].qa_content %>
+               </div>
+            </div>
+            <% } %>
+
+            <% } %>
+
+            <div class="createSupport" onclick="createSupport()"><div>+</div></div>
    </div>
+   <script>
+      function showDetail(qa_id,secret,userid_num){
+         if(secret==='true'){
+            if('<%=userid_num%>'=== userid_num){
+               window.location.href=`/supportDetail/${qa_id}`
+            }else{
+               alert('비밀글은 작성자만 볼 수 있습니다!');
+               return;
+            }
+         }
+         else{
+            window.location.href=`/supportDetail/${qa_id}`
+         }
+      }
+      function createSupport(){
+         window.location.href = '/supportNewPost';
+      }
+   </script>
 </body>
 </html>
