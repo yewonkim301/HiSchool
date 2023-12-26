@@ -33,6 +33,7 @@
 *::before,
 *::after {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent; 
 }
 
 /* Reapply the pointer cursor for anchor tags */
@@ -199,7 +200,7 @@ body {
   justify-content: center;
   height: fit-content;
   margin-top: 100px;
-  margin-bottom: 100px;
+  margin-bottom: 300px;
 }
 
 .row2 {
@@ -413,9 +414,13 @@ input[type="checkbox"]:checked + label:before {
   align-items: center;
   background-color: white;
   z-index: 500;
-  padding: 0 20px;
+  /* padding: 0 20px; */
   box-sizing: border-box;
   border-bottom: 1px solid var(--color-gray-300);
+}
+
+.header i {
+  color: var(--color-gray-400)
 }
 
 .navbar {
@@ -576,6 +581,9 @@ input[type="checkbox"]:checked + label:before {
   }
 }
 @media screen and (min-width: 801px) {
+  .header {
+    padding: 0 20px;
+  }
   .menu-icon,
   .settings-icon,
   .close-menu {

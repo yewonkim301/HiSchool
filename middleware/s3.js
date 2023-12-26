@@ -68,6 +68,7 @@ module.exports.deleteFile = async function deleteFile(data) {
   // console.log('deleteObjectCommand 시작');
   await s3.send(command);
   // console.log('deleteObjectCommand 성공');
+  return true
 }
 
 
