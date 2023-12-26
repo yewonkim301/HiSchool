@@ -1,5 +1,6 @@
 const {
-    Support
+    Support,
+    User
 } = require("../models/Index");
 const jwt = require("jsonwebtoken");
 
