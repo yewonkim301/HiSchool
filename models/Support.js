@@ -17,7 +17,7 @@ const Support = (Sequelize, DataTypes) => {
             },
             secret: {
                 type: DataTypes.STRING(10),
-                allowNull: true,
+                allowNull: false,
             }
         },{
             freezeTableName: true,
