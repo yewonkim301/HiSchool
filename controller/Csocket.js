@@ -23,6 +23,8 @@ exports.getDmRoom = async (req, res) =>{
   }
 }
 
+
+
 exports.connection = (io, socket) => {
     console.log('접속 :', socket.id);
     //채팅방 목록 보내기
@@ -42,7 +44,7 @@ exports.connection = (io, socket) => {
         //채팅방 목록 갱신
         if (!roomList.includes(roomName)) {
             roomList.push(roomName);
-            //갱신된 목록은 전체가 봐야함
+            //갱신된 목록은 전체가 봐야함 <=== 나와 상대방만 봐야해서 이제 바꿔야함
             io.emit('roomList', roomList);
         }
         const usersInRoom = getUsersInRoom(roomName);
@@ -52,13 +54,9 @@ exports.connection = (io, socket) => {
     //================ 위 까지 방만들기 =======================
     socket.on('sendMessage', (message) => {
         console.log(message);
-        if (message.user === 'all') {
-            io.to(socket.room).emit('newMessage', message.message, message.nick, false);
-        } else {
-            io.to(message.user).emit('newMessage', message.message, message.nick, true);
+            io.to(message.user).emit('newMessage', message.message, message.nick);
             //자기자신에게 메세지 띄우기
-            socket.emit('newMessage', message.message, message.nick, true);
-        }
+            socket.emit('newMessage', message.message, message.nick);
     });
 
     socket.on('disconnect', () => {
@@ -67,21 +65,21 @@ exports.connection = (io, socket) => {
         }
     });
 
-    function getUsersInRoom(room) {
-        const users = [];
-        //채팅룸에 접속한 socket.id값을 찾아야함
-        const clients = io.sockets.adapter.rooms.get(room);
-        //console.log(clients);
-        if (clients) {
-            clients.forEach((socketId) => {
-                //io.sockets.sockets: socket.id가 할당한 변수들의 객체값
-                const userSocket = io.sockets.sockets.get(socketId);
-                //개별 사용자에게 메세지를 보내기 위해서 객체형태로 변경
-                //key: 소켓아이디, name:이름
-                const info = { name: userSocket.user, key: socketId };
-                users.push(info);
-            });
-        }
-        return users;
-    }
+    // function getUsersInRoom(room) { <== 귓속말 기능은 필요 없기 때문에 제거
+    //     const users = [];
+    //     //채팅룸에 접속한 socket.id값을 찾아야함
+    //     const clients = io.sockets.adapter.rooms.get(room);
+    //     //console.log(clients);
+    //     if (clients) {
+    //         clients.forEach((socketId) => {
+    //             //io.sockets.sockets: socket.id가 할당한 변수들의 객체값
+    //             const userSocket = io.sockets.sockets.get(socketId);
+    //             //개별 사용자에게 메세지를 보내기 위해서 객체형태로 변경
+    //             //key: 소켓아이디, name:이름
+    //             const info = { name: userSocket.user, key: socketId };
+    //             users.push(info);
+    //         });
+    //     }
+    //     return users;
+    // }
 };
