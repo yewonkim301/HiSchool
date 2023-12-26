@@ -468,9 +468,6 @@ exports.getAllMembers = async (req, res) => {
         club_id : club_id
       }
     });
-    // console.log("Cpublic getAllMembers getleader >>>>", getleader.leader_id);
-
-
 
     const getAllMembersShow = await Club_members.findAll({
       where: {
@@ -505,19 +502,10 @@ exports.getAllMembers = async (req, res) => {
       // console.log(element);
       let info = await User.findOne({ where: { userid_num: element } });
       userInfo.push(info.name);
-      console.log("클럽 멤버 이름조회 >>>>>>>>>>>>>", userInfo);
-      console.log("getUserInfo까지 실행 완료");
+      // console.log("클럽 멤버 이름조회 >>>>>>>>>>>>>", userInfo);
+      // console.log("getUserInfo까지 실행 완료");
 
     }
-
-
-    // getusersid.forEach(async (element) => {
-    //   // console.log(element);
-    //   let info = await User.findOne({ where: { userid_num: element } });
-    //   await userInfo.push(info.name);
-    //   console.log("userinfo >>>>>>>>>>>>>", userInfo);
-    // }
-    // );
     await res.render("clubAdmin/clubAdminTransfer", {
       data: getAllMembersShow,
       userInfo,
@@ -525,7 +513,6 @@ exports.getAllMembers = async (req, res) => {
       title,
       link,
     });
-    console.log(">>>>>>>>>>>>>>>>>",userInfo);
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -734,37 +721,15 @@ exports.getClubMembers = async (req, res) => {
     let title = "동아리 전체 회원";
     const { club_id } = req.params;
     const getMembers = await Club_members.findAll({
-      // attributes: {
-      //   exclude: ['leader_id']
-      // },
       where: {
-        // motivation: {
-        //   [Sequelize.Op.not]: null,
-        // },
-        // introduction: {
-        //   [Sequelize.Op.not]: null,
-        // },
         club_id: club_id,
         isMember: "true",
       },
-      // include: [{ model: User }],
     });
-
-    // console.log('clubAdminMemberList 실행');
-    // console.log(
-    //   "Cpublic.js 707 clubAdminMemberList getMembers >>>>>>>>>>>>>",
-    //   getMembers
-    // );
 
     const getUsers = await Club_members.findAll({
       attributes: ["userid_num"],
       where: {
-        // motivation: {
-        //   [Sequelize.Op.not]: null,
-        // },
-        // introduction: {
-        //   [Sequelize.Op.not]: null,
-        // },
         club_id: club_id,
         isMember: "true",
       },
@@ -774,10 +739,6 @@ exports.getClubMembers = async (req, res) => {
     getUsers.forEach((element) => {
       getUserInfo.push(element.dataValues.userid_num);
     });
-
-    // console.log("getUserInfo [] : ", getUserInfo);
-
-    // console.log("getUsers까지 실행 완료");
 
     let userInfo = [];
     for (const element of getUserInfo) {
