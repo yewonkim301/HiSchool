@@ -45,7 +45,7 @@ exports.postSupport = async (req, res) => {
             qa_content: content,
             secret: secret
         })
-        res.send(newSupport,{isSuccess: true}, link, title);
+        res.send(newSupport,{isSuccess: true, link, title});
     }
     catch (err) {
         console.error(err);
