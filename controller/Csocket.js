@@ -34,10 +34,10 @@ exports.connection = (io, socket) => {
         //socket.rooms에 socket.id값과 방이름 확인가능
         socket.join(roomName);
         //socket은 객체이며 원하는 값을 할당할 수 있음
-        socket.room = myNickname + yourNickname;
-        socket.user = myNickname;
+        socket.room = roomName;
+        socket.user = userName;
 
-        socket.to(roomName).emit('notice', `${myNickname}님이 입장하셨습니다`);
+        socket.to(roomName).emit('notice', `${userName}님이 입장하셨습니다`);
 
         //채팅방 목록 갱신
         if (!roomList.includes(roomName)) {
