@@ -12,7 +12,7 @@
 
          <!-- 게시물 목록 -->
          <% for(let i=0; i < getSupport.length; i++) { %>
-            <% if (getSupport[i].secret) { %>
+            <% if (getSupport[i].secret==='1') { %>
                <div class="list" onclick="showDetail('<%= getSupport[i].qa_id %>','<%= getSupport[i].secret %>','<%= getSupport[i].userid_num %>')">
                   <div class="list-title">
                      비밀글입니다.
@@ -20,6 +20,9 @@
                   <div id="<%=getSupport[i].qa_id%>" style="display: none;">
                      내용: <%= getSupport[i].qa_content %>
                      작성자: <%= getSupport[i].userid_num %>
+                     <input type="text" class="textField">
+                     <button type="button" class="btn btn-secodary" onclick="patch('<%=getSupport[i].qa_id%>')">등록</button>
+                     <button type="button" class="btn btn-primary" onclick="deleteSupport('<%=getSupport[i].qa_id%>')">삭제하기</button>
                   </div>
                </div>
 
@@ -33,6 +36,9 @@
                <div id="<%=getSupport[i].qa_id%>" style="display: none;">
                   내용: <%= getSupport[i].qa_content %>
                   작성자: <%= getSupport[i].userid_num %>
+                  <input type="text" class="textField">
+                  <button type="button" class="btn btn-secodary" onclick="patch('<%=getSupport[i].qa_id%>')">등록</button>
+                  <button type="button" class="btn btn-primary" onclick="deleteSupport('<%=getSupport[i].qa_id%>')">삭제하기</button>
                </div>
             </div>
             <% } %>
@@ -42,10 +48,12 @@
             <div class="createSupport" onclick="createSupport()"><div>+</div></div>
    </div>
    <script>
+      console.log('<%=getSupport[1].secret%>')
+
       function showDetail(qa_id,secret,userid_num){
-         if(secret==='true'){
+         if(secret==='1'){
             if('<%=userid_num%>'=== userid_num){
-               document.querySelector(`#${qu_id}`).style.display = 'block';
+               document.getElementById(`${qa_id}`).style.display='block'
 
             }else{
                alert('비밀글은 작성자만 볼 수 있습니다!');
@@ -53,11 +61,53 @@
             }
          }
          else{
-            document.querySelector(`#${qu_id}`).style.display = 'block';
+            document.getElementById(`${qa_id}`).style.display='block'
          }
       }
       function createSupport(){
          window.location.href = '/supportNewPost';
+      }
+
+       async function patch(qa_id){
+         try{
+            const res= await axios({
+            method: "PATCH",
+            url: `/support/${qa_id}`,
+            data: {
+               secret:secret,
+               content: form.content.value,
+            },
+         });
+         if(res.data.isSuccess){
+            alert('등록되었습니다');
+            window.location.href='/supportMain'
+         }
+
+            }catch(error){
+               console.log("support에서 게시글 등록 오류 > ", error);
+            };
+      }
+
+
+      
+      async function deleteSupport(qa_id){
+         try{
+            const res= await axios({
+            method: "POST",
+            url: `/supportNewPost`,
+            data: {
+               secret:secret,
+               content: form.content.value,
+            },
+         });
+         if(res.data.isSuccess){
+            alert('등록되었습니다');
+            window.location.href='/supportMain'
+         }
+
+            }catch(error){
+               console.log("support에서 게시글 등록 오류 > ", error);
+            };
       }
    </script>
 </body>

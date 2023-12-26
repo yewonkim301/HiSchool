@@ -45,7 +45,7 @@ exports.postSupport = async (req, res) => {
             qa_content: content,
             secret: secret
         })
-        res.send(newSupport,{isSuccess: true, link, title});
+        res.send({newSupport,isSuccess: true, link, title});
     }
     catch (err) {
         console.error(err);
@@ -56,11 +56,11 @@ exports.postSupport = async (req, res) => {
 // PATCH /support 고객 문의 답글
 exports.postSupportComment = async (req,res) => {
     try{
-        const {comment} = req.body;
+        const {qa_id} = req.params;
         const postSupportComment = await Support.update({
             qa_comment: comment
         })
-        res.send(postSupportComment, {isSuccess:true});
+        res.send({postSupportComment, isSuccess:true});
     }
     catch (err) {
         console.error(err);
