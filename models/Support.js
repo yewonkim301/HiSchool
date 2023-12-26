@@ -13,7 +13,7 @@ const Support = (Sequelize, DataTypes) => {
             },
             qa_comment:{
                 type: DataTypes.STRING(300),
-                allowNull: false,
+                allowNull: true,
             },
             secret: {
                 type: DataTypes.STRING(10),
