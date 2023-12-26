@@ -5,6 +5,12 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>하이스쿨 - 고객센터 메인</title>
    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+   <style>
+      .inputField{
+         border: 1px solid black;
+         width: 80%;
+      }
+   </style>
 </head>
 <body>
    <%- include('../component/header')%>
@@ -12,19 +18,41 @@
 
          <!-- 게시물 목록 -->
          <% for(let i=0; i < getSupport.length; i++) { %>
-            <% if (getSupport[i].secret) { %>
-               <div class="list" onclick="showDetail('<%= getSupport[i].qa_id %>','<%= getSupport[i].secret %>','<%= getSupport[i].userid_num %>')">
-                  <div class="list-title">
+            <% if (getSupport[i].secret==='1') { %>
+               <div class="list">
+                  <div class="list-title"  onclick="showDetail('<%= getSupport[i].qa_id %>','<%= getSupport[i].secret %>','<%= getSupport[i].userid_num %>')">
                      비밀글입니다.
+                  </div>
+                  <div id="<%=getSupport[i].qa_id%>" style="display: none;">
+                     내용: <%= getSupport[i].qa_content %>
+                     작성자: <%= getSupport[i].userid_num %>
+                     <input type="text" class="inputField">
+                     <button type="button" class="btn-sm btn-secondary" onclick="patch('<%=getSupport[i].qa_id%>')">등록</button>
+                     <%= getSupport[i].qa_comment %>
+
+                     <% if (getSupport[i].userid_num==userid_num) { %>
+                        <button type="button" class="btn btn-primary" onclick="deleteSupport('<%=getSupport[i].qa_id%>')">삭제하기</button>
+                     <% } %>
+                     
                   </div>
                </div>
 
 
 
             <% }else{ %>
-            <div class="list" onclick="showDetail('<%= getSupport[i].qa_id %>','<%= getSupport[i].secret %>','<%= getSupport[i].userid_num %>')">
-               <div class="list-title">
+            <div class="list" >
+               <div class="list-title" onclick="showDetail('<%= getSupport[i].qa_id %>','<%= getSupport[i].secret %>','<%= getSupport[i].userid_num %>')">
                   <%= getSupport[i].qa_content %>
+               </div>
+               <div id="<%=getSupport[i].qa_id%>" style="display: none;">
+                  내용: <%= getSupport[i].qa_content %>
+                  작성자: <%= getSupport[i].userid_num %>
+                  <div><input type="text" class="inputField">
+                  <button type="button" class="btn-sm btn-secondary" onclick="patch('<%=getSupport[i].qa_id%>')">등록</button></div>
+                  <%= getSupport[i].qa_comment %>
+                  <% if (getSupport[i].userid_num==userid_num) { %>
+                     <button type="button" class="btn btn-primary" onclick="deleteSupport('<%=getSupport[i].qa_id%>')">삭제하기</button>
+                  <% } %>
                </div>
             </div>
             <% } %>
@@ -34,21 +62,71 @@
             <div class="createSupport" onclick="createSupport()"><div>+</div></div>
    </div>
    <script>
+      console.log('<%=getSupport[1].secret%>')
+
       function showDetail(qa_id,secret,userid_num){
-         if(secret==='true'){
+         if(document.getElementById(`${qa_id}`).style.display=='none'){
+            if(secret==='1'){
             if('<%=userid_num%>'=== userid_num){
-               window.location.href=`/supportDetail/${qa_id}`
+               document.getElementById(`${qa_id}`).style.display='block'
+
             }else{
                alert('비밀글은 작성자만 볼 수 있습니다!');
                return;
             }
          }
          else{
-            window.location.href=`/supportDetail/${qa_id}`
+            document.getElementById(`${qa_id}`).style.display='block'
          }
+         }else{
+            document.getElementById(`${qa_id}`).style.display='none'
+         }
+         
       }
       function createSupport(){
          window.location.href = '/supportNewPost';
+      }
+
+       async function patch(qa_id){
+         const Div= document.getElementById(`${qa_id}`);
+         const content= Div.querySelector('.inputField').value;
+         console.log(content);
+         console.log(qa_id)
+         try{
+            const res= await axios({
+            method: "PATCH",
+            url: `/supportMain/${qa_id}`,
+            data:{
+               qa_comment:content,
+            }
+
+         });
+         
+            alert('등록되었습니다');
+            window.location.href='/supportMain'
+
+            }catch(error){
+               console.log("support에서 답글 등록 오류 > ", error);
+            };
+      }
+
+
+      
+      async function deleteSupport(qa_id){
+         try{
+            const res= await axios({
+            method: "DELETE",
+            url: `/supportMain/${qa_id}`,
+            
+         });
+      
+            alert('삭제되었습니다');
+            window.location.href='/supportMain'
+         
+
+            }catch(error){
+               console.log("support에서 게시글 등록 오류 > ", error);
+            };
       }
    </script>
 </body>
