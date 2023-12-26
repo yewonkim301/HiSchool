@@ -1,8 +1,9 @@
-const express = require("express");
-const app = express();
-const path = require("path");
 const http = require("http");
 const SocketIO = require("socket.io");
+const express = require("express");
+const app = express();
+const server = http.createServer(app);
+const path = require("path");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
@@ -16,13 +17,13 @@ dotenv.config();
 
 const PORT = process.env.PORT;
 
-const server = http.createServer(app);
 const io = SocketIO(server);
 
 app.set("view engine", "ejs");
 app.set("views", "./views");
 
 app.use(express.static(path.join(__dirname, "static")));
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // app.use(cors());
@@ -76,7 +77,7 @@ app.get("*", (req, res) => {
 }); // error 페이지 ?
 
 db.sequelize.sync({ force: false }).then(() => {
-  app.listen(PORT, () => {
+  server.listen(PORT, () => {
     console.log(`${PORT}번 포트에서 실행중`);
   });
 });
