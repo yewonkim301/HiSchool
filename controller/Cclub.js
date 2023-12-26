@@ -328,12 +328,12 @@ exports.getClubPost = async (req, res) => {
 
     // s3 이미지 불러오기
     console.log('Cclub 328 clubPost.image', clubPost.image);
-    const postImgOrigin = clubPost.image
+    const postImgOrigin = clubPost.image;
 
-    let postImages = []
-    
-    for(i = 0; i < postImgOrigin.length; i++) {
-      postImages.push(await getSignedFile(postImgOrigin[i]))
+    let postImages = [];
+
+    for (i = 0; i < postImgOrigin.length; i++) {
+      postImages.push(await getSignedFile(postImgOrigin[i]));
     }
 
 
@@ -366,12 +366,12 @@ exports.getClubEditPost = async (req, res) => {
       where: { club_id: club_id, post_id: post_id },
     });
 
-    const postImgOrigin = clubPost.image
+    const postImgOrigin = clubPost.image;
 
-    let postImages = []
-    
-    for(i = 0; i < postImgOrigin.length; i++) {
-      postImages.push(await getSignedFile(postImgOrigin[i]))
+    let postImages = [];
+
+    for (i = 0; i < postImgOrigin.length; i++) {
+      postImages.push(await getSignedFile(postImgOrigin[i]));
     }
 
 
@@ -402,14 +402,14 @@ exports.patchPost = async (req, res) => {
         post_id: post_id
       },
       attributes: ['image']
-    })
+    });
 
     console.log('Cclub 407 previousImage : ', previousImage);
 
-    let imageArr = previousImage.image
+    let imageArr = previousImage.image;
 
-    for(i = 0; i < image.length; i++) {
-      imageArr.push(image[i])
+    for (i = 0; i < image.length; i++) {
+      imageArr.push(image[i]);
     }
 
     console.log(imageArr);
@@ -446,7 +446,7 @@ exports.deletePost = async (req, res) => {
         post_id: post_id
       },
       attributes: ['image']
-    })
+    });
 
     const isDeleted = await Club_post.destroy({
       where: {
@@ -457,12 +457,12 @@ exports.deletePost = async (req, res) => {
 
 
 
-    let isImagesDeleted = ''
-    for(i = 0; i < postImages.image.length; i++) {
-      isImagesDeleted = await deleteFile(postImages.image[i])
+    let isImagesDeleted = '';
+    for (i = 0; i < postImages.image.length; i++) {
+      isImagesDeleted = await deleteFile(postImages.image[i]);
       console.log('Cclub 426 isImagesDeleted', isImagesDeleted);
-      if(!isImagesDeleted) {
-        break
+      if (!isImagesDeleted) {
+        break;
       }
     }
 

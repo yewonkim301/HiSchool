@@ -1,32 +1,27 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- axios CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<head>
+   <meta charset="UTF-8" />
+   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- font-awesome -->
-    <script
-      src="https://kit.fontawesome.com/6206d712ce.js"
-      crossorigin="anonymous"
-    ></script>
-    <!-- 아이콘 CDN feather -->
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.1/feather.min.js"
+   <!-- axios CDN -->
+   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
+   <!-- font-awesome -->
+   <script src="https://kit.fontawesome.com/6206d712ce.js" crossorigin="anonymous"></script>
+   <!-- 아이콘 CDN feather -->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.1/feather.min.js"
       integrity="sha512-4lykFR6C2W55I60sYddEGjieC2fU79R7GUtaqr3DzmNbo0vSaO1MfUjMoTFYYuedjfEix6uV9jVTtRCSBU/Xiw=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
+      crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-    <style>
+   <link rel="stylesheet" href="../../static/style.css">
+
+   <style>
       .heart-active {
-        color: red;
-        /* 또는 원하는 색상 */
+         color: red;
+         /* 또는 원하는 색상 */
       }
-
    </style>
 </head>
 
@@ -43,6 +38,7 @@
                   <%= data.content %>
                      <!-- <i class="like-btn" onclick="likeBtn()">좋아요</i> -->
                </p>
+
                <div class="postImages">
                   <% for(i=0; i < postImages.length; i++) { %>
                      <img src="<%= postImages[i] %>" alt="">
@@ -58,61 +54,84 @@
                <button class="btn btn-primary" onclick="editPost('<%= data.post_id %>')">수정</button>
                <% } %>
                   <div class="comment-section">
-                     <input type="text" id="commentInput" placeholder="댓글을 입력하세요">
+                     <input type="text" id="commentInput" class="textField" placeholder="댓글을 입력하세요">
                   </div>
-                  <button onclick="submitComment()">댓글등록</button>
-                  <button onclick="deletePostComment('<%=clubPostComment.comment_id %>')">댓글삭제</button>
+                  <button class="btn-sm btn-primary" onclick="submitComment()">댓글등록</button>
+
+
+                  <!-- <button class=" btn-sm btn-primary"
+                     onclick="deletePostComment('<%=clubPostComment.comment_id %>')">댓글삭제</button> -->
                   <!-- 댓글 들어갈곳 -->
                   <div class="list" id="commentList">
                      <% for(let i=0; i < clubPostComment.length; i++) { %>
                         <div class="comment comment-<%= clubPostComment[i].comment_id %>">
                            <p>
                               <%= clubPostComment[i].comment_name %>
-
                            </p>
                            <p>
                               <%= clubPostComment[i].content %>
                            </p>
+                           <!-- 시간 업데이트 하는거.. -->
+                           <div class="list-content">
+                              <% if (clubPostComment[i].updatedAt) { %>
+                                 <% var date=new Date(clubPostComment[i].updatedAt); var year=date.getFullYear(); var
+                                    month=('0' + (date.getMonth() + 1)).slice(-2); var day=('0' +
+                                    date.getDate()).slice(-2); var hours=date.getHours(); var minutes=('0' +
+                                    date.getMinutes()).slice(-2); var ampm=hours>= 12 ? '오후' : '오전';
+                                    hours = hours % 12;
+                                    hours = hours ? hours : 12; // 0 시는 12시로 표시
+                                    %>
+                                    <p>
 
-                           <% if (clubPostComment[i].userid_num===userid_num) { %>
-                              <button onclick="deletePostComment('<%= clubPostComment[i].comment_id %>')">댓글삭제</button>
-                              <button
-                                 onclick="showEditField('<%= clubPostComment[i].comment_id %>', '<%= clubPostComment[i].content %>')">댓글수정</button>
-                              <% } %>
+                                       <%= year %>-<%= month %>-<%= day %>
+                                                <%= ampm %>
+                                                   <%= hours %>시 <%= minutes %>분
+
+                                    </p>
+                           </div>
+                           <% } %>
+
+                              <% if (clubPostComment[i].userid_num===userid_num) { %>
+                                 <button
+                                    onclick="deletePostComment('<%= clubPostComment[i].comment_id %>')">댓글삭제</button>
+                                 <button
+                                    onclick="showEditField('<%= clubPostComment[i].comment_id %>', '<%= clubPostComment[i].content %>')">댓글수정</button>
+                                 <% } %>
 
 
-                                 <% let likePush='false' %>
 
-                                    <% const content=JSON.parse(JSON.stringify(clubPostCommentLike)); %>
+                                    <% let likePush='false' %>
 
-                                       <% for (let j=0; j < content[i].length; j++) { %>
-                                          <% if (content[i][j].likeid_num==userid_num) { %>
-                                             <%likePush='true'; %>
+                                       <% const content=JSON.parse(JSON.stringify(clubPostCommentLike)); %>
 
-                                                <%}%>
-
+                                          <% for (let j=0; j < content[i].length; j++) { %>
+                                             <% if (content[i][j].likeid_num==userid_num) { %>
+                                                <%likePush='true'; %>
 
                                                    <%}%>
 
 
-                                                      <% if (likePush==='false' ){%>
-                                                         <button
-                                                            onclick="toggleLike('<%= clubPostComment[i].comment_id %>', '<%= userid_num %>', '<%= clubPostCommentLike[i].length %>', this)">
-                                                            <i id="heart-icon-<%= clubPostComment[i].comment_id %>"
-                                                               class="fas fa-heart"></i><span class="like-num">
-                                                               <%= clubPostCommentLike[i].length %>
-                                                            </span>
-                                                         </button>
-                                                         <%} else if(likePush==='true' ) {%>
+                                                      <%}%>
+
+
+                                                         <% if (likePush==='false' ){%>
                                                             <button
-                                                               onclick="toggleLike('<%= clubPostComment[i].comment_id %>', '<%= userid_num %>', '<%= clubPostCommentLike[i].length %>', this)"><i
-                                                                  id="heart-icon-<%= clubPostComment[i].comment_id %>"
-                                                                  class="heart-active fas fa-heart "></i><span
-                                                                  class="like-num">
+                                                               onclick="toggleLike('<%= clubPostComment[i].comment_id %>', '<%= userid_num %>', '<%= clubPostCommentLike[i].length %>', this)">
+                                                               <i id="heart-icon-<%= clubPostComment[i].comment_id %>"
+                                                                  class="fas fa-heart"></i><span class="like-num">
                                                                   <%= clubPostCommentLike[i].length %>
                                                                </span>
                                                             </button>
-                                                            <% }%>
+                                                            <%} else if(likePush==='true' ) {%>
+                                                               <button
+                                                                  onclick="toggleLike('<%= clubPostComment[i].comment_id %>', '<%= userid_num %>', '<%= clubPostCommentLike[i].length %>', this)"><i
+                                                                     id="heart-icon-<%= clubPostComment[i].comment_id %>"
+                                                                     class="heart-active fas fa-heart "></i><span
+                                                                     class="like-num">
+                                                                     <%= clubPostCommentLike[i].length %>
+                                                                  </span>
+                                                               </button>
+                                                               <% }%>
                         </div>
                         <% } %>
                            <div id="editCommentSection" style="display: none;">
@@ -220,11 +239,11 @@
                      commentList.appendChild(newCommentDiv);
                      console.log(contentParagraph); // 클래스를 추가한 후 요소를 콘솔에 출력
 
-              newCommentDiv.appendChild(nameParagraph);
-              newCommentDiv.appendChild(contentParagraph);
-              // newCommentLike.innerHTML = `<i id="${comment_id}" class= "like-btn" onclick = "likeBtn()" > 좋아요</i > `;
-              console.log(newCommentLike);
-              newCommentDiv.appendChild(newCommentLike);
+                     newCommentDiv.appendChild(nameParagraph);
+                     newCommentDiv.appendChild(contentParagraph);
+                     // newCommentLike.innerHTML = `<i id="${comment_id}" class= "like-btn" onclick = "likeBtn()" > 좋아요</i > `;
+                     console.log(newCommentLike);
+                     newCommentDiv.appendChild(newCommentLike);
 
                      location.reload();
                   })
@@ -336,4 +355,3 @@
 
       <script>feather.replace()</script>
 </body>
-
