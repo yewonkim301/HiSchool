@@ -51,7 +51,8 @@
       console.log('<%=getSupport[1].secret%>')
 
       function showDetail(qa_id,secret,userid_num){
-         if(secret==='1'){
+         if(document.getElementById(`${qa_id}`).style.display=='none'){
+            if(secret==='1'){
             if('<%=userid_num%>'=== userid_num){
                document.getElementById(`${qa_id}`).style.display='block'
 
@@ -63,6 +64,10 @@
          else{
             document.getElementById(`${qa_id}`).style.display='block'
          }
+         }else{
+            document.getElementById(`${qa_id}`).style.display='none'
+         }
+         
       }
       function createSupport(){
          window.location.href = '/supportNewPost';
@@ -73,15 +78,11 @@
             const res= await axios({
             method: "PATCH",
             url: `/support/${qa_id}`,
-            data: {
-               secret:secret,
-               content: form.content.value,
-            },
+
          });
-         if(res.data.isSuccess){
+         
             alert('등록되었습니다');
             window.location.href='/supportMain'
-         }
 
             }catch(error){
                console.log("support에서 게시글 등록 오류 > ", error);
@@ -94,16 +95,13 @@
          try{
             const res= await axios({
             method: "POST",
-            url: `/supportNewPost`,
-            data: {
-               secret:secret,
-               content: form.content.value,
-            },
+            url: `/supportNewPost/${qa_id}`,
+            
          });
-         if(res.data.isSuccess){
-            alert('등록되었습니다');
+      
+            alert('삭제되었습니다');
             window.location.href='/supportMain'
-         }
+         
 
             }catch(error){
                console.log("support에서 게시글 등록 오류 > ", error);
