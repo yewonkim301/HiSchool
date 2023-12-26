@@ -8,7 +8,7 @@ const { isNotLoggedIn, isLoggedIn, preventIndex } = require("./../middleware/log
 
 router.post("/s3upload", controllerUser.s3upload);
 
-router.post("/s3MultipleSignedUrl", controllerUser.s3MultipleSignedUrl)
+router.post("/s3MultipleSignedUrl", controllerUser.s3MultipleSignedUrl);
 
 router.get("/", preventIndex, (req, res) => {
   res.render("index");
@@ -308,37 +308,43 @@ router.post(
   controllerPublic.createPostCommentLike
 );
 
+// GET /publicEditPost/:post_id
+router.get("/publicEditPost/:post_id", isLoggedIn, controllerPublic.getPublicEditPost);
+
+// PATCH /publicEditPost/:post_id
+router.patch("/publicEditPost/:post_id", isLoggedIn, controllerPublic.patchPublicEditPost);
+
 // PATCH /publicPostDetail/:post_id 게시글 수정
-router.patch(
-  "/publucPostDetail/:post_id",
-  isLoggedIn,
-  controllerPublic.patchPost
-);
+// router.patch(
+//   "/publicPostDetail/:post_id",
+//   isLoggedIn,
+//   controllerPublic.patchPost
+// );
 
 // PATCH /publicPostDetail/:post_id/:comment_id 게시글 댓글 수정
 router.patch(
-  "/publucPostDetail/:post_id/:comment_id",
+  "/publicPostDetail/:post_id/:comment_id",
   isLoggedIn,
   controllerPublic.patchPostComment
 );
 
 // PATCH /publicPostDetail/:post_id/:comment_id 게시글 댓글 라이크 수정
 router.patch(
-  "/publucPostDetail/:post_id",
+  "/publicPostDetail/:post_id",
   isLoggedIn,
   controllerPublic.patchPostCommentLike
 );
 
 // DELETE /publicPostDetail/:post_id 특정 게시물 삭제
 router.delete(
-  "/publucPostDetail/:post_id",
+  "/publicPostDetail/:post_id",
   isLoggedIn,
   controllerPublic.deletePost
 );
 
 // DELETE /publicPostDetail/:post_id/:comment_id 게시글 댓글 삭제
 router.delete(
-  "/publucPostDetail/:post_id/:comment_id",
+  "/publicPostDetail/:post_id/:comment_id",
   isLoggedIn,
   controllerPublic.deletePostComment
 );
@@ -376,7 +382,7 @@ router.get("/myclubMain/:club_id", isLoggedIn, controllerClub.getMyclubMain);
 router.get("/supportMain", isLoggedIn, controllerSupport.getSupport);
 
 // GET /supportNewPost 고객 문의 등록 페이지 로드
-router.get("/supportNewPost", isLoggedIn, controllerSupport.getNewSupport)
+router.get("/supportNewPost", isLoggedIn, controllerSupport.getNewSupport);
 
 // POST /supportNewPost 고객 문의 등록
 router.post("/supportNewPost", isLoggedIn, controllerSupport.postSupport);

@@ -11,9 +11,34 @@
 
 <body>
    <%- include('../component/header')%>
-   <div class="container">
-      <h1>자유게시판</h1>
-   </div>
+
+
+      <div class="container">
+         <button onclick="createPost()" id="plus-button" class="plus-button">+</button>
+         <!-- 게시물 목록 -->
+         <% for(let i=0; i < data.length; i++) { %>
+            <div class="list" onclick="showDetail('<%= data[i].post_id %>')">
+               <div class="list-title">
+                  <%= data[i].title %>
+               </div>
+               <div class="list-content">
+                  <%= data[i].content %>
+               </div>
+            </div>
+            <% } %>
+      </div>
+      <script>
+
+         function showDetail(post_id) {
+            window.location.href = `/publicPostDetail/${post_id}`;
+         }
+
+         function createPost() {
+            console.log("게시글 생성 요청 보냄", `/publicNewPost`);
+            window.location.href = `/publicNewPost`;
+         }
+
+      </script>
 </body>
 
 </html>
