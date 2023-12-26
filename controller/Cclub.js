@@ -267,12 +267,30 @@ exports.getClubPost = async (req, res) => {
     );
     // 게시글
     const clubPost = await Club_post.findOne({
+      attributes: [
+        "post_id",
+        "title",
+        "content",
+        "image",
+        "name",
+        "updatedAt",
+        "club_id",
+      ],
       where: {
+        club_id: club_id,
         post_id: post_id,
       },
     });
     // 게시글에 달린 댓글들
     const clubPostComment = await Club_post_comment.findAll({
+      attributes: [
+        "comment_id",
+        "comment_name",
+        "content",
+        "userid_num",
+        "updatedAt",
+        "post_id",
+      ],
       where: {
         post_id: post_id,
       },
