@@ -768,8 +768,8 @@ exports.getClubMembers = async (req, res) => {
       // console.log(element);
       let info = await User.findOne({ where: { userid_num: element } });
       userInfo.push(info.name);
-      // console.log("클럽 멤버 이름조회 >>>>>>>>>>>>>", userInfo);
-      // console.log("getUserInfo까지 실행 완료");
+      console.log("클럽 멤버 이름조회 >>>>>>>>>>>>>", userInfo);
+      console.log("getUserInfo까지 실행 완료");
 
       if (!getMembers) {
         res.render("clubAdmin/clubAdminMemberList");
