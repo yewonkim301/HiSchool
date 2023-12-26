@@ -18,8 +18,8 @@
 
 
 <body>
+  <%- include('../component/header')%>
    <div class="container">
-     <%- include('../component/header')%>
       <input  name="userid_num" id="userid_num">
      <% for(let i=0; i<data.length;i++){ %>
        <div class="content">
@@ -31,9 +31,11 @@
       <!-- 추가 회원 카드 반복 -->
        </div>
        <% } %>
-       </div>
+       
        <button type="button" class="btn btn-secondary" onclick="transferClubLeader()">위임하기</button>
    </div>
+
+  </div>
   <script>
     console.log('<%=userInfo%>')
 

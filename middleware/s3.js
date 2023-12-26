@@ -58,7 +58,7 @@ module.exports.getSignedFile = async function getSignedFile(data) {
 
 
 module.exports.uploadMultipleSignedUrl = async function uploadMultipleSignedUrl(files) {
-  // console.log('file signedUrl 시작');
+  console.log('uploadMultipleSignedUrl 시작');
   const url = [];
   for (let i = 0; i < files.length; i++) {
     const params = {
@@ -66,11 +66,11 @@ module.exports.uploadMultipleSignedUrl = async function uploadMultipleSignedUrl(
       Key: files[i].name,
     };
     const command = new PutObjectCommand(params);
-    // console.log('putObjectCommand 시작');
+    console.log('uploadMultipleSignedUrl putObjectCommand 시작');
     const fileUrl = await getSignedUrl(s3, command, {
-      expiresIn: 3600,
+      expiresIn: 100,
     });
-    // console.log('getSignedUrl 성공');
+    console.log('uploadMultipleSignedUrl 성공');
     url.push(fileUrl);
   }
   return url;
@@ -79,7 +79,7 @@ module.exports.uploadMultipleSignedUrl = async function uploadMultipleSignedUrl(
 
 
 module.exports.getMultipleSignedUrl = async function getMultipleSignedUrl(files) {
-  // console.log('file signedUrl 시작');
+  console.log('getMultipleSignedUrl 시작');
   const url = [];
   for (let i = 0; i < files.length; i++) {
     const params = {
@@ -87,11 +87,11 @@ module.exports.getMultipleSignedUrl = async function getMultipleSignedUrl(files)
       Key: files[i].name,
     };
     const command = new GetObjectCommand(params);
-    // console.log('putObjectCommand 시작');
+    console.log('getMultipleSigendUrl putObjectCommand 시작');
     const fileUrl = await getSignedUrl(s3, command, {
-      expiresIn: 10,
+      expiresIn: 100,
     });
-    // console.log('getSignedUrl 성공');
+    console.log('getMultipleSigendUrl getSignedUrl 성공');
     url.push(fileUrl);
   }
   return url;

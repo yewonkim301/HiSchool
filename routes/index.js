@@ -375,8 +375,11 @@ router.get("/myclubMain/:club_id", isLoggedIn, controllerClub.getMyclubMain);
 // GET /supportMain 고객센터 페이지 로드
 router.get("/supportMain", isLoggedIn, controllerSupport.getSupport);
 
-// POST /supportMain 고객 문의 등록
-router.post("/supportMain", isLoggedIn, controllerSupport.postSupport);
+// GET /supportNewPost 고객 문의 등록 페이지 로드
+router.get("/supportNewPost", isLoggedIn, controllerSupport.getNewSupport)
+
+// POST /supportNewPost 고객 문의 등록
+router.post("/supportNewPost", isLoggedIn, controllerSupport.postSupport);
 
 // PATCH /supportMain 고객 문의 답글
 router.patch("/supportMain", isLoggedIn, controllerSupport.postSupportComment);

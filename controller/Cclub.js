@@ -15,6 +15,7 @@ const jwt = require("jsonwebtoken");
 const {
   uploadMultipleSignedUrl,
   getMultipleSignedUrl,
+  getSignedFile
 } = require("./../middleware/s3");
 
 // Club
@@ -323,6 +324,22 @@ exports.getClubPost = async (req, res) => {
       // console.log("@@@@@ clubPostCommentLike", clubPostCommentLike);
     }
 
+
+    // s3 이미지 불러오기
+    console.log('Cclub 328 clubPost.image', clubPost.image);
+    const postImgOrigin = clubPost.image
+
+    let postImages = []
+    
+    for(i = 0; i < postImgOrigin.length; i++) {
+      postImages.push(await getSignedFile(postImgOrigin[i]))
+    }
+
+
+    console.log('Cclub 332 postImg', postImages);
+
+
+
     res.render("myclub/myclubPostDetail", {
       data: clubPost,
       clubPostComment,
@@ -331,6 +348,7 @@ exports.getClubPost = async (req, res) => {
       userid_num,
       title: clubPost.title,
       link,
+      postImages,
     });
   } catch (err) {
     console.error(err);

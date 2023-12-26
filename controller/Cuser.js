@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const { User } = require("../models/Index");
 
 const dotenv = require("dotenv").config();
-const { getSignedFileUrl } = require("../middleware/s3");
+const { getSignedFileUrl, uploadMultipleSignedUrl,  getSignedFile } = require("../middleware/s3");
 
 
 exports.getRegister = async (req, res, next) => {
@@ -136,20 +136,23 @@ exports.s3upload = async (req, res) => {
 exports.s3MultipleSignedUrl = async (req, res) => {
   if (req.method === "POST") {
     try {
-      const [ files ] = req.body
-      console.log(files)
+      const payload = req.body
+      console.log('Cuser 140 payload', payload)
 
-      for(i = 0; i < files.length; i++){
-        let { name, type } = files[i];
-        const fileParams = {
-          name: name,
-          type: type,
-        };
-        // console.log("fileParams : ", fileParams);
+      const signedUrl = await uploadMultipleSignedUrl(payload);
+        console.log("Cuser 151 signedUrl : ", signedUrl);
 
-        const signedUrl = await getSignedFileUrl(fileParams);
-        // console.log("signedUrl : ", signedUrl);
-      }
+      // for(i = 0; i < files.length; i++){
+      //   let { name, type } = files[i];
+      //   const fileParams = {
+      //     name: name,
+      //     type: type,
+      //   };
+      //   console.log("Cuser 148 fileParams : ", payload);
+
+      //   const signedUrl = await uploadMultipleSignedUrl(payload);
+      //   console.log("Cuser 151 signedUrl : ", signedUrl);
+      // }
 
       return res.send(signedUrl);
     } catch (e) {
