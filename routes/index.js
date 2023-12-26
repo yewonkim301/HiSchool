@@ -8,6 +8,8 @@ const { isNotLoggedIn, isLoggedIn, preventIndex } = require("./../middleware/log
 
 router.post("/s3upload", controllerUser.s3upload);
 
+router.post("/s3MultipleSignedUrl", controllerUser.s3MultipleSignedUrl)
+
 router.get("/", preventIndex, (req, res) => {
   res.render("index");
 });
@@ -373,8 +375,11 @@ router.get("/myclubMain/:club_id", isLoggedIn, controllerClub.getMyclubMain);
 // GET /supportMain 고객센터 페이지 로드
 router.get("/supportMain", isLoggedIn, controllerSupport.getSupport);
 
-// POST /supportMain 고객 문의 등록
-router.post("/supportMain", isLoggedIn, controllerSupport.postSupport);
+// GET /supportNewPost 고객 문의 등록 페이지 로드
+router.get("/supportNewPost", isLoggedIn, controllerSupport.getNewSupport)
+
+// POST /supportNewPost 고객 문의 등록
+router.post("/supportNewPost", isLoggedIn, controllerSupport.postSupport);
 
 // PATCH /supportMain 고객 문의 답글
 router.patch("/supportMain", isLoggedIn, controllerSupport.postSupportComment);

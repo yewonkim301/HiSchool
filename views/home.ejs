@@ -19,7 +19,6 @@
         <% if(typeof myClubs !== 'undefined' && myClubs) { %> 
           <% if(myClubs.length == 0) { %>
             <span>가입한 동아리가 없어요</span>
-            <button class="btn btn-primary">동아리 구경하기</button>
             <% } else { %>
               <% for(i = 0; i < myClubs.length; i++) { %>
               <a class="list" href="/myclubMain/<%= myClubs[i].club_id %>">

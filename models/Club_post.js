@@ -22,6 +22,10 @@ const ClubPost = (Sequelize, DataTypes) => {
         type: DataTypes.JSON,
         allowNull: true,
       },
+      userid_num: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
       name: {
         type: DataTypes.STRING(100),
         allowNull: false,

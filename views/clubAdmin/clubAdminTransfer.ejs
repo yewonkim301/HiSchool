@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>회원 목록</title>
+  
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="/clubAdminMemberList.css">
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -17,8 +18,8 @@
 
 
 <body>
+  <%- include('../component/header')%>
    <div class="container">
-     <%- include('../component/header')%>
       <input  name="userid_num" id="userid_num">
      <% for(let i=0; i<data.length;i++){ %>
        <div class="content">
