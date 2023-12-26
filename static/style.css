@@ -33,7 +33,7 @@
 *::before,
 *::after {
   box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent; 
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Reapply the pointer cursor for anchor tags */
@@ -183,6 +183,19 @@ input[type="number"] {
     BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI",
     "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+
+  h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-gray-800);
+    line-height: 3rem;
+  }
+
+  p {
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--color-gray-500);
+  }
 }
 
 body {
@@ -200,7 +213,7 @@ body {
   justify-content: center;
   height: fit-content;
   margin-top: 100px;
-  margin-bottom: 300px;
+  margin-bottom: 150px;
 }
 
 .row2 {
@@ -228,9 +241,10 @@ body {
 .btn {
   cursor: pointer;
   width: 100%;
-  font-size: 16px;
+  font-size: 1.2rem;
+  font-weight: 600;
   text-align: center;
-  padding: var(--spacing-1) var(--spacing-2);
+  padding: 1rem;
 }
 
 .btn-sm {
@@ -301,7 +315,7 @@ form {
 label {
   padding: 4px 0;
   color: var(--color-gray-400);
-  font-size: 14px;
+  font-size: 1rem;
   font-weight: 600;
 }
 
@@ -318,13 +332,14 @@ label {
   align-items: center;
   gap: 4px;
   color: var(--color-gray-400);
-  font-size: 14px;
+  font-size: 0.9rem;
 }
 
 .textField {
-  padding: var(--spacing-1) var(--spacing-2);
+  padding: 16px 20px;
   background-color: white;
   border: solid 1px var(--color-gray-200);
+  font-size: 1rem;
   border-radius: 4px;
   width: 100%;
   color: var(--color-gray-500);
@@ -334,8 +349,17 @@ label {
 
 .textField:focus {
   border: solid 1.5px var(--color-primary-500);
-  transition: all 0.5s;
+  transition: all 0.2s;
   box-shadow: 0px 2px 8px 0px rgba(47, 128, 237, 0.2);
+}
+
+.textField:disabled {
+  border: solid 1.5px var(--color-gray-100);
+}
+
+
+.textField .error {
+  border: solid 1.5px var(--color-red-500)
 }
 
 .file-upload-input {
@@ -407,20 +431,23 @@ input[type="checkbox"]:checked + label:before {
   position: fixed;
   top: 0;
   left: 0;
-  height: 70px;
+  height: fit-content;
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: white;
+  background-color: #ffffffbc;
   z-index: 500;
   /* padding: 0 20px; */
+  padding: 4px 0;
   box-sizing: border-box;
-  border-bottom: 1px solid var(--color-gray-300);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border-bottom: 1px solid var(--color-gray-100);
 }
 
 .header i {
-  color: var(--color-gray-400)
+  color: var(--color-gray-400);
 }
 
 .navbar {
@@ -428,12 +455,21 @@ input[type="checkbox"]:checked + label:before {
   width: 100%;
   justify-content: space-between;
   z-index: 500;
+  align-items: center;
 }
+
 .menu-bar {
   display: flex;
   align-items: center;
+  margin: 0 auto;
   gap: 20px;
   color: var(--color-gray-500);
+
+  float: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .menu-bar a:hover {
@@ -448,6 +484,8 @@ input[type="checkbox"]:checked + label:before {
   width: fit-content;
   /* flex-basis: 200px; */
   justify-content: end;
+  /* flex-grow: 1;
+  text-align: center; */
 }
 
 .header-profile.desktop {
@@ -470,26 +508,25 @@ input[type="checkbox"]:checked + label:before {
   justify-content: center;
 }
 
-.logo {
-  cursor: pointer;
-  user-select: none;
-  font-size: large;
-  font-weight: 700;
+.title {
+  font-size: 1rem;
+  font-weight: 600;
   display: flex;
   align-self: center;
-  /* flex-basis: content; */
-  flex-grow: 0;
-  flex-basis: 200px;
+  color: var(--color-gray-500)
 }
 
 .menu-icon,
 .right-icon,
 .close-menu {
   cursor: pointer;
-  padding: 16px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
 }
 
-
+.header .right-icon {
+}
 
 .close-menu {
   position: relative;
@@ -564,7 +601,7 @@ input[type="checkbox"]:checked + label:before {
 
 @media screen and (max-width: 800px) {
   .header {
-    height: 70px;
+    height: fit-content;
   }
   .menu-bar {
     display: none;
@@ -575,14 +612,21 @@ input[type="checkbox"]:checked + label:before {
   .header-profile.desktop {
     display: none;
   }
+  .title {
+    float: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
   .logo {
-    flex-basis: content;
-    color: var(--color-gray-700);
+    display: none;
   }
 }
 @media screen and (min-width: 801px) {
   .header {
-    padding: 0 20px;
+    padding: 12px 20px;
   }
   .menu-icon,
   .settings-icon,
@@ -602,6 +646,9 @@ input[type="checkbox"]:checked + label:before {
   .right-icon {
     display: none;
   }
+  .title {
+    display: none;
+  }
 }
 
 /*# 리스트 목록 스타일 ( 제목, 내용 / 부가내용 X (날짜, 시간등) */
@@ -609,7 +656,7 @@ input[type="checkbox"]:checked + label:before {
 .list-container {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  /* gap: 12px; */
 }
 .list {
   display: flex;
@@ -619,16 +666,18 @@ input[type="checkbox"]:checked + label:before {
   align-items: flex-start;
   gap: 8px;
   border-radius: 4px;
-  border: 1px solid #eaeaea;
+  border-bottom: 1px solid var(--color-gray-200);
+  cursor: pointer;
   /* default_shadow */
-  box-shadow: 0px 1px 8px 0px rgba(19, 19, 19, 0.1);
+  /* box-shadow: 0px 1px 8px 0px rgba(19, 19, 19, 0.1); */
 }
 .list-title {
-  font-size: var(--spacing-2);
+  font-size: 1rem;
+  font-weight: 600;
   color: var(--color-gray-600);
 }
 .list-content {
-  font-size: var(--spacing-3);
+  font-size: 0.9rem;
   color: var(--color-gray-400);
 }
 
@@ -691,6 +740,20 @@ input[type="checkbox"]:checked + label:before {
   text-align: center;
 }
 
+
+.menuContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.menuItem {
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 16px 12px;
+  color: var(--color-gray-600)
+}
+
 /* 여기는 피그마 input 끝 */
 
 /* 여기는 피그마 radio 시작 */
@@ -744,17 +807,14 @@ input[type="checkbox"]:checked + label:before {
   margin: 0 auto;
 }
 
-.title,
+
 .content,
 .thumbs-up,
 .timestamp {
   margin-bottom: 10px;
 }
 
-.title {
-  font-size: 24px;
-  color: #333333;
-}
+
 
 .content {
   font-size: 16px;

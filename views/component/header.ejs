@@ -13,7 +13,7 @@
         </div>
         <% } else { %>
         <div class="menu-icon" onclick="history.back()">
-          <i data-feather="chevron-left"></i>
+          <i data-feather="chevron-left" style="color: var(--color-gray-500)"></i>
         </div>
         <% } %>
 
@@ -21,14 +21,17 @@
           <i data-feather="x"></i>
         </div>
 
+        <div class="logo">
+          <img src="/icons/hi_logo.svg" alt="" width="40" onclick="toPage('/Home')">
+        </div>
+
         <% if(typeof title !== 'undefined' && title) { %>
-        <div class="logo"><%= title %></div>
+        <div class="title"><%= title %></div>
         <% } else { %>
-        <div class="logo" onclick="toPage('/Home')">하이스쿨</div>
+        <div class="title" onclick="toPage('/Home')">하이스쿨</div>
         <% } %>
 
         <div class="menu-bar">
-          <a href="/home"><div>홈</div></a>
           <a href="/publicPostMain"><div>자유게시판</div></a>
           <a href="/mypageMain"><div>마이페이지</div></a>
           <a href="#"><div>고객센터</div></a>
@@ -64,7 +67,7 @@
         </div>
         <% } %>
 
-        <div class="right-icon" style="width: 24px; height: 24px">
+        <div class="right-icon">
         </div>
       </nav>
     </header>

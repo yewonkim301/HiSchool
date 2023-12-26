@@ -16,6 +16,7 @@
    <div class="container">
          <button onclick="createPost()" id="plus-button" class="plus-button">+</button>
          <!-- 게시물 목록 -->
+         <div class="list-container">
          <% for(let i=0; i < data.length; i++) { %>
             <div class="list" onclick="showDetail('<%= data[i].post_id %>')">
                <div class="list-title">
@@ -26,6 +27,7 @@
                </div>
             </div>
             <% } %>
+         </div>
    </div>
             <script>
                const club_id = "<%= club_id %>";
