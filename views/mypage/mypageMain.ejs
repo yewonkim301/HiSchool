@@ -6,23 +6,17 @@
     <title>마이페이지</title>
     <link rel="stylesheet" href="/style.css" />
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <style>
-
-    </style>
+    <style></style>
   </head>
 
   <body>
-    <div class="container" style="margin-bottom: 300px;">
-      <%- include('../component/header')%>
+    <%- include('../component/header')%>
+    <div class="container">
       <div class="profile-header" onclick="changeProfileImg()">
         <% if (signedFile) { %>
         <img src="<%= signedFile %>" alt="프로필 이미지" width="50" />
         <% } else { %>
-        <img
-          src="./icons/profile_img.png"
-          alt="프로필 이미지"
-          width="50"
-        />
+        <img src="./icons/profile_img.png" alt="프로필 이미지" width="50" />
         <% } %>
       </div>
 
@@ -122,7 +116,9 @@
         </button>
         <% } %>
 
-        <button class="btn btn-primary" onclick="handleUpdate()">수정하기</button>
+        <button class="btn btn-primary" onclick="handleUpdate()">
+          수정하기
+        </button>
       </div>
     </div>
 
@@ -137,16 +133,22 @@
           url: "/mypageMain",
         });
 
-        console.log(result);
-
-        confirm("탈퇴 실행할까요?");
-
-        if (result.isDeleted) {
+        if (result.data.isDeleted) {
           alert("회원 탈퇴 완료");
-          console.log("회원 탈퇴 완료", result);
+          handleLogout();
+          document.location.href = "/";
         } else {
           alert("회원 탈퇴 실패");
         }
+      }
+
+      async function handleLogout() {
+        const result = await axios({
+          method: "GET",
+          url: "/logout",
+        });
+        console.log(result);
+        document.location.href = "/";
       }
     </script>
 
@@ -223,11 +225,9 @@
         }
       }
 
-
-
       async function handleUpdate() {
         const uploadedFileOriginUrl = await uploadImgClient();
-        console.log('따끈따끈한 업로드된 파일 경로', uploadedFileOriginUrl);
+        console.log("따끈따끈한 업로드된 파일 경로", uploadedFileOriginUrl);
 
         const name = form.name.value;
         const school = form.school.value;
@@ -238,12 +238,12 @@
         let profile_img;
 
         if (uploadedFileOriginUrl) {
-          console.log('presignedURL 있어요')
-          const parts = uploadedFileOriginUrl.split('/');
-          profile_img = parts[parts.length - 1].split('?')[0];
+          console.log("presignedURL 있어요");
+          const parts = uploadedFileOriginUrl.split("/");
+          profile_img = parts[parts.length - 1].split("?")[0];
         } else {
-          console.log('presignedURL 없어요')
-          profile_img = ''
+          console.log("presignedURL 없어요");
+          profile_img = "";
         }
 
         console.log("profile_img", profile_img);

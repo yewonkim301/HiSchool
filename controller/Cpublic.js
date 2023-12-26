@@ -11,7 +11,7 @@ const jwt = require("jsonwebtoken");
 const { OP } = require("sequelize");
 const { Sequelize } = require("sequelize");
 const { isLoggedIn } = require("../middleware/loginCheck");
-const { deleteFile, getSignedFile } = require('../middleware/s3')
+const { deleteFile, getSignedFile } = require("../middleware/s3");
 
 // ===== publicPost =====
 
@@ -652,16 +652,14 @@ exports.getClubMembersApplyList = async (req, res) => {
 
     let userInfo = [];
 
-
-
-    if(getusersid == []) {
+    if (getusersid == []) {
       getusersid.forEach(async (element) => {
         // console.log(element);
         let info = await User.findOne({ where: { userid_num: element } });
         // console.log("info >>>>>>>>", info.nickname);
         userInfo.push(info.name);
         // console.log("userinfo >>>>>>>>>>>>>", userInfo);
-  
+
         res.render("clubAdmin/clubAdminApplyList", {
           getApplyList,
           userInfo,
@@ -671,7 +669,6 @@ exports.getClubMembersApplyList = async (req, res) => {
         });
       });
     } else {
-
       res.render("clubAdmin/clubAdminApplyList", {
         getApplyList,
         userInfo,
@@ -680,7 +677,6 @@ exports.getClubMembersApplyList = async (req, res) => {
         link,
       });
     }
-    
 
     // console.log("getuserid >>>>>>>>>>>>>", getusersid);
   } catch (err) {
@@ -951,21 +947,39 @@ exports.getMyPage = async (req, res) => {
 
 // DELETE /mypageMain/
 exports.deleteMyID = async (req, res) => {
+  console.log("Cpublic 954 deleteMyID 실행");
   try {
     const { userid, userid_num } = jwt.verify(
       req.cookies.jwt,
       process.env.JWT_SECRET
     );
-    const destroyMyID = await User.destroy({
+
+    const profileImg = await User.findOne({
       where: {
         userid_num: userid_num,
       },
+      attributes: ["profile_img"],
     });
 
-    if (destroyMyID) {
-      res.send({ isDeleted: true });
+    console.log("Cpublic 969 profileImg", profileImg.profile_img);
+
+    const isDeleted = await deleteFile(profileImg.profile_img);
+    console.log("Cpublic 968 isDeleted : ", isDeleted);
+
+    if (isDeleted) {
+      const destroyMyID = await User.destroy({
+        where: {
+          userid_num: userid_num,
+        },
+      });
+
+      if (destroyMyID) {
+        res.send({ isDeleted: true });
+      } else {
+        res.send({ isDeleted: false });
+      }
     } else {
-      res.send({ isDeleted: false });
+      console.error('S3 이미지 삭제 실패')
     }
   } catch (err) {
     console.error(err);
@@ -981,19 +995,20 @@ exports.updateMyPageMain = async (req, res) => {
       req.cookies.jwt,
       process.env.JWT_SECRET
     );
-    const { name, school, phone, birthday, profile_img, grade, classid } = req.body;
+    const { name, school, phone, birthday, profile_img, grade, classid } =
+      req.body;
 
-    if(profile_img) {
+    if (profile_img) {
       // 기존에 테이블에 있던 S3의 이미지 삭제 명령
       const extProfileImg = await User.findOne({
         where: {
           userid_num: userid_num,
-        }
-      })
+        },
+      });
       // console.log('Cpublic 1015 찾은 프로필 이미지 : ', extProfileImg, extProfileImg.profile_img);
 
-      if(extProfileImg.profile_img) {
-        deleteFile(extProfileImg.profile_img)
+      if (extProfileImg.profile_img) {
+        deleteFile(extProfileImg.profile_img);
       }
     }
 
@@ -1010,18 +1025,17 @@ exports.updateMyPageMain = async (req, res) => {
       {
         where: {
           userid_num: userid_num,
-        }
+        },
       }
     );
     if (update) {
-      res.send({ isUpdated: true, msg: '프로필 수정 완료' });
+      res.send({ isUpdated: true, msg: "프로필 수정 완료" });
     }
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
   }
 };
-
 
 // // PATCH /mypageMainProfile // 프로필 사진 수정
 // exports.updateMyPageProfileImg = async(req, res) => {
@@ -1032,7 +1046,6 @@ exports.updateMyPageMain = async (req, res) => {
 //     res.send("Internal Server Error!");
 //   }
 // }
-
 
 // GET /mypageMainProfile/:nickname 내 페이지 가져오기 ver.닉네임
 exports.getMyPageProfile = async (req, res) => {
@@ -1050,16 +1063,19 @@ exports.getMyPageProfile = async (req, res) => {
     const clubProfile = await Club_members.findOne({
       where: {
         userid_num: myPageMainProfile.userid_num,
-      }
-    })
+      },
+    });
 
     // console.log('Cpublic 1056 : ', myPageMainProfile.profile_img);
 
-    const profileImgOrigin = myPageMainProfile.profile_img
+    const profileImgOrigin = myPageMainProfile.profile_img;
     const profileImg = await getSignedFile(profileImgOrigin);
 
-
-    res.render("mypage/mypageProfile", { data: myPageMainProfile, clubProfile, profileImg });
+    res.render("mypage/mypageProfile", {
+      data: myPageMainProfile,
+      clubProfile,
+      profileImg,
+    });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
