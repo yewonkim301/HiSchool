@@ -29,9 +29,9 @@
     <%- include('../component/header')%>
     <main class="container">
         <div class="search-bar">
-          <input type="text" class="search-input" id="searchText" placeholder="플레이스홀더">
+          <input type="text" class="search-input" id="searchText" placeholder="이름, 키워드 검색">
 
-            <button type="button" onclick="searchName()" class="search-icon">
+            <button type="button" onclick="searchName()" class="search-icon" id="search">
               <i data-feather="search" ></i>
             </button>
       
@@ -92,6 +92,11 @@
             <span style="display: none;"  class="club_id"><%=data[i].club_id%>
             </span>
           </div>
+          <div class="keyword">
+            <%=data[i].keyword %>
+            <span style="display: none;"  class="club_id"><%=data[i].club_id%>
+            </span>
+          </div>
 
       </div>
         <% } %>
@@ -107,12 +112,36 @@
    
   
   <script>
+
+  const selectBox = document.getElementById('selectedLocation');
+  const mainDiv = document.getElementById('searchResult');
+  const seachText = document.getElementById('searchText');
+  const listArray = document.getElementsByClassName('list');
+
+  
+  for(i=0; i<listArray.length; i++){
+    let keywordDiv=listArray[i].querySelector('.keyword');
+    let keyword=keywordDiv.innerText;
+    keywordDiv.innerText="";
+    let keywordsArray = keyword.split(',');
+    for (j=0;j<keywordsArray.length; j++){
+      keywordDiv.innerHTML+=`<span class="hashtag">#${keywordsArray[j]}</span>`
+    }
+  }
  
     
 
+    function handleEnterKey(event){
+      if(event.keyCode === 13){
+        event.preventDefault();
+        document.getElementById('search').click();
+      }
+    }
+
+    document.addEventListener('keydown',handleEnterKey);
+  
     function showDetail(event) {
       let clickedDiv = event.target;
-      console.log('clickedDiv >',clickedDiv);
 
       let selectedClub = clickedDiv.querySelector('.club_id');
       let club_id = selectedClub.innerText;
@@ -125,10 +154,7 @@
   }
 
   
-  const selectBox = document.getElementById('selectedLocation');
-  const mainDiv = document.getElementById('searchResult');
-  const seachText = document.getElementById('searchText');
-  const listArray = document.getElementsByClassName('list');
+  
 
   function searchName(){
     const text = seachText.value;
@@ -136,7 +162,8 @@
     for(i=0; i<listArray.length; i++){
 
       let titleDiv =listArray[i].querySelector('.list-title');
-        if(titleDiv.innerText.includes(text)){
+      let keywordDiv = listArray[i].querySelector('.keyword');
+        if((titleDiv.innerText.includes(text))||(keywordDiv.innerText.includes(text))){
           listArray[i].style.display='block'
         }else{
           listArray[i].style.display='none'
