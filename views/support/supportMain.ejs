@@ -9,10 +9,9 @@
 <body>
    <%- include('../component/header')%>
    <div class="container">
-      <%- include('../component/header') %>
-         <button onclick="createPost()" id="plus-button" class="plus-button">+</button>
+
          <!-- 게시물 목록 -->
-         <% for(let i=0; i < data.length; i++) { %>
+         <% for(let i=0; i < getSupport.length; i++) { %>
             <% if (getSupport[i].secret) { %>
                <div class="list" onclick="showDetail('<%= getSupport[i].qa_id %>','<%= getSupport[i].secret %>','<%= getSupport[i].userid_num %>')">
                   <div class="list-title">
