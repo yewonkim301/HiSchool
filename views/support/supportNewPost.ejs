@@ -22,6 +22,8 @@
       <!-- 글쓰기 폼 -->
       <form id="support-form" name="support-form">
          <label for="secret"><input value="secret"  type="checkbox" id="secret" checked>비밀글</label>
+
+
          <textarea id="support-content" name="content" placeholder="내용을 입력하세요"></textarea>
          <button type="button" class="btn-primary" onclick="addsupport()">
             등록하기
@@ -31,27 +33,37 @@
 
    <script>
       const form = document.forms["support-form"];
-      console.log(form)
+      const secretBox=document.getElementById('secret');
+      
 
 
-      function addsupport() {
-         console.log(form.content.value)
+      async function addsupport() {
 
-         axios({
+         let secret;
+      if(secretBox.checked){
+         secret=true;
+      }else{
+         secret=false;
+      }
+         console.log(secret)
+
+         try{
+            const res= await axios({
             method: "POST",
             url: `/supportNewPost`,
             data: {
-               secret:'true',
+               secret:secret,
                content: form.content.value,
-            }
-         }).then((res) => {
-               console.log(res);
-               if (res.data.isSuccess) {
-                  alert("등록완료");
+            },
+         });
+         if(res.data.isSuccess){
+            alert('등록되었습니다');
+            window.location.href='/supportMain'
+         }
 
-                  window.location.href = `/supportMain`;
-               }
-            });
+            }catch(error){
+               console.log("support에서 게시글 등록 오류 > ", error);
+            };
       }
    </script>
 </body>
