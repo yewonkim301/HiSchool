@@ -40,12 +40,18 @@ exports.postSupport = async (req, res) => {
         title = "문의글 등록"
         const { userid, userid_num } = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
         const { content, secret } = req.body
+        const nickname = await User.findOne({
+            attributes:["nickname"],
+            where:{
+                userid_num: userid_num
+            }
+        })
         const newSupport = await Support.create({
             userid_num: userid_num,
             qa_content: content,
             secret: secret
         })
-        res.send({newSupport,isSuccess: true, link, title});
+        res.send({newSupport,isSuccess: true, link, title, nickname});
     }
     catch (err) {
         console.error(err);
@@ -53,12 +59,15 @@ exports.postSupport = async (req, res) => {
     }
 }
 
-// PATCH /support 고객 문의 답글
+// PATCH /supportMain/:qa_id 고객 문의 답글
 exports.postSupportComment = async (req,res) => {
     try{
         const {qa_id} = req.params;
         const postSupportComment = await Support.update({
-            qa_comment: comment
+            qa_comment: comment,
+            where: {
+                qa_id: qa_id
+            }
         })
         res.send({postSupportComment, isSuccess:true});
     }
