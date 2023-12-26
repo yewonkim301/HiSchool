@@ -12,6 +12,7 @@ const {
 const { trace } = require("../routes");
 const { Op } = require("sequelize");
 const jwt = require("jsonwebtoken");
+const { uploadMultipleSignedUrl, getMultipleSignedUrl } = require('./../middleware/s3')
 
 // Club
 // GET /clubMain : 전체 동아리 조회
@@ -523,9 +524,12 @@ exports.createClubPost = async (req, res) => {
     const { title, content, image } = req.body;
     const { userid_num } = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
     // console.log(club_id, title, content, image);
+    
     const getName = await User.findOne({
       where: { userid_num: userid_num },
     });
+
+    // image는 json 형태로 저장
     const newPost = await Club_post.create({
       club_id: club_id,
       title: title,

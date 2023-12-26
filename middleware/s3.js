@@ -57,6 +57,48 @@ module.exports.getSignedFile = async function getSignedFile(data) {
 }
 
 
+module.exports.uploadMultipleSignedUrl = async function uploadMultipleSignedUrl(files) {
+  // console.log('file signedUrl 시작');
+  const url = [];
+  for (let i = 0; i < files.length; i++) {
+    const params = {
+      Bucket: process.env.AWS_S3_BUCKET,
+      Key: files[i].name,
+    };
+    const command = new PutObjectCommand(params);
+    // console.log('putObjectCommand 시작');
+    const fileUrl = await getSignedUrl(s3, command, {
+      expiresIn: 3600,
+    });
+    // console.log('getSignedUrl 성공');
+    url.push(fileUrl);
+  }
+  return url;
+}
+
+
+
+module.exports.getMultipleSignedUrl = async function getMultipleSignedUrl(files) {
+  // console.log('file signedUrl 시작');
+  const url = [];
+  for (let i = 0; i < files.length; i++) {
+    const params = {
+      Bucket: process.env.AWS_S3_BUCKET,
+      Key: files[i].name,
+    };
+    const command = new GetObjectCommand(params);
+    // console.log('putObjectCommand 시작');
+    const fileUrl = await getSignedUrl(s3, command, {
+      expiresIn: 10,
+    });
+    // console.log('getSignedUrl 성공');
+    url.push(fileUrl);
+  }
+  return url;
+}
+
+
+
 
 module.exports.deleteFile = async function deleteFile(data) {
   // console.log('file delete 시작');
