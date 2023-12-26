@@ -41,8 +41,9 @@
                </p>
                <!-- 게시글 작성 시간 등의 메타 정보도 추가 있습니다. -->
             </div>
-            <% if('<%= data.post_id %>') %>
+            <% if(data.userid_num == userid_num)  { %>
             <button class="btn btn-primary" onclick="editPost('<%= data.post_id %>')">수정</button>
+            <% } %>
             <div class="comment-section">
                <input type="text" id="commentInput" placeholder="댓글을 입력하세요">
             </div>
