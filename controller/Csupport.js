@@ -77,14 +77,16 @@ exports.postSupportComment = async (req,res) => {
     }
 }
 
-// DELETE /supportMain 문의글 삭제
+// DELETE /supportMain/:qa_id 문의글 삭제
 exports.deleteSupport = async (req,res) => {
     try{
+        const {qa_id} = req.params;
         const { userid, userid_num } = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
         const destroySupport = await Support.destroy({
             where:
             {
-                userid_num: userid_num
+                userid_num: userid_num,
+                qa_id: qa_id
             }
         })
         if (destroySupport) {

@@ -384,8 +384,8 @@ router.post("/supportNewPost", isLoggedIn, controllerSupport.postSupport);
 // PATCH /supportMain/:qa_id 고객 문의 답글
 router.patch("/supportMain/:qa_id", isLoggedIn, controllerSupport.postSupportComment);
 
-// DELETE /supportMain 문의글 삭제
-router.delete("/supportMain", isLoggedIn, controllerSupport.deleteSupport);
+// DELETE /supportMain/:qa_id 문의글 삭제
+router.delete("/supportMain/:qa_id", isLoggedIn, controllerSupport.deleteSupport);
 
 // GET /clubChat
 // router.get("/", controllerClub.clubChat);
