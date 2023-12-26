@@ -151,12 +151,12 @@ Club_schedule.belongsTo(Club, {
 });
 
 User.hasMany(Support, {
-  foreignKey: "club_id",
+  foreignKey: "userid_num",
   onDelete: "CASCADE",
   onUpdate: "CASCADE",
 });
 Support.belongsTo(User, {
-  foreignKey: "club_id",
+  foreignKey: "userid_num",
 });
 
 db.User = User;
