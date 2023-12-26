@@ -9,8 +9,8 @@
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
+   <%- include('../component/header')%>
    <div class="container">
-      <%- include('../component/header')%>
       <a href="/clubAdminApplyList/<%=data%>">가입 요청 보기</a>
       <a href="/clubAdminEdit/<%=data%>">동아리 정보 관리</a>
       <a href="/clubAdminMemberList/<%=data%>">회원 목록</a>
