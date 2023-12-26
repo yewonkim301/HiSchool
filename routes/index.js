@@ -339,7 +339,7 @@ router.patch(
 
 // DELETE /publicPostDetail/:post_id 특정 게시물 삭제
 router.delete(
-  "/publicPostDetail/:post_id",
+  "/publicEditPost/:post_id",
   isLoggedIn,
   controllerPublic.deletePost
 );
