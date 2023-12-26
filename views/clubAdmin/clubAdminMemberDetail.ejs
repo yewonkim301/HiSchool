@@ -28,10 +28,10 @@
       <input id="name" class="textField" value="<%= userInfo.name %>"></input></div>
       <div class="input">
       <label for="motivation">지원동기</label>
-      <input id="motivation" class="textField" value="<%= data.motivation %>"></input></div>
+      <input id="motivation" class="textField" value="<%= data.motivation %>" readonly></input></div>
       <div class="input">
       <label for="introduction">자기소개</label>
-      <input id="introduction" class="textField" value="<%= data.introduction %>"></input></div>
+      <input id="introduction" class="textField" value="<%= data.introduction %>" readonly></input></div>
      
       <div class="cta">
         <button id="memberOut" class="btn btn-primary "  onclick="outMember('<%=data.userid_num%>')">강퇴</button>
