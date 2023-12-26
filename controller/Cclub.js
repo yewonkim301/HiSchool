@@ -245,9 +245,7 @@ exports.getClubPosts = async (req, res) => {
       where: { club_id: club_id },
     })
 
-    if(foundClub.userid_num !== userid_num) {
-      return res.status(403).render("403");
-    }
+
 
     const posts = await Club_post.findAll({
       where: { club_id: req.params.club_id },
@@ -749,9 +747,6 @@ exports.getMyclubMain = async (req, res) => {
     where: { club_id: club_id },
   })
 
-  if(foundClub.userid_num !== userid_num) {
-    return res.status(403).render('403');
-  }
 
   const myClub = await Club.findOne({ where: { club_id: club_id } });
   let isLeader;
