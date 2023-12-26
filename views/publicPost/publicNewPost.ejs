@@ -11,9 +11,172 @@
 
 <body>
    <%- include('../component/header')%>
-   <div class="container">
-      <h1>자유게시판 글 작성</h1>
-   </div>
+      <div class="container">
+         <!-- 글쓰기 폼 -->
+         <form id="post-form" name="add-post">
+            <h2>게시글 작성</h2>
+            <input type="text" id="post-title" name="title" placeholder="제목을 입력하세요" />
+            <textarea id="post-content" name="content" placeholder="내용을 입력하세요"></textarea>
+            <input type="file" name="filesInput" id="filesInput" accept="image/*" onchange="uploadToClient()"
+               multiple />
+            <div id="preview"></div>
+
+            <button type="button" onclick="handleSignedUrl()">업로드</button>
+
+            <button type="button" class="btn-primary" onclick="addpost()">
+               등록하기
+            </button>
+         </form>
+      </div>
+
+      <script>
+         const form = document.forms["add-post"];
+
+         function readURL(input) { }
+
+         function readFiles() {
+            var files = document.getElementById("filesInput").files;
+
+            for (var i = 0; i < files.length; i++) {
+               alert(files[i].name);
+            }
+         }
+
+         let createObjectURL = null;
+         let images = null;
+         let imagesArr = [];
+         let payload = [];
+         const uploadFiles = document.querySelector("#filesInput");
+         let uploadedFileUrl = "";
+         let uploadedUrl = [];
+         let uploadImages = [];
+
+         function uploadToClient(e) {
+            if (createObjectURL) {
+               URL.revokeObjectUrl(createObjectURL);
+            }
+
+            console.log("282 : uploadedFiles", uploadFiles);
+            if (uploadFiles.files && uploadFiles.files[0]) {
+               console.log('if문 안으로');
+               console.log(uploadFiles.files.length);
+               for (i = 0; i < uploadFiles.files.length; i++) {
+                  console.log(i);
+                  const img = uploadFiles.files[i];
+                  imagesArr.push(uploadFiles.files[i]);
+                  images = img;
+                  console.log("286 images", images);
+                  createObjectURL = URL.createObjectURL(img);
+               }
+            }
+
+            console.log('images', images);
+            console.log('imagesArr', imagesArr);
+            console.log('imagesArr type', imagesArr[0].type);
+
+
+
+            for (i = 0; i < imagesArr.length; i++) {
+               payload.push({
+                  name: Math.random().toString(36).substring(2, 32),
+                  type: imagesArr[i].type
+               });
+            }
+
+
+         }
+
+
+         async function handleSignedUrl() {
+            const uploadedFileOriginUrl = await uploadImgClient();
+            console.log(uploadedFileOriginUrl);
+         }
+
+
+
+         async function uploadImgClient() {
+            console.log("uploadImgClient 실행");
+            try {
+               const result = await axios({
+                  method: "POST",
+                  url: "/s3MultipleSignedUrl",
+                  data: payload
+               });
+
+               const axiosResult = result;
+               console.log("axiosResult : ", axiosResult);
+               const signedUrl = axiosResult.data;
+               console.log("signedURL", signedUrl);
+
+
+
+               for (i = 0; i < signedUrl.length; i++) {
+                  const uploadRes = await axios({
+                     method: "PUT",
+                     url: signedUrl[i],
+                     data: imagesArr[i],
+                  });
+                  console.log("uploadRes : ", uploadRes.config.url);
+                  uploadedUrl.push(uploadRes.config.url);
+                  console.log('uploadedUrl', uploadedUrl);
+               }
+
+               return uploadedUrl;
+            } catch (err) {
+               console.log(err);
+            }
+         }
+
+         async function addpost() {
+            const uploadedFileOriginUrl = await uploadImgClient();
+
+
+
+            if (uploadedFileOriginUrl !== null) {
+               console.log("presignedURL 있어요");
+               console.log('uploadedFileOriginUrl', uploadedFileOriginUrl);
+
+               for (i = 0; i < uploadedFileOriginUrl.length; i++) {
+                  const parts = uploadedFileOriginUrl[i].split("/");
+                  uploadImages.push(parts[parts.length - 1].split("?")[0]);
+               }
+
+               console.log('uploadedImages', uploadImages);
+
+            } else {
+               console.log("presignedURL 없어요");
+               uploadImages = "";
+            }
+
+            console.log("uploadImages", uploadImages);
+
+
+            await axios({
+               method: "POST",
+               url: `/publicNewPost`,
+               data: {
+                  // 클라이언트에서 서버로 전달할 club_id
+                  // userid_num: "2", // 임시 데이터
+                  title: form.title.value,
+                  content: form.content.value,
+                  image: uploadImages,
+               },
+            }).then((res) => {
+               console.log(res.data);
+               if (res.status === 200) {
+                  const post_id = res.data.post_id; // 응답으로부터 post_id를 얻음
+                  alert("게시물 등록완료");
+                  // 새 게시물 엘리먼트 생성
+                  const newPostElement = document.createElement("div");
+                  newPostElement.innerHTML = `
+                  <h3>${form.title.value}</h3>
+                  <p>${form.content.value}</p>
+               `;
+                  window.location.href = `/publicPostDetail/${post_id}`;
+               }
+            });
+         }
+      </script>
 </body>
 
 </html>

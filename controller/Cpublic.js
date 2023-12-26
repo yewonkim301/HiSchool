@@ -33,7 +33,7 @@ exports.getNewPost = async (req, res) => {
   try {
     let link = "/publicPostMain"; // 익명게시판 이동
     let title = "게시글 작성";
-    res.render("publicPost/publicNewPost", title, link);
+    res.render("publicPost/publicNewPost", { title, link });
   } catch {
     console.error(err);
     res.send("Internal Server Error!");
@@ -74,29 +74,88 @@ exports.getPostDetail = async (req, res) => {
     let link = "/publicPostMain"; // 전체 게시물로 이동
     let title = "게시글";
     const { post_id } = req.params;
+    console.log(`>>>>>>>>>>>>>> ${post_id}`);
     const { userid, userid_num } = jwt.verify(
       req.cookies.jwt,
       process.env.JWT_SECRET
     );
+    // 게시글
     const getPost = await Public_post.findOne({
-      where: { post_id: post_id },
+      attributes: [
+        "post_id",
+        "title",
+        "content",
+        "image",
+        "userid_num",
+        "updatedAt",
+
+      ],
+      where: {
+        post_id: post_id,
+      },
     });
+    // 게시글에 달린 댓글들
     const getPostComment = await Public_post_comment.findAll({
-      where: { post_id: post_id },
+      attributes: [
+        "comment_id",
+        "comment_nickname",
+        "comment",
+        "userid_num",
+        "updatedAt",
+        "post_id",
+      ],
+      where: {
+        post_id: post_id,
+      },
       include: [{ model: Public_post_comment_like }],
     });
-    // const getComments = await Public_post_comment.findAll({
 
-    // })
-    // const getPostCommentLike = await Public_post_comment_like.findAll({
-    //   where: {  },
-    // });
+    const commentId = await Public_post_comment.findAll({
+      attributes: ["comment_id"],
+      where: { post_id: post_id },
+    });
+
+    let commentIdArray = [];
+    await commentId.forEach((element) => {
+      commentIdArray.push(element.dataValues.comment_id);
+    });
+
+    console.log("commentIdArray >>>>>", commentIdArray);
+
+    // 댓글마다 있는 좋아요;
+    let getPostCommentLike = [];
+    for (const element of commentIdArray) {
+      const like = await Public_post_comment_like.findAll({
+        where: { comment_id: element },
+      });
+      console.log(`like >>>>> ${like}`);
+      getPostCommentLike.push(like);
+      // console.log("@@@@@ clubPostCommentLike", clubPostCommentLike);
+    }
+
+
+    // s3 이미지 불러오기
+    console.log('Cclub 328 clubPost.image', getPost.image);
+    const postImgOrigin = getPost.image;
+
+    let postImages = [];
+
+    for (i = 0; i < postImgOrigin.length; i++) {
+      postImages.push(await getSignedFile(postImgOrigin[i]));
+    }
+
+
+    // console.log('Cclub 332 postImg', postImages);
+    console.log(`commentLIKE >>>>>> ${getPostCommentLike}`);
+
     res.render("publicPost/publicPostDetail", {
       getPost,
       getPostComment,
       getPostCommentLike,
       title,
       link,
+      userid_num,
+      postImages
     });
   } catch (err) {
     console.error(err);
@@ -146,9 +205,7 @@ exports.createPostCommentLike = async (req, res) => {
 
     const publicPostCommentLike = await Public_post_comment_like.create({
       likeid_num: userid_num,
-      where: {
-        comment_id: comment_id,
-      },
+      comment_id: comment_id,
     });
 
     res.send(publicPostCommentLike);
@@ -159,25 +216,38 @@ exports.createPostCommentLike = async (req, res) => {
 };
 
 // ==== 수정 ====
-// PATCH /publicPostDetail/:post_id 게시글 수정
-exports.patchPost = async (req, res) => {
+// GET /publicEditPost/:post_id 게시글 수정 페이지 불러오기
+exports.getPublicEditPost = async (req, res) => {
+  try {
+    // let link = "/mypageMain"; // 프로필에 있는 내가 쓴 글 페이지 이동으로 이동할 거기 때문에
+    const { post_id } = req.params;
+    const post = await Public_post.findOne({
+      where: { post_id: post_id },
+    });
+    res.render("publicPost/publicEditPost", {
+      data: post,
+      title: "게시글 수정",
+      // link,
+    });
+  } catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+};
+// PATCH /publicEditPost/:post_id 게시글 수정
+exports.patchPublicEditPost = async (req, res) => {
   try {
     const { post_id } = req.params;
     const { title, content, image } = req.body;
-    const { userid, userid_num } = jwt.verify(
-      req.cookies.jwt,
-      process.env.JWT_SECRET
-    );
     const updatePost = await Public_post.update(
       {
-        title: title,
-        content: content,
-        image: image,
+        title,
+        content,
+        image,
       },
       {
         where: {
           post_id: post_id,
-          userid_num: userid_num,
         },
       }
     );
@@ -281,7 +351,6 @@ exports.deletePostComment = async (req, res) => {
       where: {
         post_id: post_id,
         comment_id: comment_id,
-        likeid_num: userid_num,
       },
     });
     if (deletePostComment) {
@@ -463,9 +532,9 @@ exports.getAllMembers = async (req, res) => {
     const { club_id } = req.params;
 
     const getleader = await Club.findOne({
-      attributes:["leader_id"],
+      attributes: ["leader_id"],
       where: {
-        club_id : club_id
+        club_id: club_id
       }
     });
 
@@ -478,7 +547,7 @@ exports.getAllMembers = async (req, res) => {
         },
       },
     });
-        console.log("Cpublic getAllMembers getAllMembersShow >>>>", getAllMembersShow);
+    console.log("Cpublic getAllMembers getAllMembersShow >>>>", getAllMembersShow);
 
     // 회원 전체 조회
     const getusers = await Club_members.findAll({
@@ -960,7 +1029,7 @@ exports.deleteMyID = async (req, res) => {
         res.send({ isDeleted: false });
       }
     } else {
-      console.error('S3 이미지 삭제 실패')
+      console.error('S3 이미지 삭제 실패');
     }
   } catch (err) {
     console.error(err);
