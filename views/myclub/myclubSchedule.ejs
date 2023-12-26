@@ -170,7 +170,7 @@
 
     // 서버로부터 받은 데이터를 JavaScript 변수에 할당
     const clubSchedules = `clubSchedules: <%-JSON.stringify(data) %>`;
-
+    const club_id = '<%=data%>';
 
 
     console.log(clubSchedules);
@@ -197,7 +197,6 @@
         content: content
       })
         .then(res => {
-          const club_id = res.data.club_id;
           console.log(res);
           // 일정 추가 성공 시 로직
           console.log('일정이 추가되었습니다:', res.data);
