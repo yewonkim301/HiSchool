@@ -442,22 +442,22 @@ exports.getClubAdminApplyDetail = async (req, res) => {
   }
 };
 
-// GET /clubAdminTransfer 클럽 회장 위임 페이지 가져오기
-exports.getClubAdminTransfer = async (req, res) => {
-  try {
-    let link = "/clubAdminEdit"; //클럽 설정페이지
-    let title = "클럽권한 위임";
-    res.render("clubAdmin/clubAdminTransfer", title, link);
-  } catch (err) {
-    console.error(err);
-    res.send("Internal Server Error!");
-  }
-};
+// // GET /clubAdminTransfer 클럽 회장 위임 페이지 가져오기
+// exports.getClubAdminTransfer = async (req, res) => {
+//   try {
+//     let link = "/clubAdminEdit"; //클럽 설정페이지
+//     let title = "클럽권한 위임";
+//     res.render("clubAdmin/clubAdminTransfer", title, link);
+//   } catch (err) {
+//     console.error(err);
+//     res.send("Internal Server Error!");
+//   }
+// };
 
 // GET /clubAdminTransfer/:club_id 클럽 회장 위임페이지 회원 전체 조회
 exports.getAllMembers = async (req, res) => {
   try {
-    let link = "/clubAdminEdit"; //클럽 설정 페이지
+    let link = `/clubAdminEdit/${req.params.club_id}`; //클럽 설정 페이지
 
     let title = "클럽권한 위임";
     const { club_id } = req.params;

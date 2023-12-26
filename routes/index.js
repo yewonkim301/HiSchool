@@ -119,11 +119,11 @@ router.delete(
 );
 
 // GET /clubAdminTransfer 클럽 회장 위임 페이지
-router.get(
-  "/clubAdminTransfer/",
-  isLoggedIn,
-  controllerPublic.getClubAdminTransfer
-);
+// router.get(
+//   "/clubAdminTransfer/",
+//   isLoggedIn,
+//   controllerPublic.getClubAdminTransfer
+// );
 
 // GET /clubAdminTransfer/:club_id 클럽 회장 위임페이지 회원 전체 조회
 router.get(

@@ -40,7 +40,7 @@ exports.getClub = async (req, res) => {
 
     const findmember = await Club_members.findOne({
       attributes: ["isMember"],
-      where: { userid_num: userid_num },
+      where: { userid_num: userid_num, club_id: req.params.club_id },
     });
     // console.log("@@@@@@@@@@@@@@", findmember);
     let isMember;
@@ -49,7 +49,7 @@ exports.getClub = async (req, res) => {
     else if (findmember.dataValues.isMember == "false") isMember = "false";
 
     // console.log("!!!!!!!!!!!!!!!!", isMember);
-    // console.log("ismember >>>>>>>>>>>>>>", isMember);
+    console.log("ismember >>>>>>>>>>>>>>", isMember);
     const clubNum = await Club_members.findAll({
       where: {
         userid_num: userid_num,
