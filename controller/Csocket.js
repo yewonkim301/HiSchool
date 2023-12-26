@@ -1,20 +1,43 @@
 const roomList = [];
 
+exports.getDmRoom = async (req, res) =>{
+  try{
+    const { userid, userid_num } = jwt.verify(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
+
+    const {yourNickname} = req.body;
+        const myNickname = await User.findOne({
+          attributes: ["nickname"],
+          where:{
+            userid_num: userid_num
+          }
+        });
+        const roomName = myNickname + yourNickname;
+        res.send(roomName, myNickname);
+  }
+  catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+}
+
 exports.connection = (io, socket) => {
     console.log('접속 :', socket.id);
     //채팅방 목록 보내기
     socket.emit('roomList', roomList);
 
     //채팅방 만들기 생성
-    socket.on('create', (roomName, userName, cb) => {
+    socket.on('create', async (roomName, userName, cb) => {
         //join(방이름) 해당 방이름으로 없다면 생성. 존재하면 입장
         //socket.rooms에 socket.id값과 방이름 확인가능
         socket.join(roomName);
         //socket은 객체이며 원하는 값을 할당할 수 있음
-        socket.room = roomName;
-        socket.user = userName;
+        socket.room = myNickname + yourNickname;
+        socket.user = myNickname;
 
-        socket.to(roomName).emit('notice', `${socket.id}님이 입장하셨습니다`);
+        socket.to(roomName).emit('notice', `${myNickname}님이 입장하셨습니다`);
 
         //채팅방 목록 갱신
         if (!roomList.includes(roomName)) {
@@ -26,7 +49,7 @@ exports.connection = (io, socket) => {
         io.to(roomName).emit('userList', usersInRoom);
         cb();
     });
-
+    //================ 위 까지 방만들기 =======================
     socket.on('sendMessage', (message) => {
         console.log(message);
         if (message.user === 'all') {
