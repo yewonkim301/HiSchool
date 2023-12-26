@@ -15,7 +15,8 @@ const jwt = require("jsonwebtoken");
 const {
   uploadMultipleSignedUrl,
   getMultipleSignedUrl,
-  getSignedFile
+  getSignedFile,
+  deleteFile
 } = require("./../middleware/s3");
 
 // Club
@@ -403,12 +404,33 @@ exports.patchPost = async (req, res) => {
 exports.deletePost = async (req, res) => {
   try {
     const { club_id, post_id } = req.params;
+
+    const postImages = await Club_post.findOne({
+      where: {
+        post_id: post_id
+      },
+      attributes: ['image']
+    })
+
     const isDeleted = await Club_post.destroy({
       where: {
         club_id: club_id,
         post_id: post_id,
       },
     });
+
+
+
+    let isImagesDeleted = ''
+    for(i = 0; i < postImages.image.length; i++) {
+      isImagesDeleted = await deleteFile(postImages.image[i])
+      console.log('Cclub 426 isImagesDeleted', isImagesDeleted);
+      if(!isImagesDeleted) {
+        break
+      }
+    }
+
+
     if (isDeleted) {
       res.send({ isDeleted: true });
     } else {
