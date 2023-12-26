@@ -8,6 +8,11 @@
    <!-- axios CDN -->
    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
    <title>하이스쿨 - 게시글 작성</title>
+   <style>
+      #secret{
+         border: 1px solid black;
+      }
+   </style>
 </head>
 
 <body>
@@ -15,7 +20,7 @@
    <div class="container">
       <!-- 글쓰기 폼 -->
       <form id="support-form" name="support-post">
-         
+         <label for="secret"><input value="secret"  type="checkbox" id="secret" checked>비밀글</label>
          <textarea id="support-content" name="content" placeholder="내용을 입력하세요"></textarea>
          <button type="button" class="btn-primary" onclick="addsupport()">
             등록하기
