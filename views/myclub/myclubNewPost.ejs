@@ -118,14 +118,26 @@
         console.log('images', images);
         console.log('imagesArr', imagesArr);
         console.log('imagesArr type', imagesArr[0].type);
+
       }
+
+      let payload = []
+
+      for(i = 0; i < imagesArr.length; i++) {
+        payload.push({
+          name: imagesArr[i].name,
+          type: imagesArr[i].type
+        })
+      }
+
+      console.log(payload)
 
       async function uploadImgClient() {
         console.log("uploadImgClient 실행");
         try {
           const result = await axios({
             method: "POST",
-            url: "/s3upload",
+            url: "/s3MultipleSignedUrl",
             data: {
               name:
                 // "client/" +

@@ -130,3 +130,32 @@ exports.s3upload = async (req, res) => {
     }
   }
 };
+
+
+
+exports.s3MultipleSignedUrl = async (req, res) => {
+  if (req.method === "POST") {
+    try {
+      const [ files ] = req.body
+      console.log(files)
+
+      for(i = 0; i < files.length; i++){
+        let { name, type } = files[i];
+        const fileParams = {
+          name: name,
+          type: type,
+        };
+        // console.log("fileParams : ", fileParams);
+
+        const signedUrl = await getSignedFileUrl(fileParams);
+        // console.log("signedUrl : ", signedUrl);
+      }
+
+      return res.send(signedUrl);
+    } catch (e) {
+      return res.status(500).send({
+        message: "make url failed",
+      });
+    }
+  }
+}

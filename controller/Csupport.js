@@ -21,10 +21,11 @@ exports.getSupport = async (req, res) => {
 exports.postSupport = async (req, res) => {
     try {
         const { userid, userid_num } = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
-        const { content } = req.body
+        const { content, secret } = req.body
         const newSupport = await Support.create({
             userid_num: userid_num,
-            content: content
+            content: content,
+            secret: secret
         })
         res.send(newSupport,{isSuccess: true});
     }

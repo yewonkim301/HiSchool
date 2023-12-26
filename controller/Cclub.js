@@ -12,7 +12,10 @@ const {
 const { trace } = require("../routes");
 const { Op } = require("sequelize");
 const jwt = require("jsonwebtoken");
-const { uploadMultipleSignedUrl, getMultipleSignedUrl } = require('./../middleware/s3')
+const {
+  uploadMultipleSignedUrl,
+  getMultipleSignedUrl,
+} = require("./../middleware/s3");
 
 // Club
 // GET /clubMain : 전체 동아리 조회
@@ -273,7 +276,7 @@ exports.getClubPost = async (req, res) => {
         "title",
         "content",
         "image",
-        "name",
+        "userid_num",
         "updatedAt",
         "club_id",
       ],
@@ -542,10 +545,10 @@ exports.createClubPost = async (req, res) => {
     const { title, content, image } = req.body;
     const { userid_num } = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
     // console.log(club_id, title, content, image);
-    
-    const getName = await User.findOne({
-      where: { userid_num: userid_num },
-    });
+
+    // const getName = await User.findOne({
+    //   where: { userid_num: userid_num },
+    // });
 
     // image는 json 형태로 저장
     const newPost = await Club_post.create({
@@ -553,7 +556,7 @@ exports.createClubPost = async (req, res) => {
       title: title,
       content: content,
       image: image,
-      name: getName.dataValues.name,
+      userid_num: userid_num,
     });
     // console.log("생성 완료");
     res.send(newPost);
@@ -633,7 +636,9 @@ exports.postClubSchedule = async (req, res) => {
 exports.patchClubSchedule = async (req, res) => {
   try {
     const { club_id, schedule_id } = req.params;
+    console.log("Cclub patchClubSchedule > ", req.body);
     const { date, time, title, content } = req.body;
+
     const clubSchedule = await Club_schedule.update(
       {
         date: date,
@@ -644,7 +649,6 @@ exports.patchClubSchedule = async (req, res) => {
       {
         where: {
           club_id: club_id,
-          date: date,
           schedule_id: schedule_id,
         },
       }

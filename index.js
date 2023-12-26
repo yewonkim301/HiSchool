@@ -1,14 +1,14 @@
 const express = require("express");
 const app = express();
 const path = require("path");
+const http = require("http");
+const SocketIO = require("socket.io");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const db = require("./models/Index.js");
 
 const cors = require("cors");
-const http = require("http");
-const SocketIO = require("socket.io");
 // const { sequelize } = require('./models/Index.js');
 
 const dotenv = require("dotenv");
