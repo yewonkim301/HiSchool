@@ -381,8 +381,8 @@ router.get("/supportNewPost", isLoggedIn, controllerSupport.getNewSupport)
 // POST /supportNewPost 고객 문의 등록
 router.post("/supportNewPost", isLoggedIn, controllerSupport.postSupport);
 
-// PATCH /supportMain 고객 문의 답글
-router.patch("/supportMain", isLoggedIn, controllerSupport.postSupportComment);
+// PATCH /supportMain/:qa_id 고객 문의 답글
+router.patch("/supportMain/:qa_id", isLoggedIn, controllerSupport.postSupportComment);
 
 // DELETE /supportMain 문의글 삭제
 router.delete("/supportMain", isLoggedIn, controllerSupport.deleteSupport);
