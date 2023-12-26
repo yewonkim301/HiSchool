@@ -8,6 +8,8 @@ const { isNotLoggedIn, isLoggedIn, preventIndex } = require("./../middleware/log
 
 router.post("/s3upload", controllerUser.s3upload);
 
+router.post("/s3MultipleSignedUrl", controllerUser.s3MultipleSignedUrl)
+
 router.get("/", preventIndex, (req, res) => {
   res.render("index");
 });
