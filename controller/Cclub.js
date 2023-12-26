@@ -29,7 +29,6 @@ exports.getClubs = async (req, res) => {
 // GET /clubDetail/:club_id : 동아리 하나 상세 조회
 exports.getClub = async (req, res) => {
   try {
-
     let link = "/clubMain"; // 전체 클럽화면으로 이동
     const club = await Club.findOne({
       where: { club_id: req.params.club_id },
@@ -38,9 +37,6 @@ exports.getClub = async (req, res) => {
       req.cookies.jwt,
       process.env.JWT_SECRET
     );
-
-    
-
 
     const findmember = await Club_members.findOne({
       attributes: ["isMember"],
@@ -229,12 +225,8 @@ exports.postCreateClub = async (req, res) => {
 exports.getClubPosts = async (req, res) => {
   // console.log("Cclub js 225 getClubPosts req.params", req.params);
 
-  
-
-
   try {
     let link = `/myclubMain/${req.params.club_id}`; // 해당클럽 메인페이지로 이동
-
 
     // 동아리에 사용자의 아이디가 없을 경우 403 페이지 렌더
     const { userid_num } = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
@@ -243,9 +235,7 @@ exports.getClubPosts = async (req, res) => {
 
     const foundClub = await Club_members.findOne({
       where: { club_id: club_id },
-    })
-
-
+    });
 
     const posts = await Club_post.findAll({
       where: { club_id: req.params.club_id },
@@ -565,10 +555,11 @@ exports.getClubSchedules = async (req, res) => {
       attributes: ["date"],
       where: { club_id: club_id },
     });
-    let scheduleDate = [];
+    let scheduleDates = [];
     date.forEach((element) => {
-      scheduleDate.push(element.dataValues.date);
+      scheduleDates.push(element.dataValues.date);
     });
+    let scheduleDate = [...new Set(scheduleDates)];
     res.render("./myclub/myclubSchedule", {
       data: clubSchedules,
       title: "일정",
@@ -745,8 +736,7 @@ exports.getMyclubMain = async (req, res) => {
 
   const foundClub = await Club_members.findOne({
     where: { club_id: club_id },
-  })
-
+  });
 
   const myClub = await Club.findOne({ where: { club_id: club_id } });
   let isLeader;
