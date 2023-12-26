@@ -35,6 +35,9 @@
           multiple
         />
         <div id="preview"></div>
+
+        <button type="button" onclick="handleSignedUrl()">업로드</button>
+
         <button type="button" class="btn-primary" onclick="addpost()">
           등록하기
         </button>
@@ -93,8 +96,11 @@
       let createObjectURL = null;
       let images = null;
       let imagesArr = []
+      let payload = []
       const uploadFiles = document.querySelector("#filesInput");
       let uploadedFileUrl = "";
+      let uploadedUrl = []
+      let uploadImages = []
 
       function uploadToClient(e) {
         if (createObjectURL) {
@@ -119,18 +125,25 @@
         console.log('imagesArr', imagesArr);
         console.log('imagesArr type', imagesArr[0].type);
 
-      }
 
-      let payload = []
 
       for(i = 0; i < imagesArr.length; i++) {
         payload.push({
-          name: imagesArr[i].name,
+          name: Math.random().toString(36).substring(2, 32),
           type: imagesArr[i].type
         })
       }
 
-      console.log(payload)
+
+      }
+
+
+      async function handleSignedUrl() {
+        const uploadedFileOriginUrl = await uploadImgClient();
+        console.log(uploadedFileOriginUrl)
+      }
+
+      
 
       async function uploadImgClient() {
         console.log("uploadImgClient 실행");
@@ -138,12 +151,7 @@
           const result = await axios({
             method: "POST",
             url: "/s3MultipleSignedUrl",
-            data: {
-              name:
-                // "client/" +
-                Math.random().toString(36).substring(2, 32),
-              type: image.type,
-            },
+            data: payload
           });
 
           const axiosResult = result;
@@ -151,26 +159,52 @@
           const signedUrl = axiosResult.data;
           console.log("signedURL", signedUrl);
 
-          const uploadRes = await axios({
+          
+
+          for(i = 0; i < signedUrl.length; i++) {
+            const uploadRes = await axios({
             method: "PUT",
-            url: signedUrl,
-            data: image,
-            headers: {
-              "Content-Type": image.type,
-            },
+            url: signedUrl[i],
+            data: imagesArr[i],
           });
           console.log("uploadRes : ", uploadRes.config.url);
-          uploadedFileUrl = uploadRes.config.url;
+          uploadedUrl.push(uploadRes.config.url)
+          console.log('uploadedUrl', uploadedUrl);
+          }
+          
 
           // console.log('first uploadedfileurl', uploadedFileUrl)
-          return uploadedFileUrl;
+          return uploadedUrl;
         } catch (err) {
           console.log(err);
         }
       }
 
-      function addpost() {
-        axios({
+      async function addpost() {
+        const uploadedFileOriginUrl = await uploadImgClient();
+
+        
+
+        if (uploadedFileOriginUrl !== null) {
+          console.log("presignedURL 있어요");
+          console.log('uploadedFileOriginUrl', uploadedFileOriginUrl );
+
+          for(i = 0; i < uploadedFileOriginUrl.length; i++) {
+            const parts = uploadedFileOriginUrl[i].split("/")
+            uploadImages.push(parts[parts.length -1].split("?")[0])
+          }
+
+          console.log('uploadedImages', uploadImages);
+          
+        } else {
+          console.log("presignedURL 없어요");
+          uploadImages = "";
+        }
+
+        console.log("uploadImages", uploadImages);
+
+
+        await axios({
           method: "POST",
           url: `/myclubNewPost/<%= data %>`,
           data: {
@@ -178,7 +212,7 @@
             // userid_num: "2", // 임시 데이터
             title: form.title.value,
             content: form.content.value,
-            image: "1",
+            image: uploadImages,
           },
         }).then((res) => {
           console.log(res.data);
