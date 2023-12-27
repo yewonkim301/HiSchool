@@ -1,106 +1,108 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>인터랙티브 달력</title>
-    <link rel="stylesheet" href="/myClubPostMain.css" />
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <style>
-      body {
-        font-family: "Noto Sans KR", sans-serif;
-        background: #e9ecef;
-        margin: 0;
-        padding: 0;
-      }
 
-      .calendar-container {
-        width: 100%;
-        max-width: 320px;
-        background: white;
-        margin: 20px auto;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>인터랙티브 달력</title>
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="/myClubPostMain.css" />
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <style>
+    body {
+      font-family: "Noto Sans KR", sans-serif;
+      background: #e9ecef;
+      margin: 0;
+      padding: 0;
+    }
 
-      .calendar-controls {
-        display: flex;
-        justify-content: space-between;
-        padding: 10px;
-      }
+    .calendar-container {
+      width: 100%;
+      max-width: 320px;
+      background: white;
+      margin: 20px auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-      .calendar-controls button {
-        border: none;
-        background: #4dabf7;
-        color: white;
-        padding: 5px 10px;
-        border-radius: 5px;
-        cursor: pointer;
-      }
+    .calendar-controls {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+    }
 
-      .calendar {
-        border-collapse: collapse;
-        width: 100%;
-      }
+    .calendar-controls button {
+      border: none;
+      background: #4dabf7;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
 
-      .calendar th {
-        background-color: #f1f3f5;
-        color: #495057;
-        padding: 10px;
-        font-weight: normal;
-      }
+    .calendar {
+      border-collapse: collapse;
+      width: 100%;
+    }
 
-      .calendar td {
-        padding: 15px;
-        text-align: center;
-        font-size: 14px;
-        border-bottom: 1px solid #dee2e6;
-      }
+    .calendar th {
+      background-color: #f1f3f5;
+      color: #495057;
+      padding: 10px;
+      font-weight: normal;
+    }
 
-      .calendar td:not(:last-child) {
-        border-right: 1px solid #dee2e6;
-      }
+    .calendar td {
+      padding: 15px;
+      text-align: center;
+      font-size: 14px;
+      border-bottom: 1px solid #dee2e6;
+    }
 
-      .calendar .weekend {
-        color: #f03e3e;
-      }
+    .calendar td:not(:last-child) {
+      border-right: 1px solid #dee2e6;
+    }
 
-      .calendar .empty {
-        background: #f8f9fa;
-      }
+    .calendar .weekend {
+      color: #f03e3e;
+    }
 
-      .no-events {
-        text-align: center;
-        padding: 15px;
-        font-size: 14px;
-        color: #868e96;
-      }
+    .calendar .empty {
+      background: #f8f9fa;
+    }
 
-      .calendar .today {
-        background-color: #4dabf7;
-        color: white;
-        border-radius: 50%;
-      }
+    .no-events {
+      text-align: center;
+      padding: 15px;
+      font-size: 14px;
+      color: #868e96;
+    }
 
-      /* 클릭하면 테투리 파랗게 변함 */
-      .selected-date {
-        border: 2px solid blue !important;
+    .calendar .today {
+      background-color: #4dabf7;
+      color: white;
+      border-radius: 50%;
+    }
 
-        /* 선택된 날짜의 테두리 스타일 */
-      }
+    /* 클릭하면 테투리 파랗게 변함 */
+    .selected-date {
+      border: 2px solid blue !important;
 
-      /* 임시 스케줄 있는 날짜 표시 점 */
-      .dot {
-        border-radius: 50%;
-        width: 5px;
-        height: 5px;
-        background-color: blue;
-      }
-    </style>
-  </head>
+      /* 선택된 날짜의 테두리 스타일 */
+    }
 
-  <body>
-    <%- include('../component/header')%>
+    /* 임시 스케줄 있는 날짜 표시 점 */
+    .dot {
+      border-radius: 50%;
+      width: 5px;
+      height: 5px;
+      background-color: blue;
+    }
+  </style>
+</head>
+
+<body>
+  <%- include('../component/header')%>
     <div class="container">
       <button onclick="openModal()" id="plus-button" class="plus-button">
         +
@@ -128,39 +130,37 @@
           </tbody>
         </table>
         <div id="eventsContainer">
-          <%let checkToday = `${new Date().getFullYear()}-${( new
-          Date().getMonth() + 1 ) .toString() .padStart(2, "0")}-${new
-          Date().getDate().toString().padStart(2, "0")}`;%> <% if (data &&
-          data.length) { %> <% data.forEach(function(schedule) { %> <% if (
-          checkToday == schedule.date) {%>
-          <div class="schedule" id="<%= schedule.schedule_id %>">
-            <h3 id="title<%= schedule.schedule_id %>"><%= schedule.title %></h3>
-            <p id="date<%= schedule.schedule_id %>">
-              Date: <%= schedule.date %>
-            </p>
-            <p id="time<%= schedule.schedule_id %>">
-              Time: <%= schedule.time %>
-            </p>
-            <p id="content<%= schedule.schedule_id %>">
-              Content: <%= schedule.content %>
-            </p>
-            <button
-              type="button"
-              onclick="patchSchedule('<%= schedule.schedule_id %>')"
-            >
-              수정
-            </button>
-            <button
-              type="button"
-              onclick="deleteSchedule('<%= schedule.schedule_id %>')"
-            >
-              삭제
-            </button>
-          </div>
-          <% } %> <% }); %> <% } else { %>
-          <p class="no-events">등록된 일정이 없습니다</p>
-          <% } %>
-          <!-- <ul>
+          <%let checkToday=`${new Date().getFullYear()}-${( new Date().getMonth() + 1 ) .toString() .padStart(2, "0"
+            )}-${new Date().getDate().toString().padStart(2, "0" )}`;%>
+            <% if (data && data.length) { %>
+              <% data.forEach(function(schedule) { %>
+                <% if ( checkToday==schedule.date) {%>
+                  <div class="schedule" id="<%= schedule.schedule_id %>">
+                    <h3 id="title<%= schedule.schedule_id %>">
+                      <%= schedule.title %>
+                    </h3>
+                    <p id="date<%= schedule.schedule_id %>">
+                      Date: <%= schedule.date %>
+                    </p>
+                    <p id="time<%= schedule.schedule_id %>">
+                      Time: <%= schedule.time %>
+                    </p>
+                    <p id="content<%= schedule.schedule_id %>">
+                      Content: <%= schedule.content %>
+                    </p>
+                    <button type="button" onclick="patchSchedule('<%= schedule.schedule_id %>')">
+                      수정
+                    </button>
+                    <button type="button" onclick="deleteSchedule('<%= schedule.schedule_id %>')">
+                      삭제
+                    </button>
+                  </div>
+                  <% } %>
+                    <% }); %>
+                      <% } else { %>
+                        <p class="no-events">등록된 일정이 없습니다</p>
+                        <% } %>
+                          <!-- <ul>
                     <% for (const schedule of data) { %>
                       <li>
                         <%= schedule.date %>: <%= schedule.title %> Content: <%= schedule.content %>
@@ -170,9 +170,7 @@
         </div>
       </div>
       <!----------------------- 일정을 추가하는 모달 ---------------------->
-      <div
-        id="scheduleModal"
-        style="
+      <div id="scheduleModal" style="
           display: none;
           position: fixed;
           left: 50%;
@@ -182,8 +180,7 @@
           padding: 20px;
           border-radius: 10px;
           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        "
-      >
+        ">
         <!-- <h2>일정 추가</h2> -->
         <h2 id="modalName"></h2>
         <form id="scheduleForm">
@@ -314,21 +311,23 @@
           <div class="schedule" id="<%= data[i].schedule_id %>">
             <h3 id="title<%= data[i].schedule_id %>"><%= data[i].title %></h3>
             <p id="date<%= data[i].schedule_id %>">
-              Date: <%= data[i].date %>
+              날짜: <%= data[i].date %>
             </p>
             <p id="time<%= data[i].schedule_id %>">
-              Time: <%= data[i].time %>
+              시간: <%= data[i].time %>
             </p>
             <p id="content<%= data[i].schedule_id %>">
-              Content: <%= data[i].content %>
+              내용: <%= data[i].content %>
             </p>
             <button
+            class="btn-sm btn-primary"
               type="button"
               onclick="patchSchedule('<%= data[i].schedule_id %>')"
             >
               수정
             </button>
             <button
+            class="btn-sm btn-primary"
               type="button"
               onclick="deleteSchedule('<%= data[i].schedule_id %>')"
             >
@@ -337,7 +336,7 @@
           </div>`;
           }
         <% }%>
-        eventsContainer.innerHTML = html;
+          eventsContainer.innerHTML = html;
         // console.log("Selected date:", dateStr);
       }
 
@@ -365,9 +364,8 @@
         const numDays = daysInMonth(month, year);
         const today = new Date();
 
-        document.getElementById("current-month-year").innerText = `${year}년 ${
-          month + 1
-        }월`;
+        document.getElementById("current-month-year").innerText = `${year}년 ${month + 1
+          }월`;
 
         let calendarHtml = "";
         let day = 1;
@@ -508,5 +506,6 @@
         }
       }
     </script>
-  </body>
+</body>
+
 </html>
