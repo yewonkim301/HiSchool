@@ -27,7 +27,7 @@ exports.connection = async (io, socket) => {
   console.log("접속 :", socket.id);
 
   //채팅방 목록 보내기
-  socket.emit("roomList", roomList);
+  //   socket.emit("roomList", roomList);
 
   //채팅방 만들기 생성
   socket.on("create", async (roomName, userName, cb) => {
@@ -46,9 +46,9 @@ exports.connection = async (io, socket) => {
       //갱신된 목록은 전체가 봐야함 <=== 나와 상대방만 봐야해서 이제 바꿔야함
       io.emit("roomList", roomList);
     }
-    const usersInRoom = getUsersInRoom(roomName);
-    io.to(roomName).emit("userList", usersInRoom);
-    cb();
+    // const usersInRoom = getUsersInRoom(roomName);
+    // io.to(roomName).emit("userList", usersInRoom);
+    // cb();
   });
   //================ 위 까지 방만들기 =======================
   socket.on("sendMessage", (message) => {
