@@ -340,6 +340,14 @@ label {
   font-size: 0.9rem;
 }
 
+.helpText {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--color-gray-400);
+  font-size: 0.9rem;
+}
+
 .textField {
   padding: 16px 20px;
   background-color: white;
@@ -647,7 +655,6 @@ input[type='checkbox']:checked + label:before {
   .right-icon {
     display: none;
   }
-  
 }
 
 /*# 리스트 목록 스타일 ( 제목, 내용 / 부가내용 X (날짜, 시간등) */
@@ -879,14 +886,6 @@ input[type='checkbox']:checked + label:before {
   margin-right: 10px;
   border-radius: 5px;
   background-color: var(--color-gray-100);
-}
-
-.comment-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
-  width: 100%;
 }
 
 .comment-input {
