@@ -25,21 +25,11 @@ exports.getPost = async (req, res) => {
       req.cookies.jwt,
       process.env.JWT_SECRET
     );
-    
-    const nicknames = await User.findAll({
-      attributes: ["nickname"],
-      where:{
-        userid_num: userid_num
-      }
-    })
+      
+    const Posts = await Public_post.findAll({
+    });
 
-    let nicknameArray = [];
-    await nicknames.forEach((element) => {
-      nicknameArray.push(element.dataValues.nickname);
-    });    
-    const Posts = await Public_post.findAll();
-
-    res.render("publicPost/publicPostMain", { data: Posts, title, link, nicknameArray });
+    res.render("publicPost/publicPostMain", { data: Posts, title, link });
   } catch {
     console.error(err);
     res.send("Internal Server Error!");
@@ -68,6 +58,7 @@ exports.createPost = async (req, res) => {
       process.env.JWT_SECRET
     );
     const getName = await User.findOne({
+      attributes:["nickname"],
       where: {
         userid_num: userid_num,
       },
@@ -77,7 +68,7 @@ exports.createPost = async (req, res) => {
       content: content,
       image: image,
       userid_num: userid_num,
-      nickname: getName.dataValues.nickname,
+      nickname: getName,
     });
     res.send(newPost);
   } catch (err) {

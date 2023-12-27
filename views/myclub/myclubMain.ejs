@@ -12,28 +12,32 @@
     <%- include('../component/header')%>
     <div class="container">
       <div class="menuContainer">
-        <a href="/myclubChat" class="menuItem">채팅</a>
-        <a href="/myclubSchedule/<%=data.club_id%>" class="menuItem">동아리 일정</a>
-        <a href="/myclubPostMain/<%=data.club_id%>" class="menuItem">동아리 게시판</a>
-        <a id="admin" href="/clubAdminMain/<%=data.club_id%>" class="menuItem">동아리 관리</a>
+        <a href="/myclubChat/<%=data.club_id%>" class="menuItem">채팅</a>
+        <a href="/myclubSchedule/<%=data.club_id%>" class="menuItem"
+          >동아리 일정</a
+        >
+        <a href="/myclubPostMain/<%=data.club_id%>" class="menuItem"
+          >동아리 게시판</a
+        >
+        <a id="admin" href="/clubAdminMain/<%=data.club_id%>" class="menuItem"
+          >동아리 관리</a
+        >
       </div>
     </div>
 
     <script>
       // 동아리 관리자만 동아리 관리 링크 활성화
-      const admin = document.querySelector('#admin');
-      if('<%=isLeader%>'==='true'){
-        admin.style.display = 'block'
-      }
-      else{
-        admin.style.display = 'none'
+      const admin = document.querySelector("#admin");
+      if ("<%=isLeader%>" === "true") {
+        admin.style.display = "block";
+      } else {
+        admin.style.display = "none";
       }
       function moveClubChat() {
         //   window.location.href = `/clubChat/<%=data.club_id%>`;
         //   window.location.href = `/clubChat`;
         console.log(`<%=data.club_id%>`);
       }
-      
     </script>
   </body>
 </html>
