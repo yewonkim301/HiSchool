@@ -1,6 +1,6 @@
 const roomList = [];
 
-exports.getDmRoom = async (req, res) =>{
+exports.sendNickname = async (req, res) =>{
   try{
     const { userid, userid_num } = jwt.verify(
       req.cookies.jwt,
@@ -14,7 +14,7 @@ exports.getDmRoom = async (req, res) =>{
             userid_num: userid_num
           }
         });
-        const roomName = myNickname + yourNickname;
+        const roomName = [ myNickname, yourNickname].sort();
         res.send(roomName, myNickname);
   }
   catch (err) {

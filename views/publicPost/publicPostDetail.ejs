@@ -14,6 +14,8 @@
       integrity="sha512-4lykFR6C2W55I60sYddEGjieC2fU79R7GUtaqr3DzmNbo0vSaO1MfUjMoTFYYuedjfEix6uV9jVTtRCSBU/Xiw=="
       crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+   <!--  -->
+   <link rel="stylesheet" href="../../static/style.css">
    <style>
       .heart-active {
          color: red;
@@ -31,6 +33,21 @@
                <h2>
                   <%= title %>
                </h2>
+
+                  <% var date=new Date(getPost.updatedAt); var year=date.getFullYear(); var
+                     month=('0' + (date.getMonth() + 1)).slice(-2); var day=('0' +
+                     date.getDate()).slice(-2); var hours=date.getHours(); var minutes=('0' +
+                     date.getMinutes()).slice(-2); var ampm=hours>= 12 ? '오후' : '오전';
+                     hours = hours % 12;
+                     hours = hours ? hours : 12; // 0 시는 12시로 표시
+                     %>
+                     <p>
+
+                        <%= year %>-<%= month %>-<%= day %>
+                                 <%= ampm %>
+                                    <%= hours %>시 <%= minutes %>분
+
+                     </p>
                <p>
                   <%= getPost.content %>
                      <!-- <i class="like-btn" onclick="likeBtn()">좋아요</i> -->
@@ -61,6 +78,20 @@
                            <p>
                               <%= getPostComment[i].comment_nickname %>
 
+                           </p>
+                           <% var date=new Date(getPostComment[i].updatedAt); var year=date.getFullYear(); var
+                           month=('0' + (date.getMonth() + 1)).slice(-2); var day=('0' +
+                           date.getDate()).slice(-2); var hours=date.getHours(); var minutes=('0' +
+                           date.getMinutes()).slice(-2); var ampm=hours>= 12 ? '오후' : '오전';
+                           hours = hours % 12;
+                           hours = hours ? hours : 12; // 0 시는 12시로 표시
+                           %>
+                           <p>
+      
+                              <%= year %>-<%= month %>-<%= day %>
+                                       <%= ampm %>
+                                          <%= hours %>시 <%= minutes %>분
+      
                            </p>
                            <p>
                               <%= getPostComment[i].comment %>
@@ -122,6 +153,7 @@
 
          const post_id = "<%=getPost.post_id%>";
          function toggleLike(comment_id, userid_num, currentLikeNum, clickToBtn) {
+            console.log(userid_num);
             const heartIcon = document.getElementById('heart-icon-' + comment_id);
             let likeSpan = clickToBtn.querySelector(".like-num");
             const isLiked = heartIcon.classList.contains('heart-active');
@@ -131,7 +163,10 @@
                // 좋아요 해제 요청
                axios.delete(`/publicPostDetail/${post_id}/${comment_id}/${userid_num}`)
                   .then(response => {
-                     if (response.getPost.isDeleted) {
+                     console.log(userid_num);
+                     console.log(response.data);
+
+                     if (response.data.isDeleted) {
                         heartIcon.classList.remove('heart-active');
 
                         likeSpan.textContent = Number(currentLikeNum1) - 1;
@@ -297,9 +332,8 @@
                const commentElement = document.querySelector(`.comment-${comment_id}`);
                axios.delete(`/publicPostDetail/${post_id}/${comment_id}`)
                   .then(res => {
-                     console.log(commentElement);
                      console.log(res);
-                     if (res.isDeleted) {
+                     if (data.isDeleted) {
                         // 삭제 성공 시, 페이지에서 해당 댓글 요소 제거
                         commentElement.remove();
                      } else {

@@ -20,8 +20,8 @@
         svg,
         video,
         audio,
-        input[type="checkbox"],
-        input[type="radio"]
+        input[type='checkbox'],
+        input[type='radio']
       ):not(svg *, symbol *)
   ) {
   all: unset;
@@ -101,7 +101,7 @@ meter {
 /* revert for bug in Chromium browsers
    - fix for the content editable attribute will work properly.
    - webkit-user-select: auto; added for Safari in case of using user-select:none on wrapper element */
-:where([contenteditable]:not([contenteditable="false"])) {
+:where([contenteditable]:not([contenteditable='false'])) {
   -moz-user-modify: read-write;
   -webkit-user-modify: read-write;
   overflow-wrap: break-word;
@@ -110,7 +110,7 @@ meter {
 }
 
 /* apply back the draggable feature - exist only in Chromium and Safari */
-:where([draggable="true"]) {
+:where([draggable='true']) {
   -webkit-user-drag: element;
 }
 
@@ -128,12 +128,12 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type="number"] {
+input[type='number'] {
   -moz-appearance: textfield;
 }
 
 /* 스타일 정의 */
-@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css');
 
 :root {
   --spacing-1: 12px;
@@ -179,10 +179,10 @@ input[type="number"] {
   --color-ghost-50: #eff6ff;
   --color-ghost-100: #dbeafe;
 
-  font-family: "Pretendard Variable", Pretendard, -apple-system,
-    BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI",
-    "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  font-family: 'Pretendard Variable', Pretendard, -apple-system,
+    BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI',
+    'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', sans-serif;
 
   h2 {
     font-size: 1.5rem;
@@ -357,9 +357,8 @@ label {
   border: solid 1.5px var(--color-gray-100);
 }
 
-
 .textField .error {
-  border: solid 1.5px var(--color-red-500)
+  border: solid 1.5px var(--color-red-500);
 }
 
 .file-upload-input {
@@ -392,22 +391,22 @@ label {
 }
 
 /*# input[type='checkbox'] */
-input[type="checkbox"] {
+input[type='checkbox'] {
   display: none;
 }
 
-input[type="checkbox"] + label {
+input[type='checkbox'] + label {
   cursor: pointer;
   user-select: none;
 }
 
-input[type="checkbox"] + label > span {
+input[type='checkbox'] + label > span {
   vertical-align: middle;
   padding-left: 8px;
 }
 
-input[type="checkbox"] + label:before {
-  content: "";
+input[type='checkbox'] + label:before {
+  content: '';
   display: inline-block;
   width: 20px;
   height: 20px;
@@ -416,7 +415,7 @@ input[type="checkbox"] + label:before {
   vertical-align: middle;
 }
 
-input[type="checkbox"]:checked + label:before {
+input[type='checkbox']:checked + label:before {
   background-image: url(./icons/check.svg);
   background-repeat: no-repeat;
   background-size: 70%;
@@ -456,6 +455,15 @@ input[type="checkbox"]:checked + label:before {
   justify-content: space-between;
   z-index: 500;
   align-items: center;
+}
+
+.logo img {
+  cursor: pointer;
+}
+
+.logo:hover {
+  transform: scale(1.04) rotateY(-20deg);
+  transition: all 0.4s;
 }
 
 .menu-bar {
@@ -513,7 +521,7 @@ input[type="checkbox"]:checked + label:before {
   font-weight: 600;
   display: flex;
   align-self: center;
-  color: var(--color-gray-500)
+  color: var(--color-gray-500);
 }
 
 .menu-icon,
@@ -525,12 +533,10 @@ input[type="checkbox"]:checked + label:before {
   align-items: center;
 }
 
-.header .right-icon {
-}
-
 .close-menu {
   position: relative;
   display: none;
+  height: 48px;
 }
 
 .hidden {
@@ -543,7 +549,7 @@ input[type="checkbox"]:checked + label:before {
 .sidebar {
   display: none;
   position: fixed;
-  top: 70px;
+  top: 56.8px;
   left: 0;
   height: 0px;
   background-color: #ffffff;
@@ -594,7 +600,7 @@ input[type="checkbox"]:checked + label:before {
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 100;
+  z-index: 9;
   background-color: #0000008e;
   backdrop-filter: blur(5px);
 }
@@ -603,13 +609,10 @@ input[type="checkbox"]:checked + label:before {
   .header {
     height: fit-content;
   }
-  .menu-bar {
-    display: none;
-  }
-  .nav-btn {
-    display: none;
-  }
-  .header-profile.desktop {
+  .menu-bar,
+  .nav-btn,
+  .header-profile.desktop,
+  .logo {
     display: none;
   }
   .title {
@@ -619,10 +622,6 @@ input[type="checkbox"]:checked + label:before {
     left: 50%;
     transform: translate(-50%, -50%);
   }
-
-  .logo {
-    display: none;
-  }
 }
 @media screen and (min-width: 801px) {
   .header {
@@ -630,25 +629,15 @@ input[type="checkbox"]:checked + label:before {
   }
   .menu-icon,
   .settings-icon,
-  .close-menu {
-    display: none;
-  }
-  .sidebar {
-    display: none;
-  }
-  .sidebar.active {
-    display: none;
-  }
-  .shade {
-    display: none;
-  }
-
+  .close-menu,
+  .sidebar,
+  .sidebar.active,
+  .shade,
+  .title,
   .right-icon {
     display: none;
   }
-  .title {
-    display: none;
-  }
+  
 }
 
 /*# 리스트 목록 스타일 ( 제목, 내용 / 부가내용 X (날짜, 시간등) */
@@ -740,7 +729,6 @@ input[type="checkbox"]:checked + label:before {
   text-align: center;
 }
 
-
 .menuContainer {
   display: flex;
   flex-direction: column;
@@ -751,7 +739,7 @@ input[type="checkbox"]:checked + label:before {
   font-size: 1rem;
   font-weight: 600;
   padding: 16px 12px;
-  color: var(--color-gray-600)
+  color: var(--color-gray-600);
 }
 
 /* 여기는 피그마 input 끝 */
@@ -807,14 +795,11 @@ input[type="checkbox"]:checked + label:before {
   margin: 0 auto;
 }
 
-
 .content,
 .thumbs-up,
 .timestamp {
   margin-bottom: 10px;
 }
-
-
 
 .content {
   font-size: 16px;
@@ -884,4 +869,38 @@ input[type="checkbox"]:checked + label:before {
   margin-right: 10px;
   border-radius: 5px;
   background-color: var(--color-gray-100);
+}
+
+.comment-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  width: 100%;
+}
+
+.comment-input {
+  padding: 10px;
+  margin-right: 8px;
+  border: 2px solid #d1d3d4;
+  font-size: 16px;
+  outline: none;
+}
+
+.comment-button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #4285f4;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+  outline: none;
+}
+
+.comment-input:focus {
+  border-color: #4285f4;
+}
+
+.comment-button:hover {
+  background-color: #357ae8;
 }

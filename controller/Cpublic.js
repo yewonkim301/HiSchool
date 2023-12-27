@@ -20,8 +20,26 @@ exports.getPost = async (req, res) => {
   try {
     let link = "/home"; //홈페이지 이동
     let title = "익명 게시판";
+
+    const { userid, userid_num } = jwt.verify(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
+    
+    const nicknames = await User.findAll({
+      attributes: ["nickname"],
+      where:{
+        userid_num: userid_num
+      }
+    })
+
+    let nicknameArray = [];
+    await nicknames.forEach((element) => {
+      nicknameArray.push(element.dataValues.nickname);
+    });    
     const Posts = await Public_post.findAll();
-    res.render("publicPost/publicPostMain", { data: Posts, title, link });
+
+    res.render("publicPost/publicPostMain", { data: Posts, title, link, nicknameArray });
   } catch {
     console.error(err);
     res.send("Internal Server Error!");
@@ -88,7 +106,6 @@ exports.getPostDetail = async (req, res) => {
         "image",
         "userid_num",
         "updatedAt",
-
       ],
       where: {
         post_id: post_id,
@@ -133,9 +150,8 @@ exports.getPostDetail = async (req, res) => {
       // console.log("@@@@@ clubPostCommentLike", clubPostCommentLike);
     }
 
-
     // s3 이미지 불러오기
-    console.log('Cclub 328 clubPost.image', getPost.image);
+    console.log("Cclub 328 clubPost.image", getPost.image);
     const postImgOrigin = getPost.image;
 
     let postImages = [];
@@ -143,7 +159,6 @@ exports.getPostDetail = async (req, res) => {
     for (i = 0; i < postImgOrigin.length; i++) {
       postImages.push(await getSignedFile(postImgOrigin[i]));
     }
-
 
     // console.log('Cclub 332 postImg', postImages);
     console.log(`commentLIKE >>>>>> ${getPostCommentLike}`);
@@ -155,7 +170,7 @@ exports.getPostDetail = async (req, res) => {
       title,
       link,
       userid_num,
-      postImages
+      postImages,
     });
   } catch (err) {
     console.error(err);
@@ -365,6 +380,33 @@ exports.deletePostComment = async (req, res) => {
   }
 };
 
+// DELETE /publicPostDetail/:post_id/:comment_id/:userid_num
+exports.deletePostCommentLike = async (req, res) => {
+  try {
+    const { post_id, comment_id, userid_num } = req.params;
+    console.log(`>>>>>>>>>>>>>>>>>>>>> ${userid_num}`);
+    console.log(`>>>>>>>>>>>>>>>>>>>>> ${post_id}`);
+    console.log(`>>>>>>>>>>>>>>>>>>>>> ${comment_id}`);
+    const deleteLike = await Public_post_comment_like.destroy({
+      where: {
+        likeid_num: userid_num,
+        comment_id: comment_id
+      }
+    });
+    if (deleteLike) {
+      res.send({ isDeleted: true });
+    } else {
+      res.send({ isDeleted: false });
+    }
+  }
+
+  catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
+  }
+};
+
+
 // DM
 // GET /dm => dm 가져오기
 exports.dm = async (req, res) => {
@@ -535,8 +577,8 @@ exports.getAllMembers = async (req, res) => {
     const getleader = await Club.findOne({
       attributes: ["leader_id"],
       where: {
-        club_id: club_id
-      }
+        club_id: club_id,
+      },
     });
 
     const getAllMembersShow = await Club_members.findAll({
@@ -548,7 +590,10 @@ exports.getAllMembers = async (req, res) => {
         },
       },
     });
-    console.log("Cpublic getAllMembers getAllMembersShow >>>>", getAllMembersShow);
+    console.log(
+      "Cpublic getAllMembers getAllMembersShow >>>>",
+      getAllMembersShow
+    );
 
     // 회원 전체 조회
     const getusers = await Club_members.findAll({
@@ -574,7 +619,6 @@ exports.getAllMembers = async (req, res) => {
       userInfo.push(info.name);
       // console.log("클럽 멤버 이름조회 >>>>>>>>>>>>>", userInfo);
       // console.log("getUserInfo까지 실행 완료");
-
     }
     await res.render("clubAdmin/clubAdminTransfer", {
       data: getAllMembersShow,
@@ -817,7 +861,6 @@ exports.getClubMembers = async (req, res) => {
       userInfo.push(info.name);
       console.log("클럽 멤버 이름조회 >>>>>>>>>>>>>", userInfo);
       console.log("getUserInfo까지 실행 완료");
-
     }
     if (!getMembers) {
       res.render("clubAdmin/clubAdminMemberList");
@@ -1030,7 +1073,7 @@ exports.deleteMyID = async (req, res) => {
         res.send({ isDeleted: false });
       }
     } else {
-      console.error('S3 이미지 삭제 실패');
+      console.error("S3 이미지 삭제 실패");
     }
   } catch (err) {
     console.error(err);
@@ -1118,15 +1161,28 @@ exports.getMyPageProfile = async (req, res) => {
     });
 
     // console.log('Cpublic 1056 : ', myPageMainProfile.profile_img);
+    if(myPageMainProfile.profile_img == '') {
+      console.log('프로필 사진 없다');
+    }
 
-    const profileImgOrigin = myPageMainProfile.profile_img;
-    const profileImg = await getSignedFile(profileImgOrigin);
+    if (myPageMainProfile.profile_img == '') {
+      return res.render("mypage/mypageProfile", {
+        data: myPageMainProfile,
+        clubProfile,
+        profileImg: null,
+      });
+    } else {
+      console.log("Cpublic 1123 myPageMainProfile :", myPageMainProfile);
+      const profileImgOrigin = myPageMainProfile.profile_img;
+      console.log("Cpublic 1123 profileImgOrigin :", profileImgOrigin);
+      const profileImg = await getSignedFile(profileImgOrigin);
 
-    res.render("mypage/mypageProfile", {
-      data: myPageMainProfile,
-      clubProfile,
-      profileImg,
-    });
+      return res.render("mypage/mypageProfile", {
+        data: myPageMainProfile,
+        clubProfile,
+        profileImg,
+      });
+    }
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
