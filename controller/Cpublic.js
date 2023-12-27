@@ -752,29 +752,20 @@ exports.getClubMembersApplyList = async (req, res) => {
       },
     });
 
-    // console.log(
-    //   "Cpublic.js 636 getClubMembersApplyList getusers 실행 완료",
-    //   getusers
-    // );
-
     let getusersid = [];
-
-    getusers.forEach((element) => {
-      // console.log("여기!!!!!!!!!!!!!>>>>>>", element.dataValues.userid_num);
-      getusersid.push(element.dataValues.userid_num);
-    });
-
-    // console.log("Cpublic.js 646 getusers forEach", getusersid);
+    for (const element of getusers){
+      getusersid.push(element.dataValues.userid_num)
+    }
+    // getusers.forEach((element) => {
+    //   getusersid.push(element.dataValues.userid_num);
+    // });
 
     let userInfo = [];
 
     if (getusersid == []) {
-      getusersid.forEach(async (element) => {
-        // console.log(element);
+      for(const element of getusersid){
         let info = await User.findOne({ where: { userid_num: element } });
-        // console.log("info >>>>>>>>", info.nickname);
         userInfo.push(info.name);
-        // console.log("userinfo >>>>>>>>>>>>>", userInfo);
 
         res.render("clubAdmin/clubAdminApplyList", {
           getApplyList,
@@ -783,7 +774,19 @@ exports.getClubMembersApplyList = async (req, res) => {
           title,
           link,
         });
-      });
+      }
+      // getusersid.forEach(async (element) => {
+      //   let info = await User.findOne({ where: { userid_num: element } });
+      //   userInfo.push(info.name);
+
+      //   res.render("clubAdmin/clubAdminApplyList", {
+      //     getApplyList,
+      //     userInfo,
+      //     club_id: club_id,
+      //     title,
+      //     link,
+      //   });
+      // });
     } else {
       res.render("clubAdmin/clubAdminApplyList", {
         getApplyList,
