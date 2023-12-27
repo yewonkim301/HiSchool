@@ -26,15 +26,20 @@ exports.getPost = async (req, res) => {
       process.env.JWT_SECRET
     );
     
-    const nickname = await User.findOne({
+    const nicknames = await User.findAll({
       attributes: ["nickname"],
       where:{
         userid_num: userid_num
       }
     })
 
+    let nicknameArray = [];
+    await nicknames.forEach((element) => {
+      nicknameArray.push(element.dataValues.nickname);
+    });    
     const Posts = await Public_post.findAll();
-    res.render("publicPost/publicPostMain", { data: Posts, title, link, nickname });
+
+    res.render("publicPost/publicPostMain", { data: Posts, title, link, nicknameArray });
   } catch {
     console.error(err);
     res.send("Internal Server Error!");
