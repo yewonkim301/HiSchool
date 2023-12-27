@@ -16,7 +16,7 @@ const {
   uploadMultipleSignedUrl,
   getMultipleSignedUrl,
   getSignedFile,
-  deleteFile
+  deleteFile,
 } = require("./../middleware/s3");
 
 // Club
@@ -325,9 +325,8 @@ exports.getClubPost = async (req, res) => {
       // console.log("@@@@@ clubPostCommentLike", clubPostCommentLike);
     }
 
-
     // s3 이미지 불러오기
-    console.log('Cclub 328 clubPost.image', clubPost.image);
+    console.log("Cclub 328 clubPost.image", clubPost.image);
     const postImgOrigin = clubPost.image;
 
     let postImages = [];
@@ -336,10 +335,7 @@ exports.getClubPost = async (req, res) => {
       postImages.push(await getSignedFile(postImgOrigin[i]));
     }
 
-
-    console.log('Cclub 332 postImg', postImages);
-
-
+    console.log("Cclub 332 postImg", postImages);
 
     res.render("myclub/myclubPostDetail", {
       data: clubPost,
@@ -374,22 +370,17 @@ exports.getClubEditPost = async (req, res) => {
       postImages.push(await getSignedFile(postImgOrigin[i]));
     }
 
-
     res.render("myclub/myclubEditPost", {
       data: clubPost,
       title: "게시글 수정",
       link,
-      postImages
+      postImages,
     });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
   }
 };
-
-
-
-
 
 // PATCH /myclubEditPost/:club_id/:post_id  : 동아리 게시글 수정
 exports.patchPost = async (req, res) => {
@@ -399,12 +390,12 @@ exports.patchPost = async (req, res) => {
 
     const previousImage = await Club_post.findOne({
       where: {
-        post_id: post_id
+        post_id: post_id,
       },
-      attributes: ['image']
+      attributes: ["image"],
     });
 
-    console.log('Cclub 407 previousImage : ', previousImage);
+    console.log("Cclub 407 previousImage : ", previousImage);
 
     let imageArr = previousImage.image;
 
@@ -428,7 +419,6 @@ exports.patchPost = async (req, res) => {
       }
     );
 
-
     res.send(updatePost);
   } catch (err) {
     console.error(err);
@@ -443,9 +433,9 @@ exports.deletePost = async (req, res) => {
 
     const postImages = await Club_post.findOne({
       where: {
-        post_id: post_id
+        post_id: post_id,
       },
-      attributes: ['image']
+      attributes: ["image"],
     });
 
     const isDeleted = await Club_post.destroy({
@@ -455,17 +445,14 @@ exports.deletePost = async (req, res) => {
       },
     });
 
-
-
-    let isImagesDeleted = '';
+    let isImagesDeleted = "";
     for (i = 0; i < postImages.image.length; i++) {
       isImagesDeleted = await deleteFile(postImages.image[i]);
-      console.log('Cclub 426 isImagesDeleted', isImagesDeleted);
+      console.log("Cclub 426 isImagesDeleted", isImagesDeleted);
       if (!isImagesDeleted) {
         break;
       }
     }
-
 
     if (isDeleted) {
       res.send({ isDeleted: true });

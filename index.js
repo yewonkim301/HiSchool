@@ -10,7 +10,11 @@ const session = require("express-session");
 const db = require("./models/Index.js");
 const { Club, User } = require("./models/Index");
 const jwt = require("jsonwebtoken");
-const { isNotLoggedIn,isLoggedIn,preventIndex,} = require("./middleware/loginCheck");
+const {
+  isNotLoggedIn,
+  isLoggedIn,
+  preventIndex,
+} = require("./middleware/loginCheck");
 
 const cors = require("cors");
 // const { sequelize } = require('./models/Index.js');
@@ -68,7 +72,7 @@ app.use("/", indexRouter);
 
 let flag = true;
 
-app.get("/chat/:note_id", isLoggedIn ,async (req, res) => {
+app.get("/chat/:note_id", isLoggedIn, async (req, res) => {
   if (flag) {
     flag = false;
     socketRouter.startSocket(io);
@@ -79,24 +83,20 @@ app.get("/chat/:note_id", isLoggedIn ,async (req, res) => {
     );
 
     const getName = await User.findOne({
-      attributes:["nickname"],
-      userid_num: userid_num
+      attributes: ["nickname"],
+      userid_num: userid_num,
     });
-    
-
   }
   res.render("chat");
 });
 
 app.get("/myclubChat/:club_id", isLoggedIn, async (req, res) => {
-  if (flag) {
-    flag = false;
-    socketRouter.startClubSocket(io);
-  }
   const { userid, userid_num } = jwt.verify(
     req.cookies.jwt,
     process.env.JWT_SECRET
   );
+
+  console.log("user_id", userid_num);
 
   const name = await User.findOne({
     attributes: ["name"],
@@ -104,10 +104,16 @@ app.get("/myclubChat/:club_id", isLoggedIn, async (req, res) => {
       userid_num: userid_num,
     },
   });
+  console.log("app get", name);
+  if (flag) {
+    flag = false;
+    socketRouter.startClubSocket(io);
+  }
 
   res.render("myclub/myclubChat", {
     club_id: req.params.club_id,
     name: name.dataValues.name,
+    userid_num,
   });
 });
 

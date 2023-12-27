@@ -12,6 +12,10 @@ const ClubChat = (Sequelize, DataTypes) => {
         type: DataTypes.STRING(100),
         allowNull: false,
       },
+      userid_num: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
       content: {
         type: DataTypes.STRING(200),
         allowNull: false,

@@ -95,9 +95,15 @@
           placeholder="사용자 이름 입력"
           value="<%= name %>"
         />
-        <button id="btn">만들기</button>
+        <input
+          type="text"
+          id="userid_num"
+          placeholder="사용자 이름 입력"
+          value="<%= userid_num %>"
+        />
+        <button type="submit" id="btn">만들기</button>
       </form>
-      <ul id="lists"></ul>
+      <!-- <ul id="lists"></ul> -->
     </div>
     <div id="body" hidden>
       <div id="msg">
@@ -129,6 +135,8 @@
       const notice = document.querySelector("#notice");
 
       let myName;
+      let rooName;
+      let userid_num = roomForm.querySelector("#userid_num").value;
 
       //룸리스트 < ===== 룰 리스트로 나오는데 li가 아니라 div로 roomList가 나온다
       // socket.on("roomList", (roomLists) => {
@@ -155,21 +163,22 @@
       // });
       //메세지 띄우기
       socket.on("newMessage", (message, nick) => {
-        console.log(message, nick);
+        console.log("newMessage > ", message, nick);
         const div = document.createElement("div");
-        const p = document.createElement("p");
+        //   const p = document.createElement("p");
         if (myName === nick) {
           //내가입력한 텍스트
           div.classList.add("my-chat");
+          div.innerHTML = `<p class="mychatMsg">${message}</p>`;
         } else {
           div.classList.add("other-chat");
+          div.innerHTML = `<p class="otherchatName">${nick}</p><p class="otherchatMsg">${message}</p>`;
         }
+        console.log("div >>>>", div);
 
         //채팅 텍스트
-        p.textContent = bool
-          ? `(귓속말) ${nick} : ${message}`
-          : `${nick} : ${message}`;
-        div.appendChild(p);
+        //   p.textContent = `${nick} : ${message}`;
+        //   div.appendChild(p);
         msg.appendChild(div);
       });
       //입장 메세지 이벤트
@@ -184,12 +193,14 @@
       ///폼 이벤트
       roomForm.addEventListener("submit", (e) => {
         e.preventDefault();
-        const roomName = roomForm.querySelector("#roomName");
+        //   const roomName = roomForm.querySelector("#roomName");
+        roomName = roomForm.querySelector("#roomName");
         const userName = roomForm.querySelector("#userName");
         if (roomName.value === "" || userName.value === "") {
           alert("방이름과 닉네임 적어주세요");
           return;
         }
+        console.log(roomName.value, userName.value);
         socket.emit("create", roomName.value, userName.value, () => {
           const main = document.querySelector("#main");
           const body = document.querySelector("#body");
@@ -201,14 +212,17 @@
       });
       chatForm.addEventListener("submit", (e) => {
         e.preventDefault();
-        const user = document.querySelector("#userList");
+        //   const user = document.querySelector("#userList");
+        const roomName = roomForm.querySelector("#roomName");
         const message = document.querySelector("#message");
-        console.log(user.value);
+        //   console.log(user.value);
         const msg = {
           nick: myName,
-          user: user.value,
+          roomName: roomName.value,
           message: message.value,
+          userid_num: userid_num,
         };
+        console.log("ejs msg", msg);
         socket.emit("sendMessage", msg);
         message.value = "";
       });
