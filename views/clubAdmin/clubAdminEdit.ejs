@@ -15,9 +15,7 @@
   align-items: center;
   justify-content: space-between;
  }
- #deleteClub{
-  background-color:red;
- }
+
  .member{
   display: flex;
   align-items: center;
@@ -30,7 +28,7 @@
 <body>
   
     <%- include('../component/header')%>
-    <div class="container">
+    <main class="container">
       <div class="input">
     
           <label for="editClubName">동아리 이름</label>
@@ -50,28 +48,33 @@
         <div class="member">
           <div class="input">
             <label>회원수</label>
+            
             <div>
               <%=clubmembers.length%> 명
             </div>
             </div>
             <div class="input">
               <label for="editClubLimit">제한 회원수</label>
-              <div class="unit" style="flex-direction: row; display: flex; gap:12px; align-items: center;">
-                <input id="editClubLimit" class="textField" value="<%=clubAdminEdit.limit%>"><span>명</span>
+              <div>
+                <%=clubAdminEdit.limit%> 명
               </div>
-          </div>
+              </div>
+ 
         </div>
     
         <div class="input">
           <label for="editClubKeyword">키워드</label>
           <input class=" textField" id="editClubKeyword" value="<%=clubAdminEdit.keyword%>">
         </div>
-        <button onclick="deleteClubInfo()"  id="deleteClub" class=" btn-sm btn-primary"> 동아리 삭제</button><br><br>
-        <div class="cta"><button onclick="patchClubInfo()" class="btn btn-primary">수정</button></div>
-      </div>
-    </div>
+        <button onclick="deleteClubInfo()"  id="deleteClub" class=" btn-sm btn-secondary"> 동아리 삭제</button>
+
+
+        <div class="cta"><button onclick="patchClubInfo()" class="btn btn-primary">수정</button>
+        </div>
+      </main>
+
     
-    </div>
+
 
 
   <script>
