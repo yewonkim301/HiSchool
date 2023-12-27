@@ -365,6 +365,31 @@ exports.deletePostComment = async (req, res) => {
   }
 };
 
+// DELETE /publicPostDetail/:post_id/:comment_id/:liked_num
+exports.deletePostCommentLike = async (req, res) => {
+  try{
+    const {post_id, comment_id, liked_num} = req.params;
+    const deleteLike = await Public_post_comment_like.destroy({
+      where:{
+        liked_num: liked_num,
+        comment_id: comment_id
+      }
+    })
+    if (deleteLike) {
+      res.send({ isDeleted: true });
+    } else {
+      res.send({ isDeleted: false });
+    }
+  }
+
+  catch (err) 
+  {
+  console.error(err);
+  res.send("Internal Server Error!");
+  }
+}
+
+
 // DM
 // GET /dm => dm 가져오기
 exports.dm = async (req, res) => {
