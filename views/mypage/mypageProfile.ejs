@@ -101,7 +101,7 @@
                     <%= data.school %>
                   </div>
                   <!-- 소켓 확인용 -->
-                  <button class="edit-button" onclick="move()">쪽지보내기</button>
+                  <button class="edit-button" onclick="location.href='/chat/<%= room %>'">쪽지보내기</button>
                 </div>
         </div>
         <div class="self-introduction">
@@ -122,10 +122,21 @@
 
       <!--  임시 코드 입니다 ,,, 소켓 확인용 -->
       <script>
-        function move() {
-          // 새로운 페이지로 이동
-          window.location.href = '/chat';
-        }
+        // const nick = document.getElementsByClassName("profile-name").innerText;
+        
+        // async function move() {
+        //   console.log("nick >>>>> ", nick)
+        //   await axios({
+        //     method : "get",
+        //     url: `/chat`,
+        //     params: {
+        //       nickname: `<%= data.nickname %>`,
+              
+        //     }
+        //   })
+          
+        //   window.location.href = '/chat';
+        // }
       </script>
 
     </main>

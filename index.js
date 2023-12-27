@@ -69,11 +69,10 @@ app.use("/", indexRouter);
 let flag = true;
 
 // DM
-app.get("/chat", isLoggedIn ,async (req, res) => {
-  if (flag) {
-    flag = false;
-    socketRouter.startSocket(io);
-  }
+app.get("/chat/:room", isLoggedIn ,async (req, res) => {
+  // 상대방 닉네임
+  // const {nickname} = req.query;
+  const {room} =req.params;
     const { userid, userid_num } = jwt.verify(
       req.cookies.jwt,
       process.env.JWT_SECRET
@@ -85,7 +84,15 @@ app.get("/chat", isLoggedIn ,async (req, res) => {
         userid_num: userid_num
       }
     });
-    res.render("chat", {note_id:req.params, myNickname: getName.dataValues.nickname});
+    // console.log("nickname", nickname);
+
+  if (flag) {
+    flag = false;
+    socketRouter.startSocket(io);
+  }
+
+    // console.log(room);
+    res.render("chat",{room, myNickname: getName.dataValues.nickname});
 });
 
 // Club
