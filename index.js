@@ -68,11 +68,12 @@ app.use("/", indexRouter);
 
 let flag = true;
 
-app.get("/chat/:note_id", isLoggedIn ,async (req, res) => {
+// DM
+app.get("/chat", isLoggedIn ,async (req, res) => {
   if (flag) {
     flag = false;
     socketRouter.startSocket(io);
-
+  }
     const { userid, userid_num } = jwt.verify(
       req.cookies.jwt,
       process.env.JWT_SECRET
@@ -80,14 +81,14 @@ app.get("/chat/:note_id", isLoggedIn ,async (req, res) => {
 
     const getName = await User.findOne({
       attributes:["nickname"],
-      userid_num: userid_num
+      where:{
+        userid_num: userid_num
+      }
     });
-    
-
-  }
-  res.render("chat");
+    res.render("chat", {note_id:req.params, myNickname: getName.dataValues.nickname});
 });
 
+// Club
 app.get("/myclubChat/:club_id", isLoggedIn, async (req, res) => {
   if (flag) {
     flag = false;
