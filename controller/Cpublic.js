@@ -20,8 +20,21 @@ exports.getPost = async (req, res) => {
   try {
     let link = "/home"; //홈페이지 이동
     let title = "익명 게시판";
+
+    const { userid, userid_num } = jwt.verify(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
+    
+    const nickname = await User.findOne({
+      attributes: ["nickname"],
+      where:{
+        userid_num: userid_num
+      }
+    })
+
     const Posts = await Public_post.findAll();
-    res.render("publicPost/publicPostMain", { data: Posts, title, link });
+    res.render("publicPost/publicPostMain", { data: Posts, title, link, nickname });
   } catch {
     console.error(err);
     res.send("Internal Server Error!");
