@@ -1,4 +1,27 @@
 const roomList = [];
+const {
+  User,
+  Dm
+} = require("../models/Index");
+// GET /chat
+// exports.openChat = async (req,res) => {
+//   const {nickname} = req.body;
+//   const { userid, userid_num } = jwt.verify(
+//     req.cookies.jwt,
+//     process.env.JWT_SECRET
+//   );
+
+//   const getName = await User.findOne({
+//     attributes: ["nickname"],
+//     where:{
+//       userid_num: userid_num
+//     }
+//   });
+
+//   const room_name = [getName, nickname].sort();
+//   console.log("room_name >>>>>>>>>>>>>>>>>",room_name);
+
+// }
 
 exports.connection = (io, socket) => {
     console.log('접속 :', socket.id);

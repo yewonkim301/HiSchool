@@ -1052,21 +1052,8 @@ exports.deleteMyID = async (req, res) => {
 
     console.log("Cpublic 969 profileImg", profileImg.profile_img);
 
-    const isDeleted = false
     if(profileImg.profile_img !== '') {
-      isDeleted = await deleteFile(profileImg.profile_img);
-    } else {
-      const destroyMyID = await User.destroy({
-        where: {
-          userid_num: userid_num,
-        },
-      });
-
-      if (destroyMyID) {
-        res.send({ isDeleted: true });
-      } else {
-        res.send({ isDeleted: false });
-      }
+      const isDeleted = await deleteFile(profileImg.profile_img);
     }
     
 
@@ -1158,6 +1145,20 @@ exports.getMyPageProfile = async (req, res) => {
     let link = "/publicPostMain"; // 익명게시판에서 사용자의 프로필로 이동하는 것이기 때문에? 잘 모르겠네요,,
     const { nickname } = req.params;
 
+    const { userid, userid_num } = jwt.verify(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
+
+    const getName = await User.findOne({
+      attributes:["nickname"],
+      where:{
+        userid_num: userid_num
+      }
+    });
+
+    const room = [getName.dataValues.nickname + nickname].sort();
+
     // console.log('Cpublic 1042 nickname :', nickname)
     const myPageMainProfile = await User.findOne({
       where: {
@@ -1181,17 +1182,20 @@ exports.getMyPageProfile = async (req, res) => {
         data: myPageMainProfile,
         clubProfile,
         profileImg: null,
+        room
       });
     } else {
       console.log("Cpublic 1123 myPageMainProfile :", myPageMainProfile);
       const profileImgOrigin = myPageMainProfile.profile_img;
       console.log("Cpublic 1123 profileImgOrigin :", profileImgOrigin);
       const profileImg = await getSignedFile(profileImgOrigin);
+      console.log("getMyPageProfile ", nickname)
 
       return res.render("mypage/mypageProfile", {
         data: myPageMainProfile,
         clubProfile,
         profileImg,
+        room
       });
     }
   } catch (err) {
@@ -1247,6 +1251,7 @@ exports.home = async (req, res) => {
 
     // console.log("home clubInfo 내가 가입한 동아리 >>>>>>", clubInfo);
     // console.log("home getClubs 전체 동아리 >>>>>>", getClubs);
+
     await res.render("home", {
       allClubs: getClubs,
       myClubs: clubInfo,
