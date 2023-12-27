@@ -362,16 +362,16 @@ exports.deletePostComment = async (req, res) => {
   }
 };
 
-// DELETE /publicPostDetail/:post_id/:comment_id/:liked_num
+// DELETE /publicPostDetail/:post_id/:comment_id/:userid_num
 exports.deletePostCommentLike = async (req, res) => {
   try {
-    const { post_id, comment_id, likeid_num } = req.params;
-    console.log(`>>>>>>>>>>>>>>>>>>>>> ${likeid_num}`);
+    const { post_id, comment_id, userid_num } = req.params;
+    console.log(`>>>>>>>>>>>>>>>>>>>>> ${userid_num}`);
     console.log(`>>>>>>>>>>>>>>>>>>>>> ${post_id}`);
     console.log(`>>>>>>>>>>>>>>>>>>>>> ${comment_id}`);
     const deleteLike = await Public_post_comment_like.destroy({
       where: {
-        likeid_num: likeid_num,
+        likeid_num: userid_num,
         comment_id: comment_id
       }
     });

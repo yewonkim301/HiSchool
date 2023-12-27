@@ -14,7 +14,7 @@ exports.getDmRoom = async (req, res) =>{
             userid_num: userid_num
           }
         });
-        const roomName = myNickname + yourNickname;
+        const roomName = [ myNickname, yourNickname].sort();
         res.send(roomName, myNickname);
   }
   catch (err) {
