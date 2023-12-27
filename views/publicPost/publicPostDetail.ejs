@@ -35,7 +35,7 @@
                      <%= getPost.title %>
                   </h2>
 
-                  <span><%= getPost.nickname %></span>
+                  <span onclick="handleProfileLink()"><%= getPost.nickname %></span>
 
                   <% var date=new Date(getPost.updatedAt); var year=date.getFullYear(); var month=('0' +
                      (date.getMonth() + 1)).slice(-2); var day=('0' + date.getDate()).slice(-2); var
@@ -354,6 +354,12 @@
 
          function editPost() {
             window.location.href = `/publicEditPost/${post_id}`;
+         }
+
+
+
+         function handleProfileLink() {
+            document.location.href = `/mypageProfile/<%= getPost.nickname%>`
          }
 
 

@@ -105,9 +105,16 @@
         </div>
         <div class="self-introduction">
           <p>자기소개</p>
-          <span>
-            <%= clubProfile.introduction %>
-          </span>
+          <% if(clubProfile.introduction !== null) { %>
+            <span>
+              <%= clubProfile.introduction %>
+            </span>
+          <% } else { %>
+            <span>
+              자기소개가 없습니다
+            </span>
+            <% } %>
+          
         </div>
       </div>
     </main>
