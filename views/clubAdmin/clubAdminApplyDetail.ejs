@@ -13,7 +13,7 @@
 
       }
       .wide{
-        height: 7rem;
+        height: 6rem;
       }
     </style>
 
@@ -33,14 +33,14 @@
         <label>학년</label>
         <h2><%=userInfo.grade%></h2>
         <label>지원동기</label>
-        <input class="wide textField" value="<%=getClubAdminApplyDetail.motivation%>" readonly></input>
+        <div class="wide textField" value="<%=getClubAdminApplyDetail.motivation%>" readonly><%=getClubAdminApplyDetail.motivation%></div>
         <label>자기소개</label>
-        <input class="wide textField" value="<%=getClubAdminApplyDetail.introduction%>" readonly></input>
+        <div class="wide textField" value="<%=getClubAdminApplyDetail.introduction%>" readonly><%=getClubAdminApplyDetail.introduction%></div>
       </div>
 
       <div class="agree cta">
         <button type="button" class="btn btn-primary" onclick="approve()">승인</button>
-        <button type='button' class='btn btn-secondary'onclick="reject()">거절</button>
+        <button type='button' class='btn btn-neutral'onclick="reject()">거절</button>
       </div>
         
       
