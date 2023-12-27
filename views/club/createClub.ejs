@@ -132,6 +132,10 @@
           return;
         }
 
+        if(clubKeywords.length>=0){
+          return;
+        }
+
         try {
           const res = await axios({
             method: "POST",

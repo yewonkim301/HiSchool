@@ -23,9 +23,10 @@
                   <div class="list-title"  onclick="showDetail('<%= getSupport[i].qa_id %>','<%= getSupport[i].secret %>','<%= getSupport[i].userid_num %>')">
                      비밀글입니다.
                   </div>
+                  <div class="list-content"><%= userNickname[i] %></div>
                   <div id="<%=getSupport[i].qa_id%>" style="display: none;">
-                     내용: <%= getSupport[i].qa_content %>
-                     작성자: <%= getSupport[i].userid_num %>
+                    <div><%= getSupport[i].qa_content %></div>
+                     
                      <input type="text" class="inputField">
                      <button type="button" class="btn-sm btn-secondary" onclick="patch('<%=getSupport[i].qa_id%>')">등록</button>
                      <%= getSupport[i].qa_comment %>
@@ -44,9 +45,10 @@
                <div class="list-title" onclick="showDetail('<%= getSupport[i].qa_id %>','<%= getSupport[i].secret %>','<%= getSupport[i].userid_num %>')">
                   <%= getSupport[i].qa_content %>
                </div>
+               <div class="list-content"><%= userNickname[i] %></div>
                <div id="<%=getSupport[i].qa_id%>" style="display: none;">
-                  내용: <%= getSupport[i].qa_content %>
-                  작성자: <%= getSupport[i].userid_num %>
+                   <div><%= getSupport[i].qa_content %></div>
+                  
                   <div><input type="text" class="inputField">
                   <button type="button" class="btn-sm btn-secondary" onclick="patch('<%=getSupport[i].qa_id%>')">등록</button></div>
                   <%= getSupport[i].qa_comment %>
