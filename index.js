@@ -8,6 +8,13 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const db = require("./models/Index.js");
+const { Club, User } = require("./models/Index");
+const jwt = require("jsonwebtoken");
+const {
+  isNotLoggedIn,
+  isLoggedIn,
+  preventIndex,
+} = require("./middleware/loginCheck");
 
 const cors = require("cors");
 // const { sequelize } = require('./models/Index.js');
@@ -37,7 +44,7 @@ app.use(
     secret: process.env.COOKIE_SECRET,
     cookie: {
       httpOnly: true,
-      secure: false, // https 
+      secure: false, // https
       maxAge: 1000 * 60 * 60 * 24 * 7,
     },
   })
@@ -64,7 +71,7 @@ const socketRouter = require("./routes/socket");
 app.use("/", indexRouter);
 
 let flag = true;
-app.get("/chat", (req, res) => {
+app.get("/chat/:chat_id", (req, res) => {
   if (flag) {
     flag = false;
     socketRouter.startSocket(io);
@@ -72,8 +79,31 @@ app.get("/chat", (req, res) => {
   res.render("chat");
 });
 
+app.get("/myclubChat/:club_id", isLoggedIn, async (req, res) => {
+  if (flag) {
+    flag = false;
+    socketRouter.startClubSocket(io);
+  }
+  const { userid, userid_num } = jwt.verify(
+    req.cookies.jwt,
+    process.env.JWT_SECRET
+  );
+
+  const name = await User.findOne({
+    attributes: ["name"],
+    where: {
+      userid_num: userid_num,
+    },
+  });
+
+  res.render("myclub/myclubChat", {
+    club_id: req.params.club_id,
+    name: name.dataValues.name,
+  });
+});
+
 app.get("*", (req, res) => {
-  res.render('404')
+  res.render("404");
 }); // error 페이지 ?
 
 db.sequelize.sync({ force: false }).then(() => {
