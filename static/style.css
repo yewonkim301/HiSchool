@@ -458,6 +458,15 @@ input[type="checkbox"]:checked + label:before {
   align-items: center;
 }
 
+.logo img {
+  cursor: pointer;
+}
+
+.logo:hover {
+  transform: scale(1.04) rotateY(-20deg);
+  transition: all 0.4s;
+}
+
 .menu-bar {
   display: flex;
   align-items: center;
@@ -525,12 +534,10 @@ input[type="checkbox"]:checked + label:before {
   align-items: center;
 }
 
-.header .right-icon {
-}
-
 .close-menu {
   position: relative;
   display: none;
+  height: 48px;
 }
 
 .hidden {
@@ -543,7 +550,7 @@ input[type="checkbox"]:checked + label:before {
 .sidebar {
   display: none;
   position: fixed;
-  top: 70px;
+  top: 56.8px;
   left: 0;
   height: 0px;
   background-color: #ffffff;
@@ -594,7 +601,7 @@ input[type="checkbox"]:checked + label:before {
   left: 0;
   width: 100vw;
   height: 100vh;
-  z-index: 100;
+  z-index: 9;
   background-color: #0000008e;
   backdrop-filter: blur(5px);
 }
@@ -603,13 +610,10 @@ input[type="checkbox"]:checked + label:before {
   .header {
     height: fit-content;
   }
-  .menu-bar {
-    display: none;
-  }
-  .nav-btn {
-    display: none;
-  }
-  .header-profile.desktop {
+  .menu-bar,
+  .nav-btn,
+  .header-profile.desktop,
+  .logo {
     display: none;
   }
   .title {
@@ -619,10 +623,6 @@ input[type="checkbox"]:checked + label:before {
     left: 50%;
     transform: translate(-50%, -50%);
   }
-
-  .logo {
-    display: none;
-  }
 }
 @media screen and (min-width: 801px) {
   .header {
@@ -630,25 +630,15 @@ input[type="checkbox"]:checked + label:before {
   }
   .menu-icon,
   .settings-icon,
-  .close-menu {
-    display: none;
-  }
-  .sidebar {
-    display: none;
-  }
-  .sidebar.active {
-    display: none;
-  }
-  .shade {
-    display: none;
-  }
-
+  .close-menu,
+  .sidebar,
+  .sidebar.active,
+  .shade,
+  .title,
   .right-icon {
     display: none;
   }
-  .title {
-    display: none;
-  }
+  
 }
 
 /*# 리스트 목록 스타일 ( 제목, 내용 / 부가내용 X (날짜, 시간등) */
