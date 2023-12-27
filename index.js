@@ -72,26 +72,24 @@ app.use("/", indexRouter);
 
 let flag = true;
 
-app.get("/chat/:room", isLoggedIn ,async (req, res) => {
-    if (flag) {
+app.get("/chat/:room", isLoggedIn, async (req, res) => {
+  if (flag) {
     flag = false;
-    socketRouter.startSocket(io);}
+    socketRouter.startSocket(io);
+  }
   // 상대방 닉네임
   // const {nickname} = req.query;
-  const {room} =req.params;
-    const { userid, userid_num } = jwt.verify(
-      req.cookies.jwt,
-      process.env.JWT_SECRET
-    );
+  const { room } = req.params;
+  const { userid, userid_num } = jwt.verify(
+    req.cookies.jwt,
+    process.env.JWT_SECRET
+  );
 
-    const getName = await User.findOne({
-      attributes: ["nickname"],
-      userid_num: userid_num,
-    });
-  }
-
-    // console.log(room);
-    res.render("chat",{room, myNickname: getName.dataValues.nickname});
+  const getName = await User.findOne({
+    attributes: ["nickname"],
+    userid_num: userid_num,
+  });
+  res.render("chat", { room, myNickname: getName.dataValues.nickname });
 });
 
 // Club
