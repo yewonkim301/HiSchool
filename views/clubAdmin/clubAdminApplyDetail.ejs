@@ -6,27 +6,49 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <title>Document</title>
     <link rel="stylesheet" href="/style.css" />
-    <link rel="stylesheet" href="/clubAdminApplyDetail.css" />
+    <style>
+      .agree{
+        display: flex;
+        justify-content: space-between;
+
+      }
+      .wide{
+        height: 6rem;
+      }
+    </style>
+
   </head>
 
   <body>
     <%- include('../component/header')%>
-    <div class="container">
-      <div class="content">
-        <p class="content-title">이름</p>
-        <p class="content-detail"><%=userInfo.name%></p>
-        <p class="content-title">학교</p>
-        <p class="content-detail"><%=userInfo.school%></p>
-        <p class="content-title">학년</p>
-        <p class="content-detail"><%=userInfo.grade%></p>
-        <p class="content-title">지원동기</p>
-        <p class="content-detail"><%=getClubAdminApplyDetail.motivation%></p>
-        <p class="content-title">자기소개</p>
-        <p class="content-detail"><%=getClubAdminApplyDetail.introduction%></p>
-        <button type="button" class="btn btn-primary" onclick="approve()">승인</button><br /><br><br>
-        <button onclick="reject()">거절</button>
+    <main class="container">
+
+
+
+      <div class="input">
+        <label>이름</label>
+        <div class="list-title"><%=userInfo.name%></div>
+        <label>학교</label>
+        <div class="list-title"><%=userInfo.school%></div>
+        <label>학년</label>
+        <div class="list-title"><%=userInfo.grade%></div>
+        <label>지원동기</label>
+        <div class="wide textField" value="<%=getClubAdminApplyDetail.motivation%>" readonly><%=getClubAdminApplyDetail.motivation%></div>
+        <label>자기소개</label>
+        <div class="wide textField" value="<%=getClubAdminApplyDetail.introduction%>" readonly><%=getClubAdminApplyDetail.introduction%></div>
       </div>
-    </div>
+
+      <div class="agree cta">
+        <button type="button" class="btn btn-primary" onclick="approve()">승인</button>
+        <button type='button' class='btn btn-neutral'onclick="reject()">거절</button>
+      </div>
+        
+      
+
+
+
+
+    </main>
 
     <script>
 

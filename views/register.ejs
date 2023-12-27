@@ -77,6 +77,24 @@
             랜덤 아이디 생성
           </button>
         </div>
+
+        <div class="input">
+          <label for="nickname">닉네임</label>
+          <input type="text" id="nickname" class="textField" value="" />
+          <button
+          type="button"
+          onclick="generateRandomNickname()"
+          style="
+            border: 1px solid var(--color-primary-500);
+            color: var(--color-primary-500);
+            width: fit-content;
+            padding: 8px 16px;
+          "
+        >
+          랜덤 닉네임 생성
+        </button>
+        </div>
+
         <div class="input">
           <label for="name">이름</label>
           <input type="text" id="name" class="textField" value="관리자" />
@@ -202,10 +220,47 @@
       document.getElementById("phone").value =
         "010" + generateRandomPhoneNumber();
 
+        
       function generateRandomId() {
         const randomNumber = Math.floor(Math.random() * 1000);
         document.getElementById("userid").value = "user" + randomNumber;
       }
+
+      function generateRandomNickname() {
+        const surnames = [
+          "강력한",
+          "엄청난",
+          "대단한",
+          "귀여운",
+          "푸른",
+          "배고픈",
+          "화난",
+          "철학적인",
+          "밝은",
+          "예쁜",
+        ];
+        const names = [
+        "호랑이",
+        "비버",
+        "강아지",
+        "부엉이",
+        "여우",
+        "치타",
+        "문어",
+        "고양이",
+        "미어캣",
+        "다람쥐"
+        ];
+
+        const randomNumber = Math.floor(Math.random() * 100);
+
+        const randomSurname =
+          surnames[Math.floor(Math.random() * surnames.length)];
+        const randomName = names[Math.floor(Math.random() * names.length)];
+        document.getElementById('nickname').value = randomSurname + randomName + randomNumber
+      }
+
+      generateRandomNickname()
 
       function generateRandomKoreanName() {
         const surnames = [
@@ -456,6 +511,7 @@
               birthday: form.birthday.value,
               phone: form.phone.value,
               password: form.password.value,
+              nickname: form.nickname.value,
               profile_img,
             },
           });

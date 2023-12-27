@@ -95,21 +95,50 @@
               <% } %>
                 <div class="profile-info">
                   <div class="profile-name">
-                    <%= data.name %>
+                    <%= data.nickname %>
                   </div>
                   <div class="profile-school">
                     <%= data.school %>
                   </div>
-                  <button class="edit-button">쪽지보내기</button>
+                  <!-- 소켓 확인용 -->
+                  <button class="edit-button" onclick="location.href='/chat/<%= room %>'">쪽지보내기</button>
                 </div>
         </div>
         <div class="self-introduction">
           <p>자기소개</p>
-          <span>
-            <%= clubProfile.introduction %>
-          </span>
+          <% if(clubProfile.introduction !== null) { %>
+            <span>
+              <%= clubProfile.introduction %>
+            </span>
+          <% } else { %>
+            <span>
+              자기소개가 없습니다
+            </span>
+            <% } %>
+          
         </div>
       </div>
+
+
+      <!--  임시 코드 입니다 ,,, 소켓 확인용 -->
+      <script>
+        // const nick = document.getElementsByClassName("profile-name").innerText;
+        
+        // async function move() {
+        //   console.log("nick >>>>> ", nick)
+        //   await axios({
+        //     method : "get",
+        //     url: `/chat`,
+        //     params: {
+        //       nickname: `<%= data.nickname %>`,
+              
+        //     }
+        //   })
+          
+        //   window.location.href = '/chat';
+        // }
+      </script>
+
     </main>
 </body>
 

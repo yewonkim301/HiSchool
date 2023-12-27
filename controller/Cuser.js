@@ -21,6 +21,7 @@ exports.postRegister = async (req, res, next) => {
     birthday,
     name,
     grade,
+    nickname,
     classid,
     profile_img,
   } = req.body;
@@ -40,7 +41,7 @@ exports.postRegister = async (req, res, next) => {
       school,
       phone,
       profile_img,
-      nickname: Math.random().toString(36).substring(2, 12),
+      nickname,
       birthday,
       name,
       grade,

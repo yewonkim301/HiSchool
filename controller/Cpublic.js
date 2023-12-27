@@ -25,9 +25,8 @@ exports.getPost = async (req, res) => {
       req.cookies.jwt,
       process.env.JWT_SECRET
     );
-      
-    const Posts = await Public_post.findAll({
-    });
+
+    const Posts = await Public_post.findAll({});
 
     res.render("publicPost/publicPostMain", { data: Posts, title, link });
   } catch {
@@ -57,18 +56,20 @@ exports.createPost = async (req, res) => {
       req.cookies.jwt,
       process.env.JWT_SECRET
     );
+
     const getName = await User.findOne({
-      attributes:["nickname"],
       where: {
         userid_num: userid_num,
       },
+      attributes: ["nickname"],
     });
+
     const newPost = await Public_post.create({
       title: title,
       content: content,
       image: image,
       userid_num: userid_num,
-      nickname: getName,
+      nickname: getName.nickname,
     });
     res.send(newPost);
   } catch (err) {
@@ -97,6 +98,7 @@ exports.getPostDetail = async (req, res) => {
         "image",
         "userid_num",
         "updatedAt",
+        "nickname",
       ],
       where: {
         post_id: post_id,
@@ -141,15 +143,20 @@ exports.getPostDetail = async (req, res) => {
       // console.log("@@@@@ clubPostCommentLike", clubPostCommentLike);
     }
 
-    // s3 이미지 불러오기
-    console.log("Cclub 328 clubPost.image", getPost.image);
-    const postImgOrigin = getPost.image;
-
     let postImages = [];
 
-    for (i = 0; i < postImgOrigin.length; i++) {
-      postImages.push(await getSignedFile(postImgOrigin[i]));
-    }
+
+    // s3 이미지 불러오기
+    if (getPost.image !== "") {
+      console.log("Cclub 328 clubPost.image", getPost.image);
+      const postImgOrigin = getPost.image;
+
+      
+
+      for (i = 0; i < postImgOrigin.length; i++) {
+        postImages.push(await getSignedFile(postImgOrigin[i]));
+      }
+    } 
 
     // console.log('Cclub 332 postImg', postImages);
     console.log(`commentLIKE >>>>>> ${getPostCommentLike}`);
@@ -381,22 +388,19 @@ exports.deletePostCommentLike = async (req, res) => {
     const deleteLike = await Public_post_comment_like.destroy({
       where: {
         likeid_num: userid_num,
-        comment_id: comment_id
-      }
+        comment_id: comment_id,
+      },
     });
     if (deleteLike) {
       res.send({ isDeleted: true });
     } else {
       res.send({ isDeleted: false });
     }
-  }
-
-  catch (err) {
+  } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
   }
 };
-
 
 // DM
 // GET /dm => dm 가져오기
@@ -1048,8 +1052,11 @@ exports.deleteMyID = async (req, res) => {
 
     console.log("Cpublic 969 profileImg", profileImg.profile_img);
 
-    const isDeleted = await deleteFile(profileImg.profile_img);
-    console.log("Cpublic 968 isDeleted : ", isDeleted);
+    if(profileImg.profile_img !== '') {
+      const isDeleted = await deleteFile(profileImg.profile_img);
+    }
+    
+
 
     if (isDeleted) {
       const destroyMyID = await User.destroy({
@@ -1138,6 +1145,20 @@ exports.getMyPageProfile = async (req, res) => {
     let link = "/publicPostMain"; // 익명게시판에서 사용자의 프로필로 이동하는 것이기 때문에? 잘 모르겠네요,,
     const { nickname } = req.params;
 
+    const { userid, userid_num } = jwt.verify(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
+
+    const getName = await User.findOne({
+      attributes:["nickname"],
+      where:{
+        userid_num: userid_num
+      }
+    });
+
+    const room = [getName.dataValues.nickname + nickname].sort();
+
     // console.log('Cpublic 1042 nickname :', nickname)
     const myPageMainProfile = await User.findOne({
       where: {
@@ -1152,26 +1173,29 @@ exports.getMyPageProfile = async (req, res) => {
     });
 
     // console.log('Cpublic 1056 : ', myPageMainProfile.profile_img);
-    if(myPageMainProfile.profile_img == '') {
-      console.log('프로필 사진 없다');
+    if (myPageMainProfile.profile_img == "") {
+      console.log("프로필 사진 없다");
     }
 
-    if (myPageMainProfile.profile_img == '') {
+    if (myPageMainProfile.profile_img == "") {
       return res.render("mypage/mypageProfile", {
         data: myPageMainProfile,
         clubProfile,
         profileImg: null,
+        room
       });
     } else {
       console.log("Cpublic 1123 myPageMainProfile :", myPageMainProfile);
       const profileImgOrigin = myPageMainProfile.profile_img;
       console.log("Cpublic 1123 profileImgOrigin :", profileImgOrigin);
       const profileImg = await getSignedFile(profileImgOrigin);
+      console.log("getMyPageProfile ", nickname)
 
       return res.render("mypage/mypageProfile", {
         data: myPageMainProfile,
         clubProfile,
         profileImg,
+        room
       });
     }
   } catch (err) {

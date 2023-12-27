@@ -6,30 +6,105 @@
     <link rel="stylesheet" href="/style.css" />
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <title>하이스쿨 - 동아리 메인</title>
+    <style>
+      .menuWrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .menuItem {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        justify-content: center;
+        width: 100%;
+        text-align: center;
+        background-color: var(--color-primary-50);
+        border-radius: 8px;
+        transform: scale(1);
+        transition: all 0.5s;
+      }
+
+      .menuItem:hover {
+        background-color: var(--color-primary-100);
+        transition: all 0.5s;
+        img {
+          transform: scale(1.05);
+          transition: all 0.5s;
+        }
+      }
+
+      .menuItem img {
+        margin: 0 auto;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--color-gray-700)
+      }
+
+    </style>
   </head>
 
   <body>
     <%- include('../component/header')%>
     <div class="container">
-      <div class="menuContainer">
-        <a href="/myclubChat/<%=data.club_id%>" class="menuItem">채팅</a>
-        <a href="/myclubSchedule/<%=data.club_id%>" class="menuItem"
-          >동아리 일정</a
-        >
-        <a href="/myclubPostMain/<%=data.club_id%>" class="menuItem"
-          >동아리 게시판</a
-        >
-        <a id="admin" href="/clubAdminMain/<%=data.club_id%>" class="menuItem"
-          >동아리 관리</a
-        >
+      <h1><%= data.club_name %></h1>
+      <span><%= data.description %></span>
+      <div class="menuWrapper">
+        <div class="menuContainer">
+          <a class="menuItem" href="/myclubChat/<%=data.club_id%>">
+            <img
+              width="48"
+              height="48"
+              src="https://img.icons8.com/color/96/chat--v1.png"
+              alt="chat--v1"
+            />
+            <span>채팅</span>
+          </a>
+          <a class="menuItem" href="/myclubPostMain/<%=data.club_id%>">
+            <img width="48" height="48" src="https://img.icons8.com/external-anggara-flat-anggara-putra/64/external-edit-user-interface-anggara-flat-anggara-putra-4.png" alt="external-edit-user-interface-anggara-flat-anggara-putra-4"/>
+            <span>게시판</span>
+          </a>
+          <a class="menuItem" href="/myclubSchedule/<%=data.club_id%>">
+            <img width="48" height="48" src="https://img.icons8.com/fluency/96/calendar--v1.png" alt="calendar--v1"/>
+            <span>일정</span>
+          </a>
+        </div>
+        <a class="menuItem" id="admin" href="/clubAdminMain/<%=data.club_id%>">
+          <img width="48" height="48" src="https://img.icons8.com/fluency/96/settings.png" alt="settings"/>
+          <span>관리</span>
+        </a>
       </div>
+
+
+      <h2>최근 글</h2>
+      <% for(i = 0; i < clubPosts.length; i++) { %>
+        <div class="listContainer">
+          <div class="list">
+            <h3 class="list-title"><%= clubPosts[i].title %></h3>
+            <span class="list-content"><%= clubPosts[i].content %></span><br>
+            <span class="list-content"><%= clubPosts[i].name %></span>
+          </div>
+        </div>
+        <% } %>
+        <button class="btn-sm btn-secondary" onclick="hrefTo('/myclubPostMain/<%= data.club_id %>/')">전체보기</button>
+
+
+        <% for(i = 0; i < foundMember.length; i++) { %>
+          <p><%= foundMember[i].user.name %></p>
+          <p><%= foundMember[i].user.userid_num %></p>
+        <% } %>
+        
     </div>
 
     <script>
       // 동아리 관리자만 동아리 관리 링크 활성화
       const admin = document.querySelector("#admin");
       if ("<%=isLeader%>" === "true") {
-        admin.style.display = "block";
+        admin.style.display = "flex";
       } else {
         admin.style.display = "none";
       }
@@ -37,6 +112,11 @@
         //   window.location.href = `/clubChat/<%=data.club_id%>`;
         //   window.location.href = `/clubChat`;
         console.log(`<%=data.club_id%>`);
+      }
+
+
+      function hrefTo(link) {
+        document.location.href = link
       }
     </script>
   </body>

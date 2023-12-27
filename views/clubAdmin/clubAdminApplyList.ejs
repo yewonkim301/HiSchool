@@ -1,37 +1,48 @@
 <!DOCTYPE html>
 <html lang="ko">
 
-<head>
+<>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>가입 요청</title>
   <link rel="stylesheet" href="/style.css">
-  <link rel="stylesheet" href="/clubAdminApplyList.css">
+
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <style>
+    .noneMessage{
+      font-size: 1rem;
+      text-align: center;
+    }
+
+  </style>
 </head>
 
 <body>
   <%- include('../component/header')%>
-  <div class="container">
-    <main class="request-list">
+  <main class="container">
+
       <!-- 가입 요청 목록 -->
       <% if(getApplyList.length==0){%>
-        <div>가입 요청이 없습니다.</div>
+        <div class="noneMessage">가입 요청이 없습니다.
+          
+        </div>
+        
         <%} else {%>
       <% for(let i=0; i<getApplyList.length;i++){ %>
-      <div class="request">
-        <div class="request-info">
-          <p class="requester-name"><%=userInfo[i]%></p>
-          <p class="request-text"><%=getApplyList[i].introduction%></p>
-        </div>
+      <div class="list">
+        <div class="list-title"><%=userInfo[i]%></div>
+        <div class="list-content"><%=getApplyList[i].introduction%></div>
         <button class="<%=getApplyList[i].userid_num%>" onclick="checkDetail('<%=getApplyList[i].userid_num%>')">상세 정보 확인</button>
       </div>
+      
     
       <% } %>
       <% } %>
       <!-- 추가 요청들을 여기에 반복 -->
-    </main>
-  </div>
+    
+
+
+</main>
   <script>
     console.log('<%=userInfo%>');
     
