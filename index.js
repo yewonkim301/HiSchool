@@ -64,10 +64,22 @@ const socketRouter = require("./routes/socket");
 app.use("/", indexRouter);
 
 let flag = true;
-app.get("/chat", (req, res) => {
+app.get("/chat/:note_id", async (req, res) => {
   if (flag) {
     flag = false;
     socketRouter.startSocket(io);
+
+    const { userid, userid_num } = jwt.verify(
+      req.cookies.jwt,
+      process.env.JWT_SECRET
+    );
+
+    const getName = await User.findOne({
+      attributes:["nickname"],
+      userid_num: userid_num
+    });
+    
+
   }
   res.render("chat");
 });
