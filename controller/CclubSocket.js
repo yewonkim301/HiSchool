@@ -29,17 +29,10 @@ exports.connection = async (io, socket) => {
   //채팅방 목록 보내기
   //   socket.emit("roomList", roomList);
   const roomNum = await Club_chat.findAll({ attributes: ["club_id"] });
-  console.log(`roomNum ${roomNum.length}`);
-  /*
-  let userInfo = [];
-    for (const element of getUserInfo) {
-      // console.log(element);
-      let info = await User.findOne({ where: { userid_num: element } });
-      userInfo.push(info.name);
-      console.log("클럽 멤버 이름조회 >>>>>>>>>>>>>", userInfo);
-      console.log("getUserInfo까지 실행 완료");
-    }
-  */
+  let rooms = [];
+  for (let i = 0; i < roomNum.length; i++) {
+    rooms.push(roomNum[i].club_id);
+  }
 
   //채팅방 만들기 생성
   socket.on("create", async (roomName, userName, cb) => {
@@ -51,18 +44,21 @@ exports.connection = async (io, socket) => {
     socket.user = userName;
 
     console.log("CclubSocket create", roomName, userName);
-    // const roomNum = await Club_chat.findAll({ attributes: ["club_id"] });
-    // console.log(`roomNum ${roomNum.dataValues.club_id}`);
-    // const roomNum = await Club_chat.findAll({});
-    // console.log(`roomNum ${roomNum}`);
-    roomList = [...new Set(roomNum)];
+
+    roomList = [...new Set(rooms)];
     console.log(`roomName: ${roomName}, roomList: ${roomList}`);
+    console.log(JSON.stringify(roomName));
+    let name = JSON.stringify(roomName);
+    // console.log("@@@@@@@>>>", roomList.includes(JSON.stringify(roomName)));
+    console.log("@@@@@@@>>>", typeof roomList, typeof name);
     // 동아리 채팅 정보가 있다면 이전 채팅정보 불러와주기
-    // if (roomList.includes(roomName)) {
-    //   const chats = await Club_chat.findAll({
-    //     where: { clubChat: roomName },
-    //   });
-    // }
+    if (roomList.includes(JSON.stringify(roomName))) {
+      console.log("IF 시퀄 전");
+      const chats = await Club_chat.findAll({
+        where: { club_id: roomName },
+      });
+      console.log("IF 시퀄 후");
+    }
     // console.log("socket on chat >>>>", chats);
     socket.to(roomName).emit("notice", `${userName}님이 입장하셨습니다`);
 
