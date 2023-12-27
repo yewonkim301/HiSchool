@@ -35,6 +35,8 @@
                      <%= getPost.title %>
                   </h2>
 
+                  <span><%= getPost.nickname %></span>
+
                   <% var date=new Date(getPost.updatedAt); var year=date.getFullYear(); var month=('0' +
                      (date.getMonth() + 1)).slice(-2); var day=('0' + date.getDate()).slice(-2); var
                      hours=date.getHours(); var minutes=('0' + date.getMinutes()).slice(-2); var ampm=hours>= 12 ? '오후'
