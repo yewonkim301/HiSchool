@@ -34,7 +34,7 @@
         <div class="menu-bar">
           <a href="/publicPostMain"><div>자유게시판</div></a>
           <a href="/mypageMain"><div>마이페이지</div></a>
-          <a href="#"><div>고객센터</div></a>
+          <a href="/supportMain"><div>고객센터</div></a>
         </div>
         <% if(typeof isLoggedIn !== 'undefined' && isLoggedIn) { %>
           <div class="header-profile desktop">
@@ -48,7 +48,7 @@
           style="border-radius: 100px;"
         />
         <% } else { %>
-          <i class="ri-user-3-fill ri-lg"></i>
+          <img src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png" alt="" width="28">
           <% } %>
           <div class="nav-btn">
             <button
@@ -78,7 +78,7 @@
       <a href="/home">홈</a>
       <a href="/publicPostMain">전체게시판</a>
       <a href="/mypageMain">마이페이지</a>
-      <a href="#">고객센터</a>
+      <a href="/supportMain">고객센터</a>
 
       
 
@@ -96,7 +96,7 @@
         </div>
         <% } else { %>
         <div class="profileImg-container">
-          <i class="ri-user-3-fill ri-2x"></i>
+          <img src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png" alt="" width="48">
         </div>
         <% if(typeof foundUser !== 'undefined' && foundUser) { %>
         <span><%= foundUser.name %>님</span> 

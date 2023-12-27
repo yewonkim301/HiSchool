@@ -18,15 +18,16 @@
     <% if(typeof title !== 'undefined' && title) { %>
     <div class="logo"><%= title %></div>
     <% } else { %>
-    <div class="logo" onclick="toPage('/home')">하이스쿨</div>
+      <div class="logo">
+        <img src="/icons/hi_logo.svg" alt="" width="40" onclick="toPage('/Home')">
+      </div>
 
     <% } %>
 
     <div class="menu-bar">
-      <a href="/home">홈</a>
       <a href="/publicPostMain">자유게시판</a>
       <a href="/mypageMain">마이페이지</a>
-      <a href="#">고객센터</a>
+      <a href="/supportMain">고객센터</a>
     </div>
 
     <div class="nav-btn">
@@ -42,7 +43,7 @@
               style="border-radius: 100px"
             />
           <% } else { %>
-            <i class="ri-user-3-fill ri-lg"></i>
+            <img src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png" alt="" width="28">
           <% } %>
         </div>
         <button
@@ -73,7 +74,7 @@
   <a href="/home">홈</a>
   <a href="/publicPostMain">자유게시판</a>
   <a href="/mypageMain">마이페이지</a>
-  <a href="#">고객센터</a>
+  <a href="/supportMain">고객센터</a>
 
   <div class="header-profile mobile">
     <% if(typeof signedFile !== 'undefined' && signedFile) { %>
@@ -88,7 +89,7 @@
     </div>
     <% } else { %>
     <div class="profileImg-container">
-      <i class="ri-user-3-fill ri-2x"></i>
+      <img src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png" alt="" width="48">
     </div>
     <% if(typeof foundUser !== 'undefined' && foundUser) { %>
     <span><%= foundUser.name %>님</span>
@@ -121,7 +122,9 @@
   feather.replace();
 
   function closeMenu() {
-    document.querySelector(".sidebar").classList.toggle("active");
+    document.getElementById("sidebar").classList.toggle("active");
+    document.querySelector(".close-menu").classList.toggle("visible");
+    document.querySelector(".menu-icon").classList.toggle("hidden");
     document.querySelector(".shade").classList.toggle("visible");
   }
 </script>

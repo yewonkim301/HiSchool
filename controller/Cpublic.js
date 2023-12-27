@@ -88,7 +88,6 @@ exports.getPostDetail = async (req, res) => {
         "image",
         "userid_num",
         "updatedAt",
-
       ],
       where: {
         post_id: post_id,
@@ -133,9 +132,8 @@ exports.getPostDetail = async (req, res) => {
       // console.log("@@@@@ clubPostCommentLike", clubPostCommentLike);
     }
 
-
     // s3 이미지 불러오기
-    console.log('Cclub 328 clubPost.image', getPost.image);
+    console.log("Cclub 328 clubPost.image", getPost.image);
     const postImgOrigin = getPost.image;
 
     let postImages = [];
@@ -143,7 +141,6 @@ exports.getPostDetail = async (req, res) => {
     for (i = 0; i < postImgOrigin.length; i++) {
       postImages.push(await getSignedFile(postImgOrigin[i]));
     }
-
 
     // console.log('Cclub 332 postImg', postImages);
     console.log(`commentLIKE >>>>>> ${getPostCommentLike}`);
@@ -155,7 +152,7 @@ exports.getPostDetail = async (req, res) => {
       title,
       link,
       userid_num,
-      postImages
+      postImages,
     });
   } catch (err) {
     console.error(err);
@@ -535,8 +532,8 @@ exports.getAllMembers = async (req, res) => {
     const getleader = await Club.findOne({
       attributes: ["leader_id"],
       where: {
-        club_id: club_id
-      }
+        club_id: club_id,
+      },
     });
 
     const getAllMembersShow = await Club_members.findAll({
@@ -548,7 +545,10 @@ exports.getAllMembers = async (req, res) => {
         },
       },
     });
-    console.log("Cpublic getAllMembers getAllMembersShow >>>>", getAllMembersShow);
+    console.log(
+      "Cpublic getAllMembers getAllMembersShow >>>>",
+      getAllMembersShow
+    );
 
     // 회원 전체 조회
     const getusers = await Club_members.findAll({
@@ -574,7 +574,6 @@ exports.getAllMembers = async (req, res) => {
       userInfo.push(info.name);
       // console.log("클럽 멤버 이름조회 >>>>>>>>>>>>>", userInfo);
       // console.log("getUserInfo까지 실행 완료");
-
     }
     await res.render("clubAdmin/clubAdminTransfer", {
       data: getAllMembersShow,
@@ -817,7 +816,6 @@ exports.getClubMembers = async (req, res) => {
       userInfo.push(info.name);
       console.log("클럽 멤버 이름조회 >>>>>>>>>>>>>", userInfo);
       console.log("getUserInfo까지 실행 완료");
-
     }
     if (!getMembers) {
       res.render("clubAdmin/clubAdminMemberList");
@@ -1030,7 +1028,7 @@ exports.deleteMyID = async (req, res) => {
         res.send({ isDeleted: false });
       }
     } else {
-      console.error('S3 이미지 삭제 실패');
+      console.error("S3 이미지 삭제 실패");
     }
   } catch (err) {
     console.error(err);
@@ -1118,15 +1116,28 @@ exports.getMyPageProfile = async (req, res) => {
     });
 
     // console.log('Cpublic 1056 : ', myPageMainProfile.profile_img);
+    if(myPageMainProfile.profile_img == '') {
+      console.log('프로필 사진 없다');
+    }
 
-    const profileImgOrigin = myPageMainProfile.profile_img;
-    const profileImg = await getSignedFile(profileImgOrigin);
+    if (myPageMainProfile.profile_img == '') {
+      return res.render("mypage/mypageProfile", {
+        data: myPageMainProfile,
+        clubProfile,
+        profileImg: null,
+      });
+    } else {
+      console.log("Cpublic 1123 myPageMainProfile :", myPageMainProfile);
+      const profileImgOrigin = myPageMainProfile.profile_img;
+      console.log("Cpublic 1123 profileImgOrigin :", profileImgOrigin);
+      const profileImg = await getSignedFile(profileImgOrigin);
 
-    res.render("mypage/mypageProfile", {
-      data: myPageMainProfile,
-      clubProfile,
-      profileImg,
-    });
+      return res.render("mypage/mypageProfile", {
+        data: myPageMainProfile,
+        clubProfile,
+        profileImg,
+      });
+    }
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
