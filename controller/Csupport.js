@@ -15,7 +15,24 @@ exports.getSupport = async (req, res) => {
         let title = "고객센터"
         const getSupport = await Support.findAll();
 
-        res.render("support/supportMain", {getSupport, title, link,userid_num});
+        let getuserid = [];
+        getSupport.forEach((element)=>{
+            getuserid.push(element.dataValues.userid_num);
+        });
+        let userNickname = [];
+
+        for (const element of getuserid){
+            let info = await User.findOne({
+                where:{
+                    userid_num:element
+                }
+            });
+            userNickname.push(info.nickname);
+        }
+        // console.log('>>>>>>>>>>',getuserid);
+        console.log('>>>>>>>>>>',userNickname);
+
+        res.render("support/supportMain", {getSupport, title, link,userid_num,  userNickname});
     }
     catch (err) {
         console.error(err);
