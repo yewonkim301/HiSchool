@@ -10,7 +10,7 @@ const {
   Sequelize,
 } = require("../models/Index");
 const { trace } = require("../routes");
-const { Op } = require("sequelize");
+const { Op, where } = require("sequelize");
 const jwt = require("jsonwebtoken");
 const {
   uploadMultipleSignedUrl,
@@ -838,15 +838,37 @@ exports.getMyclubMain = async (req, res) => {
     process.env.JWT_SECRET
   );
 
-  const foundClub = await Club_members.findOne({
+  const foundMember = await Club_members.findAll({
     where: { club_id: club_id },
-  });
+    include: [
+      { 
+        model: User,
+        required: false,
+        attributes: ['name', 'userid_num', 'profile_img'],
+      }
+    ],
+  })
+
+  
+  console.log('Cclub 853 foundmember : ', foundMember[0].user);
+  console.log('Cclub 853 foundmember : ', foundMember[1].user);
+
+  const clubPosts = await Club_post.findAll({
+    where: {
+      club_id: club_id
+    },
+    attributes: ['title', 'post_id', 'content', 'image', 'name', 'createdAt'],
+    order: [['createdAt', 'DESC']],
+    limit: 3,
+  })
+
+  // console.log('Cclub 854 : ', clubPosts);
 
   const myClub = await Club.findOne({ where: { club_id: club_id } });
   let isLeader;
   if (myClub.leader_id == userid_num) isLeader = true;
   else isLeader = false;
-  res.render("myclub/myclubMain", { data: myClub, isLeader, link });
+  res.render("myclub/myclubMain", { data: myClub, clubPosts, foundMember, isLeader, link });
 };
 
 // GET /clubChat
