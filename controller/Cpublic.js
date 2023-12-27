@@ -1052,8 +1052,9 @@ exports.deleteMyID = async (req, res) => {
 
     console.log("Cpublic 969 profileImg", profileImg.profile_img);
 
+    const isDeleted = false
     if(profileImg.profile_img !== '') {
-      const isDeleted = await deleteFile(profileImg.profile_img);
+      isDeleted = await deleteFile(profileImg.profile_img);
     }
     
 
@@ -1234,7 +1235,6 @@ exports.home = async (req, res) => {
 
     // console.log("home clubInfo 내가 가입한 동아리 >>>>>>", clubInfo);
     // console.log("home getClubs 전체 동아리 >>>>>>", getClubs);
-
     await res.render("home", {
       allClubs: getClubs,
       myClubs: clubInfo,
