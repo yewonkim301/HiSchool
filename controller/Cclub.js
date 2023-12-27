@@ -328,12 +328,12 @@ exports.getClubPost = async (req, res) => {
 
     // s3 이미지 불러오기
     console.log('Cclub 328 clubPost.image', clubPost.image);
-    const postImgOrigin = clubPost.image
+    const postImgOrigin = clubPost.image;
 
-    let postImages = []
-    
-    for(i = 0; i < postImgOrigin.length; i++) {
-      postImages.push(await getSignedFile(postImgOrigin[i]))
+    let postImages = [];
+
+    for (i = 0; i < postImgOrigin.length; i++) {
+      postImages.push(await getSignedFile(postImgOrigin[i]));
     }
 
 
@@ -365,26 +365,60 @@ exports.getClubEditPost = async (req, res) => {
     const clubPost = await Club_post.findOne({
       where: { club_id: club_id, post_id: post_id },
     });
+
+    const postImgOrigin = clubPost.image;
+
+    let postImages = [];
+
+    for (i = 0; i < postImgOrigin.length; i++) {
+      postImages.push(await getSignedFile(postImgOrigin[i]));
+    }
+
+
     res.render("myclub/myclubEditPost", {
       data: clubPost,
       title: "게시글 수정",
       link,
+      postImages
     });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
   }
 };
+
+
+
+
+
 // PATCH /myclubEditPost/:club_id/:post_id  : 동아리 게시글 수정
 exports.patchPost = async (req, res) => {
   try {
     const { club_id, post_id } = req.params;
     const { title, content, image } = req.body;
+
+    const previousImage = await Club_post.findOne({
+      where: {
+        post_id: post_id
+      },
+      attributes: ['image']
+    });
+
+    console.log('Cclub 407 previousImage : ', previousImage);
+
+    let imageArr = previousImage.image;
+
+    for (i = 0; i < image.length; i++) {
+      imageArr.push(image[i]);
+    }
+
+    console.log(imageArr);
+
     const updatePost = await Club_post.update(
       {
         title,
         content,
-        image,
+        image: imageArr,
       },
       {
         where: {
@@ -393,6 +427,8 @@ exports.patchPost = async (req, res) => {
         },
       }
     );
+
+
     res.send(updatePost);
   } catch (err) {
     console.error(err);
@@ -410,7 +446,7 @@ exports.deletePost = async (req, res) => {
         post_id: post_id
       },
       attributes: ['image']
-    })
+    });
 
     const isDeleted = await Club_post.destroy({
       where: {
@@ -421,12 +457,12 @@ exports.deletePost = async (req, res) => {
 
 
 
-    let isImagesDeleted = ''
-    for(i = 0; i < postImages.image.length; i++) {
-      isImagesDeleted = await deleteFile(postImages.image[i])
+    let isImagesDeleted = '';
+    for (i = 0; i < postImages.image.length; i++) {
+      isImagesDeleted = await deleteFile(postImages.image[i]);
       console.log('Cclub 426 isImagesDeleted', isImagesDeleted);
-      if(!isImagesDeleted) {
-        break
+      if (!isImagesDeleted) {
+        break;
       }
     }
 

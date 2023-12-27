@@ -1,10 +1,11 @@
 const passport = require("passport");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { User } = require("../models/Index");
+const { User, Club_post } = require("../models/Index");
 
 const dotenv = require("dotenv").config();
-const { getSignedFileUrl, uploadMultipleSignedUrl,  getSignedFile } = require("../middleware/s3");
+const { getSignedFileUrl, uploadMultipleSignedUrl,  getSignedFile, deleteFile } = require("../middleware/s3");
+const { post } = require("../routes");
 
 
 exports.getRegister = async (req, res, next) => {
@@ -158,6 +159,65 @@ exports.s3MultipleSignedUrl = async (req, res) => {
     } catch (e) {
       return res.status(500).send({
         message: "make url failed",
+      });
+    }
+  }
+}
+
+
+
+exports.s3Delete = async (req, res) => {
+  if (req.method === "POST") {
+    // console.log('s3Delete 실행');
+    try {
+
+      const { userid, userid_num } = jwt.verify(
+        req.cookies.jwt,
+        process.env.JWT_SECRET
+      );
+
+      const { club_id, post_id } = req.params;
+
+      const { key } = req.body
+
+      // const deletedPostImage = await Club_post.update({
+      //   post_img: null,
+      // })
+
+
+      const foundImage = await Club_post.findOne({
+        where: {
+          post_id: post_id
+        },
+        attributes: ["image"]
+      })
+
+      // console.log('foundImage :', foundImage);
+      // { image: [ '5suekut3jq4', 'ts6uwba8pn', 'rybm7tz5o3p' ] }
+
+      let filtered = foundImage.image.filter((element) => element !== key);
+
+      // console.log('filtered', filtered);
+
+      const updatedImage = await Club_post.update({
+        image: filtered
+      }, {
+        where: {
+          post_id: post_id,
+        }
+      })
+
+      // console.log('updatedImage :', updatedImage);
+
+
+
+      const isDeleted = await deleteFile(key);
+      // console.log("Cuser 174 isDeleted : ", isDeleted);
+
+      return res.send(isDeleted);
+    } catch (e) {
+      return res.status(500).send({
+        message: "s3 파일 삭제 실패",
       });
     }
   }

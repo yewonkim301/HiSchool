@@ -10,6 +10,8 @@ router.post("/s3upload", controllerUser.s3upload);
 
 router.post("/s3MultipleSignedUrl", controllerUser.s3MultipleSignedUrl);
 
+router.post("/s3Delete/:club_id/:post_id", controllerUser.s3Delete)
+
 router.get("/", preventIndex, (req, res) => {
   res.render("index");
 });
@@ -337,7 +339,7 @@ router.patch(
 
 // DELETE /publicPostDetail/:post_id 특정 게시물 삭제
 router.delete(
-  "/publicPostDetail/:post_id",
+  "/publicEditPost/:post_id",
   isLoggedIn,
   controllerPublic.deletePost
 );

@@ -2,10 +2,21 @@
 <html lang="ko">
 
   <head>
-    <!-- 생략 (head 내용) -->
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <!-- axios CDN -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <style>
+
+      .postImages {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        width: 100px;
+      }
+
+    </style>
   </head>
 
 <body>
@@ -22,15 +33,192 @@
             <label for="content">내용</label>
             <textarea id="content"><%= data.content %></textarea>
           </div>
-          <!-- <div>
-            <label for="image">이미지 URL</label>
-            <input type="text" id="image" value="<%= data.image %>">
-          </div> -->
-          <button type="button" onclick="submitEdit()">수정하기</button>
+
+          <input
+          type="file"
+          name="filesInput"
+          id="filesInput"
+          accept="image/*"
+          onchange="uploadToClient()"
+          multiple
+        />
+        <div id="preview"></div>
+
+
+          <div class="postImages">
+            <% let parsedPostImages = [] %>
+            <% for(i = 0; i < postImages.length; i++) { %>
+              <% const parts = postImages[i].split("/") %>
+              <% parsedPostImages.push(parts[parts.length -1].split("?")[0]) %>
+            <img src="<%= postImages[i] %>" alt="" class="image<%= i %>"/>
+            <button type="button" class="imageDeleteButton image<%= i %>" onclick="handleDeleteImage('<%= parsedPostImages[i] %>')">삭제</button>
+            <% } %>
+          </div>
+          
+          <button type="button" class="btn btn-primary" onclick="submitEdit()">수정하기</button>
         </form>
-        <button class="btn btn-primary" onclick="deletepost()">삭제</button>
+        <button class="btn btn-secondary" onclick="deletepost()">삭제</button>
       </div>
   </div>
+
+
+
+
+
+  
+  <script>
+    const form = document.forms["add-post"];
+
+    function readURL(input) {}
+
+    function readFiles() {
+      var files = document.getElementById("filesInput").files;
+
+      for (var i = 0; i < files.length; i++) {
+        alert(files[i].name);
+      }
+    }
+
+    let createObjectURL = null;
+    let images = null;
+    let imagesArr = []
+    let payload = []
+    const uploadFiles = document.querySelector("#filesInput");
+    let uploadedFileUrl = "";
+    let uploadedUrl = []
+    let uploadImages = []
+
+    function uploadToClient(e) {
+      if (createObjectURL) {
+        URL.revokeObjectUrl(createObjectURL);
+      }
+
+      console.log("282 : uploadedFiles", uploadFiles);
+      if (uploadFiles.files && uploadFiles.files[0]) {
+        console.log('if문 안으로');
+        console.log(uploadFiles.files.length);
+        for (i = 0; i < uploadFiles.files.length; i++) {
+          console.log(i);
+          const img = uploadFiles.files[i];
+          imagesArr.push(uploadFiles.files[i])
+          images = img
+          console.log("286 images", images);
+          createObjectURL = URL.createObjectURL(img);
+        }
+      }
+
+      console.log('images', images);
+      console.log('imagesArr', imagesArr);
+      console.log('imagesArr type', imagesArr[0].type);
+
+
+
+    for(i = 0; i < imagesArr.length; i++) {
+      payload.push({
+        name: Math.random().toString(36).substring(2, 32),
+        type: imagesArr[i].type
+      })
+    }
+
+
+    }
+
+
+    async function handleSignedUrl() {
+      const uploadedFileOriginUrl = await uploadImgClient();
+      console.log(uploadedFileOriginUrl)
+    }
+
+    
+
+    async function uploadImgClient() {
+      console.log("uploadImgClient 실행");
+      try {
+        const result = await axios({
+          method: "POST",
+          url: "/s3MultipleSignedUrl",
+          data: payload
+        });
+
+        const axiosResult = result;
+        console.log("axiosResult : ", axiosResult);
+        const signedUrl = axiosResult.data;
+        console.log("signedURL", signedUrl);
+
+        
+
+        for(i = 0; i < signedUrl.length; i++) {
+          const uploadRes = await axios({
+          method: "PUT",
+          url: signedUrl[i],
+          data: imagesArr[i],
+        });
+        console.log("uploadRes : ", uploadRes.config.url);
+        uploadedUrl.push(uploadRes.config.url)
+        console.log('uploadedUrl', uploadedUrl);
+        }
+        
+
+        // console.log('first uploadedfileurl', uploadedFileUrl)
+        return uploadedUrl;
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    async function addpost() {
+      const uploadedFileOriginUrl = await uploadImgClient();
+
+      
+
+      if (uploadedFileOriginUrl !== null) {
+        console.log("presignedURL 있어요");
+        console.log('uploadedFileOriginUrl', uploadedFileOriginUrl );
+
+        for(i = 0; i < uploadedFileOriginUrl.length; i++) {
+          const parts = uploadedFileOriginUrl[i].split("/")
+          uploadImages.push(parts[parts.length -1].split("?")[0])
+        }
+
+        console.log('uploadedImages', uploadImages);
+        
+      } else {
+        console.log("presignedURL 없어요");
+        uploadImages = "";
+      }
+
+      console.log("uploadImages", uploadImages);
+
+
+      await axios({
+        method: "POST",
+        url: `/myclubNewPost/<%= data %>`,
+        data: {
+          // 클라이언트에서 서버로 전달할 club_id
+          // userid_num: "2", // 임시 데이터
+          title: form.title.value,
+          content: form.content.value,
+          image: uploadImages,
+        },
+      }).then((res) => {
+        console.log(res.data);
+        if (res.status === 200) {
+          const club_id = res.data.club_id; // 응답으로부터 post_id를 얻음
+          const post_id = res.data.post_id; // 응답으로부터 post_id를 얻음
+          alert("게시물 등록완료");
+          // 새 게시물 엘리먼트 생성
+          const newPostElement = document.createElement("div");
+          newPostElement.innerHTML = `
+                <h3>${form.title.value}</h3>
+                <p>${form.content.value}</p>
+             `;
+          window.location.href = `/myclubPostDetail/${club_id}/${post_id}`;
+        }
+      });
+    }
+  </script>
+
+
 
     <script>
 
@@ -40,7 +228,35 @@
 
       console.log(club_id);
 
-      function submitEdit() {
+
+
+
+      async function submitEdit() {
+
+        const uploadedFileOriginUrl = await uploadImgClient();
+
+
+        if (uploadedFileOriginUrl !== null) {
+        console.log("presignedURL 있어요");
+        console.log('uploadedFileOriginUrl', uploadedFileOriginUrl );
+
+        for(i = 0; i < uploadedFileOriginUrl.length; i++) {
+          const parts = uploadedFileOriginUrl[i].split("/")
+          uploadImages.push(parts[parts.length -1].split("?")[0])
+        }
+
+        console.log('uploadedImages', uploadImages);
+        
+      } else {
+        console.log("presignedURL 없어요");
+        uploadImages = "";
+      }
+
+      console.log("uploadImages", uploadImages);
+
+
+
+
         const title = document.getElementById('title').value;
         const content = document.getElementById('content').value;
         // const image = document.getElementById('image').value;
@@ -50,7 +266,7 @@
         axios.patch(`/myclubEditPost/${club_id}/${post_id}`, {
           title: title,
           content: content,
-          // image: image
+          image: uploadImages,
 
         })
           .then(function (res) {
@@ -80,7 +296,29 @@
             });
         }
       }
-    </script>
+
+
+      async function handleDeleteImage(file) {
+        console.log(file)
+
+        const result = await axios({
+          method: "POST",
+          url: `/s3Delete/${club_id}/${post_id}`,
+          data: {
+            key: file
+          }
+        })
+
+        console.log(result);
+        if(result.data) {
+          alert('삭제되었습니다')
+          location.reload();
+        }
+
+      } 
+
+      </script>
+
 </body>
 
 </html>
