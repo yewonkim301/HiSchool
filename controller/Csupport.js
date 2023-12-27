@@ -29,8 +29,7 @@ exports.getSupport = async (req, res) => {
             });
             userNickname.push(info.nickname);
         }
-        // console.log('>>>>>>>>>>',getuserid);
-        console.log('>>>>>>>>>>',userNickname);
+  
 
         res.render("support/supportMain", {getSupport, title, link,userid_num,  userNickname});
     }
