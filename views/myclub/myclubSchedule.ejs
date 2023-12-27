@@ -9,16 +9,9 @@
   <link rel="stylesheet" href="/myClubPostMain.css" />
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <style>
-    body {
-      font-family: "Noto Sans KR", sans-serif;
-      background: #e9ecef;
-      margin: 0;
-      padding: 0;
-    }
-
     .calendar-container {
       width: 100%;
-      max-width: 320px;
+
       background: white;
       margin: 20px auto;
       border-radius: 8px;
@@ -98,15 +91,27 @@
       height: 5px;
       background-color: blue;
     }
+
+    .schdulebtn {
+      display: flex;
+    }
+
+    .closebtn {
+      margin: 0 15px;
+    }
+
+    .addschedule-btn {
+      margin: 30px;
+    }
   </style>
 </head>
 
 <body>
+
   <%- include('../component/header')%>
-    <div class="container">
-      <button onclick="openModal()" id="plus-button" class="plus-button">
-        +
-      </button>
+    <main class="container">
+
+
       <div class="calendar-container">
         <div class="calendar-controls">
           <button onclick="moveMonth(-1)">이전</button>
@@ -129,50 +134,48 @@
             <!-- 달력의 행은 여기에 들어갑니다 -->
           </tbody>
         </table>
+        <div class="addschedule-btn">
+          <button onclick="openModal()" id="plus-button" class="btn btn-primary">
+            추가하기
+          </button>
+        </div>
         <div id="eventsContainer">
-          <%let checkToday=`${new Date().getFullYear()}-${( new Date().getMonth() + 1 ) .toString() .padStart(2, "0"
-            )}-${new Date().getDate().toString().padStart(2, "0" )}`;%>
+          <% let selectedDate=data; // 클라이언트에서 전달받은 선택된 날짜 %>
             <% if (data && data.length) { %>
-              <% data.forEach(function(schedule) { %>
-                <% if ( checkToday==schedule.date) {%>
-                  <div class="schedule" id="<%= schedule.schedule_id %>">
-                    <h3 id="title<%= schedule.schedule_id %>">
-                      <%= schedule.title %>
-                    </h3>
-                    <p id="date<%= schedule.schedule_id %>">
-                      Date: <%= schedule.date %>
-                    </p>
-                    <p id="time<%= schedule.schedule_id %>">
-                      Time: <%= schedule.time %>
-                    </p>
-                    <p id="content<%= schedule.schedule_id %>">
-                      Content: <%= schedule.content %>
-                    </p>
-                    <button type="button" onclick="patchSchedule('<%= schedule.schedule_id %>')">
-                      수정
-                    </button>
-                    <button type="button" onclick="deleteSchedule('<%= schedule.schedule_id %>')">
-                      삭제
-                    </button>
-                  </div>
-                  <% } %>
-                    <% }); %>
-                      <% } else { %>
-                        <p class="no-events">등록된 일정이 없습니다</p>
-                        <% } %>
-                          <!-- <ul>
-                    <% for (const schedule of data) { %>
-                      <li>
-                        <%= schedule.date %>: <%= schedule.title %> Content: <%= schedule.content %>
-                      </li>
+              <% let hasSchedules=false; %>
+                <% data.forEach(function(schedule) { %>
+                  <% if (selectedDate===schedule.date) { %>
+                    <% hasSchedules=true; %>
+                      <div class="schedule" id="<%= schedule.schedule_id %>">
+                        <h3 id="title<%= schedule.schedule_id %>">
+                          <%= schedule.title %>
+                        </h3>
+                        <p id="date<%= schedule.schedule_id %>">날짜: <%= schedule.date %>
+                        </p>
+                        <p id="time<%= schedule.schedule_id %>">시간: <%= schedule.time %>
+                        </p>
+                        <p id="content<%= schedule.schedule_id %>" class="list">내용: <%= schedule.content %>
+                        </p>
+                        <button class="btn-sm btn-primary" type="button"
+                          onclick="patchSchedule('<%= schedule.schedule_id %>')">수정</button>
+                        <button class="btn-sm btn-primary" type="button"
+                          onclick="deleteSchedule('<%= schedule.schedule_id %>')">삭제</button>
+                      </div>
                       <% } %>
-                  </ul> -->
+                        <% }); %>
+                          <% if (!hasSchedules) { %>
+                            <p class="no-events">등록된 일정이 없습니다</p>
+                            <% } %>
+                              <% } else { %>
+                                <p class="no-events">등록된 일정이 없습니다</p>
+                                <% } %>
         </div>
       </div>
       <!----------------------- 일정을 추가하는 모달 ---------------------->
       <div id="scheduleModal" style="
           display: none;
           position: fixed;
+          width: 70%;
           left: 50%;
           top: 50%;
           transform: translate(-50%, -50%);
@@ -184,21 +187,28 @@
         <!-- <h2>일정 추가</h2> -->
         <h2 id="modalName"></h2>
         <form id="scheduleForm">
-          <label for="modalDate" id="modalDateL">날짜:</label>
-          <input type="date" id="modalDate" />
-          <label for="modalTime">시간:</label>
-          <input type="time" id="modalTime" required /><br />
-          <label for="modalTitle">제목:</label>
-          <input type="text" id="modalTitle" required /><br />
-          <label for="modalContent">내용:</label>
-          <textarea id="modalContent" required></textarea><br />
-          <button type="submit" id="saveBtn">저장</button>
-          <button type="button" id="resaveBtn" onclick="patch()">수정</button>
+          <label for="modalDate" id="modalDateL">날짜:
+            <input type="date" id="modalDate" />
+          </label>
+          <label for="modalTime">시간:
+            <input type="time" id="modalTime" required />
+          </label>
+          <label for="modalTitle">제목:
+            <input type="text" class="textField" id="modalTitle" required />
+          </label>
+          <label for="modalContent">내용:
+            <textarea id="modalContent" class="textField" required></textarea>
+          </label>
+          <div class="schdulebtn">
+            <button type="submit" class="btn-sm btn-primary" id="saveBtn">저장</button>
+            <button type="button" id="resaveBtn" onclick="patch()">수정</button>
+            <button class="btn-sm btn-primary closebtn" onclick="closeModal()">닫기</button>
+          </div>
         </form>
-        <button onclick="closeModal()">닫기</button>
-      </div>
-    </div>
 
+      </div>
+
+    </main>
     <!----------------------- 일정을 추가하는 모달 끝 ---------------------->
 
     <script>
@@ -286,58 +296,39 @@
       // 날짜 클릭했을때 기능 추가
 
       function onDateClick(dateStr) {
-        // 모든 날짜에서 'selected-date' 클래스 제거 (테두리 파랑색으로)
         document.querySelectorAll(".calendar td").forEach((td) => {
           td.classList.remove("selected-date");
         });
 
-        // 선택된 날짜에 'selected-date' 클래스 추가 (테두리 파랑색으로)
-        const selectedDate = document.querySelector(
-          `.calendar td[onclick="onDateClick('${dateStr}')"]`
-        );
+        const selectedDate = document.querySelector(`.calendar td[data-date='${dateStr}']`);
         if (selectedDate) {
           selectedDate.classList.add("selected-date");
         }
 
-        // openModal(dateStr); // 모달 열기
-        // document.getElementById("eventsContainer").innerHTML = "";
-        let html = "";
         const eventsContainer = document.getElementById("eventsContainer");
-        <% for (let i = 0; i < data.length; i++) { %>
-          console.log("<%=data[i].date%>");
-          if (dateStr == "<%= data[i].date %>") {
-            console.log("same");
+        let html = "";
+        let found = false;  // 일정이 있는지 여부를 추적하는 플래그
+
+  <% for (let i = 0; i < data.length; i++) { %>
+    if ("<%= data[i].date %>" === dateStr) {
+            found = true;
             html += `
-          <div class="schedule" id="<%= data[i].schedule_id %>">
-            <h3 id="title<%= data[i].schedule_id %>"><%= data[i].title %></h3>
-            <p id="date<%= data[i].schedule_id %>">
-              날짜: <%= data[i].date %>
-            </p>
-            <p id="time<%= data[i].schedule_id %>">
-              시간: <%= data[i].time %>
-            </p>
-            <p id="content<%= data[i].schedule_id %>">
-              내용: <%= data[i].content %>
-            </p>
-            <button
-            class="btn-sm btn-primary"
-              type="button"
-              onclick="patchSchedule('<%= data[i].schedule_id %>')"
-            >
-              수정
-            </button>
-            <button
-            class="btn-sm btn-primary"
-              type="button"
-              onclick="deleteSchedule('<%= data[i].schedule_id %>')"
-            >
-              삭제
-            </button>
-          </div>`;
+        <div class="schedule" id="<%= data[i].schedule_id %>">
+          <h3 id="title<%= data[i].schedule_id %>"><%= data[i].title %></h3>
+          <p id="date<%= data[i].schedule_id %>">날짜: <%= data[i].date %></p>
+          <p id="time<%= data[i].schedule_id %>">시간: <%= data[i].time %></p>
+          <p id="content<%= data[i].schedule_id %>">내용: <%= data[i].content %></p>
+          <button class="btn-sm btn-primary" type="button" onclick="patchSchedule('<%= data[i].schedule_id %>')">수정</button>
+          <button class="btn-sm btn-primary" type="button" onclick="deleteSchedule('<%= data[i].schedule_id %>')">삭제</button>
+        </div>`;
           }
-        <% }%>
-          eventsContainer.innerHTML = html;
-        // console.log("Selected date:", dateStr);
+  <% } %>
+
+  if (!found) {
+          html = '<p class="no-events">등록된 일정이 없습니다.</p>';
+        }
+
+        eventsContainer.innerHTML = html;
       }
 
       // function fetchClubSchedules() {
