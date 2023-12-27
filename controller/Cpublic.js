@@ -756,48 +756,19 @@ exports.getClubMembersApplyList = async (req, res) => {
     for (const element of getusers){
       getusersid.push(element.dataValues.userid_num)
     }
-    // getusers.forEach((element) => {
-    //   getusersid.push(element.dataValues.userid_num);
-    // });
 
     let userInfo = [];
-
-    if (getusersid == []) {
       for(const element of getusersid){
         let info = await User.findOne({ where: { userid_num: element } });
         userInfo.push(info.name);
-
-        res.render("clubAdmin/clubAdminApplyList", {
-          getApplyList,
-          userInfo,
-          club_id: club_id,
-          title,
-          link,
-        });
       }
-      // getusersid.forEach(async (element) => {
-      //   let info = await User.findOne({ where: { userid_num: element } });
-      //   userInfo.push(info.name);
-
-      //   res.render("clubAdmin/clubAdminApplyList", {
-      //     getApplyList,
-      //     userInfo,
-      //     club_id: club_id,
-      //     title,
-      //     link,
-      //   });
-      // });
-    } else {
-      res.render("clubAdmin/clubAdminApplyList", {
-        getApplyList,
-        userInfo,
-        club_id: club_id,
-        title,
-        link,
-      });
-    }
-
-    // console.log("getuserid >>>>>>>>>>>>>", getusersid);
+    res.render("clubAdmin/clubAdminApplyList", {
+      getApplyList,
+      userInfo,
+      club_id: club_id,
+      title,
+      link,
+    });
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
