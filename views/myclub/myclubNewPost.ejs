@@ -12,27 +12,31 @@
 
 <body>
   <%- include('../component/header') %>
-    <div class="container">
-      <!-- 글쓰기 폼 -->
-      <form id="post-form" name="add-post">
-        <h2>게시글 작성</h2>
-        <input type="text" id="post-title" name="title" placeholder="제목을 입력하세요" />
-        <textarea id="post-content" name="content" placeholder="내용을 입력하세요"></textarea>
-        <input type="file" name="filesInput" id="filesInput" accept="image/*" onchange="uploadToClient()" multiple />
-        <div id="preview"></div>
+    <main class="container">
+      <div>
+        <!-- 글쓰기 폼 -->
+        <form id="post-form" name="add-post">
+          <h2>게시글 작성</h2>
+          <label for="">제목
+            <input type="text" id="post-title" class="textField" name="title" placeholder="제목을 입력하세요" />
+          </label>
+          <label>내용
+            <textarea id="post-content" class="textField name=" content" placeholder="내용을 입력하세요"></textarea>
+          </label>
+          <input type="file" name="filesInput" id="filesInput" accept="image/*" onchange="uploadToClient()" multiple />
+          <div id="preview"></div>
 
 
-        <button type="button" class="btn-primary" onclick="addpost()">
-          등록하기
-        </button>
-      </form>
-    </div>
+          <button type="button" class="btn-primary " onclick="addpost()">
+            등록하기
+          </button>
+        </form>
+      </div>
+    </main>
 
     <script>
       const form = document.forms["add-post"];
-
       function readURL(input) { }
-
       function readFiles() {
         var files = document.getElementById("filesInput").files;
 
