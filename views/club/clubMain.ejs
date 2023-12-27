@@ -129,7 +129,8 @@
     let keywordDiv=listArray[i].querySelector('.keyword');
     let keyword=keywordDiv.innerText;
     keywordDiv.innerText="";
-    let keywordsArray = keyword.split(',');
+    let keywords = keyword.replace(/\s/g, "");
+    let keywordsArray = keywords.split(',');
     for (j=0;j<keywordsArray.length; j++){
       keywordDiv.innerHTML+=`<span class="hashtag">#${keywordsArray[j]}</span>`
     }
