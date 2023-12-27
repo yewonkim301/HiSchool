@@ -14,140 +14,239 @@
       integrity="sha512-4lykFR6C2W55I60sYddEGjieC2fU79R7GUtaqr3DzmNbo0vSaO1MfUjMoTFYYuedjfEix6uV9jVTtRCSBU/Xiw=="
       crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-   <!--  -->
+
+   <!-- jquery CDN -->
+   <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+      integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+   <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"
+      integrity="sha256-lSjKY0/srUM9BE3dPm+c4fBo1dky2v27Gdjm2uoZaL0=" crossorigin="anonymous"></script>
+
+   <!--style.css -->
    <link rel="stylesheet" href="../../static/style.css">
    <style>
       .heart-active {
          color: red;
          /* 또는 원하는 색상 */
       }
+
+      #motivation,
+      #introduction {
+         height: 11rem;
+      }
+
+      .textNum {
+         display: flex;
+         justify-content: space-between;
+
+      }
+
+      .heart-active {
+         color: red;
+         /* 또는 원하는 색상 */
+      }
+
+      .flexbox {
+         width: 100%;
+         display: flex;
+         justify-content: flex-end;
+
+      }
+
+      .publicPostDetail {
+         display: flex;
+         justify-content: flex-end;
+         margin-left: 10px;
+      }
+
+
+      .comment-section {
+         margin: 30px 0px;
+         width: 100%;
+      }
+
+      .comment-container {}
+
+      .commentList {
+         width: 100%;
+         display: flex;
+         justify-content: space-between;
+      }
+
+
+      .list-time {
+         width: 100%;
+         display: flex;
+         justify-content: flex-end;
+      }
+
+      .submit {
+         margin-top: 15px;
+      }
+
+      .name {
+         font-size: 1.2rem;
+         font-weight: bold;
+         margin-top: 25px;
+         margin-bottom: 5px;
+      }
+
+      .post-detail {
+         overflow-wrap: break-word;
+         margin-bottom: 100px;
+      }
+
+      .content-time {
+         margin-bottom: 30px;
+      }
+
+      .comment-input {
+         margin: 10px 0px;
+      }
    </style>
 </head>
 
 <body>
    <%- include('../component/header')%>
-      <main>
-         <div class="container">
-            <div class="board">
-               <!-- 게시글 세부 내용 -->
-               <div class="post-detail">
-                  <h2>
-                     <%= getPost.title %>
-                  </h2>
+      <main class="container">
+         <div class="board">
+            <!-- 게시글 세부 내용 -->
+            <div class="post-detail">
+               <h2>
+                  <%= getPost.title %>
+               </h2>
 
-                  <span onclick="handleProfileLink()"><%= getPost.nickname %></span>
-
-                  <% var date=new Date(getPost.updatedAt); var year=date.getFullYear(); var month=('0' +
-                     (date.getMonth() + 1)).slice(-2); var day=('0' + date.getDate()).slice(-2); var
-                     hours=date.getHours(); var minutes=('0' + date.getMinutes()).slice(-2); var ampm=hours>= 12 ? '오후'
-                     : '오전';
-                     hours = hours % 12;
-                     hours = hours ? hours : 12; // 0 시는 12시로 표시
-                     %>
-                     <p>
-
-                        <%= year %>-<%= month %>-<%= day %>
-                                 <%= ampm %>
-                                    <%= hours %>시 <%= minutes %>분
-
-                     </p>
-                     <p>
-                        <%= getPost.content %>
-                           <!-- <i class="like-btn" onclick="likeBtn()">좋아요</i> -->
-                     </p>
-                     <div class="postImages">
-                        <% for(i=0; i < postImages.length; i++) { %>
-                           <img src="<%= postImages[i] %>" alt="">
-                           <% } %>
-                     </div>
-                     <!-- 여기에 좋아요 개수 표시 -->
-
-
-                     <!-- 게시글 작성 시간 등의 메타 정보도 추가 있습니다. -->
+               <div class="name">
+                  <span onclick="handleProfileLink()">
+                     작성자: <%= getPost.nickname %>
+                  </span>
                </div>
 
-               <% if(getPost.userid_num==userid_num) { %>
-                  <button class="btn btn-primary" onclick="editPost('<%= getPost.post_id %>')">수정</button>
-                  <% } %>
-                     <div class="comment-section">
-                        <input type="text" id="commentInput" placeholder="댓글을 입력하세요">
-                     </div>
-                     <button onclick="submitComment()">댓글등록</button>
-                     <button onclick="deletePostComment('<%=getPostComment.comment_id %>')">댓글삭제</button>
-                     <!-- 댓글 들어갈곳 -->
-                     <div class="list" id="commentList">
-                        <% for(let i=0; i < getPostComment.length; i++) { %>
-                           <div class="comment comment-<%= getPostComment[i].comment_id %>">
-                              <p>
-                                 <%= getPostComment[i].comment_nickname %>
+               <% var date=new Date(getPost.updatedAt); var year=date.getFullYear(); var month=('0' + (date.getMonth() +
+                  1)).slice(-2); var day=('0' + date.getDate()).slice(-2); var hours=date.getHours(); var minutes=('0' +
+                  date.getMinutes()).slice(-2); var ampm=hours>= 12 ? '오후'
+                  : '오전';
+                  hours = hours % 12;
+                  hours = hours ? hours : 12; // 0 시는 12시로 표시
+                  %>
+                  <p class="content-time">
+                     <%= year %>-<%= month %>-<%= day %>
+                              <%= ampm %>
+                                 <%= hours %>시 <%= minutes %>분
+                  </p>
 
-                              </p>
-                              <% var date=new Date(getPostComment[i].updatedAt); var year=date.getFullYear(); var
-                                 month=('0' + (date.getMonth() + 1)).slice(-2); var day=('0' +
-                                 date.getDate()).slice(-2); var hours=date.getHours(); var minutes=('0' +
-                                 date.getMinutes()).slice(-2); var ampm=hours>= 12 ? '오후' : '오전';
-                                 hours = hours % 12;
-                                 hours = hours ? hours : 12; // 0 시는 12시로 표시
-                                 %>
-                                 <p>
+                  <p class="content">
+                     <%= getPost.content %>
+                        <!-- <i class="like-btn" onclick="likeBtn()">좋아요</i> -->
+                  </p>
 
-                                    <%= year %>-<%= month %>-<%= day %>
-                                             <%= ampm %>
-                                                <%= hours %>시 <%= minutes %>분
-
-                                 </p>
-                                 <p>
-                                    <%= getPostComment[i].comment %>
-                                 </p>
-
-                                 <% if (getPostComment[i].userid_num===userid_num) { %>
-                                    <button
-                                       onclick="deletePostComment('<%= getPostComment[i].comment_id %>')">댓글삭제</button>
-                                    <button
-                                       onclick="showEditField('<%= getPostComment[i].comment_id %>', '<%= getPostComment[i].comment %>')">댓글수정</button>
-                                    <% } %>
-
-
-                                       <% let likePush='false' %>
-
-                                          <% const content=JSON.parse(JSON.stringify(getPostCommentLike)); %>
-                                             <% for (let j=0; j < content[i].length; j++) { %>
-                                                <% if (content[i][j].likeid_num==userid_num) { %>
-                                                   <%likePush='true'; %>
-
-                                                      <%}%>
-
-
-                                                         <%}%>
-
-
-                                                            <% if (likePush==='false' ){%>
-                                                               <button
-                                                                  onclick="toggleLike('<%= getPostComment[i].comment_id %>', '<%= userid_num %>', '<%= getPostCommentLike[i].length %>', this)">
-                                                                  <i id="heart-icon-<%= getPostComment[i].comment_id %>"
-                                                                     class="fas fa-heart"></i><span class="like-num">
-                                                                     <%= getPostCommentLike[i].length %>
-                                                                  </span>
-                                                               </button>
-                                                               <%} else if(likePush==='true' ) {%>
-                                                                  <button
-                                                                     onclick="toggleLike('<%= getPostComment[i].comment_id %>', '<%= userid_num %>', '<%= getPostCommentLike[i].length %>', this)"><i
-                                                                        id="heart-icon-<%= getPostComment[i].comment_id %>"
-                                                                        class="heart-active fas fa-heart "></i><span
-                                                                        class="like-num">
-                                                                        <%= getPostCommentLike[i].length %>
-                                                                     </span>
-                                                                  </button>
-                                                                  <% }%>
-                           </div>
-                           <% } %>
-                              <div id="editCommentSection" style="display: none;">
-                                 <input type="text" id="editCommentInput" placeholder="댓글 수정">
-                                 <button onclick="submitEdit()">수정 완료</button>
-                              </div>
-                     </div>
+                  <div class="postImages">
+                     <% for(i=0; i < postImages.length; i++) { %>
+                        <img src="<%= postImages[i] %>" alt="">
+                        <% } %>
+                  </div>
             </div>
+            <div class="flexbox">
+               <button class="btn-sm btn-primary myclubPostMain" onclick="publickPostDetail()">목록</button>
+               <% if(getPost.userid_num==userid_num) { %>
+                  <button class="btn-sm btn-primary publicPostDetail"
+                     onclick="editPost('<%= getPost.post_id %>')">수정</button>
+                  <% } %>
+            </div>
+
+            <!-- 댓글 들어갈곳 -->
+
+            <div class="commentList-box" id="commentList">
+               <div class="comment-container">
+                  <label for="commentInput" class="comment-section">댓글
+                     <input type="text" id="commentInput" class="textField comment-input" placeholder="댓글을 입력하세요">
+                     <div class="textNum">
+                        <div class="helpText">최대 60글자까지 입력가능합니다</div>
+                        <div class="helpText">
+                           <span class="motivationCount">0</span>/60
+                        </div>
+                  </label>
+               </div>
+               <button class="btn-sm btn-primary submit" onclick="submitComment()">등록 </button>
+            </div>
+
+            <!-- <button onclick="deletePostComment('<%=getPostComment.comment_id %>')">댓글삭제</button> -->
+
+            <% for(let i=0; i < getPostComment.length; i++) { %>
+               <div class="comment-container list comment comment-<%= getPostComment[i].comment_id %>">
+                  <div class="commentList">
+                     <%= getPostComment[i].comment_nickname %>
+                        <div>
+
+                           <% if (getPostComment[i].userid_num===userid_num) { %>
+                              <button onclick="deletePostComment('<%= getPostComment[i].comment_id %>')"><i
+                                    data-feather="trash-2"></i></button>
+                              <button
+                                 onclick="showEditField('<%= getPostComment[i].comment_id %>', '<%= getPostComment[i].comment %>')"><i
+                                    data-feather="edit"></i></button>
+                              <% } %>
+                        </div>
+                  </div>
+                  <div class="comment-content">
+                     <p>
+                        <%= getPostComment[i].comment %>
+                     </p>
+                  </div>
+
+                  <div class="like">
+                     <% let likePush='false' %>
+                        <% const content=JSON.parse(JSON.stringify(getPostCommentLike)); %>
+                           <% for (let j=0; j < content[i].length; j++) { %>
+                              <% if (content[i][j].likeid_num==userid_num) { %>
+                                 <%likePush='true'; %>
+                                    <%}%>
+                                       <%}%>
+                                          <% if (likePush==='false' ){%>
+                                             <button
+                                                onclick="toggleLike('<%= getPostComment[i].comment_id %>', '<%= userid_num %>', '<%= getPostCommentLike[i].length %>', this)">
+                                                <i id="heart-icon-<%= getPostComment[i].comment_id %>"
+                                                   class="fas fa-heart"></i><span class="like-num">
+                                                   <%= getPostCommentLike[i].length %>
+                                                </span>
+                                             </button>
+                                             <%} else if(likePush==='true' ) {%>
+                                                <button
+                                                   onclick="toggleLike('<%= getPostComment[i].comment_id %>', '<%= userid_num %>', '<%= getPostCommentLike[i].length %>', this)"><i
+                                                      id="heart-icon-<%= getPostComment[i].comment_id %>"
+                                                      class="heart-active fas fa-heart "></i><span class="like-num">
+                                                      <%= getPostCommentLike[i].length %>
+                                                   </span>
+                                                </button>
+                                                <% }%>
+                  </div>
+
+                  <div class="list-time">
+                     <% var date=new Date(getPostComment[i].updatedAt); var year=date.getFullYear(); var month=('0' +
+                        (date.getMonth() + 1)).slice(-2); var day=('0' + date.getDate()).slice(-2); var
+                        hours=date.getHours(); var minutes=('0' + date.getMinutes()).slice(-2); var ampm=hours>= 12 ?
+                        '오후' : '오전';
+                        hours = hours % 12;
+                        hours = hours ? hours : 12; // 0 시는 12시로 표시
+                        %>
+                        <p>
+
+                           <%= year %>-<%= month %>-<%= day %>
+                                    <%= ampm %>
+                                       <%= hours %>시 <%= minutes %>분
+
+                        </p>
+                  </div>
+               </div>
+               <!-- for문 끝 -->
+               <% } %>
+
+                  <div id="editCommentSection" style="display: none;">
+                     <input type="text" id="editCommentInput" placeholder="댓글 수정">
+                     <button onclick="submitEdit()">수정 완료</button>
+                  </div>
+
          </div>
+         </div>
+
       </main>
       <script>
 
@@ -195,6 +294,30 @@
 
          // const content = JSON.parse('<%- JSON.stringify(getPostCommentLike) %>');
          // console.log(content.length);
+
+
+
+         // 유효성 검사 (글자수 세기, 글자수 넘어가면 경고 문구 보여주고 더이상 타이핑 되지 않도록 하기)
+         $('#commentInput').keyup(function (e) {
+            let content1 = $(this).val();
+
+            // 글자수 세기
+            if (content1.length == 0 || content1 == '') {
+               $('.motivationCount').text('0');
+            } else {
+               $('.motivationCount').text(content1.length);
+            }
+
+
+
+            // 글자수 제한
+            if (content1.length > 60) {
+
+               $(this).val($(this).val().substring(0, 60));
+
+            };
+         });
+
 
 
 
@@ -337,7 +460,7 @@
                axios.delete(`/publicPostDetail/${post_id}/${comment_id}`)
                   .then(res => {
                      console.log(res);
-                     if (data.isDeleted) {
+                     if (res.isDeleted) {
                         // 삭제 성공 시, 페이지에서 해당 댓글 요소 제거
                         commentElement.remove();
                      } else {
@@ -359,9 +482,12 @@
 
 
          function handleProfileLink() {
-            document.location.href = `/mypageProfile/<%= getPost.nickname%>`
+            document.location.href = `/mypageProfile/<%= getPost.nickname%>`;
          }
 
+         function publickPostDetail() {
+            window.location.href = `/publicPostMain/`;
+         }
 
 
       </script>

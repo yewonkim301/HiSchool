@@ -47,11 +47,11 @@
 
 <body>
   <%- include('../component/header') %>
-    <div class="container">
-      <div class="board">
-        <!-- 수정 폼 -->
-        <form id="editForm">
-          <div class="myclubEditPost">
+    <main class="container">
+      <div>
+        <div class="board">
+          <!-- 수정 폼 -->
+          <form id="editForm">
             <div>
               <label for="title">제목</label>
               <input type="text" id="title" class="textField-title textField" value="<%= data.title %>">
@@ -72,29 +72,28 @@
                 </div>
               </div>
             </div>
-          </div>
+            <input type="file" name="filesInput" id="filesInput" accept="image/*" onchange="uploadToClient()"
+              multiple />
+            <div id="preview"></div>
 
-          <input type="file" name="filesInput" id="filesInput" accept="image/*" onchange="uploadToClient()" multiple />
-          <div id="preview"></div>
 
+            <div class="postImages">
+              <% let parsedPostImages=[] %>
+                <% for(i=0; i < postImages.length; i++) { %>
+                  <% const parts=postImages[i].split("/") %>
+                    <% parsedPostImages.push(parts[parts.length -1].split("?")[0]) %>
+                      <img src="<%= postImages[i] %>" alt="" class="image<%= i %>" />
+                      <button type="button" class="imageDeleteButton image<%= i %>"
+                        onclick="handleDeleteImage('<%= parsedPostImages[i] %>')">삭제</button>
+                      <% } %>
+            </div>
 
-          <div class="postImages">
-            <% let parsedPostImages=[] %>
-              <% for(i=0; i < postImages.length; i++) { %>
-                <% const parts=postImages[i].split("/") %>
-                  <% parsedPostImages.push(parts[parts.length -1].split("?")[0]) %>
-                    <img src="<%= postImages[i] %>" alt="" class="image<%= i %>" />
-                    <button type="button" class="imageDeleteButton image<%= i %>"
-                      onclick="handleDeleteImage('<%= parsedPostImages[i] %>')">삭제</button>
-                    <% } %>
-          </div>
-
-          <button type="button" class="btn btn-primary" onclick="submitEdit()">수정하기</button>
-        </form>
-        <button class="btn btn-secondary" onclick="deletepost()">삭제</button>
+            <button type="button" class="btn btn-primary" onclick="submitEdit()">수정하기</button>
+          </form>
+          <button class="btn btn-secondary" onclick="deletepost()">삭제</button>
+        </div>
       </div>
-    </div>
-
+    </main>
 
 
 

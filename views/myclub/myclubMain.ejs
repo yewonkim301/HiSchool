@@ -1,103 +1,137 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/style.css" />
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <title>하이스쿨 - 동아리 메인</title>
-    <style>
-      .menuWrapper {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-      }
 
-      .menuItem {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        justify-content: center;
-        width: 100%;
-        text-align: center;
-        background-color: var(--color-primary-50);
-        border-radius: 8px;
-        transform: scale(1);
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <title>하이스쿨 - 동아리 메인</title>
+  <style>
+    .menuWrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .menuItem {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      justify-content: center;
+      width: 100%;
+      text-align: center;
+      background-color: var(--color-primary-50);
+      border-radius: 8px;
+      transform: scale(1);
+      transition: all 0.5s;
+    }
+
+    .menuItem:hover {
+      background-color: var(--color-primary-100);
+      transition: all 0.5s;
+
+      img {
+        transform: scale(1.05);
         transition: all 0.5s;
       }
+    }
 
-      .menuItem:hover {
-        background-color: var(--color-primary-100);
-        transition: all 0.5s;
-        img {
-          transform: scale(1.05);
-          transition: all 0.5s;
-        }
-      }
+    .menuItem img {
+      margin: 0 auto;
+    }
 
-      .menuItem img {
-        margin: 0 auto;
-      }
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--color-gray-700)
+    }
 
-      h1 {
-        font-size: 2.5rem;
-        font-weight: 700;
-        color: var(--color-gray-700)
-      }
+    .list-content {
+      white-space: nowrap;
+      /* 줄바꿈 없이 텍스트를 한 줄에 표시 */
+      overflow: hidden;
+      /* 넘치는 내용을 숨김 */
+      text-overflow: ellipsis;
+      /* 넘치는 내용을 '...'으로 표시 */
+      width: 200px;
+      /* 원하는 컨테이너의 너비를 설정 */
+    }
 
-    </style>
-  </head>
+    .list-title {
+      white-space: nowrap;
+      /* 줄바꿈 없이 텍스트를 한 줄에 표시 */
+      overflow: hidden;
+      /* 넘치는 내용을 숨김 */
+      text-overflow: ellipsis;
+      /* 넘치는 내용을 '...'으로 표시 */
+      width: 200px;
+      /* 원하는 컨테이너의 너비를 설정 */
+    }
+  </style>
+</head>
 
-  <body>
-    <%- include('../component/header')%>
+<body>
+  <%- include('../component/header')%>
     <div class="container">
-      <h1><%= data.club_name %></h1>
-      <span><%= data.description %></span>
+      <h1>
+        <%= data.club_name %>
+      </h1>
+      <span>
+        <%= data.description %>
+      </span>
       <div class="menuWrapper">
         <div class="menuContainer">
           <a class="menuItem" href="/myclubChat/<%=data.club_id%>">
-            <img
-              width="48"
-              height="48"
-              src="https://img.icons8.com/color/96/chat--v1.png"
-              alt="chat--v1"
-            />
+            <img width="48" height="48" src="https://img.icons8.com/color/96/chat--v1.png" alt="chat--v1" />
             <span>채팅</span>
           </a>
           <a class="menuItem" href="/myclubPostMain/<%=data.club_id%>">
-            <img width="48" height="48" src="https://img.icons8.com/external-anggara-flat-anggara-putra/64/external-edit-user-interface-anggara-flat-anggara-putra-4.png" alt="external-edit-user-interface-anggara-flat-anggara-putra-4"/>
+            <img width="48" height="48"
+              src="https://img.icons8.com/external-anggara-flat-anggara-putra/64/external-edit-user-interface-anggara-flat-anggara-putra-4.png"
+              alt="external-edit-user-interface-anggara-flat-anggara-putra-4" />
             <span>게시판</span>
           </a>
           <a class="menuItem" href="/myclubSchedule/<%=data.club_id%>">
-            <img width="48" height="48" src="https://img.icons8.com/fluency/96/calendar--v1.png" alt="calendar--v1"/>
+            <img width="48" height="48" src="https://img.icons8.com/fluency/96/calendar--v1.png" alt="calendar--v1" />
             <span>일정</span>
           </a>
         </div>
         <a class="menuItem" id="admin" href="/clubAdminMain/<%=data.club_id%>">
-          <img width="48" height="48" src="https://img.icons8.com/fluency/96/settings.png" alt="settings"/>
+          <img width="48" height="48" src="https://img.icons8.com/fluency/96/settings.png" alt="settings" />
           <span>관리</span>
         </a>
       </div>
 
 
       <h2>최근 글</h2>
-      <% for(i = 0; i < clubPosts.length; i++) { %>
+      <% for(i=0; i < clubPosts.length; i++) { %>
         <div class="listContainer">
           <div class="list">
-            <h3 class="list-title"><%= clubPosts[i].title %></h3>
-            <span class="list-content"><%= clubPosts[i].content %></span><br>
-            <span class="list-content"><%= clubPosts[i].name %></span>
+            <h3 class="list-title">
+              <%= clubPosts[i].title %>
+            </h3>
+            <span class="list-content">
+              <%= clubPosts[i].content %>
+            </span><br>
+            <span class="list-content">
+              <%= clubPosts[i].name %>
+            </span>
           </div>
         </div>
         <% } %>
-        <button class="btn-sm btn-secondary" onclick="hrefTo('/myclubPostMain/<%= data.club_id %>/')">전체보기</button>
+          <button class="btn-sm btn-secondary" onclick="hrefTo('/myclubPostMain/<%= data.club_id %>/')">전체보기</button>
 
 
-        <% for(i = 0; i < foundMember.length; i++) { %>
-          <p><%= foundMember[i].user.name %></p>
-          <p><%= foundMember[i].user.userid_num %></p>
-        <% } %>
-        
+          <% for(i=0; i < foundMember.length; i++) { %>
+            <p>
+              <%= foundMember[i].user.name %>
+            </p>
+            <p>
+              <%= foundMember[i].user.userid_num %>
+            </p>
+            <% } %>
+
     </div>
 
     <script>
@@ -116,8 +150,9 @@
 
 
       function hrefTo(link) {
-        document.location.href = link
+        document.location.href = link;
       }
     </script>
-  </body>
+</body>
+
 </html>
