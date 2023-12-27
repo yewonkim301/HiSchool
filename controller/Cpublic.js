@@ -1052,8 +1052,11 @@ exports.deleteMyID = async (req, res) => {
 
     console.log("Cpublic 969 profileImg", profileImg.profile_img);
 
-    const isDeleted = await deleteFile(profileImg.profile_img);
-    console.log("Cpublic 968 isDeleted : ", isDeleted);
+    if(profileImg.profile_img !== '') {
+      const isDeleted = await deleteFile(profileImg.profile_img);
+    }
+    
+
 
     if (isDeleted) {
       const destroyMyID = await User.destroy({
