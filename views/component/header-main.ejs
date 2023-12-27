@@ -7,12 +7,12 @@
 
 <header class="header">
   <nav class="navbar">
-    <div class="menu-icon" onclick="toggleSidebar()">
-      <i data-feather="menu"></i>
+    <div class="menu-icon icon" onclick="toggleSidebar()">
+      <i data-feather="menu" class="icon"></i>
     </div>
 
-    <div class="close-menu" onclick="toggleSidebar()">
-      <i data-feather="x"></i>
+    <div class="close-menu icon" onclick="toggleSidebar()">
+      <i data-feather="x" class="icon"></i>
     </div>
 
     <% if(typeof title !== 'undefined' && title) { %>
@@ -61,8 +61,8 @@
     </div>
     <% } %>
 
-    <div class="right-icon">
-      <i data-feather="send"></i>
+    <div class="right-icon icon">
+      <i data-feather="send" class="icon"></i>
     </div>
   </nav>
 </header>
@@ -114,6 +114,7 @@
 
 <script>
   function toggleSidebar() {
+    document.querySelector('.header').classList.toggle("bg-white")
     document.getElementById("sidebar").classList.toggle("active");
     document.querySelector(".close-menu").classList.toggle("visible");
     document.querySelector(".menu-icon").classList.toggle("hidden");
@@ -122,6 +123,7 @@
   feather.replace();
 
   function closeMenu() {
+    document.querySelector('.header').classList.toggle("bg-white")
     document.getElementById("sidebar").classList.toggle("active");
     document.querySelector(".close-menu").classList.toggle("visible");
     document.querySelector(".menu-icon").classList.toggle("hidden");

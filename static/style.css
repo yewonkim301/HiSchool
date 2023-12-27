@@ -223,6 +223,11 @@ body {
   width: 100%;
 }
 
+.icon {
+  stroke: var(--color-gray-500);
+  stroke-width: 2;
+}
+
 /* 버튼 */
 .cta {
   display: flex;
@@ -446,6 +451,10 @@ input[type="checkbox"]:checked + label:before {
   border-bottom: 1px solid var(--color-gray-100);
 }
 
+.header.bg-white {
+  background-color: white;
+}
+
 .header i {
   color: var(--color-gray-400);
 }
@@ -597,7 +606,7 @@ input[type="checkbox"]:checked + label:before {
 
 .shade {
   position: fixed;
-  top: 0;
+  top: 56.8px;
   left: 0;
   width: 100vw;
   height: 100vh;
@@ -609,6 +618,7 @@ input[type="checkbox"]:checked + label:before {
 @media screen and (max-width: 800px) {
   .header {
     height: fit-content;
+    padding: 4px 8px;
   }
   .menu-bar,
   .nav-btn,
