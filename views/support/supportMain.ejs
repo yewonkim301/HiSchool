@@ -5,16 +5,62 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>하이스쿨 - 고객센터 메인</title>
    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.1/feather.min.js"
+    integrity="sha512-4lykFR6C2W55I60sYddEGjieC2fU79R7GUtaqr3DzmNbo0vSaO1MfUjMoTFYYuedjfEix6uV9jVTtRCSBU/Xiw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+   <link rel="stylesheet" href="/style.css" />
    <style>
       .inputField{
          border: 1px solid black;
          width: 80%;
       }
+     
+      .admin-comment{
+         background-color: var(--color-gray-100);
+      }
+      .btn-delete{
+         padding: 0.3rem ;
+         width: fit-content;
+         height: fit-content;
+         background-color: var(--color-gray-200);
+         border-radius: 5px;
+      }
+      .btn-delete:hover{
+         cursor: pointer;
+         background-color:var(--color-gray-300) ;
+      }
+      .btn-delete:active{
+         background-color:var(--color-gray-300) ;
+      }
+      .content{
+         background-color:var(--color-gray-100) ;
+         width: 100%;
+         height: 100px;
+      }
+      .btn-comment{
+         padding: 0.3rem ;
+         width: fit-content;
+         height: fit-content;
+         background-color: var(--color-primary-500);
+         color: white;
+         border-radius: 5px;
+      }
+      .btn-comment:hover{
+         background-color: var(--color-primary-600);
+      }
+      .btn-comment:active{
+         background-color: var(--color-primary-600);
+      }
+      .support{
+         border: 1px solid var(--color-gray-600);
+      }
+
+      
    </style>
 </head>
 <body>
    <%- include('../component/header')%>
-   <div class="container">
+   <main class="container">
 
          <!-- 게시물 목록 -->
          <% for(let i=0; i < getSupport.length; i++) { %>
@@ -24,16 +70,21 @@
                      비밀글입니다.
                   </div>
                   <div class="list-content"><%= userNickname[i] %></div>
+                  <% if (getSupport[i].userid_num==userid_num) { %>
+                     <button type="button" class="btn-delete" onclick="deleteSupport('<%=getSupport[i].qa_id%>')">삭제</button>
+                  <% } %>
                   <div id="<%=getSupport[i].qa_id%>" style="display: none;">
-                    <div><%= getSupport[i].qa_content %></div>
+                    <div class="content"><%= getSupport[i].qa_content %></div>
                      
-                     <input type="text" class="inputField">
-                     <button type="button" class="btn-sm btn-secondary" onclick="patch('<%=getSupport[i].qa_id%>')">등록</button>
-                     <%= getSupport[i].qa_comment %>
+                     <input type="text" class="support">
 
-                     <% if (getSupport[i].userid_num==userid_num) { %>
-                        <button type="button" class="btn btn-primary" onclick="deleteSupport('<%=getSupport[i].qa_id%>')">삭제하기</button>
-                     <% } %>
+                     <button type="button" class="btn-comment" onclick="patch('<%=getSupport[i].qa_id%>')">등록</button>
+                     <div class="admin-comment">
+                        <%= getSupport[i].qa_comment %>
+                     </div>
+                     
+
+                    
                      
                   </div>
                </div>
@@ -46,25 +97,34 @@
                   <%= getSupport[i].qa_content %>
                </div>
                <div class="list-content"><%= userNickname[i] %></div>
+               <% if (getSupport[i].userid_num==userid_num) { %>
+                  <button type="button" class="btn-delete" onclick="deleteSupport('<%=getSupport[i].qa_id%>')">삭제</button>
+               <% } %>
                <div id="<%=getSupport[i].qa_id%>" style="display: none;">
-                   <div><%= getSupport[i].qa_content %></div>
+                   
                   
-                  <div><input type="text" class="inputField">
-                  <button type="button" class="btn-sm btn-secondary" onclick="patch('<%=getSupport[i].qa_id%>')">등록</button></div>
-                  <%= getSupport[i].qa_comment %>
-                  <% if (getSupport[i].userid_num==userid_num) { %>
-                     <button type="button" class="btn btn-primary" onclick="deleteSupport('<%=getSupport[i].qa_id%>')">삭제하기</button>
-                  <% } %>
+                  <div>
+                     <input type="text" class="support">
+                     <button type="button" class="btn-comment" onclick="patch('<%=getSupport[i].qa_id%>')">등록</button>
+                  </div>
+                  <br>
+                  <div class="admin-comment">
+                     <%= getSupport[i].qa_comment %>
+                  </div>
+             
+                  
                </div>
             </div>
             <% } %>
 
             <% } %>
 
-            <div class="createSupport" onclick="createSupport()"><div>+</div></div>
-   </div>
+            <div class="cta">
+               <button class="btn-create" type="button" onclick="createSupport()"><i data-feather="plus" ></i></button>
+             </div>
+   </main>
    <script>
-      console.log('<%=getSupport[1].secret%>')
+ 
 
       function showDetail(qa_id,secret,userid_num){
          if(document.getElementById(`${qa_id}`).style.display=='none'){
@@ -91,9 +151,7 @@
 
        async function patch(qa_id){
          const Div= document.getElementById(`${qa_id}`);
-         const content= Div.querySelector('.inputField').value;
-         console.log(content);
-         console.log(qa_id)
+         const content= Div.querySelector('.support').value;
          try{
             const res= await axios({
             method: "PATCH",
@@ -115,7 +173,8 @@
 
       
       async function deleteSupport(qa_id){
-         try{
+         if(confirm('정말 삭제하시겠습니까?')){
+            try{
             const res= await axios({
             method: "DELETE",
             url: `/supportMain/${qa_id}`,
@@ -129,7 +188,14 @@
             }catch(error){
                console.log("support에서 게시글 등록 오류 > ", error);
             };
+         }else{
+            return;
+         }
+         
       }
+
+      
    </script>
+   <script>feather.replace()</script>
 </body>
 </html>

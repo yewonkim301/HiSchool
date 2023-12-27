@@ -293,19 +293,59 @@ body {
 
 .btn-neutral {
   padding: var(--spacing-1) var(--spacing-2);
-  background-color: var(--color-gray-500);
-  border: solid 1px var(--color-gray-500);
+  background-color: var(--color-gray-400);
+  border: solid 1px var(--color-gray-400);
   color: var(--color-gray-50);
   border-radius: 4px;
   box-shadow: 0px 2px 8px 0px rgba(47, 128, 237, 0.2);
 }
+.btn-neutral:active{
+  background-color: var(--color-gray-500);
+}
+.btn-neutral[disabled]{
+  background-color: var(--color-gray-200);
+}
+
+
 .btn-ghost {
   padding: var(--spacing-1) var(--spacing-2);
   background-color: var();
-  border: 1px solid var(--gray-200, #e5e7eb);
+  border: 1px solid var(--color-gray-200);
   color: var(--gray-400, #9ca3af);
   border-radius: 4px;
   box-shadow: 0px 1px 8px 0px rgba(19, 19, 19, 0.1);
+}
+.btn-ghost:active{
+  background-color: var(--color-gray-100);;
+}
+.btn-ghost[disabled]{
+  background-color: white;
+}
+
+.btn-create{
+  padding: 0;
+  width: 60px;
+  height: 60px;
+  background-color: var(--color-primary-500);
+  color: white;
+  border-radius: 50%;
+  line-height: 0px;
+
+  font-size: 1em;
+  text-align: center;
+  position: fixed;
+  right: 60px;
+  bottom: 60px;
+
+
+
+}
+.btn-create:active{
+  background-color: var(--color-primary-600);
+}
+.btn-create:hover{
+  background-color: var(--color-primary-600);
+  cursor: pointer;
 }
 
 /* 텍스트필드 - input */
@@ -355,11 +395,17 @@ label {
   font-size: 1rem;
   border-radius: 4px;
   width: 100%;
-  color: var(--color-gray-500);
+  /* color: var(--color-gray-700); */
   box-shadow: 0px 1px 8px 0px rgba(19, 19, 19, 0.1);
   /* background: url(icons/search.svg) no-repeat scroll right 12px center; */
 }
+.textField::placeholder{
+  color: var(--color-gray-400);
+}
 
+.textField:not(:placeholder-shown){
+  color: var(--color-gray-600);
+}
 .textField:focus {
   border: solid 1.5px var(--color-primary-500);
   transition: all 0.2s;
@@ -716,6 +762,12 @@ input[type='checkbox']:checked + label:before {
   border: none;
   outline: none;
 }
+.search-input::placeholder{
+  color:var(--color-gray-400)
+}
+.search-input:not(:placeholder-shown){
+  color: var(--color-gray-700);
+}
 
 .search-icon {
   padding-right: 15px;
@@ -886,6 +938,7 @@ input[type='checkbox']:checked + label:before {
   margin-right: 10px;
   border-radius: 5px;
   background-color: var(--color-gray-100);
+  font-size: 0.8rem;
 }
 
 .comment-input {
