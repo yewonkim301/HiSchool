@@ -1208,6 +1208,8 @@ exports.getMyPageProfile = async (req, res) => {
 // GET /home 전체 동아리, 유저아이디가 가입되어있는 동아리 정보 로드
 exports.home = async (req, res) => {
   try {
+
+    let title = '홈'
     const { userid, userid_num } = jwt.verify(
       req.cookies.jwt,
       process.env.JWT_SECRET

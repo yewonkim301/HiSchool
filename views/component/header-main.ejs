@@ -15,14 +15,17 @@
       <i data-feather="x" class="icon"></i>
     </div>
 
-    <% if(typeof title !== 'undefined' && title) { %>
-    <div class="logo"><%= title %></div>
-    <% } else { %>
-      <div class="logo">
-        <img src="/icons/hi_logo.svg" alt="" width="40" onclick="toPage('/Home')">
-      </div>
 
-    <% } %>
+    <div class="logo">
+      <img src="/icons/hi_logo.svg" alt="" width="40" onclick="toPage('/Home')">
+    </div>
+
+
+ 
+      <div class="title" onclick="toPage('/Home')">하이스쿨</div>
+
+
+
 
     <div class="menu-bar">
       <a href="/publicPostMain">자유게시판</a>
