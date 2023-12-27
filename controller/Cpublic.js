@@ -364,14 +364,17 @@ exports.deletePostComment = async (req, res) => {
 
 // DELETE /publicPostDetail/:post_id/:comment_id/:liked_num
 exports.deletePostCommentLike = async (req, res) => {
-  try{
-    const {post_id, comment_id, liked_num} = req.params;
+  try {
+    const { post_id, comment_id, likeid_num } = req.params;
+    console.log(`>>>>>>>>>>>>>>>>>>>>> ${likeid_num}`);
+    console.log(`>>>>>>>>>>>>>>>>>>>>> ${post_id}`);
+    console.log(`>>>>>>>>>>>>>>>>>>>>> ${comment_id}`);
     const deleteLike = await Public_post_comment_like.destroy({
-      where:{
-        liked_num: liked_num,
+      where: {
+        likeid_num: likeid_num,
         comment_id: comment_id
       }
-    })
+    });
     if (deleteLike) {
       res.send({ isDeleted: true });
     } else {
@@ -379,12 +382,11 @@ exports.deletePostCommentLike = async (req, res) => {
     }
   }
 
-  catch (err) 
-  {
-  console.error(err);
-  res.send("Internal Server Error!");
+  catch (err) {
+    console.error(err);
+    res.send("Internal Server Error!");
   }
-}
+};
 
 
 // DM
