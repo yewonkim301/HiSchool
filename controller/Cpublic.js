@@ -1055,6 +1055,18 @@ exports.deleteMyID = async (req, res) => {
     const isDeleted = false
     if(profileImg.profile_img !== '') {
       isDeleted = await deleteFile(profileImg.profile_img);
+    } else {
+      const destroyMyID = await User.destroy({
+        where: {
+          userid_num: userid_num,
+        },
+      });
+
+      if (destroyMyID) {
+        res.send({ isDeleted: true });
+      } else {
+        res.send({ isDeleted: false });
+      }
     }
     
 
