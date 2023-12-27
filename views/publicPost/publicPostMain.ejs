@@ -11,25 +11,29 @@
 
 <body>
    <%- include('../component/header')%>
+      <main>
+         <div class="container">
+            <button onclick="createPost()" id="plus-button" class="plus-button">+</button>
+            <!-- 게시물 목록 -->
+            <% for(let i=0; i < data.length; i++) { %>
+               <div class="list" onclick="showDetail('<%= data[i].post_id %>')">
+                  <div class="list-nickname">
+                     <%= nicknameArray %>
+                  </div>
 
+                  <div class="list-title">
+                     <%= data[i].title %>
+                  </div>
+                  <div class="list-content">
+                     <%= data[i].content %>
+                  </div>
+                  <%=data[i].updatedAt.getFullYear()%>년 <%=data[i].updatedAt.getMonth()+1%>월
+                        <%=data[i].updatedAt.getDate()%>일
 
-      <div class="container">
-         <button onclick="createPost()" id="plus-button" class="plus-button">+</button>
-         <!-- 게시물 목록 -->
-         <% for(let i=0; i < data.length; i++) { %>
-            <div class="list" onclick="showDetail('<%= data[i].post_id %>')">
-               <div class="list-title">
-                  <%= data[i].title %>
                </div>
-               <div class="list-nickname">
-                  <%= data[i].nickname %>
-               </div>
-               <div class="list-content">
-                  <%= data[i].content %>
-               </div>
-            </div>
-            <% } %>
-      </div>
+               <% } %>
+         </div>
+      </main>
       <script>
 
          function showDetail(post_id) {

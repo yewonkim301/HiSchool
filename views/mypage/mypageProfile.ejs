@@ -1,110 +1,116 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>마이페이지 상세</title>
-    <link rel="stylesheet" href="/style.css" />
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <style>
-      body {
-        margin: 0;
-        padding: 0;
-        background-color: #f0f0f0;
-      }
 
-      /* 헤더바 */
-      .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px;
-        background-color: #fff;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>마이페이지 상세</title>
+  <link rel="stylesheet" href="/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #f0f0f0;
+    }
 
-      .navbar {
-        display: flex;
-        width: 100%;
-        justify-content: space-between;
-      }
+    /* 헤더바 */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      background-color: #fff;
+    }
 
-      .menu-icon,
-      .settings-icon {
-        cursor: pointer;
-      }
+    .navbar {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+    }
 
-      .logo {
-        text-align: center;
-      }
+    .menu-icon,
+    .settings-icon {
+      cursor: pointer;
+    }
 
-      /* 헤더바 */
+    .logo {
+      text-align: center;
+    }
 
-      .profile-header {
-        display: flex;
-        align-items: center;
-        padding: 20px;
-        background-color: #fff;
-      }
+    /* 헤더바 */
 
-      .profile-photo {
-        width: 70px;
-        height: 70px;
-        border-radius: 50%;
-        background-size: cover;
-        margin-right: 10px;
-      }
+    .profile-header {
+      display: flex;
+      align-items: center;
+      padding: 20px;
+      background-color: #fff;
+    }
 
-      .profile-info {
-        flex-grow: 1;
-      }
+    .profile-photo {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      background-size: cover;
+      margin-right: 10px;
+    }
 
-      .profile-name {
-        font-weight: bold;
-      }
+    .profile-info {
+      flex-grow: 1;
+    }
 
-      .profile-school {
-        color: #666;
-      }
+    .profile-name {
+      font-weight: bold;
+    }
 
-      .edit-button {
-        background-color: #007bff;
-        color: white;
-        padding: 5px 10px;
-        border: none;
-        cursor: pointer;
-      }
+    .profile-school {
+      color: #666;
+    }
 
-      .self-introduction {
-        padding: 20px;
-        background-color: #fff;
-        margin-top: 10px;
-      }
-    </style>
-  </head>
+    .edit-button {
+      background-color: #007bff;
+      color: white;
+      padding: 5px 10px;
+      border: none;
+      cursor: pointer;
+    }
 
-  <body>
-    <%- include('../component/header')%>
-    <div class="container">
-      <div class="profile-header">
-        <% if (profileImg) { %>
-        <img src="<%= profileImg %>" alt="프로필 이미지" width="60" />
-        <% } else { %>
-        <img
-          src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png"
-          alt="프로필 이미지"
-          width="60"
-        />
-        <% } %>
-        <div class="profile-info">
-          <div class="profile-name"><%= data.name %></div>
-          <div class="profile-school"><%= data.school %></div>
-          <button class="edit-button">쪽지보내기</button>
+    .self-introduction {
+      padding: 20px;
+      background-color: #fff;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <%- include('../component/header')%>
+    <main>
+      <div class="container">
+        <div class="profile-header">
+          <% if (profileImg) { %>
+            <img src="<%= profileImg %>" alt="프로필 이미지" width="60" />
+            <% } else { %>
+              <img src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png" alt="프로필 이미지" width="60" />
+              <% } %>
+                <div class="profile-info">
+                  <div class="profile-name">
+                    <%= data.name %>
+                  </div>
+                  <div class="profile-school">
+                    <%= data.school %>
+                  </div>
+                  <button class="edit-button">쪽지보내기</button>
+                </div>
+        </div>
+        <div class="self-introduction">
+          <p>자기소개</p>
+          <span>
+            <%= clubProfile.introduction %>
+          </span>
         </div>
       </div>
-      <div class="self-introduction">
-        <p>자기소개</p>
-        <span><%= clubProfile.introduction %></span>
-      </div>
-    </div>
-  </body>
+    </main>
+</body>
+
 </html>

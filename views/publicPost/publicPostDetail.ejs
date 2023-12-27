@@ -26,18 +26,19 @@
 
 <body>
    <%- include('../component/header')%>
-      <div class="container">
-         <div class="board">
-            <!-- 게시글 세부 내용 -->
-            <div class="post-detail">
-               <h2>
-                  <%= title %>
-               </h2>
+      <main>
+         <div class="container">
+            <div class="board">
+               <!-- 게시글 세부 내용 -->
+               <div class="post-detail">
+                  <h2>
+                     <%= getPost.title %>
+                  </h2>
 
-                  <% var date=new Date(getPost.updatedAt); var year=date.getFullYear(); var
-                     month=('0' + (date.getMonth() + 1)).slice(-2); var day=('0' +
-                     date.getDate()).slice(-2); var hours=date.getHours(); var minutes=('0' +
-                     date.getMinutes()).slice(-2); var ampm=hours>= 12 ? '오후' : '오전';
+                  <% var date=new Date(getPost.updatedAt); var year=date.getFullYear(); var month=('0' +
+                     (date.getMonth() + 1)).slice(-2); var day=('0' + date.getDate()).slice(-2); var
+                     hours=date.getHours(); var minutes=('0' + date.getMinutes()).slice(-2); var ampm=hours>= 12 ? '오후'
+                     : '오전';
                      hours = hours % 12;
                      hours = hours ? hours : 12; // 0 시는 12시로 표시
                      %>
@@ -48,103 +49,104 @@
                                     <%= hours %>시 <%= minutes %>분
 
                      </p>
-               <p>
-                  <%= getPost.content %>
-                     <!-- <i class="like-btn" onclick="likeBtn()">좋아요</i> -->
-               </p>
-               <div class="postImages">
-                  <% for(i=0; i < postImages.length; i++) { %>
-                     <img src="<%= postImages[i] %>" alt="">
-                     <% } %>
+                     <p>
+                        <%= getPost.content %>
+                           <!-- <i class="like-btn" onclick="likeBtn()">좋아요</i> -->
+                     </p>
+                     <div class="postImages">
+                        <% for(i=0; i < postImages.length; i++) { %>
+                           <img src="<%= postImages[i] %>" alt="">
+                           <% } %>
+                     </div>
+                     <!-- 여기에 좋아요 개수 표시 -->
+
+
+                     <!-- 게시글 작성 시간 등의 메타 정보도 추가 있습니다. -->
                </div>
-               <!-- 여기에 좋아요 개수 표시 -->
+
+               <% if(getPost.userid_num==userid_num) { %>
+                  <button class="btn btn-primary" onclick="editPost('<%= getPost.post_id %>')">수정</button>
+                  <% } %>
+                     <div class="comment-section">
+                        <input type="text" id="commentInput" placeholder="댓글을 입력하세요">
+                     </div>
+                     <button onclick="submitComment()">댓글등록</button>
+                     <button onclick="deletePostComment('<%=getPostComment.comment_id %>')">댓글삭제</button>
+                     <!-- 댓글 들어갈곳 -->
+                     <div class="list" id="commentList">
+                        <% for(let i=0; i < getPostComment.length; i++) { %>
+                           <div class="comment comment-<%= getPostComment[i].comment_id %>">
+                              <p>
+                                 <%= getPostComment[i].comment_nickname %>
+
+                              </p>
+                              <% var date=new Date(getPostComment[i].updatedAt); var year=date.getFullYear(); var
+                                 month=('0' + (date.getMonth() + 1)).slice(-2); var day=('0' +
+                                 date.getDate()).slice(-2); var hours=date.getHours(); var minutes=('0' +
+                                 date.getMinutes()).slice(-2); var ampm=hours>= 12 ? '오후' : '오전';
+                                 hours = hours % 12;
+                                 hours = hours ? hours : 12; // 0 시는 12시로 표시
+                                 %>
+                                 <p>
+
+                                    <%= year %>-<%= month %>-<%= day %>
+                                             <%= ampm %>
+                                                <%= hours %>시 <%= minutes %>분
+
+                                 </p>
+                                 <p>
+                                    <%= getPostComment[i].comment %>
+                                 </p>
+
+                                 <% if (getPostComment[i].userid_num===userid_num) { %>
+                                    <button
+                                       onclick="deletePostComment('<%= getPostComment[i].comment_id %>')">댓글삭제</button>
+                                    <button
+                                       onclick="showEditField('<%= getPostComment[i].comment_id %>', '<%= getPostComment[i].comment %>')">댓글수정</button>
+                                    <% } %>
 
 
-               <!-- 게시글 작성 시간 등의 메타 정보도 추가 있습니다. -->
-            </div>
+                                       <% let likePush='false' %>
 
-            <% if(getPost.userid_num==userid_num) { %>
-               <button class="btn btn-primary" onclick="editPost('<%= getPost.post_id %>')">수정</button>
-               <% } %>
-                  <div class="comment-section">
-                     <input type="text" id="commentInput" placeholder="댓글을 입력하세요">
-                  </div>
-                  <button onclick="submitComment()">댓글등록</button>
-                  <button onclick="deletePostComment('<%=getPostComment.comment_id %>')">댓글삭제</button>
-                  <!-- 댓글 들어갈곳 -->
-                  <div class="list" id="commentList">
-                     <% for(let i=0; i < getPostComment.length; i++) { %>
-                        <div class="comment comment-<%= getPostComment[i].comment_id %>">
-                           <p>
-                              <%= getPostComment[i].comment_nickname %>
+                                          <% const content=JSON.parse(JSON.stringify(getPostCommentLike)); %>
+                                             <% for (let j=0; j < content[i].length; j++) { %>
+                                                <% if (content[i][j].likeid_num==userid_num) { %>
+                                                   <%likePush='true'; %>
 
-                           </p>
-                           <% var date=new Date(getPostComment[i].updatedAt); var year=date.getFullYear(); var
-                           month=('0' + (date.getMonth() + 1)).slice(-2); var day=('0' +
-                           date.getDate()).slice(-2); var hours=date.getHours(); var minutes=('0' +
-                           date.getMinutes()).slice(-2); var ampm=hours>= 12 ? '오후' : '오전';
-                           hours = hours % 12;
-                           hours = hours ? hours : 12; // 0 시는 12시로 표시
-                           %>
-                           <p>
-      
-                              <%= year %>-<%= month %>-<%= day %>
-                                       <%= ampm %>
-                                          <%= hours %>시 <%= minutes %>분
-      
-                           </p>
-                           <p>
-                              <%= getPostComment[i].comment %>
-                           </p>
-
-                           <% if (getPostComment[i].userid_num===userid_num) { %>
-                              <button onclick="deletePostComment('<%= getPostComment[i].comment_id %>')">댓글삭제</button>
-                              <button
-                                 onclick="showEditField('<%= getPostComment[i].comment_id %>', '<%= getPostComment[i].comment %>')">댓글수정</button>
-                              <% } %>
+                                                      <%}%>
 
 
-                                 <% let likePush='false' %>
-
-                                    <% const content=JSON.parse(JSON.stringify(getPostCommentLike)); %>
-                                       <% for (let j=0; j < content[i].length; j++) { %>
-                                          <% if (content[i][j].likeid_num==userid_num) { %>
-                                             <%likePush='true'; %>
-
-                                                <%}%>
+                                                         <%}%>
 
 
-                                                   <%}%>
-
-
-                                                      <% if (likePush==='false' ){%>
-                                                         <button
-                                                            onclick="toggleLike('<%= getPostComment[i].comment_id %>', '<%= userid_num %>', '<%= getPostCommentLike[i].length %>', this)">
-                                                            <i id="heart-icon-<%= getPostComment[i].comment_id %>"
-                                                               class="fas fa-heart"></i><span class="like-num">
-                                                               <%= getPostCommentLike[i].length %>
-                                                            </span>
-                                                         </button>
-                                                         <%} else if(likePush==='true' ) {%>
-                                                            <button
-                                                               onclick="toggleLike('<%= getPostComment[i].comment_id %>', '<%= userid_num %>', '<%= getPostCommentLike[i].length %>', this)"><i
-                                                                  id="heart-icon-<%= getPostComment[i].comment_id %>"
-                                                                  class="heart-active fas fa-heart "></i><span
-                                                                  class="like-num">
-                                                                  <%= getPostCommentLike[i].length %>
-                                                               </span>
-                                                            </button>
-                                                            <% }%>
-                        </div>
-                        <% } %>
-                           <div id="editCommentSection" style="display: none;">
-                              <input type="text" id="editCommentInput" placeholder="댓글 수정">
-                              <button onclick="submitEdit()">수정 완료</button>
+                                                            <% if (likePush==='false' ){%>
+                                                               <button
+                                                                  onclick="toggleLike('<%= getPostComment[i].comment_id %>', '<%= userid_num %>', '<%= getPostCommentLike[i].length %>', this)">
+                                                                  <i id="heart-icon-<%= getPostComment[i].comment_id %>"
+                                                                     class="fas fa-heart"></i><span class="like-num">
+                                                                     <%= getPostCommentLike[i].length %>
+                                                                  </span>
+                                                               </button>
+                                                               <%} else if(likePush==='true' ) {%>
+                                                                  <button
+                                                                     onclick="toggleLike('<%= getPostComment[i].comment_id %>', '<%= userid_num %>', '<%= getPostCommentLike[i].length %>', this)"><i
+                                                                        id="heart-icon-<%= getPostComment[i].comment_id %>"
+                                                                        class="heart-active fas fa-heart "></i><span
+                                                                        class="like-num">
+                                                                        <%= getPostCommentLike[i].length %>
+                                                                     </span>
+                                                                  </button>
+                                                                  <% }%>
                            </div>
-                  </div>
+                           <% } %>
+                              <div id="editCommentSection" style="display: none;">
+                                 <input type="text" id="editCommentInput" placeholder="댓글 수정">
+                                 <button onclick="submitEdit()">수정 완료</button>
+                              </div>
+                     </div>
+            </div>
          </div>
-      </div>
-
+      </main>
       <script>
 
          const abc = JSON.parse(JSON.stringify('<%=getPostCommentLike%>'));
