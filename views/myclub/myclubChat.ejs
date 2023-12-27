@@ -131,16 +131,16 @@
       let myName;
 
       //룸리스트 < ===== 룰 리스트로 나오는데 li가 아니라 div로 roomList가 나온다
-      socket.on("roomList", (roomLists) => {
-        console.log(roomLists);
-        const lists = document.querySelector("#lists");
-        lists.textContent = "";
-        roomLists.forEach((roomList) => {
-          const li = document.createElement("li");
-          li.textContent = `${roomList} 와 닉네임 입력 후 입장`;
-          lists.appendChild(li);
-        });
-      });
+      // socket.on("roomList", (roomLists) => {
+      //   console.log(roomLists);
+      //   const lists = document.querySelector("#lists");
+      //   lists.textContent = "";
+      //   roomLists.forEach((roomList) => {
+      //     const li = document.createElement("li");
+      //     li.textContent = `${roomList} 와 닉네임 입력 후 입장`;
+      //     lists.appendChild(li);
+      //   });
+      // });
 
       //사용자 리스트 < ==== 1:1 채팅이라 필요 없다.
       // socket.on('userList', (userLists) => {
