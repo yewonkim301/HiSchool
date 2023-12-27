@@ -351,6 +351,9 @@ router.delete(
   controllerPublic.deletePostComment
 );
 
+// DELETE /publicPostDetail/:post_id/:comment_id/:liked_num 게시글 댓글 삭제
+router.delete("/publicPostDetail/:post_id/:comment_id/:liked_num", isLoggedIn, controllerPublic.deletePostCommentLike);
+
 // DM
 // GET /dm dm 가져오기
 router.get("/dm", isLoggedIn, controllerPublic.dm);
