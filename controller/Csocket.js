@@ -1,30 +1,5 @@
 const roomList = [];
 
-exports.sendNickname = async (req, res) =>{
-  try{
-    const { userid, userid_num } = jwt.verify(
-      req.cookies.jwt,
-      process.env.JWT_SECRET
-    );
-
-    const {yourNickname} = req.body;
-        const myNickname = await User.findOne({
-          attributes: ["nickname"],
-          where:{
-            userid_num: userid_num
-          }
-        });
-        const roomName = [ myNickname, yourNickname].sort();
-        res.send(roomName, myNickname);
-  }
-  catch (err) {
-    console.error(err);
-    res.send("Internal Server Error!");
-  }
-}
-
-
-
 exports.connection = (io, socket) => {
     console.log('접속 :', socket.id);
     //채팅방 목록 보내기
@@ -47,8 +22,8 @@ exports.connection = (io, socket) => {
             //갱신된 목록은 전체가 봐야함 <=== 나와 상대방만 봐야해서 이제 바꿔야함
             io.emit('roomList', roomList);
         }
-        const usersInRoom = getUsersInRoom(roomName);
-        io.to(roomName).emit('userList', usersInRoom);
+        // const usersInRoom = getUsersInRoom(roomName);
+        // io.to(roomName).emit('userList', usersInRoom);
         cb();
     });
     //================ 위 까지 방만들기 =======================

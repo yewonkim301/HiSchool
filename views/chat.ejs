@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Document</title>
+  <title>DM</title>
     <!-- cdn -->
     <!-- <script src="/socket.io/socket.io.js"></script> -->
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js" integrity="sha384-mZLF4UVrpi/QTWPA7BjNPEnkIfRFn4ZEO3Qt/HFklTJBj/gBOV8G3HcKn4NfQblz" crossorigin="anonymous"></script>    
@@ -77,8 +77,8 @@
 <body>
   <div id="main">
     <form id="room">
-      <input type="text" id="roomName" placeholder="채팅방 만들기" value="<%= roomName %>" hidden />
-      <input type="text" id="userName" placeholder="사용자 이름 입력" value="<%= myNickname %>" hidden />
+      <input type="text" id="roomName" placeholder="채팅방 만들기" value="<%= note_id %>" />
+      <input type="text" id="userName" placeholder="사용자 이름 입력" value="<%= myNickname %>" />
       <button>만들기</button>
     </form>
     <ul id="lists"></ul>

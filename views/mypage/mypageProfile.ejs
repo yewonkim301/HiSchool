@@ -100,7 +100,8 @@
                   <div class="profile-school">
                     <%= data.school %>
                   </div>
-                  <button class="edit-button">쪽지보내기</button>
+                  <!-- 소켓 확인용 -->
+                  <button class="edit-button" onclick="move()">쪽지보내기</button>
                 </div>
         </div>
         <div class="self-introduction">
@@ -117,6 +118,16 @@
           
         </div>
       </div>
+
+
+      <!--  임시 코드 입니다 ,,, 소켓 확인용 -->
+      <script>
+        function move() {
+          // 새로운 페이지로 이동
+          window.location.href = '/chat';
+        }
+      </script>
+
     </main>
 </body>
 
