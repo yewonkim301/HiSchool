@@ -396,6 +396,7 @@ exports.patchPost = async (req, res) => {
   try {
     const { club_id, post_id } = req.params;
     const { title, content, image } = req.body;
+    const link = '/'
 
     const previousImage = await Club_post.findOne({
       where: {
