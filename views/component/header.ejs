@@ -9,16 +9,16 @@
       <nav class="navbar">
         <% if(typeof link !== 'undefined' && link) { %>
         <div class="menu-icon" onclick="toPage('<%= link %>')">
-          <i data-feather="chevron-left"></i>
+          <i data-feather="chevron-left" class="icon"></i>
         </div>
         <% } else { %>
         <div class="menu-icon" onclick="history.back()">
-          <i data-feather="chevron-left" style="color: var(--color-gray-500)"></i>
+          <i data-feather="chevron-left" class="icon"></i>
         </div>
         <% } %>
 
         <div class="close-menu" onclick="toggleSidebar()">
-          <i data-feather="x"></i>
+          <i data-feather="x" class="icon"></i>
         </div>
 
         <div class="logo">
