@@ -10,11 +10,7 @@ const session = require("express-session");
 const db = require("./models/Index.js");
 const { Club, User } = require("./models/Index");
 const jwt = require("jsonwebtoken");
-const {
-  isNotLoggedIn,
-  isLoggedIn,
-  preventIndex,
-} = require("./middleware/loginCheck");
+const { isNotLoggedIn,isLoggedIn,preventIndex,} = require("./middleware/loginCheck");
 
 const cors = require("cors");
 // const { sequelize } = require('./models/Index.js');
@@ -72,7 +68,7 @@ app.use("/", indexRouter);
 
 let flag = true;
 
-app.get("/chat/:note_id", async (req, res) => {
+app.get("/chat/:note_id", isLoggedIn ,async (req, res) => {
   if (flag) {
     flag = false;
     socketRouter.startSocket(io);

@@ -19,6 +19,10 @@ const PublicPost = (Sequelize, DataTypes) => {
                 type: DataTypes.JSON,
                 allowNull: true,
             },
+            nickname :{
+                type: DataTypes.STRING(50),
+                allowNull: false,
+            }
         },{
             freezeTableName: true,
             timestamps: true
