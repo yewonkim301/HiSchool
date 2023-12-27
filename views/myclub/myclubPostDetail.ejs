@@ -53,11 +53,12 @@
             <% if(data.userid_num==userid_num) { %>
                <button class="btn btn-primary" onclick="editPost('<%= data.post_id %>')">수정</button>
                <% } %>
-                  <div class="comment-section">
-                     <input type="text" id="commentInput" class="textField" placeholder="댓글을 입력하세요">
+                  <div class="comment-container">
+                     <div class="comment-section">
+                        <input type="text" id="commentInput" class="comment-input" placeholder="댓글을 입력하세요">
+                     </div>
+                     <button class=" comment-button btn-sm btn-primary" onclick="submitComment()">댓글등록</button>
                   </div>
-                  <button class="btn-sm btn-primary" onclick="submitComment()">댓글등록</button>
-
 
                   <!-- <button class=" btn-sm btn-primary"
                      onclick="deletePostComment('<%=clubPostComment.comment_id %>')">댓글삭제</button> -->
