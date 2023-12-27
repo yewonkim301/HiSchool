@@ -741,7 +741,6 @@ input[type='checkbox']:checked + label:before {
 
 .menuContainer {
   display: flex;
-  flex-direction: column;
   gap: 8px;
 }
 
