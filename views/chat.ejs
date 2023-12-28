@@ -8,6 +8,8 @@
     <!-- cdn -->
     <!-- <script src="/socket.io/socket.io.js"></script> -->
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js" integrity="sha384-mZLF4UVrpi/QTWPA7BjNPEnkIfRFn4ZEO3Qt/HFklTJBj/gBOV8G3HcKn4NfQblz" crossorigin="anonymous"></script>    
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 
   <style>
     #body {
@@ -91,10 +93,9 @@
 
     <div id="msg">
       <div id="notice"></div>
-      <div class="my-chat">
-                </div>
-                <div class="other-chat">
-                </div>
+      <div class="my-chat">"<%= chats.length %>"</div>
+      <div class="my-chat">"<%= chats[0].dm_content %>"</div>
+      <div class="other-chat"></div>
     </div>
 
     <form id="chat">
@@ -105,11 +106,19 @@
   </div>
 
   <script>
-    // window.onload = function () {
-    //     // 버튼 요소를 찾아서 클릭 이벤트 발생
-    //     var myButton = document.getElementById("btn");
-    //     myButton.click();
-    //   };
+    window.onload = async function () {
+        // 버튼 요소를 찾아서 클릭 이벤트 발생
+        var myButton = document.getElementById("btn");
+        myButton.click();
+
+        await axios({
+          method: "get",
+          url: `/chat/<%= room %>`,
+        }).then(res => {
+          console.log(res);
+        })
+        console.log("가나요?");
+      };
 
     const socket = io();
     const roomForm = document.querySelector('#room');
@@ -118,6 +127,7 @@
     const notice = document.querySelector('#notice');
 
     let myName;
+    let enter;
 
     //룸리스트 < ===== 룰 리스트로 나오는데 li가 아니라 div로 roomList가 나온다
     socket.on('roomList', (roomLists) => {
@@ -155,22 +165,20 @@
     });
     //입장 메세지 이벤트
     socket.on('notice', (message) => {
-      const div = document.createElement('div');
-      const p = document.createElement('p');
-      p.textContent = message;
-      div.appendChild(p);
-      notice.appendChild(div);
+      // 한번 입장 했었으면 다시 안뜨게
+      if(enter !== message){
+        enter = message;
+        const div = document.createElement('div');
+        const p = document.createElement('p');
+        p.textContent = message;
+        div.appendChild(p);
+        notice.appendChild(div);
+      }
     });
 
     ///폼 이벤트
     roomForm.addEventListener('submit', (e) => {
       e.preventDefault();
-      const roomName = roomForm.querySelector('#roomName');
-      const userName = roomForm.querySelector('#userName');
-      if (roomName.value === '' || userName.value === '') {
-        alert('방이름과 닉네임 적어주세요');
-        return;
-      }
       socket.emit('create', roomName.value, userName.value, () => {
         const main = document.querySelector('#main');
         const body = document.querySelector('#body');
@@ -180,6 +188,7 @@
         myName = userName.value;
       });
     });
+
     chatForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const message = document.querySelector('#message');
@@ -193,17 +202,6 @@
       message.value = '';
     });
 
-    // async function send(){
-    //   const message = document.querySelector('#message');
-    //   const getMessage = await axios({
-    //     method: "post",
-    //     url: `/chat/:<%= room %>`,
-    //     data:{
-    //       dm_content: message.value,
-    //       userid_num : "<%= userid_num %>"
-    //     }
-    //   })
-    // };
   </script>
 </body>
 
