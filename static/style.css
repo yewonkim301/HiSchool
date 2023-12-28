@@ -779,7 +779,7 @@ input[type='checkbox']:checked + label:before {
   line-height: 1.4;
 }
 
-.empty {
+.listEmpty {
   display: flex;
   height: 200px;
   align-items: center;
