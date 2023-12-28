@@ -33,6 +33,11 @@
           <% } %>
       </div>
       <br />
+
+      <img src="https://www.cuk.edu/type/common/img/kor/info/schoolAdCollect_01_img12.png" alt="">
+
+
+      <br>
       <h2 class="label">전체 동아리</h2>
       <div class="list-container">
         <% if(typeof allClubs !== 'undefined' && allClubs) { %> 
@@ -45,9 +50,16 @@
         <% } %> 
         <% } %>
       </div>
+      
+      <div class="btnCenter"><button class="btn-sm btn-neutral" onclick="toLink('/clubMain')">전체보기</button></div>
 
-      <a href="/clubMain">전체보기</a><br />
       <a href="/chat">챗 테스트</a>
     </div>
+
+    <script>
+      function toLink(link) {
+        document.location.href = link
+      }
+    </script>
   </body>
 </html>
