@@ -388,7 +388,7 @@ exports.patchPost = async (req, res) => {
   try {
     const { club_id, post_id } = req.params;
     const { title, content, image } = req.body;
-    const link = '/'
+    const link = '/';
 
     const previousImage = await Club_post.findOne({
       where: {
@@ -829,15 +829,15 @@ exports.getMyclubMain = async (req, res) => {
   const foundMember = await Club_members.findAll({
     where: { club_id: club_id },
     include: [
-      { 
+      {
         model: User,
         required: false,
         attributes: ['name', 'userid_num', 'profile_img'],
       }
     ],
-  })
+  });
 
-  
+
 
 
   const clubPosts = await Club_post.findAll({
@@ -847,7 +847,7 @@ exports.getMyclubMain = async (req, res) => {
     attributes: ['title', 'post_id', 'content', 'image', 'name', 'createdAt', 'club_id'],
     order: [['createdAt', 'DESC']],
     limit: 3,
-  })
+  });
 
   // console.log('Cclub 854 : ', clubPosts);
 
@@ -856,7 +856,7 @@ exports.getMyclubMain = async (req, res) => {
   if (myClub.leader_id == userid_num) isLeader = true;
   else isLeader = false;
 
-  const title = myClub.club_name
+  const title = myClub.club_name;
 
   console.log('Cclub 861 title : ', myClub.club_name);
 
