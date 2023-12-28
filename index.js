@@ -95,9 +95,7 @@ app.get("/chat/:room", isLoggedIn, async (req, res) => {
   const chats = await Dm.findAll({
     where: {room_name: room}
   })
-  console.log("app.get room_name 밖", room);
-  console.log("app.get chats", chats);
-
+console.log("index chats >>>>>>>>> ",chats);
   res.render("chat", { room, myNickname: getName.nickname, userid_num , chats});
 });
 

@@ -93,7 +93,10 @@
 
     <div id="msg">
       <div id="notice"></div>
-      <div class="my-chat">"<%= chats.length %>"</div>
+      <div class="my-chat">"<% for(let i = 0; i< chats.length; i++) { %>
+                            <%= chats[i].dm_content %>
+                            <% } %>"
+                          </div>
       <div class="my-chat">"<%= chats[0].dm_content %>"</div>
       <div class="other-chat"></div>
     </div>
@@ -129,17 +132,17 @@
     let myName;
     let enter;
 
-    //룸리스트 < ===== 룰 리스트로 나오는데 li가 아니라 div로 roomList가 나온다
-    socket.on('roomList', (roomLists) => {
-      console.log(roomLists);
-      const lists = document.querySelector('#lists');
-      lists.textContent = '';
-      roomLists.forEach((roomList) => {
-        const li = document.createElement('li');
-        li.textContent = `${roomList} 와 닉네임 입력 후 입장`;
-        lists.appendChild(li);
-      });
-    });
+    // //룸리스트 < ===== 룰 리스트로 나오는데 li가 아니라 div로 roomList가 나온다
+    // socket.on('roomList', (roomLists) => {
+    //   console.log(roomLists);
+    //   const lists = document.querySelector('#lists');
+    //   lists.textContent = '';
+    //   roomLists.forEach((roomList) => {
+    //     const li = document.createElement('li');
+    //     li.textContent = `${roomList} 와 닉네임 입력 후 입장`;
+    //     lists.appendChild(li);
+    //   });
+    // });
 
     //메세지 띄우기
     socket.on('newMessage', (message, nick) => {
