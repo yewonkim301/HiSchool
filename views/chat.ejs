@@ -8,6 +8,8 @@
     <!-- cdn -->
     <!-- <script src="/socket.io/socket.io.js"></script> -->
     <script src="https://cdn.socket.io/4.7.2/socket.io.min.js" integrity="sha384-mZLF4UVrpi/QTWPA7BjNPEnkIfRFn4ZEO3Qt/HFklTJBj/gBOV8G3HcKn4NfQblz" crossorigin="anonymous"></script>    
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 
   <style>
     #body {
@@ -91,7 +93,8 @@
 
     <div id="msg">
       <div id="notice"></div>
-      <div class="my-chat"></div>
+      <div class="my-chat">"<%= chats.length %>"</div>
+      <div class="my-chat">"<%= chats[0].dm_content %>"</div>
       <div class="other-chat"></div>
     </div>
 
@@ -103,10 +106,18 @@
   </div>
 
   <script>
-    window.onload = function () {
+    window.onload = async function () {
         // 버튼 요소를 찾아서 클릭 이벤트 발생
         var myButton = document.getElementById("btn");
         myButton.click();
+
+        await axios({
+          method: "get",
+          url: `/chat/<%= room %>`,
+        }).then(res => {
+          console.log(res);
+        })
+        console.log("가나요?");
       };
 
     const socket = io();
