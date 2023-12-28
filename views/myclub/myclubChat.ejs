@@ -109,12 +109,19 @@
     <div id="body" hidden>
       <div id="msg">
         <div id="notice"></div>
-        <!-- <div class="my-chat">
-                      <p>채팅테스트(나)</p>
-                  </div>
-                  <div class="other-chat">
-                      <p>채팅테스트(상대방)</p>
-                  </div> -->
+        <% for (i = 0; i < chats.length; i++) { %> <% if (chats[i].userid_num
+        === userid_num) {%>
+        <div class="my-chat">
+          <p class="mychatMsg"><%= chats[i].content %></p>
+          <p class="mychatTime"><%= chats[i].createdAt %></p>
+        </div>
+        <% } else { %>
+        <div class="other-chat">
+          <p class="otherchatName"><%= chats[i].from_name %></p>
+          <p class="otherchatMsg"><%= chats[i].content %></p>
+          <p class="otherchatTime"><%= chats[i].createdAt %></p>
+        </div>
+        <% } %> <% } %>
       </div>
       <form id="chat">
         <select id="userList"></select>
@@ -162,7 +169,9 @@
       //   }
       //   lists.innerHTML = options;
       // });
+
       //메세지 띄우기
+
       socket.on("newMessage", (newClubChat) => {
         // socket.on("newMessage", (message, nick) => {
         // console.log("newMessage > ", message, nick);
@@ -184,6 +193,7 @@
         //   div.appendChild(p);
         msg.appendChild(div);
       });
+
       //입장 메세지 이벤트
       socket.on("notice", (message) => {
         const div = document.createElement("div");
@@ -199,10 +209,10 @@
         //   const roomName = roomForm.querySelector("#roomName");
         roomName = roomForm.querySelector("#roomName");
         const userName = roomForm.querySelector("#userName");
-        if (roomName.value === "" || userName.value === "") {
-          alert("방이름과 닉네임 적어주세요");
-          return;
-        }
+        // if (roomName.value === "" || userName.value === "") {
+        //   alert("방이름과 닉네임 적어주세요");
+        //   return;
+        // }
         console.log(roomName.value, userName.value);
 
         socket.emit("create", roomName.value, userName.value, () => {
@@ -216,6 +226,7 @@
       });
 
       //이전 메세지 불러오기
+      /*
       socket.on("preChats", (data) => {
         // console.log("myclubChat preChats  >  ", data.chats[0]);
         for (let i = 0; i < data.chats.length; i++) {
@@ -245,6 +256,7 @@
           }
         }
       });
+      */
       chatForm.addEventListener("submit", (e) => {
         e.preventDefault();
         //   const user = document.querySelector("#userList");
