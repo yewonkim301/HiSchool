@@ -34,7 +34,7 @@ exports.connection = (io, socket) => {
     //================ 위 까지 방만들기 =======================
     socket.on('sendMessage', async (message) => {
         console.log(">>>>>>>>>>>",message);
-            io.emit('newMessage', message.message, message.from_nick);
+            io.to(socket.room).emit('newMessage', message.message, message.from_nick);
             console.log("Csocket Message From Nick >>>>",message.from_nick)
               const NewChatMessage = await Dm.create({
                 dm_content: message.message,
@@ -42,8 +42,6 @@ exports.connection = (io, socket) => {
                 userid_num: message.userid_num,
                 from_nick: message.from_nick
               });
-              console.log("Csocket sendMessage message.nick", message.from_nick);
-              console.log("Csocket NewChatMessage", NewChatMessage.from_nick);
     });
 
     socket.on('disconnect', () => {
