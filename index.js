@@ -8,7 +8,7 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const db = require("./models/Index.js");
-const { Club, User } = require("./models/Index");
+const { Club, User,Dm } = require("./models/Index");
 const jwt = require("jsonwebtoken");
 const {
   isNotLoggedIn,
@@ -92,7 +92,13 @@ app.get("/chat/:room", isLoggedIn, async (req, res) => {
     }
   });
 
-  res.render("chat", { room, myNickname: getName.nickname, userid_num });
+  const chats = await Dm.findAll({
+    where: {room_name: room}
+  })
+  console.log("app.get room_name 밖", room);
+  console.log("app.get chats", chats);
+
+  res.render("chat", { room, myNickname: getName.nickname, userid_num , chats});
 });
 
 // Club

@@ -1131,7 +1131,7 @@ exports.getMyPageProfile = async (req, res) => {
       }
     });
 
-    const room = [getName.dataValues.nickname , nickname].sort();
+    const room = [getName.dataValues.nickname,nickname].sort();
 
     // console.log('Cpublic 1042 nickname :', nickname)
     const myPageMainProfile = await User.findOne({
