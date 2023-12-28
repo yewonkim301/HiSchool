@@ -9,9 +9,16 @@
   <link rel="stylesheet" href="/myClubPostMain.css" />
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <style>
-    .calendar-container {
-      width: 100%;
+    .container.dimmed {
+      opacity: 0.5;
+      /* 투명도 조정 */
+      background-color: rgba(0, 0, 0, 0.5);
+      /* 필요에 따라 배경색 조정 */
+      pointer-events: none;
+      /* 모달이 열려있는 동안 컨테이너의 상호작용 비활성화 */
+    }
 
+    .calendar-container {
       background: white;
       margin: 20px auto;
       border-radius: 8px;
@@ -74,7 +81,7 @@
     .calendar .today {
       background-color: #4dabf7;
       color: white;
-      border-radius: 50%;
+
     }
 
     /* 클릭하면 테투리 파랗게 변함 */
@@ -94,14 +101,30 @@
 
     .schdulebtn {
       display: flex;
+      margin-top: 15px;
     }
 
     .closebtn {
-      margin: 0 15px;
+      margin: 0px 15px;
     }
 
-    .addschedule-btn {
-      margin: 30px;
+    .eventschedule {
+      padding: 20px;
+    }
+
+    .schedule {
+      display: flex;
+      margin-bottom: 30px;
+    }
+
+    .correctionBtn {
+      margin-right: 15px;
+    }
+
+    .schdulecontentBox {
+      display: grid;
+      margin-bottom: 20px;
+
     }
   </style>
 </head>
@@ -135,11 +158,8 @@
           </tbody>
         </table>
         <div class="addschedule-btn">
-          <button onclick="openModal()" id="plus-button" class="btn btn-primary">
-            추가하기
-          </button>
         </div>
-        <div id="eventsContainer">
+        <div id="eventsContainer" class="eventschedule">
           <% let selectedDate=data; // 클라이언트에서 전달받은 선택된 날짜 %>
             <% if (data && data.length) { %>
               <% let hasSchedules=false; %>
@@ -167,15 +187,20 @@
                             <p class="no-events">등록된 일정이 없습니다</p>
                             <% } %>
                               <% } else { %>
-                                <p class="no-events">등록된 일정이 없습니다</p>
+                                <p class="no-events">
+                                  등록된 일정이 없습니다
+                                </p>
                                 <% } %>
         </div>
       </div>
+      <button onclick="openModal()" id="plus-button" class="btn btn-primary">
+        추가하기
+      </button>
       <!----------------------- 일정을 추가하는 모달 ---------------------->
       <div id="scheduleModal" style="
           display: none;
           position: fixed;
-          width: 70%;
+          width: 50%;
           left: 50%;
           top: 50%;
           transform: translate(-50%, -50%);
@@ -212,6 +237,8 @@
     <!----------------------- 일정을 추가하는 모달 끝 ---------------------->
 
     <script>
+      console.log('>>>>>>>>>:<%= scheduleDate %>');
+      console.log('>>>>>>>>>:<%= scheduleDate %>');
       // 서버로부터 받은 데이터를 JavaScript 변수에 할당
       const clubSchedules = `clubSchedules: <%-JSON.stringify(data) %>`;
 
@@ -281,15 +308,17 @@
         document.getElementById("modalName").innerText = "일정 추가";
         // document.getElementById("modalDateL").style.display = "none";
         // document.getElementById("modalDate").style.display = "none";
-        document.getElementById("modalDate").value = date;
+        document.getElementById("modalDate").value = date; // 날짜 설정
         document.getElementById("scheduleModal").style.display = "block";
         document.getElementById("saveBtn").style.display = "block";
         document.getElementById("resaveBtn").style.display = "none";
+
       }
 
       // 모달 닫기
       function closeModal() {
         document.getElementById("scheduleModal").style.display = "none";
+
       }
       // --------------------- 일정을 추가할수 있는 모달 끝
 
@@ -322,12 +351,23 @@
             found = true;
             html += `
         <div class="schedule" id="<%= data[i].schedule_id %>">
-          <h3 id="title<%= data[i].schedule_id %>"><%= data[i].title %></h3>
-          <p id="date<%= data[i].schedule_id %>">날짜: <%= data[i].date %></p>
-          <p id="time<%= data[i].schedule_id %>">시간: <%= data[i].time %></p>
-          <p id="content<%= data[i].schedule_id %>">내용: <%= data[i].content %></p>
-          <button class="btn-sm btn-primary" type="button" onclick="patchSchedule('<%= data[i].schedule_id %>')">수정</button>
-          <button class="btn-sm btn-primary" type="button" onclick="deleteSchedule('<%= data[i].schedule_id %>')">삭제</button>
+          <div class="list">
+            <div class="schdulecontentBox">
+            <h3 id="title<%= data[i].schedule_id %>"><%= data[i].title %></h3>
+            <p id="content<%= data[i].schedule_id %>">내용: <%= data[i].content %></p>
+            </div>
+
+            <div class="schduleDate">
+            <p id="date<%= data[i].schedule_id %>">날짜: <%= data[i].date %></p>
+            <p id="time<%= data[i].schedule_id %>">시간: <%= data[i].time %></p>
+            </div>
+          
+
+            <div class="schdulebtn">
+            <button class="btn-sm btn-primary correctionBtn" type="button" onclick="patchSchedule('<%= data[i].schedule_id %>')">수정</button>
+            <button class="btn-sm btn-primary deleteBtn" type="button" onclick="deleteSchedule('<%= data[i].schedule_id %>')">삭제</button>
+            </div>
+          </div>
         </div>`;
           }
   <% } %>
