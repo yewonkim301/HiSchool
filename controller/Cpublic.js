@@ -832,9 +832,9 @@ exports.getClubMembers = async (req, res) => {
       console.log("getUserInfo까지 실행 완료");
     }
     if (!getMembers) {
-      res.render("clubAdmin/clubAdminMemberList");
+      res.render("clubAdmin/clubAdminMemberlist");
     } else {
-      res.render("clubAdmin/clubAdminMemberList", {
+      res.render("clubAdmin/clubAdminMemberlist", {
         data: getMembers,
         userInfo,
         club_id,

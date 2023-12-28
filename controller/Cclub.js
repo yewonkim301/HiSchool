@@ -245,6 +245,7 @@ exports.getClubPosts = async (req, res) => {
 
     const posts = await Club_post.findAll({
       where: { club_id: req.params.club_id },
+      order: [["createdAt", "DESC"]],
       //clubClubId 수정 전
     });
 
