@@ -136,7 +136,7 @@
         var myButton = document.getElementById("btn");
         myButton.click();
       };
-      const socket = io();
+      const socket = io({ transports: ["websocket"], upgrade: false });
       const roomForm = document.querySelector("#room");
       const chatForm = document.querySelector("#chat");
       const msg = document.querySelector("#msg");
@@ -146,32 +146,7 @@
       let rooName;
       let userid_num = roomForm.querySelector("#userid_num").value;
 
-      //룸리스트 < ===== 룰 리스트로 나오는데 li가 아니라 div로 roomList가 나온다
-      // socket.on("roomList", (roomLists) => {
-      //   console.log(roomLists);
-      //   const lists = document.querySelector("#lists");
-      //   lists.textContent = "";
-      //   roomLists.forEach((roomList) => {
-      //     const li = document.createElement("li");
-      //     li.textContent = `${roomList} 와 닉네임 입력 후 입장`;
-      //     lists.appendChild(li);
-      //   });
-      // });
-
-      //사용자 리스트 < ==== 1:1 채팅이라 필요 없다.
-      // socket.on('userList', (userLists) => {
-      //   console.log(userLists);
-      //   const lists = document.querySelector('#userList');
-      //   lists.textContent = '';
-      //   let options = `<option value="all">전체</option>`;
-      //   for (let i of userLists) {
-      //     options += `<option value="${i.key}">${i.name}</option>`;
-      //   }
-      //   lists.innerHTML = options;
-      // });
-
       //메세지 띄우기
-
       socket.on("newMessage", (newClubChat) => {
         // socket.on("newMessage", (message, nick) => {
         // console.log("newMessage > ", message, nick);
@@ -186,7 +161,7 @@
           div.classList.add("other-chat");
           div.innerHTML = `<p class="otherchatName">${newClubChat.from_name}</p><p class="otherchatMsg">${newClubChat.content}</p><p class="mychatTime">${newClubChat.createdAt}</p>`;
         }
-        console.log("div >>>>", div);
+        // console.log("div >>>>", div);
 
         //채팅 텍스트
         //   p.textContent = `${nick} : ${message}`;
@@ -259,10 +234,8 @@
       */
       chatForm.addEventListener("submit", (e) => {
         e.preventDefault();
-        //   const user = document.querySelector("#userList");
         const roomName = roomForm.querySelector("#roomName");
         const message = document.querySelector("#message");
-        //   console.log(user.value);
         const msg = {
           nick: myName,
           roomName: roomName.value,
