@@ -126,7 +126,7 @@
         console.log("가나요?");
       };
 
-    const socket = io();
+    const socket = io({ transports: ["websocket"], upgrade: false });
     const roomForm = document.querySelector('#room');
     const chatForm = document.querySelector('#chat');
     const msg = document.querySelector('#msg');
