@@ -1,28 +1,9 @@
-const roomList = [];
 const {
   User,
   Dm
 } = require("../models/Index");
-// GET /chat
-// exports.openChat = async (req,res) => {
-//   const {nickname} = req.body;
-//   const { userid, userid_num } = jwt.verify(
-//     req.cookies.jwt,
-//     process.env.JWT_SECRET
-//   );
 
-//   const getName = await User.findOne({
-//     attributes: ["nickname"],
-//     where:{
-//       userid_num: userid_num
-//     }
-//   });
-
-//   const room_name = [getName, nickname].sort();
-//   console.log("room_name >>>>>>>>>>>>>>>>>",room_name);
-
-// }
-
+const roomList = [];
 exports.connection = (io, socket) => {
     console.log('접속 :', socket.id);
     //채팅방 목록 보내기
@@ -50,34 +31,25 @@ exports.connection = (io, socket) => {
         cb();
     });
     //================ 위 까지 방만들기 =======================
-    socket.on('sendMessage', (message) => {
-        console.log(message);
-            io.to(message.user).emit('newMessage', message.message, message.nick);
-            //자기자신에게 메세지 띄우기
-            socket.emit('newMessage', message.message, message.nick);
+    socket.on('sendMessage', async (message) => {
+        console.log(">>>>>>>>>>>",message);
+            io.emit('newMessage', message.message, message.nick);
+            
     });
 
     socket.on('disconnect', () => {
+
+      socket.on('sendMessage', async (message) => {
+        const NewChatMessage = await Dm.create({
+          dm_content: message.message,
+          room_name: message.room,
+          userid_num: message.userid_num
+        });
+        console.log("disconnect Message >>>>>>>>>>", message);
+      });
         if (socket.room) {
             socket.leave(socket.room);
+            console.log("연결 해제")
         }
     });
-
-    // function getUsersInRoom(room) { <== 귓속말 기능은 필요 없기 때문에 제거
-    //     const users = [];
-    //     //채팅룸에 접속한 socket.id값을 찾아야함
-    //     const clients = io.sockets.adapter.rooms.get(room);
-    //     //console.log(clients);
-    //     if (clients) {
-    //         clients.forEach((socketId) => {
-    //             //io.sockets.sockets: socket.id가 할당한 변수들의 객체값
-    //             const userSocket = io.sockets.sockets.get(socketId);
-    //             //개별 사용자에게 메세지를 보내기 위해서 객체형태로 변경
-    //             //key: 소켓아이디, name:이름
-    //             const info = { name: userSocket.user, key: socketId };
-    //             users.push(info);
-    //         });
-    //     }
-    //     return users;
-    // }
 };

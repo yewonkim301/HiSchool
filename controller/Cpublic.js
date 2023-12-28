@@ -1131,7 +1131,7 @@ exports.getMyPageProfile = async (req, res) => {
       }
     });
 
-    const room = [getName.dataValues.nickname + nickname].sort();
+    const room = [getName.dataValues.nickname , nickname].sort();
 
     // console.log('Cpublic 1042 nickname :', nickname)
     const myPageMainProfile = await User.findOne({
@@ -1156,7 +1156,8 @@ exports.getMyPageProfile = async (req, res) => {
         data: myPageMainProfile,
         clubProfile,
         profileImg: null,
-        room
+        room,
+        userid_num
       });
     } else {
       console.log("Cpublic 1123 myPageMainProfile :", myPageMainProfile);
@@ -1169,7 +1170,8 @@ exports.getMyPageProfile = async (req, res) => {
         data: myPageMainProfile,
         clubProfile,
         profileImg,
-        room
+        room,
+        userid_num
       });
     }
   } catch (err) {
