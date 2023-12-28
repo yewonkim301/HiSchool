@@ -52,11 +52,13 @@ exports.connection = async (io, socket) => {
     // console.log("@@@@@@@>>>", typeof roomList, typeof roomName);
     // 동아리 채팅 정보가 있다면 이전 채팅정보 불러와주기
     if (roomList.includes(roomName)) {
-      // console.log("IF 시퀄 전");
+      console.log("Cclubsocket create roomList", roomList);
+      console.log("Cclubsocket create roomName", roomName);
+      console.log("Cclubsocket create includes", roomList.includes(roomName));
       chats = await Club_chat.findAll({
         where: { club_id: roomName },
       });
-      // console.log("socket on chat >>>>", chats);
+      console.log("socket on chat >>>>", chats);
     }
     io.to(roomName).emit("preChats", { chats, userName });
 
