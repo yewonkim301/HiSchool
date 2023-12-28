@@ -162,17 +162,19 @@
       //   lists.innerHTML = options;
       // });
       //메세지 띄우기
-      socket.on("newMessage", (message, nick) => {
-        console.log("newMessage > ", message, nick);
+      socket.on("newMessage", (newClubChat) => {
+        // socket.on("newMessage", (message, nick) => {
+        // console.log("newMessage > ", message, nick);
+        console.log("newMessage > ", newClubChat);
         const div = document.createElement("div");
         //   const p = document.createElement("p");
-        if (myName === nick) {
+        if (myName === newClubChat.from_name) {
           //내가입력한 텍스트
           div.classList.add("my-chat");
-          div.innerHTML = `<p class="mychatMsg">${message}</p>`;
+          div.innerHTML = `<p class="mychatMsg">${newClubChat.content}</p><p class="mychatTime">${newClubChat.createdAt}</p>`;
         } else {
           div.classList.add("other-chat");
-          div.innerHTML = `<p class="otherchatName">${nick}</p><p class="otherchatMsg">${message}</p>`;
+          div.innerHTML = `<p class="otherchatName">${newClubChat.from_name}</p><p class="otherchatMsg">${newClubChat.content}</p><p class="mychatTime">${newClubChat.createdAt}</p>`;
         }
         console.log("div >>>>", div);
 
@@ -212,10 +214,35 @@
         });
       });
 
-      //이전 메세비 불러오기
-      socket.on("preChats", (chats) => {
-        console.log("34");
-        console.log(chats);
+      //이전 메세지 불러오기
+      socket.on("preChats", (data) => {
+        console.log("myclubChat preChats  >  ", data.chats[0]);
+        for (let i = 0; i < data.chats.length; i++) {
+          let div = document.createElement("div");
+          let html = "";
+
+          if (data.userName === data.chats[i].from_name) {
+            //내가입력한 텍스트
+            div.classList.add("my-chat");
+            html = `<p class="mychatMsg">${data.chats[i].content}</p>`;
+            if (data.chats[i].createdAt !== data.chats[i + 1].createdAt) {
+              html += `<p class="mychatTime">${data.chats[i].createdAt}</p>`;
+            }
+            div.innerHTML = html;
+            msg.appendChild(div);
+          } else if (data.userName !== data.chats[i].from_name) {
+            div.classList.add("other-chat");
+            if (data.chats[i - 1].from_name !== data.chats[i].from_name) {
+              html += `<p class="otherchatName">${data.chats[i].from_name}</p>`;
+            }
+            html += `<p class="otherchatMsg">${data.chats[i].content}</p>`;
+            if (data.chats[i].createdAt !== data.chats[i + 1].createdAt) {
+              html += `<p class="otherchatTime">${data.chats[i].createdAt}</p>`;
+            }
+            div.innerHTML = html;
+            msg.appendChild(div);
+          }
+        }
       });
       chatForm.addEventListener("submit", (e) => {
         e.preventDefault();
