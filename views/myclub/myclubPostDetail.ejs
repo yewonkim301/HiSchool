@@ -74,7 +74,7 @@
       }
 
       .submit {
-         margin: 15px;
+         margin-top: 15px;
       }
 
       .name {
@@ -90,11 +90,24 @@
       }
 
       .content-time {
-         margin-bottom: 30px;
+         width: 100%;
+         display: flex;
+         justify-content: flex-end;
+         margin: 6px 0px;
       }
 
       .comment-input {
-         margin: 10px 0px;
+         margin-top: 18px;
+      }
+
+      .name {
+         margin-bottom: 50px;
+      }
+
+      .no-comment {
+         width: 100%;
+         text-align: center;
+         margin-top: 100px;
       }
    </style>
 </head>
@@ -106,39 +119,28 @@
          <div class="board">
             <!-- 게시글 세부 내용 -->
             <div class="post-detail">
-               <h2>
-                  <%= data.title %>
-               </h2>
 
-               <div class="name">
+               <div class="name list">
                   <span>
                      <%= data.name %>
                   </span>
                </div>
 
-               <% var date=new Date(data.updatedAt); var year=date.getFullYear(); var month=('0' + (date.getMonth() +
-                  1)).slice(-2); var day=('0' + date.getDate()).slice(-2); var hours=date.getHours(); var minutes=('0' +
-                  date.getMinutes()).slice(-2); var ampm=hours>= 12 ? '오후'
-                  : '오전';
-                  hours = hours % 12;
-                  hours = hours ? hours : 12; // 0 시는 12시로 표시
-                  %>
-                  <p class="content-time">
-                     <%= year %>-<%= month %>-<%= day %>
-                              <%= ampm %>
-                                 <%= hours %>시 <%= minutes %>분
-                  </p>
+               <h2>
+                  <%= data.title %>
+               </h2>
 
-                  <p class="content">
-                     <%= data.content %>
-                        <!-- <i class="like-btn" onclick="likeBtn()">좋아요</i> -->
-                  </p>
 
-                  <div class="postImages">
-                     <% for(i=0; i < postImages.length; i++) { %>
-                        <img src="<%= postImages[i] %>" alt="">
-                        <% } %>
-                  </div>
+               <p class="content">
+                  <%= data.content %>
+                     <!-- <i class="like-btn" onclick="likeBtn()">좋아요</i> -->
+               </p>
+
+               <div class="postImages">
+                  <% for(i=0; i < postImages.length; i++) { %>
+                     <img src="<%= postImages[i] %>" alt="">
+                     <% } %>
+               </div>
             </div>
             <div class="flexbox">
                <button class="btn-sm btn-primary myclubPostMain" onclick="myclubPostMain()">목록</button>
@@ -150,95 +152,114 @@
 
             <!-- 댓글 들어갈곳 -->
 
-            <div class="commentList-box" id="commentList">
-               <div class="comment-container">
-                  <label for="commentInput" class="comment-section">댓글
-                     <input type="text" id="commentInput" class="textField comment-input" placeholder="댓글을 입력하세요">
-                     <div class="textNum">
-                        <div class="helpText">최대 60글자까지 입력가능합니다</div>
-                        <div class="helpText">
-                           <span class="motivationCount">0</span>/60
-                        </div>
-                  </label>
+            <% var date=new Date(data.updatedAt); var year=date.getFullYear(); var month=('0' + (date.getMonth() +
+               1)).slice(-2); var day=('0' + date.getDate()).slice(-2); var hours=date.getHours(); var minutes=('0' +
+               date.getMinutes()).slice(-2); var ampm=hours>= 12 ? '오후'
+               : '오전';
+               hours = hours % 12;
+               hours = hours ? hours : 12; // 0 시는 12시로 표시
+               %>
+               <p class="content-time">
+                  <%= year %>-<%= month %>-<%= day %>
+                           <%= ampm %>
+                              <%= hours %>시 <%= minutes %>분
+               </p>
+
+               <div class="commentList-box" id="commentList">
+                  <div class="comment-container">
+                     <label for="commentInput" class="comment-section">댓글
+                        <input type="text" id="commentInput" class="textField comment-input" placeholder="댓글을 입력하세요">
+                        <div class="textNum">
+                           <div class="helpText">최대 60글자까지 입력가능합니다</div>
+                           <div class="helpText">
+                              <span class="motivationCount">0</span>/60
+                           </div>
+                     </label>
+                  </div>
+                  <button class="btn-sm btn-primary submit" onclick="submitComment()">등록 </button>
+                  <% if (clubPostComment.length===0) { %>
+                     <p class="no-comment">등록된 댓글이 없습니다.</p>
+                     <% } else { %>
+
+                        <% } %>
                </div>
-               <button class="btn-sm btn-primary submit" onclick="submitComment()">등록 </button>
-            </div>
 
 
-            <% for(let i=0; i < clubPostComment.length; i++) { %>
-               <div class="comment-container list comment comment-<%= clubPostComment[i].comment_id %>">
-                  <div class="commentList">
-                     <%= clubPostComment[i].comment_name %>
-                        <div class>
-                           <% if (clubPostComment[i].userid_num===userid_num) { %>
-                              <button onclick="deletePostComment('<%= clubPostComment[i].comment_id %>')">
-                                 <i data-feather="trash-2" class="trash-2"></i>
-                              </button>
-                              <button
-                                 onclick="showEditField('<%= clubPostComment[i].comment_id %>', '<%= clubPostComment[i].content %>')"><i
-                                    data-feather="edit" class="edit"></i></button>
-                              <% } %>
-                        </div>
-                  </div>
-                  <div class="comment-content">
-                     <p>
-                        <%= clubPostComment[i].content %>
-                     </p>
-                  </div>
-                  <!-- 좋아요 -->
-                  <div class="like">
-                     <% let likePush='false' %>
-                        <% const content=JSON.parse(JSON.stringify(clubPostCommentLike)); %>
-                           <% for (let j=0; j < content[i].length; j++) { %>
-                              <% if (content[i][j].likeid_num==userid_num) { %>
-                                 <%likePush='true'; %>
-                                    <%}%>
+               <% for(let i=0; i < clubPostComment.length; i++) { %>
+                  <div class="comment-container list comment comment-<%= clubPostComment[i].comment_id %>">
+                     <div class="commentList">
+                        <%= clubPostComment[i].comment_name %>
+                           <div class>
+                              <% if (clubPostComment[i].userid_num===userid_num) { %>
+                                 <button onclick="deletePostComment('<%= clubPostComment[i].comment_id %>')">
+                                    <i data-feather="trash-2" class="trash-2"></i>
+                                 </button>
+                                 <button
+                                    onclick="showEditField('<%= clubPostComment[i].comment_id %>', '<%= clubPostComment[i].content %>')"><i
+                                       data-feather="edit" class="edit"></i></button>
+                                 <% } %>
+                           </div>
+                     </div>
+                     <div class="comment-content">
+                        <p>
+                           <%= clubPostComment[i].content %>
+                        </p>
+                     </div>
+                     <!-- 좋아요 -->
+                     <div class="like">
+                        <% let likePush='false' %>
+                           <% const content=JSON.parse(JSON.stringify(clubPostCommentLike)); %>
+                              <% for (let j=0; j < content[i].length; j++) { %>
+                                 <% if (content[i][j].likeid_num==userid_num) { %>
+                                    <%likePush='true'; %>
                                        <%}%>
-                                          <% if (likePush==='false' ){%>
-                                             <button
-                                                onclick="toggleLike('<%= clubPostComment[i].comment_id %>', '<%= userid_num %>', '<%= clubPostCommentLike[i].length %>', this)">
-                                                <i id="heart-icon-<%= clubPostComment[i].comment_id %>"
-                                                   class="fas fa-heart"></i><span class="like-num">
-                                                   <%= clubPostCommentLike[i].length %>
-                                                </span>
-                                             </button>
-                                             <%} else if(likePush==='true' ) {%>
+                                          <%}%>
+                                             <% if (likePush==='false' ){%>
                                                 <button
-                                                   onclick="toggleLike('<%= clubPostComment[i].comment_id %>', '<%= userid_num %>', '<%= clubPostCommentLike[i].length %>', this)"><i
-                                                      id="heart-icon-<%= clubPostComment[i].comment_id %>"
-                                                      class="heart-active fas fa-heart "></i><span class="like-num">
+                                                   onclick="toggleLike('<%= clubPostComment[i].comment_id %>', '<%= userid_num %>', '<%= clubPostCommentLike[i].length %>', this)">
+                                                   <i id="heart-icon-<%= clubPostComment[i].comment_id %>"
+                                                      class="fas fa-heart"></i> <span class="like-num">
                                                       <%= clubPostCommentLike[i].length %>
                                                    </span>
                                                 </button>
-                                                <% }%>
-                  </div>
-                  <!-- 좋아요 끝-->
+                                                <%} else if(likePush==='true' ) {%>
+                                                   <button
+                                                      onclick="toggleLike('<%= clubPostComment[i].comment_id %>', '<%= userid_num %>', '<%= clubPostCommentLike[i].length %>', this)"><i
+                                                         id="heart-icon-<%= clubPostComment[i].comment_id %>"
+                                                         class="heart-active fas fa-heart "></i> <span class="like-num">
+                                                         <%= clubPostCommentLike[i].length %>
+                                                      </span>
+                                                   </button>
+                                                   <% }%>
+                     </div>
+                     <!-- 좋아요 끝-->
 
-                  <!-- 시간 업데이트 하는거.. -->
-                  <div class="list-time">
-                     <% if (clubPostComment[i].updatedAt) { %>
-                        <% var date=new Date(clubPostComment[i].updatedAt); var year=date.getFullYear(); var month=('0'
-                           + (date.getMonth() + 1)).slice(-2); var day=('0' + date.getDate()).slice(-2); var
-                           hours=date.getHours(); var minutes=('0' + date.getMinutes()).slice(-2); var ampm=hours>= 12 ?
-                           '오후' : '오전';
-                           hours = hours % 12;
-                           hours = hours ? hours : 12; // 0 시는 12시로 표시
-                           %>
-                           <p>
-                              <%= year %>-<%= month %>-<%= day %>
-                                       <%= ampm %>
-                                          <%= hours %>시 <%= minutes %>분
-                           </p>
+                     <!-- 시간 업데이트 하는거.. -->
+                     <div class="list-time">
+                        <% if (clubPostComment[i].updatedAt) { %>
+                           <% var date=new Date(clubPostComment[i].updatedAt); var year=date.getFullYear(); var
+                              month=('0' + (date.getMonth() + 1)).slice(-2); var day=('0' + date.getDate()).slice(-2);
+                              var hours=date.getHours(); var minutes=('0' + date.getMinutes()).slice(-2); var
+                              ampm=hours>= 12 ?
+                              '오후' : '오전';
+                              hours = hours % 12;
+                              hours = hours ? hours : 12; // 0 시는 12시로 표시
+                              %>
+                              <p>
+                                 <%= year %>-<%= month %>-<%= day %>
+                                          <%= ampm %>
+                                             <%= hours %>시 <%= minutes %>분
+                              </p>
+                     </div>
+                     <% } %>
                   </div>
+                  <!-- for문 끝 -->
                   <% } %>
-               </div>
-               <!-- for문 끝 -->
-               <% } %>
 
-                  <div id="editCommentSection" style="display: none;">
-                     <input type="text" id="editCommentInput" class="textField" placeholder="댓글 수정">
-                     <button class="btn-sm btn-primary" onclick="submitEdit()">수정 완료</button>
-                  </div>
+                     <div id="editCommentSection" style="display: none;">
+                        <input type="text" id="editCommentInput" class="textField" placeholder="댓글 수정">
+                        <button class="btn-sm btn-primary" onclick="submitEdit()">수정 완료</button>
+                     </div>
          </div>
          </div>
 
