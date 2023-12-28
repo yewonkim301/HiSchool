@@ -15,7 +15,6 @@
   <style>
     .textField {
       width: 100%;
-      height: 300px;
     }
 
     .textField-title {
@@ -42,6 +41,86 @@
       gap: 20px;
       width: 100px;
     }
+
+
+    #image_preview input[type="file"] {
+    position: absolute;
+    width: 0;
+    height: 0;
+    padding: 0;
+    overflow: hidden;
+    border: 0;
+}
+
+.s3image {
+  position: relative;
+}
+
+.imageDeleteButton {
+  position: absolute;
+}
+
+
+.btn-upload {
+  width: 150px;
+  height: 30px;
+  background-color: var(--color-primary-500);
+  color: white;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &:hover {
+    background: var(--color-primary-600);
+    color: #fff;
+  }
+}
+
+.btn-upload:hover {
+  background-color: var(--color-primary-600);
+}
+
+#file {
+  display: none;
+}
+
+
+#btnAtt {
+  display: none;
+}
+
+
+
+
+
+    #btnAtt {
+      display: inline-block;
+    height: 40px;
+    padding: 0 10px;
+    vertical-align: middle;
+    border: 1px solid #dddddd;
+    color: #999999;
+    }
+
+    #att_zone{
+	width: 100%;
+  display: flex;
+  gap: 4px;
+}
+
+#att_zone:empty:before{
+	content : attr(data-placeholder);
+	color : #999;
+	font-size:.9em;
+}
+
+#image_preview {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
   </style>
 </head>
 
@@ -52,7 +131,7 @@
         <div class="board">
           <!-- 수정 폼 -->
           <form id="editForm">
-            <div>
+            <div class="input">
               <label for="title">제목</label>
               <input type="text" id="title" class="textField-title textField" value="<%= data.title %>">
               <div class="textNum">
@@ -62,7 +141,7 @@
                 </div>
               </div>
             </div>
-            <div>
+            <div class="input">
               <label for="content">내용</label>
               <textarea id="content" class="textField"><%= data.content %></textarea>
               <div class="textNum">
@@ -72,25 +151,45 @@
                 </div>
               </div>
             </div>
-            <input type="file" name="filesInput" id="filesInput" accept="image/*" onchange="uploadToClient()"
+            <!-- <input type="file" name="filesInput" id="filesInput" accept="image/*" onchange="uploadToClient()"
               multiple />
-            <div id="preview"></div>
+            <div id="preview"></div> -->
+            <div id='image_preview'>
 
-
-            <div class="postImages">
-              <% let parsedPostImages=[] %>
+              <label for="btnAtt">
+                <div class="btn-upload">이미지 업로드</div>
+              </label>
+              <input type='file' id='btnAtt' multiple accept="image/*" onchange="uploadToClient(); "/>
+              <div id='att_zone'>
+                <% let parsedPostImages=[] %>
                 <% for(i=0; i < postImages.length; i++) { %>
                   <% const parts=postImages[i].split("/") %>
                     <% parsedPostImages.push(parts[parts.length -1].split("?")[0]) %>
-                      <img src="<%= postImages[i] %>" alt="" class="image<%= i %>" />
+                      <img src="<%= postImages[i] %>" alt="" class="s3image image<%= i %>" style="display:flex; position:relative; gap: 4px; width: calc( (100% - 40px) / 5); aspect-ratio: 1/1; gap: 4px; object-fit: cover; z-index:1;" />
                       <button type="button" class="imageDeleteButton image<%= i %>"
-                        onclick="handleDeleteImage('<%= parsedPostImages[i] %>')">삭제</button>
-                      <% } %>
+                        onclick="handleDeleteImage('<%= parsedPostImages[i] %>')" style="width:30px;height:30px;position:absolute;font-size:24px; right:0px;bottom:0px;z-index:999;background-color:rgba(255,255,255,0.1);color:#f00;">삭제</button>
+                  <% } %>
+              </div>
+    
+
+
+            <div class="postImages">
+              
             </div>
 
-            <button type="button" class="btn btn-primary" onclick="submitEdit()">수정하기</button>
+
+
+
+
+            
+
+
+
+            <div class="cta">
+              <button class="btn btn-secondary" onclick="deletepost()">삭제</button>
+              <button type="button" class="btn btn-primary" onclick="submitEdit()">수정하기</button>
+            </div>
           </form>
-          <button class="btn btn-secondary" onclick="deletepost()">삭제</button>
         </div>
       </div>
     </main>
@@ -105,7 +204,7 @@
       function readURL(input) { }
 
       function readFiles() {
-        var files = document.getElementById("filesInput").files;
+        var files = document.getElementById("btnAtt").files;
 
         for (var i = 0; i < files.length; i++) {
           alert(files[i].name);
@@ -116,12 +215,67 @@
       let images = null;
       let imagesArr = [];
       let payload = [];
-      const uploadFiles = document.querySelector("#filesInput");
+      const uploadFiles = document.querySelector("#btnAtt");
       let uploadedFileUrl = "";
       let uploadedUrl = [];
       let uploadImages = [];
 
-      function uploadToClient(e) {
+
+      
+
+      
+var attZone = document.getElementById('att_zone');
+var btnAtt = document.getElementById('btnAtt')
+var sel_files = [];
+
+// 이미지와 체크 박스를 감싸고 있는 div 속성
+var div_style = 'display:flex; position:relative; gap: 4px;'
+              + 'width: calc( (100% - 40px) / 5); aspect-ratio: 1/1; gap: 4px; object-fit: cover; z-index:1';
+// 미리보기 이미지 속성
+var img_style = 'width:100%;z-index:none; object-fit: cover;';
+// 이미지안에 표시되는 체크박스의 속성
+var chk_style = 'width:30px;height:30px;position:absolute;font-size:24px;'
+              + 'right:0px;bottom:0px;z-index:999;background-color:rgba(255,255,255,0.1);color:#f00';
+
+
+
+
+
+      
+  
+/*첨부된 이미지를 배열에 넣고 미리보기 */
+imageLoader = function(file){
+  sel_files.push(file);
+  var reader = new FileReader();
+  reader.onload = function(ee){
+    let img = document.createElement('img')
+    img.setAttribute('style', img_style)
+    img.src = ee.target.result;
+    attZone.appendChild(makeDiv(img, file));
+  }
+  
+  reader.readAsDataURL(file);
+}
+
+
+      function uploadToClient() {
+
+
+
+        
+
+        var files = uploadFiles.files;
+  var fileArr = Array.prototype.slice.call(files)
+  for(f of fileArr){
+    imageLoader(f);
+  }
+
+
+
+
+
+
+
         if (createObjectURL) {
           URL.revokeObjectUrl(createObjectURL);
         }
@@ -193,56 +347,6 @@
         }
       }
 
-      // async function addpost() {
-      //   const uploadedFileOriginUrl = await uploadImgClient();
-
-
-
-      //   if (uploadedFileOriginUrl !== null) {
-      //     console.log("presignedURL 있어요");
-      //     console.log('uploadedFileOriginUrl', uploadedFileOriginUrl);
-
-      //     for (i = 0; i < uploadedFileOriginUrl.length; i++) {
-      //       const parts = uploadedFileOriginUrl[i].split("/");
-      //       uploadImages.push(parts[parts.length - 1].split("?")[0]);
-      //     }
-
-      //     console.log('uploadedImages', uploadImages);
-
-      //   } else {
-      //     console.log("presignedURL 없어요");
-      //     uploadImages = "";
-      //   }
-
-      //   console.log("uploadImages", uploadImages);
-
-
-      //   await axios({
-      //     method: "POST",
-      //     url: `/myclubNewPost/<%= data %>`,
-      //     data: {
-      //       // 클라이언트에서 서버로 전달할 club_id
-      //       // userid_num: "2", // 임시 데이터
-      //       title: form.title.value,
-      //       content: form.content.value,
-      //       image: uploadImages,
-      //     },
-      //   }).then((res) => {
-      //     console.log(res.data);
-      //     if (res.status === 200) {
-      //       const club_id = res.data.club_id; // 응답으로부터 post_id를 얻음
-      //       const post_id = res.data.post_id; // 응답으로부터 post_id를 얻음
-      //       alert("게시물 등록완료");
-      //       // 새 게시물 엘리먼트 생성
-      //       const newPostElement = document.createElement("div");
-      //       newPostElement.innerHTML = `
-      //           <h3>${form.title.value}</h3>
-      //           <p>${form.content.value}</p>
-      //        `;
-      //       window.location.href = `/myclubPostDetail/${club_id}/${post_id}`;
-      //     }
-      //   });
-      // }
     </script>
 
 
@@ -298,6 +402,7 @@
       async function submitEdit() {
         let title = document.getElementById('title').value;
         let content = document.getElementById('content').value;
+        var files = document.getElementById('btnAtt').files;
 
 
         // 제목 유효성 검사
@@ -312,6 +417,11 @@
           return false;
         }
 
+        // 파일 유효성 검사: 5장 이하
+        if (files.length > 5) {
+          alert('사진은 최대 5장까지 업로드 가능합니다.');
+          return false;
+        }
 
 
         const uploadedFileOriginUrl = await uploadImgClient();
@@ -395,6 +505,50 @@
         }
 
       }
+
+
+
+
+      imageView = function imageView(att_zone, btn){
+
+
+
+
+
+/*첨부된 파일이 있는 경우 checkbox와 함께 attZone에 추가할 div를 만들어 반환 */
+makeDiv = function(img, file){
+  var div = document.createElement('div')
+  div.setAttribute('style', div_style)
+  
+  var btn = document.createElement('input')
+  btn.setAttribute('type', 'button')
+  btn.setAttribute('value', 'x')
+  btn.setAttribute('delFile', file.name);
+  btn.setAttribute('style', chk_style);
+  btn.onclick = function(ev){
+    var ele = ev.srcElement;
+    var delFile = ele.getAttribute('delFile');
+    for(var i=0 ;i<sel_files.length; i++){
+      if(delFile== sel_files[i].name){
+        sel_files.splice(i, 1);      
+      }
+    }
+    
+    dt = new DataTransfer();
+    for(f in sel_files) {
+      var file = sel_files[f];
+      dt.items.add(file);
+    }
+    btnAtt.files = dt.files;
+    var p = ele.parentNode;
+    attZone.removeChild(p)
+  }
+  div.appendChild(img)
+  div.appendChild(btn)
+  return div
+}
+}('att_zone', 'btnAtt')
+
 
     </script>
 
