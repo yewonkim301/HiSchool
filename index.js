@@ -72,6 +72,7 @@ app.use("/", indexRouter);
 
 let flag = true;
 
+// DM
 app.get("/chat/:room", isLoggedIn, async (req, res) => {
   if (flag) {
     flag = false;
@@ -84,12 +85,14 @@ app.get("/chat/:room", isLoggedIn, async (req, res) => {
     req.cookies.jwt,
     process.env.JWT_SECRET
   );
-
   const getName = await User.findOne({
     attributes: ["nickname"],
-    userid_num: userid_num,
+    where:{
+      userid_num: userid_num
+    }
   });
-  res.render("chat", { room, myNickname: getName.dataValues.nickname });
+
+  res.render("chat", { room, myNickname: getName.nickname, userid_num });
 });
 
 // Club

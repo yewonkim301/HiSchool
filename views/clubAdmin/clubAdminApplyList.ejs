@@ -30,7 +30,7 @@
       <% for(let i=0; i<getApplyList.length;i++){ %>
       <div class="list">
         <div class="list-title"><%=userInfo[i]%></div>
-        <div class="list-content"><%=getApplyList[i].introduction%></div>
+        <div class="list-content"><%=getApplyList[i].introduction.slice(0,19)%>. . .</div>
         <button class="<%=getApplyList[i].userid_num%>" onclick="checkDetail('<%=getApplyList[i].userid_num%>')">상세 정보 확인</button>
       </div>
       

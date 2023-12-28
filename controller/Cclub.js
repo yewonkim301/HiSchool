@@ -838,8 +838,7 @@ exports.getMyclubMain = async (req, res) => {
   })
 
   
-  console.log('Cclub 853 foundmember : ', foundMember[0].user);
-  console.log('Cclub 853 foundmember : ', foundMember[1].user);
+
 
   const clubPosts = await Club_post.findAll({
     where: {

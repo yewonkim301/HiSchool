@@ -58,8 +58,7 @@ exports.connection = async (io, socket) => {
       });
       // console.log("socket on chat >>>>", chats);
     }
-
-    io.to(roomName).emit("preChats", { chats });
+    io.to(roomName).emit("preChats", { chats, userName });
 
     // socket.to(roomName).emit("notice", `${userName}님이 입장하셨습니다`);
 
@@ -75,16 +74,19 @@ exports.connection = async (io, socket) => {
   });
 
   //================ 위 까지 방만들기 =======================
-  socket.on("sendMessage", (message) => {
+  socket.on("sendMessage", async (message) => {
     console.log("CclubSocket sendMessage > ", message);
 
-    io.to(socket.room).emit("newMessage", message.message, message.nick, false);
-    const newClubChat = Club_chat.create({
+    const newClubChat = await Club_chat.create({
       userid_num: message.userid_num,
       from_name: message.nick,
       content: message.message,
       club_id: message.roomName,
     });
+    // const time = Club_chat
+    console.log("newClubChat", newClubChat);
+    // io.to(socket.room).emit("newMessage", message.message, message.nick, false);
+    io.to(socket.room).emit("newMessage", newClubChat, false);
   });
 
   socket.on("disconnect", () => {
