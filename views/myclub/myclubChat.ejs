@@ -201,6 +201,7 @@
           return;
         }
         console.log(roomName.value, userName.value);
+
         socket.emit("create", roomName.value, userName.value, () => {
           const main = document.querySelector("#main");
           const body = document.querySelector("#body");
@@ -209,6 +210,12 @@
           //전역변수에 입력한 닉네임을 저장
           myName = userName.value;
         });
+      });
+
+      //이전 메세비 불러오기
+      socket.on("preChats", (chats) => {
+        console.log("34");
+        console.log(chats);
       });
       chatForm.addEventListener("submit", (e) => {
         e.preventDefault();
