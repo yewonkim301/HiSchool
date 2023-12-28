@@ -2,6 +2,7 @@ const { Club, Club_chat, User, Sequelize } = require("../models/Index");
 const jwt = require("jsonwebtoken");
 
 let roomList = [];
+let chats;
 
 // exports.getDmRoom = async (req, res) => {
 //   try {
@@ -47,20 +48,20 @@ exports.connection = async (io, socket) => {
 
     roomList = [...new Set(rooms)];
     console.log(`roomName: ${roomName}, roomList: ${roomList}`);
-    console.log(JSON.stringify(roomName));
-    let name = JSON.stringify(roomName);
-    // console.log("@@@@@@@>>>", roomList.includes(JSON.stringify(roomName)));
-    console.log("@@@@@@@>>>", typeof roomList, typeof name);
+    roomList = JSON.stringify(roomList);
+    // console.log("@@@@@@@>>>", typeof roomList, typeof roomName);
     // 동아리 채팅 정보가 있다면 이전 채팅정보 불러와주기
-    if (roomList.includes(JSON.stringify(roomName))) {
-      console.log("IF 시퀄 전");
-      const chats = await Club_chat.findAll({
+    if (roomList.includes(roomName)) {
+      // console.log("IF 시퀄 전");
+      chats = await Club_chat.findAll({
         where: { club_id: roomName },
       });
-      console.log("IF 시퀄 후");
+      // console.log("socket on chat >>>>", chats);
     }
-    // console.log("socket on chat >>>>", chats);
-    socket.to(roomName).emit("notice", `${userName}님이 입장하셨습니다`);
+
+    io.to(roomName).emit("preChats", { chats });
+
+    // socket.to(roomName).emit("notice", `${userName}님이 입장하셨습니다`);
 
     //채팅방 목록 갱신
     // if (!roomList.includes(roomName)) {
@@ -72,6 +73,7 @@ exports.connection = async (io, socket) => {
     // io.to(roomName).emit("userList", usersInRoom);
     cb();
   });
+
   //================ 위 까지 방만들기 =======================
   socket.on("sendMessage", (message) => {
     console.log("CclubSocket sendMessage > ", message);
