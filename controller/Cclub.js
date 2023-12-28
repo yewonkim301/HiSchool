@@ -837,7 +837,6 @@ exports.getMyclubMain = async (req, res) => {
       },
     ],
   });
-
   const clubPosts = await Club_post.findAll({
     where: {
       club_id: club_id,
