@@ -190,39 +190,54 @@
         </table>
         <div class="addschedule-btn">
         </div>
-        <div id="eventsContainer" class="eventschedule">
-          <% let selectedDate=data; // 클라이언트에서 전달받은 선택된 날짜 %>
-            <% if (data && data.length) { %>
-              <% let hasSchedules=false; %>
-                <% data.forEach(function(schedule) { %>
-                  <% if (selectedDate===schedule.date) { %>
-                    <% hasSchedules=true; %>
-                      <div class="schedule" id="<%= schedule.schedule_id %>">
-                        <h3 id="title<%= schedule.schedule_id %>">
-                          <%= schedule.title %>
-                        </h3>
-                        <p id="date<%= schedule.schedule_id %>">날짜: <%= schedule.date %>
-                        </p>
-                        <p id="time<%= schedule.schedule_id %>">시간: <%= schedule.time %>
-                        </p>
-                        <p id="content<%= schedule.schedule_id %>" class="list">내용: <%= schedule.content %>
-                        </p>
-                        <button class="btn-sm btn-primary" type="button"
-                          onclick="patchSchedule('<%= schedule.schedule_id %>')">수정</button>
-                        <button class="btn-sm btn-primary" type="button"
-                          onclick="deleteSchedule('<%= schedule.schedule_id %>')">삭제</button>
-                      </div>
-                      <% } %>
-                        <% }); %>
-                          <% if (!hasSchedules) { %>
-                            <p class="no-events">등록된 일정이 없습니다</p>
-                            <% } %>
-                              <% } else { %>
-                                <p class="no-events">
-                                  등록된 일정이 없습니다
-                                </p>
-                                <% } %>
-        </div>
+        
+          <div id="eventsContainer" class="eventschedule">
+
+            
+            <% let today=new Date();  // 클라이언트에서 전달받은 선택된 날짜 %>
+            <% let searchDate = `${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`%>
+            <% let todaySced =[]%>
+           
+            <%for(let i=0; i<data.length; i++){%>
+              
+              <% if(data[i].date ===searchDate){%>
+                
+               <%todaySced.push(i)%>
+              <%}%>
+           <%}%>
+      
+                <%if(todaySced.length==0){%>
+                  <div class="emptyFull"><span>오늘 등록된 일정이 없습니다.</span></div>
+                  <%}else{%>
+           <%for(let j=0;j<todaySced.length; j++){%>
+            <% let order = todaySced[j]%>
+            <div class="schedule" id="<%= data[order].schedule_id %>">
+              <div class="list">
+                <div class="schdulecontentBox">
+                <h3 id="title<%= data[order].schedule_id %>"><%= data[order].title %></h3>
+                <p id="content<%= data[order].schedule_id %>">내용: <%= data[order].content %></p>
+                </div>
+    
+                <div class="schduleDate">
+                <p id="date<%= data[order].schedule_id %>">날짜: <%= data[order].date %></p>
+                <p id="time<%= data[order].schedule_id %>">시간: <%= data[order].time %></p>
+                </div>
+              
+    
+                <div class="schdulebtn">
+                <button class="btn-sm btn-primary correctionBtn" type="button" onclick="patchSchedule('<%= data[order].schedule_id %>')">수정</button>
+                <button class="btn-sm btn-primary deleteBtn" type="button" onclick="deleteSchedule('<%= data[order].schedule_id %>')">삭제</button>
+                </div>
+              </div>
+            </div>
+             <%}%>
+             <%}%>
+
+           
+
+             
+         </div>
+        
       </div>
       <button onclick="openModal()" id="plus-button" class="btn btn-primary">
         추가하기
@@ -253,7 +268,7 @@
           padding: 20px;
           border-radius: 10px;
           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-          z-index: 2
+          z-index: 100
         ">
           <!-- <h2>일정 추가</h2> -->
           <h2 id="modalName"></h2>
@@ -283,8 +298,8 @@
     <!----------------------- 일정을 추가하는 모달 끝 ---------------------->
 
     <script>
-      console.log('>>>>>>>>>:<%= scheduleDate %>');
-      console.log('>>>>>>>>>:<%= scheduleDate %>');
+      
+      
       // 서버로부터 받은 데이터를 JavaScript 변수에 할당
       const clubSchedules = `clubSchedules: <%-JSON.stringify(data) %>`;
 
@@ -519,10 +534,12 @@
         document.getElementById("modalName").innerText = "일정 수정";
         // document.getElementById("modalDateL").style.display = "block";
         // document.getElementById("modalDate").style.display = "block";
-
+        
         document.getElementById("saveBtn").style.display = "none";
         document.getElementById("resaveBtn").style.display = "block";
-
+        document.getElementById("modalOverlay").style.display = "block";
+        
+        
         patchId = schedule_id;
 
         // 저장된 값 불러오기
