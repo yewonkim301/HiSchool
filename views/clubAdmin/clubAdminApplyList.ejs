@@ -22,9 +22,7 @@
 
       <!-- 가입 요청 목록 -->
       <% if(getApplyList.length==0){%>
-        <div class="noneMessage">가입 요청이 없습니다.
-          
-        </div>
+        <div class="emptyFull"><span>가입 요청이 없습니다.</span></div>
         
         <%} else {%>
       <% for(let i=0; i<getApplyList.length;i++){ %>
