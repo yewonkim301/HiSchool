@@ -21,20 +21,22 @@
     </div>
 
 
- 
+      <% if(typeof title !== 'undefined' && title) { %>
+        <div class="title" onclick="toPage('/Home')"><%= title %></div>
+      <% } else { %>
       <div class="title" onclick="toPage('/Home')">하이스쿨</div>
-
+        <% } %>
 
 
 
     <div class="menu-bar">
       <a href="/publicPostMain">자유게시판</a>
-      <a href="/mypageMain">마이페이지</a>
+      <!-- <a href="/mypageMain">마이페이지</a> -->
       <a href="/supportMain">고객센터</a>
     </div>
 
     <div class="nav-btn">
-      <div class="header-profile desktop">
+      <div class="header-profile desktop" onclick="toPage('/mypageMain')">
         <% if(typeof isLoggedIn !== 'undefined' && isLoggedIn) { %>
           <span><%= foundUser.name %>님</span>
           <% if(typeof signedFile !== 'undefined' && signedFile) { %>
@@ -76,10 +78,10 @@
       <i data-feather="menu"></i></div> -->
   <a href="/home">홈</a>
   <a href="/publicPostMain">자유게시판</a>
-  <a href="/mypageMain">마이페이지</a>
+  <!-- <a href="/mypageMain">마이페이지</a> -->
   <a href="/supportMain">고객센터</a>
 
-  <div class="header-profile mobile">
+  <div class="header-profile mobile" onclick="toPage('/mypageMain')">
     <% if(typeof signedFile !== 'undefined' && signedFile) { %>
     <div class="profileImg-container">
       <img
@@ -89,6 +91,9 @@
         height="50"
         style="border-radius: 100px"
       />
+      <% if(typeof foundUser !== 'undefined' && foundUser) { %>
+        <span><%= foundUser.name %>님</span>
+        <% } %>
     </div>
     <% } else { %>
     <div class="profileImg-container">

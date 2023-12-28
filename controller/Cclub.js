@@ -855,7 +855,12 @@ exports.getMyclubMain = async (req, res) => {
   let isLeader;
   if (myClub.leader_id == userid_num) isLeader = true;
   else isLeader = false;
-  res.render("myclub/myclubMain", { data: myClub, clubPosts, foundMember, isLeader, link });
+
+  const title = myClub.club_name
+
+  console.log('Cclub 861 title : ', myClub.club_name);
+
+  res.render("myclub/myclubMain", { data: myClub, clubPosts, foundMember, isLeader, link, title });
 };
 
 // GET /clubChat

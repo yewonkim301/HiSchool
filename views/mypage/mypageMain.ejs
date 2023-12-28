@@ -56,20 +56,23 @@
             <label for="classid">반</label>
             <input type="text" class="textField" id="classid" value="<%= data.classid %>" />
           </div>
-        </form>
-        <div class="cta">
+
           <% if (Leader || Leader2 || Leader3) { %>
             <label for="deleteButton">가입된 동아리가 존재합니다. <br />동아리 탈퇴 후 회원탈퇴를
               해주세요.</label>
-            <button class="btn btn-primary" id="deleteButton" style="background-color: rgba(255, 0, 0, 0.188)"
+            <button class="btn-sm btn-warning" id="deleteButton" style="background-color: rgba(255, 0, 0, 0.188)"
               onclick="handleDelete()" disabled>
               탈퇴
             </button>
             <% } else { %>
-              <button class="btn btn-primary" style="background-color: red" onclick="handleDelete()">
+              <button class="btn-sm btn-warning" style="background-color: red" onclick="handleDelete()">
                 탈퇴
               </button>
               <% } %>
+
+        </form>
+        <div class="cta">
+          
 
                 <button class="btn btn-primary" onclick="handleUpdate()">
                   수정하기

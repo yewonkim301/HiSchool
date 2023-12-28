@@ -348,6 +348,15 @@ body {
   cursor: pointer;
 }
 
+
+.btn-warning {
+  background-color: var(--color-red-500);
+  color: var(--color-red-50);
+  border: none;
+  border-radius: 4px;
+  box-shadow: 0px 2px 8px 0px rgba(47, 128, 237, 0.2);
+}
+
 /* 텍스트필드 - input */
 form {
   display: flex;
@@ -561,10 +570,14 @@ input[type='checkbox']:checked + label:before {
 
 .header-profile.desktop {
   display: flex;
-  gap: 8px;
+  gap: 6px;
   align-items: center;
   /* flex-basis: content; */
   flex-grow: 0;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-gray-400);
 }
 
 .header-profile.mobile {
@@ -572,6 +585,10 @@ input[type='checkbox']:checked + label:before {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-gray-400);
 }
 
 .profileImg-container {

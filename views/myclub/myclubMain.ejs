@@ -8,6 +8,24 @@
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <title>하이스쿨 - 동아리 메인</title>
   <style>
+    .clubTitle {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+
+    .description {
+      display: flex;
+      padding: 12px;
+      background-color: var(--color-gray-100);
+      border-radius: 4px;
+      color: var(--color-gray-500);
+      font-weight: 600;
+    }
+
+
+
     .menuWrapper {
       display: flex;
       flex-direction: column;
@@ -74,12 +92,16 @@
 <body>
   <%- include('../component/header')%>
     <div class="container">
-      <h1>
-        <%= data.club_name %>
-      </h1>
-      <span>
-        <%= data.description %>
-      </span>
+      <div class="clubTitle">
+        <h1>
+          <%= data.club_name %>
+        </h1>
+        <div class="description">
+          <span>
+            <%= data.description %>
+          </span>
+        </div>
+      </div>
       <div class="menuWrapper">
         <div class="menuContainer">
           <a class="menuItem" href="/myclubChat/<%=data.club_id%>">
