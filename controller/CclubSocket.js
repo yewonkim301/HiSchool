@@ -56,7 +56,7 @@ exports.connection = async (io, socket) => {
       chats = await Club_chat.findAll({
         where: { club_id: roomName },
       });
-      // console.log("socket on chat >>>>", chats);
+      console.log("socket on chat >>>>", chats);
     }
     io.to(roomName).emit("preChats", { chats, userName });
 

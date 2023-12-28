@@ -216,11 +216,11 @@
 
       //이전 메세지 불러오기
       socket.on("preChats", (data) => {
-        console.log("myclubChat preChats  >  ", data.chats[0]);
+        // console.log("myclubChat preChats  >  ", data.chats[0]);
         for (let i = 0; i < data.chats.length; i++) {
           let div = document.createElement("div");
           let html = "";
-
+          console.log("myclubChat preChats  >  ", data.chats[i].from_name);
           if (data.userName === data.chats[i].from_name) {
             //내가입력한 텍스트
             div.classList.add("my-chat");
