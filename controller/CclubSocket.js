@@ -39,6 +39,7 @@ exports.connection = async (io, socket) => {
   socket.on("create", async (roomName, userName, cb) => {
     //join(방이름) 해당 방이름으로 없다면 생성. 존재하면 입장
     //socket.rooms에 socket.id값과 방이름 확인가능
+    socket.to(roomName).emit("notice", `${userName}님이 입장하셨습니다`);
     socket.join(roomName);
     //socket은 객체이며 원하는 값을 할당할 수 있음
     socket.room = roomName;
@@ -61,8 +62,6 @@ exports.connection = async (io, socket) => {
     //   console.log("socket on chat >>>>", chats);
     // }
     // io.to(roomName).emit("preChats", { chats, userName });
-
-    socket.to(roomName).emit("notice", `${userName}님이 입장하셨습니다`);
 
     //채팅방 목록 갱신
     // if (!roomList.includes(roomName)) {
