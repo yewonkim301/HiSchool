@@ -33,6 +33,25 @@
          /* 원하는 컨테이너의 너비를 설정 */
       }
 
+      .list-mainbox {}
+
+      .list-box {
+         display: flex;
+         justify-content: space-between;
+         /* 양쪽 끝에 날짜와 시간을 배치 */
+         align-items: center;
+         /* 세로 중앙 정렬 */
+         width: 100%;
+      }
+
+      .list-time {
+         text-align: right;
+         /* 시간을 오른쪽에 정렬 */
+      }
+
+      .list-name {
+         margin-bottom: 30px;
+      }
    </style>
 </head>
 
@@ -43,19 +62,19 @@
          <button onclick="createPost()" id="plus-button" class="plus-button">+</button>
          <!-- 게시물 목록 -->
          <div class="list-container">
-            <% if(data.length !== 0) { %>
-            <% for(let i=0; i < data.length; i++) { %>
-               <div class="list" onclick="showDetail('<%= data[i].post_id %>')">
-                  <div class="list-name">
-                     <%= data[i].name %>
-                  </div>
-                  <div class="list-title">
-                     <%= data[i].title %>
-                  </div>
-                  <div class="list-content">
-                     <%= data[i].content %>
-                  </div>
-                  <div class="list-content">
+            <% if(data.length !==0) { %>
+               <% for(let i=0; i < data.length; i++) { %>
+                  <div class="list" onclick="showDetail('<%= data[i].post_id %>')">
+                     <div class="list-name">
+                        <%= data[i].name %>
+                     </div>
+                     <div class="list-title">
+                        <%= data[i].title %>
+                     </div>
+                     <div class="list-content">
+                        <%= data[i].content %>
+                     </div>
+
                      <!-- 지금 현재 시간은 출력되지만 YYYY-MM-DD 변경해줘야함 -->
                      <% var date=new Date(data[i].updatedAt); var year=date.getFullYear(); var month=('0' +
                         (date.getMonth() + 1)).slice(-2); var day=('0' + date.getDate()).slice(-2); var
@@ -65,17 +84,24 @@
                         var minutes = ('0' + date.getMinutes()).slice(-2);
                         %>
 
-                        <%= year %>-<%= month %>-<%= day %>
-                                 <%= ampm %>
-                                    <%= hours %>시 <%= minutes %>분
+                        <div class="list-content list-box">
+                           <div class="list-date">
+                              <%= year %>년<%= month %>월 <%= day %>일
+                           </div>
+                           <div class="list-time">
+                              <%= ampm %>
+                                 <%= hours %>시 <%= minutes %>분
+                           </div>
+                        </div>
+
+
 
                   </div>
-               </div>
-               <% } %>
-               <% } else { %>
-                  <div class="emptyFull"><span>작성된 글이 없습니다<br>
-                  아래 + 버튼을 눌러 글을 써보세요</span></div>
                   <% } %>
+                     <% } else { %>
+                        <div class="emptyFull"><span>작성된 글이 없습니다<br>
+                              아래 + 버튼을 눌러 글을 써보세요</span></div>
+                        <% } %>
          </div>
       </div>
       <script>

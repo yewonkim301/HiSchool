@@ -31,6 +31,7 @@ app.set("views", "./views");
 
 app.use(express.static(path.join(__dirname, "static")));
 
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // app.use(cors());
@@ -93,10 +94,10 @@ app.get("/chat/:room", isLoggedIn, async (req, res) => {
   });
 
   const chats = await Dm.findAll({
-    where: {room_name: room}
-  })
-console.log("index chats >>>>>>>>> ",chats);
-  res.render("chat", { room, myNickname: getName.nickname, userid_num , chats});
+    where: { room_name: room }
+  });
+  console.log("index chats >>>>>>>>> ", chats);
+  res.render("chat", { room, myNickname: getName.nickname, userid_num, chats });
 });
 
 // Club
