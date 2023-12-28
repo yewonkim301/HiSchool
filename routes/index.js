@@ -406,4 +406,9 @@ router.delete("/supportMain/:qa_id", isLoggedIn, controllerSupport.deleteSupport
 router.get("/home", isLoggedIn, controllerPublic.home);
 
 
+// socket
+
+// GET /chatList
+router.get('/chatList', isLoggedIn, controllerPublic.getChatList);
+
 module.exports = router;
