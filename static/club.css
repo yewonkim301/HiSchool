@@ -25,7 +25,7 @@
   border-radius: 10px;
 }
 
-.hashtags {
+/* .hashtags {
   display: flex;
   flex-wrap: wrap;
   padding: 10px;
@@ -37,7 +37,7 @@
   background-color: #ddd;
   border-radius: 20px;
   cursor: pointer;
-}
+} */
 
 .modal {
   display: none; /* Hidden by default */

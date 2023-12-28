@@ -33,16 +33,6 @@
          /* 원하는 컨테이너의 너비를 설정 */
       }
 
-      .empty {
-         display: flex;
-         height: calc(100vh - 250px);
-         align-items: center;
-         justify-content: center;
-         text-align: center;
-         font-size: 1rem;
-         color: var(--color-gray-400);
-         line-height: 1.4;
-      }
    </style>
 </head>
 
@@ -83,7 +73,7 @@
                </div>
                <% } %>
                <% } else { %>
-                  <div class="empty"><span>작성된 글이 없습니다<br>
+                  <div class="emptyFull"><span>작성된 글이 없습니다<br>
                   아래 + 버튼을 눌러 글을 써보세요</span></div>
                   <% } %>
          </div>

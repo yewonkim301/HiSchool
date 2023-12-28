@@ -228,6 +228,10 @@ body {
   stroke-width: 2;
 }
 
+img {
+  border-radius: 4px;
+}
+
 /* 버튼 */
 .cta {
   display: flex;
@@ -357,6 +361,14 @@ body {
   box-shadow: 0px 2px 8px 0px rgba(47, 128, 237, 0.2);
 }
 
+.btnCenter {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+
+}
+
+
 /* 텍스트필드 - input */
 form {
   display: flex;
@@ -372,6 +384,12 @@ label {
   font-size: 1rem;
   font-weight: 600;
 }
+
+
+.keyword {
+  padding: 8px 0;
+}
+
 
 .input {
   display: flex;
@@ -730,7 +748,7 @@ input[type='checkbox']:checked + label:before {
 .list {
   display: flex;
   width: 100%;
-  padding: 24px;
+  padding: 24px 8px;
   flex-direction: column;
   align-items: flex-start;
   gap: 8px;
@@ -750,7 +768,32 @@ input[type='checkbox']:checked + label:before {
   color: var(--color-gray-400);
 }
 
-/* 여기는 피그마 input  시작  */
+.emptyFull {
+  display: flex;
+  height: calc(100vh - 250px);
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 1rem;
+  color: var(--color-gray-400);
+  line-height: 1.4;
+}
+
+.empty {
+  display: flex;
+  height: 200px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 1rem;
+  color: var(--color-gray-400);
+  line-height: 1.4;
+}
+
+
+
+
+/*# 여기는 피그마 input  시작  */
 .search-container {
   width: 100%;
   padding: 20px;
@@ -950,11 +993,13 @@ input[type='checkbox']:checked + label:before {
 /* hashtag */
 /* test용 코드(수정 필요)---------------------------------------------- */
 .hashtag {
-  padding: 3px;
-  margin-right: 10px;
-  border-radius: 5px;
-  background-color: var(--color-gray-100);
-  font-size: 0.8rem;
+  padding: 8px 12px;
+  margin-right: 8px;
+  border-radius: 4px;
+  background-color: var(--color-primary-50);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--color-primary-500);
 }
 
 .comment-input {

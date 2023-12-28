@@ -281,6 +281,7 @@ exports.getClubPost = async (req, res) => {
         "userid_num",
         "updatedAt",
         "club_id",
+        "name"
       ],
       where: {
         club_id: club_id,
@@ -844,7 +845,7 @@ exports.getMyclubMain = async (req, res) => {
     where: {
       club_id: club_id
     },
-    attributes: ['title', 'post_id', 'content', 'image', 'name', 'createdAt'],
+    attributes: ['title', 'post_id', 'content', 'image', 'name', 'createdAt', 'club_id'],
     order: [['createdAt', 'DESC']],
     limit: 3,
   })
