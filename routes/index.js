@@ -3,6 +3,7 @@ const controllerPublic = require("../controller/Cpublic");
 const controllerClub = require("../controller/Cclub");
 const controllerSupport = require("../controller/Csupport");
 const controllerUser = require("../controller/Cuser");
+const controllerCsocket = require("../controller/Csocket");
 const router = express.Router();
 const { isNotLoggedIn, isLoggedIn, preventIndex } = require("./../middleware/loginCheck");
 
@@ -403,5 +404,6 @@ router.delete("/supportMain/:qa_id", isLoggedIn, controllerSupport.deleteSupport
 
 // GET /home 홈 화면 로드(전체 동아리, 유저가 가입되어 있는 동아이 정보)
 router.get("/home", isLoggedIn, controllerPublic.home);
+
 
 module.exports = router;
