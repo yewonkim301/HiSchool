@@ -1,56 +1,93 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>홈 화면</title>
-    <!-- <link rel="stylesheet" href="/home.css" /> -->
-    <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.0/dist/js.cookie.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  </head>
 
-  <body>
-    <%- include('./component/header-main') %>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>홈 화면</title>
+  <!-- <link rel="stylesheet" href="/home.css" /> -->
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.0/dist/js.cookie.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <style>
+    .slider {
+      width: 100%;
+      min-width: 70%;
+      /* 슬라이더 너비 설정 */
+      height: 150px;
+      /* 슬라이더 높이 설정 */
+      overflow: hidden;
+      /* 슬라이더 밖으로 나가는 이미지 숨김 */
+    }
+
+    .slide {
+      width: 100%;
+      /* 슬라이더 너비에 맞게 이미지 크기 조정 */
+      height: 100%;
+      /* 슬라이더 높이에 맞게 이미지 크기 조정 */
+      display: none;
+      /* 초기 상태에서 이미지 숨김 */
+    }
+  </style>
+</head>
+
+<body>
+  <%- include('./component/header-main') %>
     <div class="container">
       <!-- <a href="/clubAdminMain">동아리 관리 페이지(test)</a> -->
 
       <h2 class="label">내 동아리</h2>
       <div class="list-container">
-        <% if(typeof myClubs !== 'undefined' && myClubs) { %> 
-          <% if(myClubs.length == 0) { %>
+        <% if(typeof myClubs !=='undefined' && myClubs) { %>
+          <% if(myClubs.length==0) { %>
             <span>가입한 동아리가 없어요</span>
             <% } else { %>
-              <% for(i = 0; i < myClubs.length; i++) { %>
-              <a class="list" href="/myclubMain/<%= myClubs[i].club_id %>">
-                <span class="list-title"><%= myClubs[i].club_name %></span>
-                <span class="list-content"><%= myClubs[i].location %></span>
-                <span class="list-content"><%= myClubs[i].description %></span>
-              </a>
-              <% } %>
-              <% } %>
-        <% } else { %>
-          <span>불러오기 실패</span>
-          <% } %>
+              <% for(i=0; i < myClubs.length; i++) { %>
+                <a class="list" href="/myclubMain/<%= myClubs[i].club_id %>">
+                  <span class="list-title">
+                    <%= myClubs[i].club_name %>
+                  </span>
+                  <span class="list-content">
+                    <%= myClubs[i].location %>
+                  </span>
+                  <span class="list-content">
+                    <%= myClubs[i].description %>
+                  </span>
+                </a>
+                <% } %>
+                  <% } %>
+                    <% } else { %>
+                      <span>불러오기 실패</span>
+                      <% } %>
       </div>
       <br />
 
-      <img src="https://www.cuk.edu/type/common/img/kor/info/schoolAdCollect_01_img12.png" alt="">
+      <div class="slider">
+        <img src="https://i.pinimg.com/564x/5b/d5/6c/5bd56cc467c092e742775df9f47aaa7a.jpg" alt="" class="slide">
+        <img src="https://i.pinimg.com/564x/61/54/f1/6154f1739549c5c1d00da1374f63a802.jpg" alt="" class="slide">
+        <img src="https://www.cuk.edu/type/common/img/kor/info/schoolAdCollect_01_img12.png" alt="" class="slide">
 
+      </div>
 
       <br>
       <h2 class="label">전체 동아리</h2>
       <div class="list-container">
-        <% if(typeof allClubs !== 'undefined' && allClubs) { %> 
-        <% for(i = 0; i < allClubs.length; i++) { %>
-        <a class="list" href="/clubDetail/<%= allClubs[i].club_id %>">
-          <span class="list-title"><%= allClubs[i].club_name %></span>
-          <span class="list-content"><%= allClubs[i].location %></span>
-          <span class="list-content"><%= allClubs[i].description %></span>
-        </a>
-        <% } %> 
-        <% } %>
+        <% if(typeof allClubs !=='undefined' && allClubs) { %>
+          <% for(i=0; i < allClubs.length; i++) { %>
+            <a class="list" href="/clubDetail/<%= allClubs[i].club_id %>">
+              <span class="list-title">
+                <%= allClubs[i].club_name %>
+              </span>
+              <span class="list-content">
+                <%= allClubs[i].location %>
+              </span>
+              <span class="list-content">
+                <%= allClubs[i].description %>
+              </span>
+            </a>
+            <% } %>
+              <% } %>
       </div>
-      
+
       <div class="btnCenter"><button class="btn-sm btn-neutral" onclick="toLink('/clubMain')">전체보기</button></div>
 
       <a href="/chat">챗 테스트</a>
@@ -58,8 +95,26 @@
 
     <script>
       function toLink(link) {
-        document.location.href = link
+        document.location.href = link;
       }
+
+      let slides = document.getElementsByClassName("slide");
+      let index = 0;
+
+      function changeSlide() {
+        for (let i = 0; i < slides.length; i++) {
+          slides[i].style.display = "none";
+        }
+        index++;
+        if (index > slides.length) { index = 1; }
+        slides[index - 1].style.display = "block";
+        setTimeout(changeSlide, 3000); // 3초마다 함수를 호출
+      }
+
+      changeSlide(); // 함수 실행
     </script>
-  </body>
+
+
+</body>
+
 </html>

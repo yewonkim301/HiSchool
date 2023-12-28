@@ -15,6 +15,10 @@ const Dm = (Sequelize, DataTypes) => {
             room_name:{
                 type: DataTypes.STRING(120),
                 allowNull: false
+            },
+            from_nick:{
+                type: DataTypes.STRING(50),
+                allowNull: false
             }
         },
         {
