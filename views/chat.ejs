@@ -93,12 +93,15 @@
 
     <div id="msg">
       <div id="notice"></div>
-      <div class="my-chat">"<% for(let i = 0; i< chats.length; i++) { %>
-                            <%= chats[i].dm_content %>
-                            <% } %>"
-                          </div>
-      <div class="my-chat">"<%= chats[0].dm_content %>"</div>
-      <div class="other-chat"></div>
+      <% for(let i=0; i < chats.length; i++) {  %>
+        <% if(myNickname === chats[i].from_nick){ %>
+      <div class="my-chat"><p><%= chats[i].dm_content %></p></div>
+      <!-- <div class="my-chat"></div> -->
+      <% } else { %>
+        <div class="other-chat"><p><%= chats[i].dm_content %></p><p><%= chats[i].from_nick %></p></div>
+        <!-- <div class="other-chat"></div> -->
+      <% } %>
+      <% } %>
     </div>
 
     <form id="chat">
@@ -195,13 +198,15 @@
     chatForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const message = document.querySelector('#message');
+      console.log("myName >>>>>", myName);
       const msg = {
         room: `<%= room %>`,
-        nick: myName,
+        from_nick: myName,
         message: message.value,
-        userid_num: `<%= userid_num %>`
+        userid_num: `<%= userid_num %>`,
       };
-      socket.emit('sendMessage', msg);
+      console.log("chat msg from nick >>>>>>", msg.from_nick);
+      socket.emit('sendMessage', msg, myName);
       message.value = '';
     });
 
