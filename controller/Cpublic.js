@@ -1131,7 +1131,7 @@ exports.getMyPageProfile = async (req, res) => {
       }
     });
 
-    const room = [getName.dataValues.nickname , nickname].sort();
+    const room = [getName.dataValues.nickname,nickname].sort();
 
     // console.log('Cpublic 1042 nickname :', nickname)
     const myPageMainProfile = await User.findOne({
@@ -1157,7 +1157,8 @@ exports.getMyPageProfile = async (req, res) => {
         clubProfile,
         profileImg: null,
         room,
-        userid_num
+        userid_num,
+        nickname
       });
     } else {
       console.log("Cpublic 1123 myPageMainProfile :", myPageMainProfile);
@@ -1171,7 +1172,8 @@ exports.getMyPageProfile = async (req, res) => {
         clubProfile,
         profileImg,
         room,
-        userid_num
+        userid_num,
+        nickname
       });
     }
   } catch (err) {
@@ -1240,3 +1242,27 @@ exports.home = async (req, res) => {
     res.send("Internal Server Error!");
   }
 };
+
+// GET /chatList
+exports.getChatList = async (req, res) => {
+  const { userid, userid_num } = jwt.verify(
+    req.cookies.jwt,
+    process.env.JWT_SECRET
+  );
+
+  const myname = await User.findOne({
+    attributes:["nickname"],
+    where:{
+      userid_num: userid_num
+    }
+  });
+
+  const findMyChat = await Dm.findAll({
+    attributes:["room_name"],
+    where:{
+      [Sequelize.Op.like]:`${myname}`    
+    }
+  });
+  console.log(findMyChat);
+  
+}

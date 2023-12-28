@@ -33,7 +33,7 @@
 
     .calendar-controls button {
       border: none;
-      background: #4dabf7;
+      background: var(--color-primary-400);
       color: white;
       padding: 5px 10px;
       border-radius: 5px;
@@ -47,7 +47,7 @@
 
     .calendar th {
       background-color: #f1f3f5;
-      color: #495057;
+      color: var(--color-gray-500);
       padding: 10px;
       font-weight: normal;
     }
@@ -57,6 +57,7 @@
       text-align: center;
       font-size: 14px;
       border-bottom: 1px solid #dee2e6;
+
     }
 
     .calendar td:not(:last-child) {
@@ -64,7 +65,7 @@
     }
 
     .calendar .weekend {
-      color: #f03e3e;
+      color: var(--color-red-600);
     }
 
     .calendar .empty {
@@ -75,28 +76,29 @@
       text-align: center;
       padding: 15px;
       font-size: 14px;
-      color: #868e96;
+      color: var(--color-gray-500);
     }
 
     .calendar .today {
-      background-color: #4dabf7;
+      background-color: var(--color-primary-400);
       color: white;
 
     }
 
     /* 클릭하면 테투리 파랗게 변함 */
     .selected-date {
-      border: 2px solid blue !important;
+      border: 2px solid var(--color-primary-500) !important;
 
       /* 선택된 날짜의 테두리 스타일 */
     }
 
     /* 임시 스케줄 있는 날짜 표시 점 */
     .dot {
+      margin: 0 auto;
       border-radius: 50%;
       width: 5px;
       height: 5px;
-      background-color: blue;
+      background-color: var(--color-primary-700);
     }
 
     .schdulebtn {
@@ -125,6 +127,35 @@
       display: grid;
       margin-bottom: 20px;
 
+    }
+
+    #modalOverlay {
+      display: none;
+      /* 기본적으로 숨김 */
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      /* 투명도를 가진 검은색 배경 */
+      z-index: 1;
+      /* 내용보다 위에 위치하도록 z-index 설정 */
+    }
+
+    #scheduleModal {
+      /* display 속성은 자바스크립트로 제어 */
+      position: fixed;
+      width: 50%;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      z-index: 2;
+      /* 오버레이 위에 위치하도록 z-index 설정 */
     }
   </style>
 </head>
@@ -159,46 +190,75 @@
         </table>
         <div class="addschedule-btn">
         </div>
-        <div id="eventsContainer" class="eventschedule">
-          <% let selectedDate=data; // 클라이언트에서 전달받은 선택된 날짜 %>
-            <% if (data && data.length) { %>
-              <% let hasSchedules=false; %>
-                <% data.forEach(function(schedule) { %>
-                  <% if (selectedDate===schedule.date) { %>
-                    <% hasSchedules=true; %>
-                      <div class="schedule" id="<%= schedule.schedule_id %>">
-                        <h3 id="title<%= schedule.schedule_id %>">
-                          <%= schedule.title %>
-                        </h3>
-                        <p id="date<%= schedule.schedule_id %>">날짜: <%= schedule.date %>
-                        </p>
-                        <p id="time<%= schedule.schedule_id %>">시간: <%= schedule.time %>
-                        </p>
-                        <p id="content<%= schedule.schedule_id %>" class="list">내용: <%= schedule.content %>
-                        </p>
-                        <button class="btn-sm btn-primary" type="button"
-                          onclick="patchSchedule('<%= schedule.schedule_id %>')">수정</button>
-                        <button class="btn-sm btn-primary" type="button"
-                          onclick="deleteSchedule('<%= schedule.schedule_id %>')">삭제</button>
-                      </div>
-                      <% } %>
-                        <% }); %>
-                          <% if (!hasSchedules) { %>
-                            <p class="no-events">등록된 일정이 없습니다</p>
-                            <% } %>
-                              <% } else { %>
-                                <p class="no-events">
-                                  등록된 일정이 없습니다
-                                </p>
-                                <% } %>
-        </div>
+        
+          <div id="eventsContainer" class="eventschedule">
+
+            
+            <% let today=new Date();  // 클라이언트에서 전달받은 선택된 날짜 %>
+            <% let searchDate = `${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`%>
+            <% let todaySced =[]%>
+           
+            <%for(let i=0; i<data.length; i++){%>
+              
+              <% if(data[i].date ===searchDate){%>
+                
+               <%todaySced.push(i)%>
+              <%}%>
+           <%}%>
+      
+                <%if(todaySced.length==0){%>
+                  <div class="emptyFull"><span>오늘 등록된 일정이 없습니다.</span></div>
+                  <%}else{%>
+           <%for(let j=0;j<todaySced.length; j++){%>
+            <% let order = todaySced[j]%>
+            <div class="schedule" id="<%= data[order].schedule_id %>">
+              <div class="list">
+                <div class="schdulecontentBox">
+                <h3 id="title<%= data[order].schedule_id %>"><%= data[order].title %></h3>
+                <p id="content<%= data[order].schedule_id %>">내용: <%= data[order].content %></p>
+                </div>
+    
+                <div class="schduleDate">
+                <p id="date<%= data[order].schedule_id %>">날짜: <%= data[order].date %></p>
+                <p id="time<%= data[order].schedule_id %>">시간: <%= data[order].time %></p>
+                </div>
+              
+    
+                <div class="schdulebtn">
+                <button class="btn-sm btn-primary correctionBtn" type="button" onclick="patchSchedule('<%= data[order].schedule_id %>')">수정</button>
+                <button class="btn-sm btn-primary deleteBtn" type="button" onclick="deleteSchedule('<%= data[order].schedule_id %>')">삭제</button>
+                </div>
+              </div>
+            </div>
+             <%}%>
+             <%}%>
+
+           
+
+             
+         </div>
+        
       </div>
       <button onclick="openModal()" id="plus-button" class="btn btn-primary">
         추가하기
       </button>
       <!----------------------- 일정을 추가하는 모달 ---------------------->
-      <div id="scheduleModal" style="
-          display: none;
+
+
+      <div id="modalOverlay" style="
+    display: none;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1; /* 모달이 다른 요소들 위에 나타나도록 함 */
+">
+        <div id="scheduleModal" style="
+    display: none;
           position: fixed;
           width: 50%;
           left: 50%;
@@ -208,37 +268,38 @@
           padding: 20px;
           border-radius: 10px;
           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          z-index: 100
         ">
-        <!-- <h2>일정 추가</h2> -->
-        <h2 id="modalName"></h2>
-        <form id="scheduleForm">
-          <label for="modalDate" id="modalDateL">날짜:
-            <input type="date" id="modalDate" />
-          </label>
-          <label for="modalTime">시간:
-            <input type="time" id="modalTime" required />
-          </label>
-          <label for="modalTitle">제목:
-            <input type="text" class="textField" id="modalTitle" required />
-          </label>
-          <label for="modalContent">내용:
-            <textarea id="modalContent" class="textField" required></textarea>
-          </label>
-          <div class="schdulebtn">
-            <button type="submit" class="btn-sm btn-primary" id="saveBtn">저장</button>
-            <button type="button" id="resaveBtn" onclick="patch()">수정</button>
-            <button class="btn-sm btn-primary closebtn" onclick="closeModal()">닫기</button>
-          </div>
-        </form>
+          <!-- <h2>일정 추가</h2> -->
+          <h2 id="modalName"></h2>
+          <form id="scheduleForm">
+            <label for="modalDate" id="modalDateL">날짜:
+              <input type="date" id="modalDate" />
+            </label>
+            <label for="modalTime">시간:
+              <input type="time" id="modalTime" required />
+            </label>
+            <label for="modalTitle">제목:
+              <input type="text" class="textField" id="modalTitle" required />
+            </label>
+            <label for="modalContent">내용:
+              <textarea id="modalContent" class="textField" required></textarea>
+            </label>
+            <div class="schdulebtn">
+              <button type="submit" class="btn-sm btn-primary" id="saveBtn">저장</button>
+              <button type="button" id="resaveBtn" onclick="patch()">수정</button>
+              <button class="btn-sm btn-primary closebtn" onclick="closeModal()">닫기</button>
+            </div>
+          </form>
 
-      </div>
+        </div>
 
     </main>
     <!----------------------- 일정을 추가하는 모달 끝 ---------------------->
 
     <script>
-      console.log('>>>>>>>>>:<%= scheduleDate %>');
-      console.log('>>>>>>>>>:<%= scheduleDate %>');
+      
+      
       // 서버로부터 받은 데이터를 JavaScript 변수에 할당
       const clubSchedules = `clubSchedules: <%-JSON.stringify(data) %>`;
 
@@ -309,6 +370,7 @@
         // document.getElementById("modalDateL").style.display = "none";
         // document.getElementById("modalDate").style.display = "none";
         document.getElementById("modalDate").value = date; // 날짜 설정
+        document.getElementById('modalOverlay').style.display = 'block';
         document.getElementById("scheduleModal").style.display = "block";
         document.getElementById("saveBtn").style.display = "block";
         document.getElementById("resaveBtn").style.display = "none";
@@ -317,6 +379,7 @@
 
       // 모달 닫기
       function closeModal() {
+        document.getElementById('modalOverlay').style.display = 'none';
         document.getElementById("scheduleModal").style.display = "none";
 
       }
@@ -471,10 +534,12 @@
         document.getElementById("modalName").innerText = "일정 수정";
         // document.getElementById("modalDateL").style.display = "block";
         // document.getElementById("modalDate").style.display = "block";
-
+        
         document.getElementById("saveBtn").style.display = "none";
         document.getElementById("resaveBtn").style.display = "block";
-
+        document.getElementById("modalOverlay").style.display = "block";
+        
+        
         patchId = schedule_id;
 
         // 저장된 값 불러오기

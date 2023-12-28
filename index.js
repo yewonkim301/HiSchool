@@ -8,7 +8,7 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const db = require("./models/Index.js");
-const { Club, User } = require("./models/Index");
+const { Club, User, Dm, Club_chat } = require("./models/Index");
 const jwt = require("jsonwebtoken");
 const {
   isNotLoggedIn,
@@ -87,16 +87,26 @@ app.get("/chat/:room", isLoggedIn, async (req, res) => {
   );
   const getName = await User.findOne({
     attributes: ["nickname"],
-    where:{
-      userid_num: userid_num
-    }
+    where: {
+      userid_num: userid_num,
+    },
   });
 
-  res.render("chat", { room, myNickname: getName.nickname, userid_num });
+  let otherNick = room.replace(`${getName.nickname}`, "")
+  otherNick = otherNick.replace(`,`, "")
+  otherNick = otherNick.replace(` `, "")
+  console.log("otherNick >>>>> ", otherNick)
+
+  const chats = await Dm.findAll({
+    where: {room_name: room}
+  })
+console.log("index chats >>>>>>>>> ",chats);
+  res.render("chat", { room, myNickname: getName.nickname, userid_num , chats, otherNick});
 });
 
 // Club
 app.get("/myclubChat/:club_id", isLoggedIn, async (req, res) => {
+  const { club_id } = req.params;
   const { userid, userid_num } = jwt.verify(
     req.cookies.jwt,
     process.env.JWT_SECRET
@@ -116,10 +126,17 @@ app.get("/myclubChat/:club_id", isLoggedIn, async (req, res) => {
     socketRouter.startClubSocket(io);
   }
 
+  const chats = await Club_chat.findAll({
+    where: { club_id: club_id },
+  });
+
+  console.log("!!!!!!!!!!!!!!", chats);
+
   res.render("myclub/myclubChat", {
-    club_id: req.params.club_id,
+    club_id: club_id,
     name: name.dataValues.name,
     userid_num,
+    chats,
   });
 });
 

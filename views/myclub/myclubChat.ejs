@@ -10,6 +10,7 @@
       integrity="sha384-mZLF4UVrpi/QTWPA7BjNPEnkIfRFn4ZEO3Qt/HFklTJBj/gBOV8G3HcKn4NfQblz"
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <style>
       #body {
@@ -108,12 +109,19 @@
     <div id="body" hidden>
       <div id="msg">
         <div id="notice"></div>
-        <!-- <div class="my-chat">
-                      <p>채팅테스트(나)</p>
-                  </div>
-                  <div class="other-chat">
-                      <p>채팅테스트(상대방)</p>
-                  </div> -->
+        <% for (i = 0; i < chats.length; i++) { %> <% if (chats[i].userid_num
+        === userid_num) {%>
+        <div class="my-chat">
+          <p class="mychatMsg"><%= chats[i].content %></p>
+          <p class="mychatTime"><%= chats[i].createdAt %></p>
+        </div>
+        <% } else { %>
+        <div class="other-chat">
+          <p class="otherchatName"><%= chats[i].from_name %></p>
+          <p class="otherchatMsg"><%= chats[i].content %></p>
+          <p class="otherchatTime"><%= chats[i].createdAt %></p>
+        </div>
+        <% } %> <% } %>
       </div>
       <form id="chat">
         <select id="userList"></select>
@@ -128,7 +136,7 @@
         var myButton = document.getElementById("btn");
         myButton.click();
       };
-      const socket = io();
+      const socket = io({ transports: ["websocket"], upgrade: false });
       const roomForm = document.querySelector("#room");
       const chatForm = document.querySelector("#chat");
       const msg = document.querySelector("#msg");
@@ -138,29 +146,6 @@
       let rooName;
       let userid_num = roomForm.querySelector("#userid_num").value;
 
-      //룸리스트 < ===== 룰 리스트로 나오는데 li가 아니라 div로 roomList가 나온다
-      // socket.on("roomList", (roomLists) => {
-      //   console.log(roomLists);
-      //   const lists = document.querySelector("#lists");
-      //   lists.textContent = "";
-      //   roomLists.forEach((roomList) => {
-      //     const li = document.createElement("li");
-      //     li.textContent = `${roomList} 와 닉네임 입력 후 입장`;
-      //     lists.appendChild(li);
-      //   });
-      // });
-
-      //사용자 리스트 < ==== 1:1 채팅이라 필요 없다.
-      // socket.on('userList', (userLists) => {
-      //   console.log(userLists);
-      //   const lists = document.querySelector('#userList');
-      //   lists.textContent = '';
-      //   let options = `<option value="all">전체</option>`;
-      //   for (let i of userLists) {
-      //     options += `<option value="${i.key}">${i.name}</option>`;
-      //   }
-      //   lists.innerHTML = options;
-      // });
       //메세지 띄우기
       socket.on("newMessage", (newClubChat) => {
         // socket.on("newMessage", (message, nick) => {
@@ -176,13 +161,14 @@
           div.classList.add("other-chat");
           div.innerHTML = `<p class="otherchatName">${newClubChat.from_name}</p><p class="otherchatMsg">${newClubChat.content}</p><p class="mychatTime">${newClubChat.createdAt}</p>`;
         }
-        console.log("div >>>>", div);
+        // console.log("div >>>>", div);
 
         //채팅 텍스트
         //   p.textContent = `${nick} : ${message}`;
         //   div.appendChild(p);
         msg.appendChild(div);
       });
+
       //입장 메세지 이벤트
       socket.on("notice", (message) => {
         const div = document.createElement("div");
@@ -198,10 +184,10 @@
         //   const roomName = roomForm.querySelector("#roomName");
         roomName = roomForm.querySelector("#roomName");
         const userName = roomForm.querySelector("#userName");
-        if (roomName.value === "" || userName.value === "") {
-          alert("방이름과 닉네임 적어주세요");
-          return;
-        }
+        // if (roomName.value === "" || userName.value === "") {
+        //   alert("방이름과 닉네임 적어주세요");
+        //   return;
+        // }
         console.log(roomName.value, userName.value);
 
         socket.emit("create", roomName.value, userName.value, () => {
@@ -215,12 +201,13 @@
       });
 
       //이전 메세지 불러오기
+      /*
       socket.on("preChats", (data) => {
-        console.log("myclubChat preChats  >  ", data.chats[0]);
+        // console.log("myclubChat preChats  >  ", data.chats[0]);
         for (let i = 0; i < data.chats.length; i++) {
           let div = document.createElement("div");
           let html = "";
-
+          console.log("myclubChat preChats  >  ", data.chats[i].from_name);
           if (data.userName === data.chats[i].from_name) {
             //내가입력한 텍스트
             div.classList.add("my-chat");
@@ -244,12 +231,11 @@
           }
         }
       });
+      */
       chatForm.addEventListener("submit", (e) => {
         e.preventDefault();
-        //   const user = document.querySelector("#userList");
         const roomName = roomForm.querySelector("#roomName");
         const message = document.querySelector("#message");
-        //   console.log(user.value);
         const msg = {
           nick: myName,
           roomName: roomName.value,
