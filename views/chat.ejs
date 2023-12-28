@@ -98,8 +98,10 @@
       <div class="my-chat"><p><%= chats[i].dm_content %></p></div>
       <!-- <div class="my-chat"></div> -->
       <% } else { %>
+        <% if(otherNick === chats[i].from_nick) { %>
         <div class="other-chat"><p><%= chats[i].dm_content %></p><p><%= chats[i].from_nick %></p></div>
         <!-- <div class="other-chat"></div> -->
+        <% } %>
       <% } %>
       <% } %>
     </div>
@@ -116,17 +118,16 @@
         // 버튼 요소를 찾아서 클릭 이벤트 발생
         var myButton = document.getElementById("btn");
         myButton.click();
-
-        await axios({
-          method: "get",
-          url: `/chat/<%= room %>`,
-        }).then(res => {
-          console.log(res);
-        })
-        console.log("가나요?");
+        // await axios({
+        //   method: "get",
+        //   url: `/chat/<%= room %>`,
+        // }).then(res => {
+        //   console.log(res);
+        // })
+        // console.log("가나요?");
       };
 
-    const socket = io();
+    const socket = io({ transports: ["websocket"], upgrade: false });
     const roomForm = document.querySelector('#room');
     const chatForm = document.querySelector('#chat');
     const msg = document.querySelector('#msg');

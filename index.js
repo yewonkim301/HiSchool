@@ -93,11 +93,16 @@ app.get("/chat/:room", isLoggedIn, async (req, res) => {
     },
   });
 
+  let otherNick = room.replace(`${getName.nickname}`, "")
+  otherNick = otherNick.replace(`,`, "")
+  otherNick = otherNick.replace(` `, "")
+  console.log("otherNick >>>>> ", otherNick)
+
   const chats = await Dm.findAll({
-    where: { room_name: room }
-  });
-  console.log("index chats >>>>>>>>> ", chats);
-  res.render("chat", { room, myNickname: getName.nickname, userid_num, chats });
+    where: {room_name: room}
+  })
+console.log("index chats >>>>>>>>> ",chats);
+  res.render("chat", { room, myNickname: getName.nickname, userid_num , chats, otherNick})
 });
 
 // Club
