@@ -127,6 +127,7 @@ exports.getPostDetail = async (req, res) => {
         "userid_num",
         "updatedAt",
         "nickname",
+        "click",
       ],
       where: {
         post_id: post_id,
@@ -1313,7 +1314,7 @@ exports.getChatList = async (req, res) => {
     raw: true, // 결과를 plain objects로 가져오기
     group: ["room_name"],
     where: {
-      room_name :{[Sequelize.Op.like] : `%${myname.nickname}%`},
+      room_name: { [Sequelize.Op.like]: `%${myname.nickname}%` },
     },
   });
   // if(findMyChat){
@@ -1323,7 +1324,7 @@ exports.getChatList = async (req, res) => {
   // }
   // const chatList = [];
   // for(element of findMy)
-  console.log("Cpublic getChatList findMyChat >>>>>>>>",findMyChat);
+  console.log("Cpublic getChatList findMyChat >>>>>>>>", findMyChat);
 
   res.render("chatList", findMyChat);
 };
