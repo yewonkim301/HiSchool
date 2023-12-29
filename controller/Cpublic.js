@@ -4,6 +4,7 @@ const {
   Public_post_comment_like,
   Dm,
   Club,
+  Club_post,
   Club_members,
   User,
 } = require("../models/Index");
@@ -12,6 +13,7 @@ const { OP } = require("sequelize");
 const { Sequelize } = require("sequelize");
 const { isLoggedIn } = require("../middleware/loginCheck");
 const { deleteFile, getSignedFile } = require("../middleware/s3");
+const ClubPost = require("../models/Club_post");
 
 // ===== publicPost =====
 
@@ -26,7 +28,9 @@ exports.getPost = async (req, res) => {
       process.env.JWT_SECRET
     );
 
-    const Posts = await Public_post.findAll({});
+    const Posts = await Public_post.findAll({
+      order: [["createdAt", "DESC"]],
+    });
 
     res.render("publicPost/publicPostMain", { data: Posts, title, link });
   } catch {
@@ -145,18 +149,15 @@ exports.getPostDetail = async (req, res) => {
 
     let postImages = [];
 
-
     // s3 이미지 불러오기
     if (getPost.image !== "") {
       console.log("Cclub 328 clubPost.image", getPost.image);
       const postImgOrigin = getPost.image;
 
-      
-
       for (i = 0; i < postImgOrigin.length; i++) {
         postImages.push(await getSignedFile(postImgOrigin[i]));
       }
-    } 
+    }
 
     // console.log('Cclub 332 postImg', postImages);
     console.log(`commentLIKE >>>>>> ${getPostCommentLike}`);
@@ -753,15 +754,15 @@ exports.getClubMembersApplyList = async (req, res) => {
     });
 
     let getusersid = [];
-    for (const element of getusers){
-      getusersid.push(element.dataValues.userid_num)
+    for (const element of getusers) {
+      getusersid.push(element.dataValues.userid_num);
     }
 
     let userInfo = [];
-      for(const element of getusersid){
-        let info = await User.findOne({ where: { userid_num: element } });
-        userInfo.push(info.name);
-      }
+    for (const element of getusersid) {
+      let info = await User.findOne({ where: { userid_num: element } });
+      userInfo.push(info.name);
+    }
     res.render("clubAdmin/clubAdminApplyList", {
       getApplyList,
       userInfo,
@@ -1026,11 +1027,9 @@ exports.deleteMyID = async (req, res) => {
 
     console.log("Cpublic 969 profileImg", profileImg.profile_img);
 
-    if(profileImg.profile_img !== '') {
+    if (profileImg.profile_img !== "") {
       const isDeleted = await deleteFile(profileImg.profile_img);
     }
-    
-
 
     if (isDeleted) {
       const destroyMyID = await User.destroy({
@@ -1125,13 +1124,13 @@ exports.getMyPageProfile = async (req, res) => {
     );
 
     const getName = await User.findOne({
-      attributes:["nickname"],
-      where:{
-        userid_num: userid_num
-      }
+      attributes: ["nickname"],
+      where: {
+        userid_num: userid_num,
+      },
     });
 
-    const room = [getName.dataValues.nickname,nickname].sort();
+    const room = [getName.dataValues.nickname, nickname].sort();
 
     // console.log('Cpublic 1042 nickname :', nickname)
     const myPageMainProfile = await User.findOne({
@@ -1158,14 +1157,14 @@ exports.getMyPageProfile = async (req, res) => {
         profileImg: null,
         room,
         userid_num,
-        nickname
+        nickname,
       });
     } else {
       console.log("Cpublic 1123 myPageMainProfile :", myPageMainProfile);
       const profileImgOrigin = myPageMainProfile.profile_img;
       console.log("Cpublic 1123 profileImgOrigin :", profileImgOrigin);
       const profileImg = await getSignedFile(profileImgOrigin);
-      console.log("getMyPageProfile ", nickname)
+      console.log("getMyPageProfile ", nickname);
 
       return res.render("mypage/mypageProfile", {
         data: myPageMainProfile,
@@ -1173,7 +1172,7 @@ exports.getMyPageProfile = async (req, res) => {
         profileImg,
         room,
         userid_num,
-        nickname
+        nickname,
       });
     }
   } catch (err) {
@@ -1186,25 +1185,48 @@ exports.getMyPageProfile = async (req, res) => {
 // GET /home 전체 동아리, 유저아이디가 가입되어있는 동아리 정보 로드
 exports.home = async (req, res) => {
   try {
-
-    let title = '홈'
+    let title = "홈";
     const { userid, userid_num } = jwt.verify(
       req.cookies.jwt,
       process.env.JWT_SECRET
     );
-    const getClubs = await Club.findAll({
-      limit: 3,
-      order: [["club_id", "DESC"]],
-    });
 
-    const myclubList = await Club_members.findAll({
-      attributes: ["club_id"],
+    const myclubs = await Club_members.findAll({
       where: {
         userid_num: userid_num,
         isMember: "true",
       },
     });
+    let myclubList = [];
+    for (let i = 0; i < myclubs.length; i++) {
+      myclubList.push(myclubs[i].club_id);
+    }
+    console.log("Cpublic home myclubList >>> ", myclubList);
 
+    const clubPosts = await Club_post.findAll({
+      where: { club_id: myclubList },
+      order: [["click", "DESC"]],
+      limit: 3,
+    });
+    console.log("clubPosts", clubPosts);
+
+    const publicPostImg = await Public_post.findAll({
+      attributes: ["image"],
+    });
+
+    const recommendClub = await Club.findAll({
+      order: [Sequelize.literal("rand()")],
+      limit: 6,
+    });
+
+    const publicPosts = await Public_post.findAll({
+      order: [["click", "DESC"]],
+      limit: 6,
+    });
+
+    // console.log("recommendClub>>>>>>>>", recommendClub);
+
+    /*
     const foundUser = await User.findOne({
       where: {
         userid: userid,
@@ -1213,7 +1235,7 @@ exports.home = async (req, res) => {
 
     // console.log("myclubList >>>>>>", myclubList);
 
-    let myclubs = [];
+    // let myclubs = [];
     myclubList.forEach((element) => {
       // console.log("여기!!!!!!!!!!!!!>>>>>>", element.club_id);
       myclubs.push(element.club_id);
@@ -1231,11 +1253,14 @@ exports.home = async (req, res) => {
 
     // console.log("home clubInfo 내가 가입한 동아리 >>>>>>", clubInfo);
     // console.log("home getClubs 전체 동아리 >>>>>>", getClubs);
+    */
 
     await res.render("home", {
-      allClubs: getClubs,
-      myClubs: clubInfo,
-      foundUser,
+      myclubs,
+      clubPosts,
+      publicPostImg,
+      recommendClub,
+      publicPosts,
     });
   } catch (err) {
     console.error(err);
@@ -1251,18 +1276,17 @@ exports.getChatList = async (req, res) => {
   );
 
   const myname = await User.findOne({
-    attributes:["nickname"],
-    where:{
-      userid_num: userid_num
-    }
+    attributes: ["nickname"],
+    where: {
+      userid_num: userid_num,
+    },
   });
 
   const findMyChat = await Dm.findAll({
-    attributes:["room_name"],
-    where:{
-      [Sequelize.Op.like]:`${myname}`    
-    }
+    attributes: ["room_name"],
+    where: {
+      [Sequelize.Op.like]: `${myname}`,
+    },
   });
   console.log(findMyChat);
-  
-}
+};

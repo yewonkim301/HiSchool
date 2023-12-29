@@ -39,6 +39,10 @@ const Club = (Sequelize, DataTypes) => {
         type: DataTypes.STRING(200),
         allowNull: false,
       },
+      club_img: {
+        type: DataTypes.STRING(200),
+        allowNull: true,
+      },
     },
     {
       tableName: "club",
