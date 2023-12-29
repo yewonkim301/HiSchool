@@ -82,6 +82,10 @@
       
     
     <div id="searchResult">
+      <% if (data.length==0) { %>
+        <div class="emptyFull"><span>아직 생성된 동아리가 없습니다.<br>
+        하단의 + 버튼을 눌러 동아리를 생성해보세요!</span></div>
+      <% }else{ %>
     
       <% for(let i=0; i<data.length;i++){ %>
         <div class="list" onclick="showDetail(event)" >
@@ -104,6 +108,7 @@
           </div>
 
       </div>
+        <% } %>
         <% } %>
       </div>
     
@@ -179,6 +184,9 @@
         }
         
       }
+      if(mainDiv.innerText==''){
+        mainDiv.innerHTML='<div class="emptyFull"><span>검색 결과가 없습니다.</span></div>'
+      }
     }
 
   
@@ -200,7 +208,12 @@
   }else{
     mainDiv.style.display='inline';
   }
+
+  if(mainDiv.innerText==''){
+        mainDiv.innerHTML='<div class="emptyFull"><span>검색 결과가 없습니다.</span></div>'
+      }
     
+
   })
   
   </script>

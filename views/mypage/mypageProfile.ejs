@@ -7,117 +7,92 @@
   <title>마이페이지 상세</title>
   <link rel="stylesheet" href="/style.css" />
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="https://unpkg.com/feather-icons"></script>
   <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #f0f0f0;
-    }
-
-    /* 헤더바 */
-    .header {
+    .profile{
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px;
-      background-color: #fff;
+      gap: 25px;
     }
-
-    .navbar {
+    .userInfo{
       display: flex;
-      width: 100%;
-      justify-content: space-between;
+      flex-direction: column;
+      gap: 10px;
     }
-
-    .menu-icon,
-    .settings-icon {
-      cursor: pointer;
-    }
-
-    .logo {
+    #btn-dm{
+      padding: 0.3rem;
+      font-size: 1rem;
       text-align: center;
     }
 
-    /* 헤더바 */
-
-    .profile-header {
-      display: flex;
-      align-items: center;
-      padding: 20px;
-      background-color: #fff;
-    }
-
-    .profile-photo {
-      width: 70px;
-      height: 70px;
-      border-radius: 50%;
-      background-size: cover;
-      margin-right: 10px;
-    }
-
-    .profile-info {
-      flex-grow: 1;
-    }
-
-    .profile-name {
-      font-weight: bold;
-    }
-
-    .profile-school {
-      color: #666;
-    }
-
-    .edit-button {
-      background-color: #007bff;
-      color: white;
-      padding: 5px 10px;
-      border: none;
-      cursor: pointer;
-    }
-
-    .self-introduction {
-      padding: 20px;
-      background-color: #fff;
-      margin-top: 10px;
-    }
   </style>
 </head>
 
 <body>
   <%- include('../component/header')%>
-    <main>
-      <div class="container">
-        <div class="profile-header">
-          <% if (profileImg) { %>
-            <img src="<%= profileImg %>" alt="프로필 이미지" width="60" />
-            <% } else { %>
-              <img src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png" alt="프로필 이미지" width="60" />
-              <% } %>
-                <div class="profile-info">
-                  <div class="profile-name">
+    <main class="container">
+      <div class="list">
+        
+        <div class="profile">
+          <div class="img">
+            <% if (profileImg) { %>
+              <img src="<%= profileImg %>" alt="프로필 이미지" width="80" />
+              <% } else { %>
+                <img src="https://cdn-icons-png.flaticon.com/512/3177/3177440.png" alt="프로필 이미지" width="80" />
+                <% } %>
+          </div>
+          
+                <div  class="userInfo">
+                  <div class="list-title">
                     <%= data.nickname %>
                   </div>
-                  <div class="profile-school">
+                  <div class="list-content">
                     <%= data.school %>
                   </div>
                   <!-- 소켓 확인용 -->
-                  <button class="edit-button" onclick="location.href='/chat/<%= room %>'">쪽지보내기</button>
+                  <button class="btn-sm btn-ghost" id="btn-dm" onclick="location.href='/chat/<%= room %>'">쪽지보내기</button>
                 </div>
         </div>
-        <div class="self-introduction">
-          <p>자기소개</p>
+      </div>
+        
+        <div class="input">
+          <label for="introduction">자기소개</label>
           <% if(clubProfile.introduction !== null) { %>
-            <span>
-              <%= clubProfile.introduction %>
-            </span>
+            <input type="text" class="textField" id="introduction" value="<%= clubProfile.introduction %>">
+              
+            </input>
+            </div>
           <% } else { %>
-            <span>
+            <div>
               자기소개가 없습니다
-            </span>
+            </div>
             <% } %>
           
-        </div>
-      </div>
+        
+      </main>
+
+
+    <!--# 프로필 미리보기 -->
+    <script>
+      
+      function readURL(input) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            document.getElementById("preview").src = e.target.result;
+          };
+          reader.readAsDataURL(input.files[0]);
+        } else {
+          document.getElementById("preview").src = "";
+        }
+      }
+      
+    </script>
+    <script>feather.replace()</script>
+
+
+</body>
+
+</html>
 
 
       <!--  임시 코드 입니다 ,,, 소켓 확인용 -->
@@ -137,9 +112,5 @@
           
         //   window.location.href = '/chat';
         // }
-      </script>
+    
 
-    </main>
-</body>
-
-</html>
