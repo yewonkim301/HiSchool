@@ -1241,7 +1241,7 @@ exports.home = async (req, res) => {
     for (let i = 0; i < myclubs.length; i++) {
       myclubList.push(myclubs[i].club_id);
     }
-    console.log("Cpublic home myclubList >>> ", myclubList);
+    // console.log("Cpublic home myclubList >>> ", myclubList);
 
     const getMyClubs = await Club.findAll({
       where: {
@@ -1255,16 +1255,34 @@ exports.home = async (req, res) => {
       order: [["click", "DESC"]],
       limit: 3,
     });
-    console.log("clubPosts", clubPosts);
+    // console.log("clubPosts", clubPosts);
 
     const publicPostImg = await Public_post.findAll({
       order: [Sequelize.literal("rand()")],
-      attributes: ["image"],
-      where: {
-        [Sequelize.Op.not]: [{ image: [] }],
-      },
+      attributes: ["image", "post_id"],
+      where: Sequelize.literal('JSON_LENGTH(image) > 0'),
       limit: 3,
     });
+
+
+
+    let publicPostImagesSend = [];
+
+    for(let i = 0; i < publicPostImg.length; i++) {
+      // 각 image에 대해 getSignedFile 함수를 적용
+      console.log('public post >>>>>>>', publicPostImg[i].image[0]);
+      let signedImage = await getSignedFile(publicPostImg[i].image[0]);
+      console.log('signedImage >>>>>>', signedImage);
+    
+      // 결과를 새 객체에 저장하여 publicPostImagesSend 배열에 추가
+      publicPostImagesSend.push({
+        post_id: publicPostImg[i].post_id,
+        image: signedImage
+      });
+    }
+
+
+
 
     const recommendClub = await Club.findAll({
       order: [Sequelize.literal("rand()")],
@@ -1311,12 +1329,12 @@ exports.home = async (req, res) => {
       name,
       getMyClubs,
       clubPosts,
-      publicPostImg,
+      publicPostImg: publicPostImagesSend,
       recommendClub,
       publicPosts,
     });
 
-    console.log(" publicPosts > >>", publicPosts);
+    // console.log(" publicPosts > >>", publicPosts);
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
