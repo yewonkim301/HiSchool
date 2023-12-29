@@ -411,4 +411,7 @@ router.get("/home", isLoggedIn, controllerPublic.home);
 // GET /chatList
 router.get('/chatList', isLoggedIn, controllerPublic.getChatList);
 
+// Delete /chatList
+router.delete('/chatList', isLoggedIn, controllerPublic.deleteChat);
+
 module.exports = router;

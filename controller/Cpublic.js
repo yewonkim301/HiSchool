@@ -1349,13 +1349,40 @@ exports.getChatList = async (req, res) => {
   }
 
   const getMyClub = await Club.findAll({
-    attributes: ["club_name"],
-    where: {
-      club_id: myclubList,
-    },
+    attributes: ["club_name","club_id"],
+    where:{
+      club_id : myclubList
+    }
   });
 
   res.render("chatList", { findMyChat, getMyClub, myname });
 };
 
-// DELETE /myChatList
+// DELETE /chatList/:room
+exports.deleteChat = async (req,res) => {
+  const {room} = req.params;
+const { userid, userid_num } = jwt.verify(
+  req.cookies.jwt,
+  process.env.JWT_SECRET
+);
+
+const myname = await User.findOne({
+  attributes: ["nickname"],
+  where: {
+    userid_num: userid_num,
+  },
+});
+
+const deleteMyChatList = await Dm.destroy({
+  where:{
+    room_name: room,
+  }
+});
+
+if (deleteMyChatList) {
+  res.send({ isDeleted: true });
+} else {
+  res.send({ isDeleted: false });
+}
+
+};
