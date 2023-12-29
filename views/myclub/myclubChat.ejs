@@ -257,7 +257,7 @@
         var myButton = document.getElementById("btn");
         myButton.click();
       };
-      const socket = io(`/myclubChat/:club_id`, {
+      const socket = io({
         transports: ["websocket"],
         upgrade: false,
       });

@@ -27,8 +27,6 @@ let chats;
 exports.connection = async (io, socket) => {
   console.log("접속 :", socket.id);
 
-  const namespace2 = io.of(`/myclubChat`);
-
   //채팅방 목록 보내기
   //   socket.emit("roomList", roomList);
   const roomNum = await Club_chat.findAll({ attributes: ["club_id"] });
@@ -89,7 +87,7 @@ exports.connection = async (io, socket) => {
     // const time = Club_chat
     console.log("newClubChat", newClubChat);
     // io.to(socket.room).emit("newMessage", message.message, message.nick, false);
-    namespace2.to(socket.room).emit("newMessage", newClubChat, false);
+    io.to(socket.room).emit("newMessage", newClubChat, false);
   });
 
   socket.on("disconnect", () => {
