@@ -337,7 +337,7 @@ img {
   font-size: 1em;
   text-align: center;
   position: fixed;
-  right: 40px;
+  right: 20px;
   bottom: 60px;
 }
 .btn-create:active {
@@ -375,7 +375,24 @@ img {
   position: fixed;
   right: 20px;
   bottom: 130px;
+  background-color: white;
 }
+
+/* .up-btn2 {
+  padding: 0;
+  width: 60px;
+  height: 60px;
+  color: var(--color-primary-400);
+  border-radius: 50%;
+  border: 1px solid var(--color-primary-400);
+  line-height: 0px;
+  font-size: 1em;
+  text-align: center;
+  position: fixed;
+  right: 20px;
+  bottom: 130px;
+  background-color: white;
+} */
 
 /* 텍스트필드 - input */
 form {

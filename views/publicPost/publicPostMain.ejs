@@ -59,9 +59,8 @@
 
 <body>
    <%- include('../component/header')%>
-      <main>
-         <div class="container">
-            <button onclick="createPost()" id="plus-button" class="plus-button">+</button>
+      <main class="container">
+         <div>
             <!-- 게시물 목록 -->
             <% for(let i=0; i < data.length; i++) { %>
                <div class="list" onclick="showDetail('<%= data[i].post_id %>')">
@@ -100,6 +99,10 @@
                </div>
                <% } %>
          </div>
+
+         <button onclick="createPost()" id="plus-button" class="btn-create"><i data-feather="plus"></i></button>
+         <%- include('../component/upbtn')%>
+
       </main>
       <script>
 

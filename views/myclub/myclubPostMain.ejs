@@ -10,6 +10,12 @@
    <!-- axios CDN -->
    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
+
+   <script src="https://unpkg.com/feather-icons"></script>
+   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css" rel="stylesheet" />
+   <link href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css" rel="stylesheet" />
+
+
    <style>
       .list-content {
          white-space: nowrap;
@@ -59,7 +65,7 @@
 
    <%- include('../component/header') %>
       <div class="container">
-         <button onclick="createPost()" id="plus-button" class="plus-button">+</button>
+         <button onclick="createPost()" id="plus-button" class="btn-create"><i data-feather="plus"></i></button>
          <!-- 게시물 목록 -->
          <div class="list-container">
             <% if(data.length !==0) { %>
@@ -109,20 +115,23 @@
                         <% } %>
          </div>
       </div>
-      <script>
-         const club_id = "<%= club_id %>";
+      <%- include('../component/upbtn') %>
+         <script>
+            const club_id = "<%= club_id %>";
 
 
-         function showDetail(post_id) {
-            window.location.href = `/myclubPostDetail/${club_id}/${post_id}`;
-         }
+            function showDetail(post_id) {
+               window.location.href = `/myclubPostDetail/${club_id}/${post_id}`;
+            }
 
-         function createPost() {
-            console.log("게시글 생성 요청 보냄", `/myclubNewPost/${club_id}`);
-            window.location.href = `/myclubNewPost/${club_id}`;
-         }
+            function createPost() {
+               console.log("게시글 생성 요청 보냄", `/myclubNewPost/${club_id}`);
+               window.location.href = `/myclubNewPost/${club_id}`;
+            }
 
-      </script>
+         </script>
+
+         <script>feather.replace();</script>
 </body>
 
 </html>
