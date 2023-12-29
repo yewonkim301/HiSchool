@@ -193,7 +193,7 @@
           <% if(getMyClubs.length == 0) { %>
             <span>가입한 동아리가 없어요</span>
             <% } else { %>
-              <% for(i=0; i < 3; i++) { %>
+              <% for(i=0; i < getMyClubs.length; i++) { %>
                 <a class="club-list" href="/myclubMain/<%= getMyClubs[i].club_id %>">
 
                   <img
