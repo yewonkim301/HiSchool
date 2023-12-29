@@ -1282,13 +1282,24 @@ exports.getChatList = async (req, res) => {
     },
   });
 
-  // const findMyChat = await Dm.findAll({
-  //   attributes: ["room_name"],
-  //   where: {
-  //     [Sequelize.Op.like]: `${myname}`,
-  //   },
-  // });
-  // console.log(findMyChat);
+  // console.log("Cpublic getChatList myname >>>>>>>>",myname);
 
-  res.render("chatList")
+  const findMyChat = await Dm.findAll({
+    attributes: ["room_name"], // 중복을 제거하고자 하는 열 지정
+    raw: true, // 결과를 plain objects로 가져오기
+    group: ["room_name"],
+    where: {
+      room_name :{[Sequelize.Op.like] : `%${myname.nickname}%`},
+    },
+  });
+  // if(findMyChat){
+  //   isFound = "true";
+  // } else{
+  //   isFound = "true";
+  // }
+  // const chatList = [];
+  // for(element of findMy)
+  console.log("Cpublic getChatList findMyChat >>>>>>>>",findMyChat);
+
+  res.render("chatList", findMyChat);
 };

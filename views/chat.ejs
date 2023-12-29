@@ -122,13 +122,6 @@
         // 버튼 요소를 찾아서 클릭 이벤트 발생
         var myButton = document.getElementById("btn");
         myButton.click();
-        // await axios({
-        //   method: "get",
-        //   url: `/chat/<%= room %>`,
-        // }).then(res => {
-        //   console.log(res);
-        // })
-        // console.log("가나요?");
       };
 
     const socket = io({ transports: ["websocket"], upgrade: false });
@@ -140,18 +133,6 @@
     let myName;
     let enter;
 
-    // //룸리스트 < ===== 룰 리스트로 나오는데 li가 아니라 div로 roomList가 나온다
-    // socket.on('roomList', (roomLists) => {
-    //   console.log(roomLists);
-    //   const lists = document.querySelector('#lists');
-    //   lists.textContent = '';
-    //   roomLists.forEach((roomList) => {
-    //     const li = document.createElement('li');
-    //     li.textContent = `${roomList} 와 닉네임 입력 후 입장`;
-    //     lists.appendChild(li);
-    //   });
-    // });
-
     //메세지 띄우기
     socket.on('newMessage', (message, nick) => {
       const div = document.createElement('div');
@@ -159,23 +140,50 @@
       if (myName === nick) {
         //내가입력한 텍스트
         div.classList.add('my-chat');
-        div.innerHTML = `<p class="mychatTime">${message.createdAt}</p>`
+        // div.innerHTML = `<p class="mychatTime">${message.createdAt}</p>`
       } else {
         div.classList.add('other-chat');
-        div.innerHTML = `<p class="mychatTime">${message.createdAt}</p>`
+        // div.innerHTML = `<p class="mychatTime">${message.createdAt}</p>`
       }
 
-      console.log("chat message >>>>>>>>>>>>>",message);
-      //채팅 텍스트
+      // //채팅 텍스트
+      // if (myName === nick) {
+      //   p.textContent = `${message.dm_content} `;
+      //   div.appendChild(p);
+      //   msg.appendChild(div);
+      // } else {
+      //   p.textContent = `${nick} : ${message.dm_content}`;
+      //   div.appendChild(p);
+      //   msg.appendChild(div);
+      // }
+
       if (myName === nick) {
         p.textContent = `${message.dm_content} `;
-        div.appendChild(p);
-        msg.appendChild(div);
       } else {
         p.textContent = `${nick} : ${message.dm_content}`;
-        div.appendChild(p);
-        msg.appendChild(div);
       }
+
+      div.appendChild(p);
+
+
+      const timeP = document.createElement('p');
+      timeP.classList.add('mychatTime');
+      timeP.textContent = message.createdAt;
+      div.appendChild(timeP);
+
+      msg.appendChild(div);
+
+      // 마지막 메시지의 시간만 표시하기
+      const lastMessage = document.querySelector('#msg .my-chat:last-child .mychatTime');
+      if (lastMessage) {
+        lastMessage.style.display = 'block';
+      }
+
+      // 이전 메시지의 시간 숨기기
+      const previousMessages = document.querySelectorAll('#msg .my-chat:not(:last-child) .mychatTime');
+      previousMessages.forEach((time) => {
+        time.style.display = 'none';
+      });
     });
     //입장 메세지 이벤트
     socket.on('notice', (message) => {
