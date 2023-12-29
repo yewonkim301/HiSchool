@@ -189,7 +189,7 @@
       <div class="calendar-container">
         <div class="calendar-controls">
           <button onclick="moveMonth(-1)">이전</button>
-          <span id="current-month-year"></span>
+          <span id="current-month-year" style="line-height: 30px;"></span>
           <button onclick="moveMonth(1)">다음</button>
         </div>
         <table class="calendar">
@@ -212,20 +212,14 @@
         </div>
 
         <div id="eventsContainer" class="eventschedule">
-
-
           <% let today=new Date(); // 클라이언트에서 전달받은 선택된 날짜 %>
             <% let searchDate=`${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`%>
               <% let todaySced=[]%>
-
                 <%for(let i=0; i<data.length; i++){%>
-
                   <% if(data[i].date===searchDate){%>
-
                     <%todaySced.push(i)%>
                       <%}%>
                         <%}%>
-
                           <%if(todaySced.length==0){%>
                             <div>
                               <p class="no-events">등록된 일정이 없습니다.</p>
@@ -235,9 +229,11 @@
                                 <% let order=todaySced[j]%>
                                   <div class="schedule" id="<%= data[order].schedule_id %>">
                                     <div class="schduleDate">
-                                      <p id="date<%= data[order].schedule_id %>">날짜:<%= data[order].date %>
+                                      <p id="date<%= data[order].schedule_id %>">
+                                        <%= data[order].date %>
                                       </p>
-                                      <p id="time<%= data[order].schedule_id %>">시간: <%= data[order].time %>
+                                      <p id="time<%= data[order].schedule_id %>">
+                                        <%= data[order].time %>
                                       </p>
                                     </div>
                                     <div class="schduleDate-list">
@@ -263,10 +259,6 @@
                                   </div>
                                   <%}%>
                                     <%}%>
-
-
-
-
         </div>
         <button onclick="openModal()" id="plus-button" class="btn btn-primary">
           추가하기
@@ -289,9 +281,9 @@
     z-index: 1; /* 모달이 다른 요소들 위에 나타나도록 함 */
 ">
         <div id="scheduleModal" style="
-    display: none;
+        display: none;
           position: fixed;
-          width: 50%;
+          width: 100%;
           left: 50%;
           top: 50%;
           transform: translate(-50%, -50%);
@@ -451,8 +443,8 @@
             html += `
         
       <div class="schduleDate">
-            <p id="date<%= data[i].schedule_id %>">날짜: <%= data[i].date %></p>
-            <p id="time<%= data[i].schedule_id %>">시간: <%= data[i].time %></p>
+            <p id="date<%= data[i].schedule_id %>"> <%= data[i].date %></p>
+            <p id="time<%= data[i].schedule_id %>"> <%= data[i].time %></p>
         </div>
             
         <div class="schduleDate-list">
