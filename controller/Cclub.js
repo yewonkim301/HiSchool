@@ -889,7 +889,9 @@ exports.getMyclubMain = async (req, res) => {
 
   const member =[];
   const foundMemberList = await Club_members.findAll({
-    where: { club_id: club_id },
+    where: { 
+      club_id: club_id ,
+      isMember: 'true'},
   });
   for(const ele of foundMemberList){
 
