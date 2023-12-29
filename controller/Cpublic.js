@@ -1330,7 +1330,7 @@ exports.getChatList = async (req, res) => {
   }
 
   const getMyClub = await Club.findAll({
-    attributes: ["club_name"],
+    attributes: ["club_name","club_id"],
     where:{
       club_id : myclubList
     }
