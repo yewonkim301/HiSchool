@@ -313,24 +313,24 @@
             <%= name.name %>님을 위한<br>오늘의 추천 동아리
           </h2>
           <div class="club-container">
-            <% if(typeof getMyClubs !==undefined && getMyClubs) { %>
-              <% if(getMyClubs.length==0) { %>
+            <% if(typeof recommendClubs !==undefined && recommendClubs) { %>
+              <% if(recommendClubs.length==0) { %>
                 <span>가입한 동아리가 없어요</span>
                 <% } else { %>
-                  <% for(i=0; i < getMyClubs.length; i++) { %>
-                    <a class="club-list2" href="/myclubMain/<%= getMyClubs[i].club_id %>">
+                  <% for(i=0; i < recommendClubs.length; i++) { %>
+                    <a class="club-list2" href="/myclubMain/<%= recommendClubs[i].club_id %>">
 
-                      <img src="<%= getMyClubs[i].club_img %>" alt="Description of the image">
+                      <img src="<%= recommendClubs[i].club_img %>" alt="Description of the image">
                       <div class="club-box">
                         <p class="list-content description location">
-                          <%= getMyClubs[i].location %>
+                          <%= recommendClubs[i].location %>
                         </p>
                         <h3 class="list-title container-title">
-                          <%= getMyClubs[i].club_name %>
+                          <%= recommendClubs[i].club_name %>
                         </h3>
 
                         <p class="list-content description content">
-                          <%= getMyClubs[i].description %>
+                          <%= recommendClubs[i].description %>
                         </p>
                       </div>
 
