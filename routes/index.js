@@ -412,6 +412,6 @@ router.get("/home", isLoggedIn, controllerPublic.home);
 router.get('/chatList', isLoggedIn, controllerPublic.getChatList);
 
 // Delete /chatList
-router.delete('/chatList', isLoggedIn, controllerPublic.deleteChat);
+router.delete('/chatList/:room', isLoggedIn, controllerPublic.deleteChat);
 
 module.exports = router;

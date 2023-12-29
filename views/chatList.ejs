@@ -15,6 +15,37 @@
     <style>
         #btn-out{
             padding: 0.2rem;
+            color: var(--color-gray-400);
+        }
+        #btn-out:hover{
+            padding: 0.2rem;
+            cursor: pointer;
+            
+        }
+        .Chatlist{
+            display: flex;
+            width: 100%;
+            padding: 24px 15px;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+            border-radius: 20px;
+            border-bottom: 1px solid var(--color-gray-200);
+            /* box-shadow: 0px 2px 8px 0px var(--color-gray-200); */
+            cursor: pointer;
+        }
+        .Chatlist:hover{
+            box-shadow: 0px 2px 8px 0px var(--color-gray-200);
+            /* margin-bottom: 0.1rem; */
+        }
+        .Chatlist:active{
+            box-shadow: 0px 2px 8px 0px var(--color-gray-200);
+            /* margin-bottom: 0.1rem; */
+        }
+        .flex{
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
         }
     </style>
 </head>
@@ -25,14 +56,25 @@
     <h2>DM </h2>
     <% for( let i = 0; i < findMyChat.length; i++ ) { %>
         
-        <div class="list" onclick="showChat('<%=findMyChat[i].room_name%>')">
-            <% let roomName = findMyChat[i].room_name %>
+        <div class="Chatlist" >
+            <div class="flex">
+                <div class="flex-item">
+                    <% let roomName = findMyChat[i].room_name %>
             <% myname.nickname %>
             <% let room_name1 = roomName.replace(myname.nickname,"")%>
             <% let room_name2 = room_name1.replace(",","")%>
-            <div class="list-title"><%=room_name2%></div>
-            <div class="list-content">채팅방 바로 가기</div>
-            <button class="btn-sm btn-ghost" id="btn-out" onclick="outRoom('<%=findMyChat[i].room_name%>')"> 나가기</button>
+            <div class="list-title" onclick="showChat('<%=findMyChat[i].room_name%>')"><%=room_name2%></div>
+            <div class="list-content" onclick="showChat('<%=findMyChat[i].room_name%>')">채팅방 바로 가기 </div>
+                </div>
+                
+
+            
+            <div class="flex-item">
+                <button class="" id="btn-out" onclick="outRoom('<%=findMyChat[i].room_name%>')"><i data-feather="x" ></i></button>
+        </div>
+            
+            </div>
+            
         </div>
     
     <% } %>
@@ -40,7 +82,7 @@
 
     <h2>동아리 채팅</h2>
     <% for( let i = 0; i < getMyClub.length; i++ ) { %>
-        <div class="list" onclick="showClubChat('<%=getMyClub[i].club_id%>')">
+        <div class="Chatlist" onclick="showClubChat('<%=getMyClub[i].club_id%>')">
             
             <div class="list-title"><%=getMyClub[i].club_name%></div>
             <div class="list-content">채팅방 바로 가기</div>
