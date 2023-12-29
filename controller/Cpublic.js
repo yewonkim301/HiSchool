@@ -74,6 +74,7 @@ exports.createPost = async (req, res) => {
       image: image,
       userid_num: userid_num,
       nickname: getName.nickname,
+      click: 0,
     });
     res.send(newPost);
   } catch (err) {
@@ -93,6 +94,29 @@ exports.getPostDetail = async (req, res) => {
       req.cookies.jwt,
       process.env.JWT_SECRET
     );
+
+    let preClick = await Public_post.findOne({
+      attributes: ["click"],
+      where: {
+        post_id: post_id,
+      },
+    });
+    // console.log("preClick", typeof preClick);
+    preClick = preClick.click;
+    preClick = JSON.stringify(preClick);
+    // console.log("preClick", typeof preClick);
+
+    const newClick = await Public_post.update(
+      {
+        click: Number(preClick) + 1,
+      },
+      {
+        where: {
+          post_id: post_id,
+        },
+      }
+    );
+
     // 게시글
     const getPost = await Public_post.findOne({
       attributes: [
@@ -103,6 +127,7 @@ exports.getPostDetail = async (req, res) => {
         "userid_num",
         "updatedAt",
         "nickname",
+        "click",
       ],
       where: {
         post_id: post_id,
@@ -1282,13 +1307,24 @@ exports.getChatList = async (req, res) => {
     },
   });
 
-  // const findMyChat = await Dm.findAll({
-  //   attributes: ["room_name"],
-  //   where: {
-  //     [Sequelize.Op.like]: `${myname}`,
-  //   },
-  // });
-  // console.log(findMyChat);
+  // console.log("Cpublic getChatList myname >>>>>>>>",myname);
 
-  res.render("chatList")
+  const findMyChat = await Dm.findAll({
+    attributes: ["room_name"], // 중복을 제거하고자 하는 열 지정
+    raw: true, // 결과를 plain objects로 가져오기
+    group: ["room_name"],
+    where: {
+      room_name: { [Sequelize.Op.like]: `%${myname.nickname}%` },
+    },
+  });
+  // if(findMyChat){
+  //   isFound = "true";
+  // } else{
+  //   isFound = "true";
+  // }
+  // const chatList = [];
+  // for(element of findMy)
+  console.log("Cpublic getChatList findMyChat >>>>>>>>", findMyChat);
+
+  res.render("chatList", findMyChat);
 };
