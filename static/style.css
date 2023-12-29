@@ -610,12 +610,17 @@ input[type='checkbox']:checked + label:before {
 .nav-btn {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 20px;
   width: fit-content;
   /* flex-basis: 200px; */
   justify-content: end;
   /* flex-grow: 1;
   text-align: center; */
+}
+
+.nav-btn a {
+  display: flex;
+  align-items: center;
 }
 
 .header-profile.desktop {

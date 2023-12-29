@@ -19,6 +19,10 @@
       justify-content: space-between;
       width: 100%;
    }
+
+   .list a {
+      line-height: 28px;
+   }
    /* span{
       color: var(--color-primary-600);
    } */
@@ -28,20 +32,21 @@
 <body>
    <%- include('../component/header')%>
    <main class="container">
-      <div class="list">
-         <div class="adminMenu" onclick="go('clubAdminApplyList')"><a href="/clubAdminApplyList/<%=data%>">  가입 요청 보기</a><span><i data-feather="chevrons-right"
-            class="chevrons-right"></i></span></div>
-      </div>
-      <div class="list">
-         <div class="adminMenu" onclick="go('clubAdminEdit')">
-            <a href="/clubAdminEdit/<%=data%>">  동아리 정보 관리</a><span><i data-feather="chevrons-right"
+      <div class="list-container">
+         <div class="list">
+            <div class="adminMenu" onclick="go('clubAdminApplyList')"><a href="/clubAdminApplyList/<%=data%>">  가입 요청 보기</a><span><i data-feather="chevrons-right"
                class="chevrons-right"></i></span></div>
-      </div>
-      <div class="list">
-         <div class="adminMenu" onclick="go('clubAdminMemberList')">
-            <a href="/clubAdminMemberList/<%=data%>">  회원 목록</a><span><i data-feather="chevrons-right"
-            class="chevrons-right"></i></span></div>
-
+         </div>
+         <div class="list">
+            <div class="adminMenu" onclick="go('clubAdminEdit')">
+               <a href="/clubAdminEdit/<%=data%>">  동아리 정보 관리</a><span><i data-feather="chevrons-right"
+                  class="chevrons-right"></i></span></div>
+         </div>
+         <div class="list">
+            <div class="adminMenu" onclick="go('clubAdminMemberList')">
+               <a href="/clubAdminMemberList/<%=data%>">  회원 목록</a><span><i data-feather="chevrons-right"
+               class="chevrons-right"></i></span></div>
+         </div>
       </div>
       
       
