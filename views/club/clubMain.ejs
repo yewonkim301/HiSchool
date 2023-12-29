@@ -172,27 +172,22 @@
 
   function searchName(){
     const text = seachText.value;
+ 
 
     for(i=0; i<listArray.length; i++){
 
       let titleDiv =listArray[i].querySelector('.list-title');
       let keywordDiv = listArray[i].querySelector('.keyword');
         if((titleDiv.innerText.includes(text))||(keywordDiv.innerText.includes(text))){
-          listArray[i].style.display='block'
+          listArray[i].style.display='flex'
         }else{
           listArray[i].style.display='none'
         }
         
       }
-      if(mainDiv.innerText==''){
-        mainDiv.innerHTML='<div class="emptyFull"><span>검색 결과가 없습니다.</span></div>'
-      }
     }
 
   
-
-
-
   selectBox.addEventListener('change', function(){
     const value = selectBox.value;
     if(value!='all'){
@@ -200,18 +195,20 @@
       
       for(i=0; i<listArray.length; i++){
         if(listArray[i].querySelector('.list-title').id == `서울시 ${value}구`){
-          listArray[i].style.display='block'
+          listArray[i].style.display='flex'
         }else{
           listArray[i].style.display='none'
         }
       }
   }else{
-    mainDiv.style.display='inline';
+    for(i=0; i<listArray.length; i++){
+          listArray[i].style.display='flex'
+      }
   }
 
-  if(mainDiv.innerText==''){
-        mainDiv.innerHTML='<div class="emptyFull"><span>검색 결과가 없습니다.</span></div>'
-      }
+
+
+
     
 
   })

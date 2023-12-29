@@ -148,17 +148,27 @@
             <div class="listEmpty"><span>등록된 글이 없습니다</span></div>
             <% } %>
 
-
+<h2>회원 목록</h2>
           <% for(i=0; i < foundMember.length; i++) { %>
-            <p>
-              <%= foundMember[i].user.name %>
-            </p>
-            <p>
-              <%= foundMember[i].user.userid_num %>
-            </p>
+            <div class="list">
+              <div class="list-title"><%= foundMember[i] %></div>
+
+              <div class="list-content">
+                <%= school[i] %>
+              </div>
+            </div>
+  
+
             <% } %>
 
     </div>
+
+    <% if (isLeader) { %>
+      <div class="btnCenter"><button class="btn-sm btn-ghost" disabled>탈퇴하기</button></div>
+     
+    <% }else{ %>
+      <div class="btnCenter"><button class="btn-sm btn-ghost" onclick="withdraw()">탈퇴하기</button></div>
+    <%}%>
 
     <script>
       // 동아리 관리자만 동아리 관리 링크 활성화
@@ -177,6 +187,28 @@
 
       function hrefTo(link) {
         document.location.href = link;
+      }
+
+      // 동아리 탈퇴 기능
+      async function withdraw(){
+        if(confirm('<%=data.club_name%>에서 탈퇴하시겠습니까?')){
+
+          try {
+            const res = await axios({
+            method: "DELETE",
+            url: `/clubAdminMemberDetail/<%=data.club_id%>/<%=userid_num%>`,
+          });
+          console.log(res);
+          alert('탈퇴되었습니다')
+          window.location.href='/home'
+        } catch (error) {
+          console.log("myclubMain 에서 axios delete error > ", error);
+        }
+      
+
+        }else{
+          return;
+        }
       }
     </script>
 </body>
