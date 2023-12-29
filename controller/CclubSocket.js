@@ -27,7 +27,7 @@ let chats;
 exports.connection = async (io, socket) => {
   console.log("접속 :", socket.id);
 
-  const namespace2 = io.of(`/myclubChat/:club_id`);
+  const namespace2 = io.of(`/myclubChat`);
 
   //채팅방 목록 보내기
   //   socket.emit("roomList", roomList);

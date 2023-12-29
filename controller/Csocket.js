@@ -4,7 +4,7 @@ const roomList = [];
 exports.connection = (io, socket) => {
   console.log("접속 :", socket.id);
 
-  const namespace1 = io.of(`/chat/:room`);
+  const namespace1 = io.of(`/chat`);
 
   //채팅방 목록 보내기
   socket.emit("roomList", roomList);
