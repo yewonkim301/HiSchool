@@ -3,8 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 아이콘 CDN feather -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.1/feather.min.js"
+    integrity="sha512-4lykFR6C2W55I60sYddEGjieC2fU79R7GUtaqr3DzmNbo0vSaO1MfUjMoTFYYuedjfEix6uV9jVTtRCSBU/Xiw=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- axios CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
     <link rel="stylesheet" href="/style.css" />
     <title>채팅목록</title>
+    <style>
+        #btn-out{
+            padding: 0.2rem;
+        }
+    </style>
 </head>
 <body>
   
@@ -12,6 +24,7 @@
     <main class="container">
     <h2>DM </h2>
     <% for( let i = 0; i < findMyChat.length; i++ ) { %>
+        
         <div class="list" onclick="showChat('<%=findMyChat[i].room_name%>')">
             <% let roomName = findMyChat[i].room_name %>
             <% myname.nickname %>
@@ -19,6 +32,7 @@
             <% let room_name2 = room_name1.replace(",","")%>
             <div class="list-title"><%=room_name2%></div>
             <div class="list-content">채팅방 바로 가기</div>
+            <button class="btn-sm btn-ghost" id="btn-out" onclick="outRoom('<%=findMyChat[i].room_name%>')"> 나가기</button>
         </div>
     
     <% } %>
@@ -43,8 +57,26 @@
             window.location.href=`/myclubChat/${club_id}` 
 
         }
+        async function outRoom(room_name){
+            try{
+            const res= await axios({
+            method: "DELETE",
+            url: `/chatList/${room_name}`,
+
+
+         });
+         
+            alert(`채팅방을 나갔습니다`);
+            location.reload();
+            
+            
+            }catch(error){
+               console.log("chatList 에서 채팅방 나가기 오류 > ", error);
+            };
+        }
 
     </script>
+    <script>feather.replace()</script>
 </body>
 
 </html>
