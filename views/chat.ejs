@@ -11,69 +11,140 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 
-  <style>
-    #body {
-      width: 100%;
-      height: 70vh;
-      position: relative;
-      background: #8ae4bc;
-    }
-
-    #chat {
-      position: absolute;
-      bottom: 0px;
-      display: flex;
-      justify-content: space-between;
-      width: 100%;
-    }
-
-    #chat input {
-      width: 80%;
-    }
-
-    .my-chat {
-      display: flex;
-      justify-content: end;
-      padding: 2px 0px;
-    }
-
-    .my-chat p {
-      margin: 0;
-      padding: 10px;
-      background: yellow;
-      border-radius: 10px;
-      margin-right: 10px;
-    }
-
-    .other-chat {
-      display: flex;
-      justify-content: start;
-      padding: 2px 0px;
-    }
-
-    .other-chat p {
-      margin: 0;
-      padding: 10px;
-      background: white;
-      border-radius: 10px;
-      margin-left: 10px;
-    }
-
-    #notice {
-      display: flex;
-      flex-direction: column;
-      text-align: center;
-      color: gray;
-    }
-
-    #notice p {
-      margin: 0;
-    }
-
-    .secret-chat p {
-      background: pink;
-    }
-  </style>
+    <style>
+      .container {
+        margin-top: 61.6px !important;
+        margin-bottom: 100.8px !important;
+      }
+  
+  
+      @media (max-width: 640px) {
+        .container {
+          margin: 0 !important;
+          padding: 0 !important;
+          margin-top: 56.8px !important;
+        margin-bottom: 100.8px !important;
+        }
+  
+        #chat {
+          max-width: 600px !important;
+        }
+  }
+  
+  
+      #body {
+        width: 100%;
+        max-width: 600px;
+        margin: 0 auto;
+        /* height: calc(100vh - 130px);
+        position: fixed; */
+        top: 0;
+        left: 0;
+        background: var(--color-primary-100);
+        /* overflow: scroll; */
+      }
+  
+      #chat {
+        position: fixed;
+        bottom: 0px;
+        display: flex;
+        justify-content: space-between;
+        max-width: 560px;
+        box-sizing: border-box;
+        background-color: var(--color-gray-50);
+        padding: 20px;
+        flex-direction: row;
+        gap: 12px;
+      }
+  
+      #chat input {
+        /* width: 80%; */
+        padding: 20px;
+        border: 1px solid var(--color-gray-100);
+        box-sizing: border-box;
+        color: var(--color-gray-500);
+        background-color: var(--color-gray-100);
+        border-radius: 8px;
+        border: 1px solid var(--color-gray-200);
+        width: 100%;
+      }
+  
+      #chat button {
+        width: 80px;
+      }
+  
+  
+      .my-chat {
+        display: flex;
+        justify-content: end;
+        padding: 2px 0px;
+      }
+  
+      .my-chat p {
+        margin: 0;
+        padding: 10px;
+        background: var(--color-primary-400);
+        border-radius: 8px;
+        margin-right: 10px;
+      }
+  
+      .otherMsg {
+        display: flex;
+        flex-direction: row;
+      }
+  
+      .other-chat {
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        padding: 2px 0px;
+      }
+  
+      .other-chat p {
+        margin: 0;
+        padding: 10px;
+        background: white;
+        border-radius: 8px;
+        margin-left: 10px;
+      }
+  
+      #notice {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        color: gray;
+      }
+  
+      #notice p {
+        margin: 0;
+      }
+  
+      .secret-chat p {
+        background: pink;
+      }
+  
+      p.mychatMsg {
+        color: white !important;
+      }
+  
+      p.mychatTime, p.otherchatTime {
+        padding: 0;
+        background: none;
+        display: flex;
+        align-self: self-end;
+        font-size: 0.8rem !important;
+        color: var(--color-gray-400) !important;
+      }
+  
+      p.otherchatName {
+        background: none;
+        margin: 0;
+        /* padding: 0; */
+  
+        
+      }
+  
+    </style>
 </head>
 
 <body>
@@ -90,20 +161,23 @@
   </div>
 
   <div id="body" hidden>
-
     <div id="msg">
       <div id="notice"></div>
       <% for(let i=0; i < chats.length; i++) {  %>
         <% if(myNickname === chats[i].from_nick){ %>
-      <div class="my-chat"><p class="mychatTime"><%= chats[i].createdAt %></p><p><%= chats[i].dm_content %></p>
-
+      <div class="my-chat">
+        <p class="mychatTime">
+          <%= chats[i].createdAt %></p>
+        <p class="mychatMsg"><%= chats[i].dm_content %></p>
       </div>
       <!-- <div class="my-chat"></div> -->
       <% } else { %>
-        <div class="other-chat"><p><%= chats[i].from_nick %></p>
-          <p><%= chats[i].dm_content %></p>
-          <p class="otherchatTime"><%= chats[i].createdAt %></p>
-
+        <div class="other-chat">
+          <p class="otherchatName"><%= chats[i].from_nick %></p>
+          <div class="otherMsg">
+            <p class="otherchatMsg"><%= chats[i].dm_content %></p>
+            <p class="otherchatTime"><%= chats[i].createdAt %></p>
+          </div>
         </div>
         <!-- <div class="other-chat"></div> -->
       <% } %>
