@@ -66,7 +66,7 @@
 
       <h2>내 동아리</h2>
       <div class="">
-        <% if(getMyClubs) { %>
+        <% if(typeof getMyClubs !== undefined && getMyClubs) { %>
           <% if(getMyClubs.length == 0) { %>
             <span>가입한 동아리가 없어요</span>
             <% } else { %>
@@ -108,7 +108,7 @@
               <div class="list-container">
                 <h2 class="label">내 동아리 인기글</h2>
                 <div class="">
-                  <% if(clubPosts) { %>
+                  <% if(typeof clubPosts !== undefined && clubPosts) { %>
                     <% if(clubPosts.length == 0) { %>
                       <span>가입한 동아리가 없어요</span>
                       <% } else { %>
@@ -136,7 +136,7 @@
               <div class="list-container">
                 <h2 class="label">자유게시판 갤러리</h2>
                 <div class="">
-                  <% if(publicPostImg) { %>
+                  <% if(typeof publicPostImg !== undefined && publicPostImg) { %>
                     <% if(publicPostImg.length == 0) { %>
                       <span>자유게시판에 업데이트된 사진이 없습니다.</span>
                       <% } else { %>
@@ -163,7 +163,7 @@
               <div class="list-container">
                 <h2 class="label"><%= name.name %>님을 위한 오늘의 추천 동아리</h2>
                 <div class="">
-                  <% if(recommendClub) { %>
+                  <% if(typeof recommendClub !== undefined && recommendClub) { %>
                     <% if(recommendClub.length == 0) { %>
                       <span>아직 개설된 동아리가 없습니다.</span>
                       <% } else { %>
@@ -193,7 +193,7 @@
 
               <div class="list-container">
                 <h2 class="label">자유 게시판</h2>
-                <% if(publicPosts) { %>
+                <% if(typeof publicPosts !== undefined && publicPosts) { %>
                   <% if(publicPosts.length == 0) { %>
                     <span>자유게시판에 작성된 글이 없습니다.</span>
                     <% } else { %>
