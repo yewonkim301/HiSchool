@@ -21,7 +21,7 @@
       z-index: -1;
       height: 260px;
       width: 100vw;
-      background: linear-gradient(#ffffff, #ffffff53);
+      background: linear-gradient(#ededed, #ffffff53);
     }
 
     .background-image {
@@ -98,7 +98,7 @@
     }
 
     div p.location {
-      width: fit-content;
+      width: fit-content !important;
       padding: 8px 12px 8px 10px;
       background-color: var(--color-primary-50);
       color: var(--color-primary-400);
@@ -180,17 +180,13 @@
     }
 
 
-    .description {
-      width: 250px;
-      /* 고정 너비 */
-      overflow: hidden;
-      /* 오버플로된 텍스트 숨기기 */
+    div.club-box p.list-content.description {
       white-space: nowrap;
-      /* 텍스트 줄바꿈 방지 */
-      text-overflow: ellipsis;
-      /* 텍스트 오버플로 시 '...' 표시 */
+         overflow: hidden;
+         text-overflow: ellipsis;
+         width: 100%;
     }
-    }
+
 
 
     @media (max-width: 800px) {
@@ -207,7 +203,7 @@
   <%- include('./component/header-main') %>
   <!-- <img class="background-image" src="/blue-bg.png" alt=""> -->
   <div class="hero"></div>
-  <img class="background-image" src="https://images.unsplash.com/photo-1597200381847-30ec200eeb9a?q=80&w=4032&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="">
+  <!-- <img class="background-image" src="https://images.unsplash.com/photo-1597200381847-30ec200eeb9a?q=80&w=4032&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt=""> -->
   <main class="container">
       <div class="main-container"></div>
 
