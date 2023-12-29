@@ -292,7 +292,7 @@ function formatTime(dateString) {
           div.innerHTML = `<p class="mychatTime">${convertToFormattedTime(newClubChat.createdAt)}</p><p class="mychatMsg">${newClubChat.content}</p>`;
         } else {
           div.classList.add("other-chat");
-          div.innerHTML = `<p class="otherchatName">${newClubChat.from_name}</p><p class="otherchatMsg">${newClubChat.content}</p><p class="mychatTime">${newClubChat.createdAt}</p>`;
+          div.innerHTML = `<p class="otherchatName">${newClubChat.from_name}</p><p class="otherchatMsg">${newClubChat.content}</p><p class="otherchatTime">${convertToFormattedTime(newClubChat.createdAt)}</p>`;
         }
         // console.log("div >>>>", div);
 
