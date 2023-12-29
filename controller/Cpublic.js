@@ -1343,6 +1343,7 @@ exports.getChatList = async (req, res) => {
 // DELETE /chatList/:room
 exports.deleteChat = async (req,res) => {
   const {room} = req.params;
+  console.log(room);
 const { userid, userid_num } = jwt.verify(
   req.cookies.jwt,
   process.env.JWT_SECRET
