@@ -37,6 +37,8 @@
          /* 넘치는 내용을 '...'으로 표시 */
          width: 200px;
          /* 원하는 컨테이너의 너비를 설정 */
+
+         margin-bottom: 30px;
       }
 
       .list-mainbox {}
@@ -54,10 +56,6 @@
          text-align: right;
          /* 시간을 오른쪽에 정렬 */
       }
-
-      .list-name {
-         margin-bottom: 30px;
-      }
    </style>
 </head>
 
@@ -71,12 +69,14 @@
             <% if(data.length !==0) { %>
                <% for(let i=0; i < data.length; i++) { %>
                   <div class="list" onclick="showDetail('<%= data[i].post_id %>')">
-                     <div class="list-name">
-                        <%= data[i].name %>
-                     </div>
                      <div class="list-title">
                         <%= data[i].title %>
                      </div>
+
+                     <div class="list-name">
+                        <%= data[i].name %>
+                     </div>
+
                      <div class="list-content">
                         <%= data[i].content %>
                      </div>

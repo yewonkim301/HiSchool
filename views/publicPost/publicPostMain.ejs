@@ -30,6 +30,7 @@
          /* 넘치는 내용을 '...'으로 표시 */
          width: 200px;
          /* 원하는 컨테이너의 너비를 설정 */
+         margin-bottom: 30px;
       }
 
       .list-box {
@@ -46,9 +47,7 @@
          /* 시간을 오른쪽에 정렬 */
       }
 
-      .list-nickname {
-         margin-bottom: 30px;
-      }
+      .list-nickname {}
 
       .count {
          padding-right: 5px;
@@ -64,11 +63,11 @@
             <!-- 게시물 목록 -->
             <% for(let i=0; i < data.length; i++) { %>
                <div class="list" onclick="showDetail('<%= data[i].post_id %>')">
-                  <div class="list-nickname">
-                     <%= data[i].nickname %>
-                  </div>
                   <div class="list-title">
                      <%= data[i].title %>
+                  </div>
+                  <div class="list-nickname">
+                     <%= data[i].nickname %>
                   </div>
                   <div class="list-content">
                      <%= data[i].content %>
