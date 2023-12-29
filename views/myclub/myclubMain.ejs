@@ -152,9 +152,9 @@
 
                 <h2>회원 목록</h2>
                 <% for(i=0; i < foundMember.length; i++) { %>
-                  <div class="list">
+                  <div class="list" onclick="showProfile('<%= foundMember[i].nickname %>','<%=foundMember[i].userid_num %>')">
                     <div class="list-title">
-                      <%= foundMember[i] %>
+                      <%= foundMember[i].name %>
                     </div>
 
                     <div class="list-content">
@@ -177,6 +177,9 @@
           <%- include('../component/upbtn') %>
 
             <script>
+
+
+
               // 동아리 관리자만 동아리 관리 링크 활성화
               const admin = document.querySelector("#admin");
               if ("<%=isLeader%>" === "true") {
@@ -215,6 +218,15 @@
                 } else {
                   return;
                 }
+              }
+
+              function showProfile(nickname,userid_num){
+                if(userid_num=='<%=userid_num%>'){
+                  window.location.href=`/mypageMain`
+                }else{
+                  window.location.href=`/mypageProfile/${nickname}`
+                }
+                
               }
             </script>
 </body>

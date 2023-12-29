@@ -880,7 +880,7 @@ exports.getMyclubMain = async (req, res) => {
     const userName = await User.findOne({
       where:{userid_num:element}
     })
-    foundMember.push(userName.name);
+    foundMember.push(userName);
     school.push(userName.school);
   }
   
