@@ -94,12 +94,12 @@
       .content-time {
          width: 100%;
          display: flex;
-         justify-content: flex-end;
-         margin: 6px 0px;
+         justify-content: space-between;
+         margin: 15px 0px;
       }
 
       .comment-input {
-         margin-top: 18px;
+         margin-top: 12px;
       }
 
       .name {
@@ -147,9 +147,6 @@
             </div>
             <div class="flexbox">
                <button class="btn-sm btn-primary myclubPostMain" onclick="publickPostDetail()">목록</button>
-
-
-
                <% if(getPost.userid_num==userid_num) { %>
                   <button class="btn-sm btn-primary publicPostDetail"
                      onclick="editPost('<%= getPost.post_id %>')">수정</button>
@@ -166,7 +163,8 @@
                hours = hours ? hours : 12; // 0 시는 12시로 표시
                %>
                <p class="content-time">
-                  <%= year %>-<%= month %>-<%= day %>
+                  <span>조회수 <%= getPost.click %></span>
+                  <%= year %>년<%= month %>월<%= day %>일
                            <%= ampm %>
                               <%= hours %>시 <%= minutes %>분
                </p>
