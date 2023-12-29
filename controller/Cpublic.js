@@ -74,6 +74,7 @@ exports.createPost = async (req, res) => {
       image: image,
       userid_num: userid_num,
       nickname: getName.nickname,
+      click: 0,
     });
     res.send(newPost);
   } catch (err) {
@@ -93,6 +94,29 @@ exports.getPostDetail = async (req, res) => {
       req.cookies.jwt,
       process.env.JWT_SECRET
     );
+
+    let preClick = await Public_post.findOne({
+      attributes: ["click"],
+      where: {
+        post_id: post_id,
+      },
+    });
+    // console.log("preClick", typeof preClick);
+    preClick = preClick.click;
+    preClick = JSON.stringify(preClick);
+    // console.log("preClick", typeof preClick);
+
+    const newClick = await Public_post.update(
+      {
+        click: Number(preClick) + 1,
+      },
+      {
+        where: {
+          post_id: post_id,
+        },
+      }
+    );
+
     // 게시글
     const getPost = await Public_post.findOne({
       attributes: [
