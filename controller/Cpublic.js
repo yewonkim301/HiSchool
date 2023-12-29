@@ -1216,6 +1216,11 @@ exports.home = async (req, res) => {
       process.env.JWT_SECRET
     );
 
+    const name = await User.findOne({
+      attributes: ["name"],
+      where: { userid_num: userid_num },
+    });
+
     const myclubs = await Club_members.findAll({
       where: {
         userid_num: userid_num,
@@ -1228,6 +1233,12 @@ exports.home = async (req, res) => {
     }
     console.log("Cpublic home myclubList >>> ", myclubList);
 
+    const getMyClubs = await Club.findAll({
+      where: {
+        club_id: myclubList,
+      },
+    });
+
     const clubPosts = await Club_post.findAll({
       where: { club_id: myclubList },
       order: [["click", "DESC"]],
@@ -1236,7 +1247,12 @@ exports.home = async (req, res) => {
     console.log("clubPosts", clubPosts);
 
     const publicPostImg = await Public_post.findAll({
+      order: [Sequelize.literal("rand()")],
       attributes: ["image"],
+      where: {
+        [Sequelize.Op.not]: [{ image: [] }],
+      },
+      limit: 3,
     });
 
     const recommendClub = await Club.findAll({
@@ -1281,12 +1297,15 @@ exports.home = async (req, res) => {
     */
 
     await res.render("home", {
-      myclubs,
+      name,
+      getMyClubs,
       clubPosts,
       publicPostImg,
       recommendClub,
       publicPosts,
     });
+
+    console.log(" publicPosts > >>", publicPosts);
   } catch (err) {
     console.error(err);
     res.send("Internal Server Error!");
@@ -1331,13 +1350,12 @@ exports.getChatList = async (req, res) => {
 
   const getMyClub = await Club.findAll({
     attributes: ["club_name"],
-    where:{
-      club_id : myclubList
-    }
+    where: {
+      club_id: myclubList,
+    },
   });
 
-  res.render("chatList", {findMyChat, getMyClub, myname});
-
+  res.render("chatList", { findMyChat, getMyClub, myname });
 };
 
 // DELETE /myChatList
