@@ -1,80 +1,78 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>하이스쿨 - 회원가입</title>
-    <link rel="stylesheet" href="/style.css" />
-    <script src="https://unpkg.com/feather-icons"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <style>
-      .search-results {
-        position: absolute;
-        width: 100%;
-        margin-top: 90px;
-        cursor: pointer;
-        border: 1px solid var(--color-gray-200);
-        border-radius: 4px;
-        background-color: white;
-        overflow-y: scroll;
-        height: 200px;
-        z-index: 2;
-      }
 
-      .no-results {
-        padding: 12px 16px;
-        text-align: center;
-        color: var(--color-gray-500);
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>하이스쿨 - 회원가입</title>
+  <link rel="stylesheet" href="/style.css" />
+  <script src="https://unpkg.com/feather-icons"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <style>
+    .search-results {
+      position: absolute;
+      width: 100%;
+      margin-top: 90px;
+      cursor: pointer;
+      border: 1px solid var(--color-gray-200);
+      border-radius: 4px;
+      background-color: white;
+      overflow-y: scroll;
+      height: 200px;
+      z-index: 2;
+    }
 
-      .schoolList {
-        padding: 12px 16px;
-        border: none;
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-      }
+    .no-results {
+      padding: 12px 16px;
+      text-align: center;
+      color: var(--color-gray-500);
+    }
 
-      .schoolList h3 {
-        font-size: 16px;
-        color: var(--color-gray-600);
-        font-weight: 500;
-      }
+    .schoolList {
+      padding: 12px 16px;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
 
-      .schoolList span {
-        font-size: 14px;
-        color: var(--color-gray-400);
-      }
+    .schoolList h3 {
+      font-size: 16px;
+      color: var(--color-gray-600);
+      font-weight: 500;
+    }
 
-      .schoolList:hover {
-        transition: all 0.5s;
-        background-color: var(--color-gray-100);
-      }
+    .schoolList span {
+      font-size: 14px;
+      color: var(--color-gray-400);
+    }
 
-      #preview {
-        width: 100px;
-        border-radius: 200px;
-      }
-    </style>
-  </head>
-  <body>
-    <%- include('./component/header')%>
+    .schoolList:hover {
+      transition: all 0.5s;
+      background-color: var(--color-gray-100);
+    }
+
+    #preview {
+      width: 100px;
+      border-radius: 200px;
+    }
+  </style>
+</head>
+
+<body>
+  <%- include('./component/header')%>
     <div class="container">
       <form name="register">
         <div class="input">
           <label for="userid">아이디</label>
           <input type="text" id="userid" class="textField" value="admin" />
           <div class="helpText-warning" id="userid-error"></div>
-          <button
-            type="button"
-            onclick="generateRandomId()"
-            style="
+          <button type="button" onclick="generateRandomId()" style="
               border: 1px solid var(--color-primary-500);
               color: var(--color-primary-500);
               width: fit-content;
               padding: 8px 16px;
-            "
-          >
+            ">
             랜덤 아이디 생성
           </button>
         </div>
@@ -83,18 +81,14 @@
           <label for="nickname">닉네임</label>
           <input type="text" id="nickname" class="textField" value="" />
           <div class="helpText-warning" id="nickname-error"></div>
-          <button
-          type="button"
-          onclick="generateRandomNickname()"
-          style="
+          <button type="button" onclick="generateRandomNickname()" style="
             border: 1px solid var(--color-primary-500);
             color: var(--color-primary-500);
             width: fit-content;
             padding: 8px 16px;
-          "
-        >
-          랜덤 닉네임 생성
-        </button>
+          ">
+            랜덤 닉네임 생성
+          </button>
         </div>
 
         <div class="input">
@@ -105,14 +99,8 @@
 
         <div class="input">
           <label for="fileUpload">프로필 이미지</label>
-          <input
-            name="myImage"
-            type="file"
-            id="fileUpload"
-            accept="image/*"
-            onchange="readURL(this); uploadToClient();"
-            class="file-upload-input"
-          />
+          <input name="myImage" type="file" id="fileUpload" accept="image/*" onchange="readURL(this); uploadToClient();"
+            class="file-upload-input" />
           <!-- <button class="file-upload-button">이미지 선택</button> -->
           <span class="file-upload-text">파일을 선택하세요</span>
           <img id="preview" src="" alt="" />
@@ -120,89 +108,46 @@
 
         <div class="input">
           <label for="school">학교</label>
-          <input
-            type="text"
-            id="school"
-            class="textField"
-            oninput="showResult(); searchSchool();"
-            onfocus="resetSchoolInput();"
-            value="가락고등학교"
-          />
+          <input type="text" id="school" class="textField" oninput="showResult(); searchSchool();"
+            onfocus="resetSchoolInput();" value="가락고등학교" />
           <div id="schoolSearchResults" class="search-results hidden"></div>
         </div>
         <div class="row2">
           <div class="input">
             <label for="grade">학년</label>
-            <input
-              type="number"
-              inputmode="numeric"
-              pattern="[0-9]*"
-              id="grade"
-              class="textField noscroll"
-              value="1"
-            />
+            <input type="number" inputmode="numeric" pattern="[0-9]*" id="grade" class="textField noscroll" value="1" />
           </div>
           <div class="input">
             <label for="classid">반</label>
-            <input
-              type="number"
-              inputmode="numeric"
-              pattern="[0-9]*"
-              id="classid"
-              class="textField noscroll"
-              value="2"
-            />
+            <input type="number" inputmode="numeric" pattern="[0-9]*" id="classid" class="textField noscroll"
+              value="2" />
           </div>
         </div>
         <div class="input">
           <label for="birthday">생일</label>
-          <input
-            type="date"
-            id="birthday"
-            class="textField"
-            value="2000-10-10"
-          />
+          <input type="date" id="birthday" class="textField" value="2000-10-10" />
         </div>
         <div class="input">
           <label for="phone">전화번호</label>
           <input type="tel" id="phone" class="textField" />
-          <span class="helpText"
-            ><i data-feather="info" width="16"></i>- 를 제외하고
-            입력해주세요</span
-          >
+          <span class="helpText"><i data-feather="info" width="16"></i>- 를 제외하고
+            입력해주세요</span>
         </div>
 
         <div class="input">
           <label for="password">비밀번호</label>
-          <input
-            type="password"
-            id="password"
-            class="textField"
-            value="12341234"
-            minlength="8"
-            maxlength="16"
-          />
-          <span class="helpText"
-            ><i data-feather="info" width="16"></i>8자리 이상, 16자리 이하</span>
-            <div class="helpText-warning" id="password-error"></div>
+          <input type="password" id="password" class="textField" value="12341234" minlength="8" maxlength="16" />
+          <span class="helpText"><i data-feather="info" width="16"></i>8자리 이상, 16자리 이하</span>
+          <div class="helpText-warning" id="password-error"></div>
         </div>
         <div class="input">
           <label for="passwordCheck">비밀번호 확인</label>
-          <input
-            type="password"
-            id="passwordCheck"
-            class="textField"
-            value="12341234"
-          />
+          <input type="password" id="passwordCheck" class="textField" value="12341234" />
         </div>
       </form>
 
       <div class="cta">
-        <button
-          type="button"
-          class="btn btn-primary"
-          onclick="handleRegister()"
-        >
+        <button type="button" class="btn btn-primary" onclick="handleRegister()">
           회원가입
         </button>
       </div>
@@ -225,7 +170,7 @@
       document.getElementById("phone").value =
         "010" + generateRandomPhoneNumber();
 
-        
+
       function generateRandomId() {
         const randomNumber = Math.floor(Math.random() * 1000);
         document.getElementById("userid").value = "user" + randomNumber;
@@ -245,18 +190,18 @@
           "예쁜",
         ];
         const names = [
-        "호랑이",
-        "비버",
-        "강아지",
-        "부엉이",
-        "여우",
-        "치타",
-        "문어",
-        "고양이",
-        "미어캣",
-        "다람쥐",
-        "라마",
-        "판다"
+          "호랑이",
+          "비버",
+          "강아지",
+          "부엉이",
+          "여우",
+          "치타",
+          "문어",
+          "고양이",
+          "미어캣",
+          "다람쥐",
+          "라마",
+          "판다"
         ];
 
         const randomNumber = Math.floor(Math.random() * 100);
@@ -264,10 +209,10 @@
         const randomSurname =
           surnames[Math.floor(Math.random() * surnames.length)];
         const randomName = names[Math.floor(Math.random() * names.length)];
-        document.getElementById('nickname').value = randomSurname + randomName + randomNumber
+        document.getElementById('nickname').value = randomSurname + randomName + randomNumber;
       }
 
-      generateRandomNickname()
+      generateRandomNickname();
 
       function generateRandomKoreanName() {
         const surnames = [
@@ -365,7 +310,7 @@
           });
 
           const axiosResult = result;
-          console.log('axiosResult : ', axiosResult)
+          console.log('axiosResult : ', axiosResult);
           const signedUrl = axiosResult.data;
           console.log("signedURL", signedUrl);
 
@@ -488,44 +433,59 @@
         const birthday = form.birthday.value;
         const phone = form.phone.value;
         const password = form.password.value;
-        let profile_img;
+        const nickname = form.nickname.value;
+        //  let profile_img;
 
-        if((!(/^[a-zA-Z]+$/.test(userid)))||userid.length>20){
-        document.getElementById('userid').style.borderColor='red'
-        document.getElementById('userid-error').innerText='영어 최대 20자 이내로 입력해주세요';
-        return;
+        // 한글 15자 이하, 영어 30자 이하, 특수문자 제외
+
+
+        if ((!(/^[a-zA-Z]+$/.test(userid))) || userid.length > 20) {
+          document.getElementById('userid').style.borderColor = 'red';
+          document.getElementById('userid-error').innerText = '영문 20자 이내로 입력해주세요';
+          return;
         }
 
-
-      
-
-
-
-
-        if((!(/[ㄱ-ㅎㅏ-ㅣ가-힣]+$/.test(name)))||name.length>30){
-        document.getElementById('name').style.borderColor='red'
-        document.getElementById('name-error').innerText='이름은 한글 최대 30자까지 가능합니다';
-        return;
+        if ((!(/[ㄱ-ㅎㅏ-ㅣ가-힣]+$/.test(name))) || name.length > 30) {
+          document.getElementById('name').style.borderColor = 'red';
+          document.getElementById('name-error').innerText = ' 한글 최대 30자까지 입력해주세요';
+          return;
         }
 
-        if((/[ㄱ-ㅎㅏ-ㅣ가-힣]/.test(password))||password.length<8||password.length>16){
-        document.getElementById('password').style.borderColor='red'
-        document.getElementById('password-error').innerText='비밀번호를 정확히 입력해주세요';
-      
-        return;
+        if ((/[ㄱ-ㅎㅏ-ㅣ가-힣]/.test(password)) || password.length < 8 || password.length > 16) {
+          document.getElementById('password').style.borderColor = 'red';
+          document.getElementById('password-error').innerText = '비밀번호를 정확히 입력해주세요';
+          return;
         }
 
-      
+        // 닉네임 유효성 검사
+        document.getElementById('nickname').addEventListener('input', function () {
+          const nickname = this.value;
+          const specialCharRegex = /[`!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?~]/;
+          const validCharRegex = /^[a-zA-Z0-9\u3131-\uD79D]+$/;
+          const adjustedLength = [...nickname].reduce((acc, char) => acc + (char.match(/[\u3131-\uD79D]/) ? 2 : 1), 0);
+
+          if (specialCharRegex.test(nickname) || !validCharRegex.test(nickname) || adjustedLength > 30) {
+            document.getElementById('nickname').style.borderColor = 'red';
+            document.getElementById('nickname-error').innerText = '닉네임은 영문 및 숫자는 30자 이내, 한글은 15자 이내로 입력해주세요';
+          } else {
+            document.getElementById('nickname').style.borderColor = ''; // 기본 테두리 색으로 초기화
+            document.getElementById('nickname-error').innerText = ''; // 오류 메시지 제거
+          }
+        });
+
+
+
+
 
         if (uploadedFileOriginUrl) {
-          console.log('presignedURL 있어요')
+          console.log('presignedURL 있어요');
           // const parts = uploadedFileOriginUrl.split("?");
           // const uploadedFileUrl = parts[0];
           const parts = uploadedFileOriginUrl.split('/');
           profile_img = parts[parts.length - 1].split('?')[0];
         } else {
-          console.log('presignedURL 없어요')
-          profile_img = ''
+          console.log('presignedURL 없어요');
+          profile_img = '';
         }
 
         console.log("profile_img", profile_img);
@@ -571,5 +531,6 @@
         }
       });
     </script>
-  </body>
+</body>
+
 </html>
