@@ -14,6 +14,16 @@
       max-width: 1000px !important;
     }
 
+    .background-image {
+      position: absolute;
+      top:0 ;
+      left: 0;
+      right: 0;
+      z-index: -2;
+      height: 300px;
+      border-radius: 0;
+      width: 100vw;
+    }
 
     .slider {
       width: 100%;
@@ -58,6 +68,18 @@
       gap: 12px;
     }
 
+    div.list-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-height: 300px;
+    }
+
+    div.list-container span {
+      text-align: center;
+      width: 100%;
+    }
+
 
     a.club-list {
       display: flex;
@@ -67,12 +89,20 @@
 
     div p.location {
       width: fit-content;
-      padding: 8px 12px;
+      padding: 8px 12px 8px 10px;
       background-color: var(--color-primary-50);
       color: var(--color-primary-400);
       font-weight: 700;
       font-size: 0.85rem;
       border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+
+    div p.location img {
+      height: 16px;
     }
 
     div p.list-content.description.content {
@@ -105,8 +135,41 @@
       
     }
 
-    
+    h2.label {
+      line-height: 1.5 !important;
+    }
 
+
+    div.club-container2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+    }
+
+
+    a.club-list2 {
+      display: flex;
+      flex-direction: row;
+    }
+
+    a.club-list2 img {
+      border-radius: 0;
+      border-radius: 8px 0 0 8px;
+      height: 100px;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+    }
+    
+    a.club-list2 div.club-box {
+      width: 100%;
+      border-radius: 0 8px 8px 0;
+    }
+
+    a.club-list2 p.location {
+      display: none;
+    }
+
+    
 
     @media (max-width: 800px) {
       div.club-container {
@@ -118,17 +181,19 @@
 
 <body>
 
+  
+  <%- include('./component/header-main') %>
+  <img class="background-image" src="/blue-bg.png" alt="">
   <main class="container">
-    <%- include('./component/header-main') %>
       <div class="main-container"></div>
 
-      <h2>내 동아리</h2>
+      <h2 style="color: white;">내 동아리</h2>
       <div class="club-container">
         <% if(typeof getMyClubs !== undefined && getMyClubs) { %>
           <% if(getMyClubs.length == 0) { %>
             <span>가입한 동아리가 없어요</span>
             <% } else { %>
-              <% for(i=0; i < getMyClubs.length; i++) { %>
+              <% for(i=0; i < 3; i++) { %>
                 <a class="club-list" href="/myclubMain/<%= getMyClubs[i].club_id %>">
 
                   <img
@@ -136,6 +201,7 @@
                     alt="Description of the image">
                   <div class="club-box">
                     <p class="list-content description location">
+                      <img width="16" height="16" src="https://img.icons8.com/ios-filled/50/228BE6/marker.png" alt="marker"/>
                       <%= getMyClubs[i].location %>
                     </p>
                     <h3 class="list-title container-title">
@@ -165,10 +231,10 @@
 
               <br>
 
+              <h2 class="label">내 동아리 인기글</h2>
               <div class="list-container">
-                <h2 class="label">내 동아리 인기글</h2>
                 
-                <div class="">
+
                   <% if(typeof clubPosts !== undefined && clubPosts) { %>
                     <% if(clubPosts.length == 0) { %>
                       <span>가입한 동아리가 없어요</span>
@@ -183,19 +249,21 @@
                                 <%= clubPosts[i].content %>
                               </p>
                             </div>
-                </div>
+
                 </a>
                 <% } %>
                   <% } %>
                     <% } else { %>
                       <span>불러오기 실패</span>
                       <% } %>
-                        <br />
-          
               </div>
 
+
+
+
+
+              <h2 class="label">자유게시판 갤러리</h2>
               <div class="list-container">
-                <h2 class="label">자유게시판 갤러리</h2>
                 <div class="">
                   <% if(typeof publicPostImg !== undefined && publicPostImg) { %>
                     <% if(publicPostImg.length == 0) { %>
@@ -223,14 +291,14 @@
 
 
 
-              <h2 class="label"><%= name.name %>님을 위한 오늘의 추천 동아리</h2>
+              <h2 class="label"><%= name.name %>님을 위한<br>오늘의 추천 동아리</h2>
               <div class="club-container">
                 <% if(typeof getMyClubs !== undefined && getMyClubs) { %>
                   <% if(getMyClubs.length == 0) { %>
                     <span>가입한 동아리가 없어요</span>
                     <% } else { %>
                       <% for(i=0; i < getMyClubs.length; i++) { %>
-                        <a class="club-list" href="/myclubMain/<%= getMyClubs[i].club_id %>">
+                        <a class="club-list2" href="/myclubMain/<%= getMyClubs[i].club_id %>">
         
                           <img
                             src="<%= getMyClubs[i].club_img %>"
@@ -258,8 +326,8 @@
 
 
 
+              <h2 class="label">자유 게시판</h2>
               <div class="list-container">
-                <h2 class="label">자유 게시판</h2>
                 <% if(typeof publicPosts !== undefined && publicPosts) { %>
                   <% if(publicPosts.length == 0) { %>
                     <span>자유게시판에 작성된 글이 없습니다.</span>
@@ -274,7 +342,7 @@
                              <%= publicPosts[i].content %>
                             </p>
                           </div>
-              </div>
+              
               </a>
               <% } %>
                 <% } %>
@@ -283,6 +351,7 @@
                     <% } %>
                       <br />
               </div>
+            </div>
 
 
   </main>
