@@ -266,11 +266,13 @@
 
 
 
-                                      <button onclick="openModal()" id="plus-button" class="btn btn-primary">
-                                        추가하기
-                                      </button>
+
         </div>
+        <button onclick="openModal()" id="plus-button" class="btn btn-primary">
+          추가하기
+        </button>
       </div>
+
       <!----------------------- 일정을 추가하는 모달 ---------------------->
 
 
@@ -330,6 +332,7 @@
 
     <script>
 
+      const addplus = document.getElementById('plus-button');
       // 서버로부터 받은 데이터를 JavaScript 변수에 할당
       const clubSchedules = `clubSchedules: <%-JSON.stringify(data) %>`;
 
@@ -437,11 +440,10 @@
 
         const eventsContainer = document.getElementById("eventsContainer");
         let html = "";
-        let found = false;  // 일정이 있는지 여부를 추적하는 플래그
+        let found = false;
 
-        // <div class="schedule" id="<%= data[i].schedule_id %>">
 
-          
+
 
   <% for (let i = 0; i < data.length; i++) { %>
     if ("<%= data[i].date %>" === dateStr) {
@@ -466,14 +468,17 @@
             <button class="btn-sm btn-secondary  deleteBtn" type="button" onclick="deleteSchedule('<%= data[i].schedule_id %>')">삭제</button>
           </div>
         </div>
-      </div>`;
+      </div>
+      `;
+
           }
   <% } %>
 
   if (!found) {
-          html = '<p class="no-events">등록된 일정이 없습니다.</p>';
-        }
 
+          html = '<p class="no-events">등록된 일정이 없습니다.</p>';
+
+        }
 
         eventsContainer.innerHTML = html;
       }
