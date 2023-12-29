@@ -95,13 +95,17 @@
       <div id="notice"></div>
       <% for(let i=0; i < chats.length; i++) {  %>
         <% if(myNickname === chats[i].from_nick){ %>
-      <div class="my-chat"><p><%= chats[i].dm_content %></p></div>
+      <div class="my-chat"><p class="mychatTime"><%= chats[i].createdAt %></p><p><%= chats[i].dm_content %></p>
+
+      </div>
       <!-- <div class="my-chat"></div> -->
       <% } else { %>
-        <% if(otherNick === chats[i].from_nick) { %>
-        <div class="other-chat"><p><%= chats[i].dm_content %></p><p><%= chats[i].from_nick %></p></div>
+        <div class="other-chat"><p><%= chats[i].from_nick %></p>
+          <p><%= chats[i].dm_content %></p>
+          <p class="otherchatTime"><%= chats[i].createdAt %></p>
+
+        </div>
         <!-- <div class="other-chat"></div> -->
-        <% } %>
       <% } %>
       <% } %>
     </div>
@@ -155,17 +159,20 @@
       if (myName === nick) {
         //내가입력한 텍스트
         div.classList.add('my-chat');
+        div.innerHTML = `<p class="mychatTime">${message.createdAt}</p>`
       } else {
         div.classList.add('other-chat');
+        div.innerHTML = `<p class="mychatTime">${message.createdAt}</p>`
       }
 
+      console.log("chat message >>>>>>>>>>>>>",message);
       //채팅 텍스트
       if (myName === nick) {
-        p.textContent = `${message}`;
+        p.textContent = `${message.dm_content} `;
         div.appendChild(p);
         msg.appendChild(div);
       } else {
-        p.textContent = `${nick} : ${message}`;
+        p.textContent = `${nick} : ${message.dm_content}`;
         div.appendChild(p);
         msg.appendChild(div);
       }
