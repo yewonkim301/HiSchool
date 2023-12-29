@@ -117,7 +117,7 @@ app.get("/chat/:room", isLoggedIn, async (req, res) => {
 });
 
 // Club
-/*
+
 app.get("/myclubChat/:club_id", isLoggedIn, async (req, res) => {
   const { club_id } = req.params;
   const { userid, userid_num } = jwt.verify(
@@ -152,7 +152,7 @@ app.get("/myclubChat/:club_id", isLoggedIn, async (req, res) => {
     chats,
   });
 });
-*/
+
 
 app.get("*", (req, res) => {
   res.render("404");
