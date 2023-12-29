@@ -55,7 +55,7 @@
             </div>
             <div class="input">
               <label for="editClubLimit">제한 회원수</label>
-              <div>
+              <div id="editClubLimit">
                 <%=clubAdminEdit.limit%> 명
               </div>
               </div>
@@ -89,7 +89,7 @@
    async function patchClubInfo(){
     const newName = document.getElementById('editClubName').value;
     const newDescription = document.getElementById('editClubDescription').value;
-    const newLimit = document.getElementById('editClubLimit').value;
+    const newLimit = document.getElementById('editClubLimit').innerText;
     const newKeyword = document.getElementById('editClubKeyword').value;
     console.log(newName,newDescription,newLimit,newKeyword)
  
