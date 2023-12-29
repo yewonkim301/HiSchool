@@ -247,16 +247,20 @@
 
       msg.appendChild(div);
 
-      // 마지막 메시지의 시간만 표시하기
-      const lastMessage = document.querySelector('#msg .my-chat:last-child .mychatTime');
-      if (lastMessage) {
-        lastMessage.style.display = 'block';
-      }
+        // 이전 메시지의 시간 숨기기
+    const myMessages = document.querySelectorAll('#msg .my-chat .mychatTime');
+    const otherMessages = document.querySelectorAll('#msg .other-chat .mychatTime');
 
-      // 이전 메시지의 시간 숨기기
-      const previousMessages = document.querySelectorAll('#msg .my-chat:not(:last-child) .mychatTime');
-      previousMessages.forEach((time) => {
-        time.style.display = 'none';
+    myMessages.forEach((time, index) => {
+        if (index !== myMessages.length - 1) {
+          time.style.display = 'none';
+        }
+      });
+
+      otherMessages.forEach((time, index) => {
+        if (index !== otherMessages.length - 1) {
+          time.style.display = 'none';
+        }
       });
     });
     //입장 메세지 이벤트
