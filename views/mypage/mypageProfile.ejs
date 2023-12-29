@@ -67,7 +67,9 @@
             </div>
             <% } %>
           
-        
+            <% if ( userid_num === 1) { %>
+        <button type="button" onclick="deleteUser()">강퇴</button>
+        <% } %>
       </main>
 
 
@@ -87,7 +89,24 @@
       }
       
     </script>
-    <script>feather.replace()</script>
+    <script>feather.replace()
+    
+    function deleteUser() {
+      if (confirm("사용자를 강퇴시키겠습니까?")) {
+      axios({
+        method:"delete",
+        url: "//mypageProfile/<%= nickname%>"
+      }).then((res) => {
+        if(res) {
+          alert("사용자 강퇴에 성공했습니다.");
+          document.location.href("/home");
+        } else {
+          alert("사용자 강퇴에 실패했습니다.");
+        }
+      })
+    }
+    }
+    </script>
 
 
 </body>
@@ -96,7 +115,7 @@
 
 
       <!--  임시 코드 입니다 ,,, 소켓 확인용 -->
-      <script>
+      <!-- <script> -->
         // const nick = document.getElementsByClassName("profile-name").innerText;
         
         // async function move() {
