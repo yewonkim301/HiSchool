@@ -11,6 +11,7 @@
       crossorigin="anonymous"
     ></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
     <style>
       .container {
@@ -156,6 +157,10 @@
         color: white !important;
       }
 
+      p.otherchatMsg {
+        width: fit-content;
+      }
+
       p.mychatTime,
       p.otherchatTime {
         padding: 0;
@@ -209,35 +214,35 @@
       <div id="body" hidden>
         <div id="msg">
           <div id="notice"></div>
-          <% for (i = 0; i < chats.length; i++) { %> <% if (chats[i].userid_num
-          === userid_num) {%>
-          <div class="my-chat">
-            <p class="mychatTime">
-              <% var createdAt = new Date(chats[i].createdAt); var hours =
-              createdAt.getHours().toString().padStart(2, '0'); var minutes =
-              createdAt.getMinutes().toString().padStart(2, '0'); var seconds =
-              createdAt.getSeconds().toString().padStart(2, '0'); var
-              formattedTime = hours + '시' + minutes + '분' ; %> <%=
-              formattedTime %>
-            </p>
-            <p class="mychatMsg"><%= chats[i].content %></p>
-          </div>
-          <% } else { %>
-          <div class="other-chat">
-            <p class="otherchatName"><%= chats[i].from_name %></p>
-            <div class="otherMsg">
-              <p class="otherchatMsg"><%= chats[i].content %></p>
-              <p class="otherchatTime">
-                <% var createdAt = new Date(chats[i].createdAt); var hours =
-                createdAt.getHours().toString().padStart(2, '0'); var minutes =
-                createdAt.getMinutes().toString().padStart(2, '0'); var seconds
-                = createdAt.getSeconds().toString().padStart(2, '0'); var
-                formattedTime = hours + '시' + minutes + '분' ; %> <%=
-                formattedTime %>
-              </p>
-            </div>
-          </div>
-          <% } %> <% } %>
+          <%
+function formatTime(dateString) {
+  var date = new Date(dateString);
+  var hours = date.getHours().toString().padStart(2, '0');
+  var minutes = date.getMinutes().toString().padStart(2, '0');
+  return hours + '시 ' + minutes + '분';
+}
+%>
+
+<% for (i = 0; i < chats.length; i++) { %>
+  <% if (chats[i].userid_num === userid_num) { %>
+    <div class="my-chat">
+      <p class="mychatTime">
+        <%= formatTime(chats[i].createdAt) %>
+      </p>
+      <p class="mychatMsg"><%= chats[i].content %></p>
+    </div>
+  <% } else { %>
+    <div class="other-chat">
+      <p class="otherchatName"><%= chats[i].from_name %></p>
+      <div class="otherMsg">
+        <p class="otherchatMsg"><%= chats[i].content %></p>
+        <p class="otherchatTime">
+          <%= formatTime(chats[i].createdAt) %>
+        </p>
+      </div>
+    </div>
+  <% } %>
+<% } %>
         </div>
         <form id="chat">
           <input
@@ -256,6 +261,7 @@
         // 버튼 요소를 찾아서 클릭 이벤트 발생
         var myButton = document.getElementById("btn");
         myButton.click();
+        scrollToBottom();
       };
       const socket = io({
         transports: ["websocket"],
@@ -277,11 +283,13 @@
         console.log("newMessage > ", newClubChat);
 
         const div = document.createElement("div");
+        div.classList.add("chatMsg")
         //   const p = document.createElement("p");
         if (myName === newClubChat.from_name) {
           //내가입력한 텍스트
           div.classList.add("my-chat");
-          div.innerHTML = `<p class="mychatMsg">${newClubChat.content}</p><p class="mychatTime">${newClubChat.createdAt}</p>`;
+          
+          div.innerHTML = `<p class="mychatTime">${convertToFormattedTime(newClubChat.createdAt)}</p><p class="mychatMsg">${newClubChat.content}</p>`;
         } else {
           div.classList.add("other-chat");
           div.innerHTML = `<p class="otherchatName">${newClubChat.from_name}</p><p class="otherchatMsg">${newClubChat.content}</p><p class="mychatTime">${newClubChat.createdAt}</p>`;
@@ -292,8 +300,12 @@
         //   p.textContent = `${nick} : ${message}`;
         //   div.appendChild(p);
         msg.appendChild(div);
-        msg.scrollTop = msg.scrollHeight;
+        // msg.scrollTop = msg.scrollHeight;
+        scrollToBottom();
+            
       });
+
+
 
       //입장 메세지 이벤트
       socket.on("notice", (message) => {
@@ -302,6 +314,7 @@
         p.textContent = message;
         div.appendChild(p);
         notice.appendChild(div);
+        scrollToBottom();
       });
 
       ///폼 이벤트
@@ -324,6 +337,7 @@
           //전역변수에 입력한 닉네임을 저장
           myName = userName.value;
         });
+        scrollToBottom();
       });
 
       //이전 메세지 불러오기
@@ -371,12 +385,17 @@
         console.log("ejs msg", msg);
         socket.emit("sendMessage", msg);
         message.value = "";
+        scrollToBottom();
       });
+
+      
     </script>
 
     <script>
       window.onload = function () {
         document.getElementById("btn").click();
+        setTimeout(scrollToBottom(), 200)
+        scrollToBottom();
       };
 
       function blockEmptyMsg() {
@@ -389,6 +408,29 @@
           msgSendBtn.disabled = false;
         }
       }
+
+
+
+
+
+
+
+
+function convertToFormattedTime(isoString) {
+    var date = new Date(isoString);
+    var hours = date.getHours().toString().padStart(2, '0');
+    var minutes = date.getMinutes().toString().padStart(2, '0');
+    return hours + '시 ' + minutes + '분';
+}
+
+
+function scrollToBottom() {
+    const chatContainer = document.querySelector("#msg");
+    chatContainer.scrollTop = chatContainer.scrollHeight;
+  }
+
+
+
     </script>
   </body>
 </html>
