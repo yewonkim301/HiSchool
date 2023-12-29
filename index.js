@@ -73,6 +73,7 @@ app.use("/", indexRouter);
 let flag = true;
 
 // DM
+/*
 app.get("/chat/:room", isLoggedIn, async (req, res) => {
   if (flag) {
     flag = false;
@@ -109,6 +110,7 @@ app.get("/chat/:room", isLoggedIn, async (req, res) => {
     otherNick,
   });
 });
+*/
 
 // Club
 
