@@ -837,16 +837,31 @@ exports.getMyclubMain = async (req, res) => {
     process.env.JWT_SECRET
   );
 
-  const foundMember = await Club_members.findAll({
+  const member =[];
+  const foundMemberList = await Club_members.findAll({
     where: { club_id: club_id },
-    include: [
-      {
-        model: User,
-        required: false,
-        attributes: ["name", "userid_num", "profile_img"],
-      },
-    ],
   });
+  for(const ele of foundMemberList){
+
+    member.push(ele.dataValues.userid_num);
+  }
+  const foundMember =[];
+  const school =[];
+  for(const element of member){
+    const userName = await User.findOne({
+      where:{userid_num:element}
+    })
+    foundMember.push(userName.name);
+    school.push(userName.school);
+  }
+  
+
+
+
+
+
+  
+
   const clubPosts = await Club_post.findAll({
     where: {
       club_id: club_id,
@@ -877,8 +892,10 @@ exports.getMyclubMain = async (req, res) => {
 
   res.render("myclub/myclubMain", {
     data: myClub,
+    userid_num,
     clubPosts,
     foundMember,
+    school,
     isLeader,
     link,
     title,
