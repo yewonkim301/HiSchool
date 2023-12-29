@@ -9,6 +9,13 @@
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.0/dist/js.cookie.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <style>
+    body {
+      margin: 0 !important;
+
+    }
+
+    .container {}
+
     .slider {
       width: 100%;
       min-width: 70%;
@@ -36,6 +43,10 @@
       padding: 0 20px;
     }
 
+    .footer-content p {
+      padding: 5px;
+    }
+
     .footer-logo {
       width: 75px;
       height: auto;
@@ -46,10 +57,10 @@
 
 <body>
 
+  <main class="container">
+    <%- include('./component/header-main') %>
+      <div class="main-container"></div>
 
-  <%- include('./component/header-main') %>
-    <div class="main-container"></div>
-    <main class="container">
       <h2>내 동아리</h2>
       <div class="">
 
@@ -122,37 +133,39 @@
               </div>
               </div>
 
-              <footer class="footer">
-                <div class="footer-content">
-                  <img src="/icons/hischool_logo.svg" alt="회사 로고" class="footer-logo">
-                  <p>(주)Introverted Innovators</p>
-                  <p>대표명: 홍길동</p>
-                  <p>주소: 서울특별시 강남구 예시동 123-45</p>
-                  <p>이메일: i@example.com | 전화번호: 123-456-7890</p>
-                  <p>&copy; (2023)Introverted Innovators. 모든 권리 보유.</p>
-                </div>
-              </footer>
-    </main>
-    <script>
-      function toLink(link) {
-        document.location.href = link;
-      }
 
-      let slides = document.getElementsByClassName("slide");
-      let index = 0;
+  </main>
+  <footer class="footer">
+    <div class="footer-content">
+      <img src="/icons/hischool_logo.svg" alt="회사 로고" class="footer-logo">
+      <p>(주)Introverted Innovators</p>
+      <p>대표: 시진 예원 구휘 민수 용</p>
+      <p>주소: 서울특별시 강남구 예시동 123-45</p>
+      <p>이메일: Innovators@example.com </p>
+      <p>전화번호: 123-456-7890</p>
+      <p>&copy; (2023)Introverted Innovators. 모든 권리 보유.</p>
+    </div>
+  </footer>
+  <script>
+    function toLink(link) {
+      document.location.href = link;
+    }
 
-      // function changeSlide() {
-      //   for (let i = 0; i < slides.length; i++) {
-      //     slides[i].style.display = "none";
-      //   }
-      //   index++;
-      //   if (index > slides.length) { index = 1; }
-      //   slides[index - 1].style.display = "block";
-      //   setTimeout(changeSlide, 3000); // 3초마다 함수를 호출
-      // }
+    let slides = document.getElementsByClassName("slide");
+    let index = 0;
 
-      // changeSlide(); // 함수 실행
-    </script>
+    // function changeSlide() {
+    //   for (let i = 0; i < slides.length; i++) {
+    //     slides[i].style.display = "none";
+    //   }
+    //   index++;
+    //   if (index > slides.length) { index = 1; }
+    //   slides[index - 1].style.display = "block";
+    //   setTimeout(changeSlide, 3000); // 3초마다 함수를 호출
+    // }
+
+    // changeSlide(); // 함수 실행
+  </script>
 
 
 </body>

@@ -66,6 +66,10 @@
          justify-content: space-between;
       }
 
+      .comment-container {
+         margin-top: 30px
+      }
+
 
       .list-time {
          width: 100%;
@@ -92,12 +96,12 @@
       .content-time {
          width: 100%;
          display: flex;
-         justify-content: flex-end;
-         margin: 6px 0px;
+         justify-content: space-between;
+         margin: 15px 0px;
       }
 
       .comment-input {
-         margin-top: 18px;
+         margin-top: 12px;
       }
 
       .name {
@@ -159,8 +163,11 @@
                hours = hours % 12;
                hours = hours ? hours : 12; // 0 시는 12시로 표시
                %>
+
+
                <p class="content-time">
-                  <%= year %>-<%= month %>-<%= day %>
+                  <span>조회수 <%= data.click %></span>
+                  <%= year %>년<%= month %>월<%= day %>일
                            <%= ampm %>
                               <%= hours %>시 <%= minutes %>분
                </p>
