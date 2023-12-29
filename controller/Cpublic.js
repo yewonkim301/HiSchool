@@ -1340,8 +1340,9 @@ exports.getChatList = async (req, res) => {
 
 };
 
-// DELETE /chatList
+// DELETE /chatList/:room
 exports.deleteChat = async (req,res) => {
+  const {room} = req.params;
 const { userid, userid_num } = jwt.verify(
   req.cookies.jwt,
   process.env.JWT_SECRET
@@ -1356,7 +1357,7 @@ const myname = await User.findOne({
 
 const deleteMyChatList = await Dm.destroy({
   where:{
-    room_name: { [Sequelize.Op.like]: `%${myname.nickname}%` },
+    room_name: room,
   }
 });
 
