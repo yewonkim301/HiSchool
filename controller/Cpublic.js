@@ -1282,11 +1282,13 @@ exports.getChatList = async (req, res) => {
     },
   });
 
-  const findMyChat = await Dm.findAll({
-    attributes: ["room_name"],
-    where: {
-      [Sequelize.Op.like]: `${myname}`,
-    },
-  });
-  console.log(findMyChat);
+  // const findMyChat = await Dm.findAll({
+  //   attributes: ["room_name"],
+  //   where: {
+  //     [Sequelize.Op.like]: `${myname}`,
+  //   },
+  // });
+  // console.log(findMyChat);
+
+  res.render("chatList")
 };
