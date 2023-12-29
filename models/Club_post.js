@@ -30,6 +30,10 @@ const ClubPost = (Sequelize, DataTypes) => {
         type: DataTypes.STRING(100),
         allowNull: false,
       },
+      click: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+      },
     },
     {
       tableName: "clubPost",

@@ -200,6 +200,15 @@ exports.postCreateClub = async (req, res) => {
     const { club_name, limit, location, field, keyword, description } =
       req.body;
     const { userid_num } = jwt.verify(req.cookies.jwt, process.env.JWT_SECRET);
+    const img = [
+      "https://images.unsplash.com/photo-1610380860077-a300a8d1ba73?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "https://images.unsplash.com/photo-1493711662062-fa541adb3fc8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "https://images.unsplash.com/photo-1578667343051-ff8c81d04408?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "https://plus.unsplash.com/premium_photo-1682140999442-e9e2a5f55be6?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "https://images.unsplash.com/photo-1613918702390-48771f69c133?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    ];
+    let randomNum = Math.random() * 5;
+    let randomNumFloor = Math.floor(randomNum);
     const newClub = await Club.create({
       club_name: club_name,
       leader_id: userid_num,
@@ -208,8 +217,8 @@ exports.postCreateClub = async (req, res) => {
       field: field,
       keyword: keyword,
       description: description,
+      club_img: img[randomNumFloor],
     });
-    // console.log("res >>>>>>>>>", newClub.dataValues.club_id);
 
     const newMember = await Club_members.create({
       club_id: newClub.dataValues.club_id,
