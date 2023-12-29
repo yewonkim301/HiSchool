@@ -1207,13 +1207,13 @@ exports.getMyPageProfile = async (req, res) => {
 };
 
 // Delete /mypageProfile/:nickname 회원 강퇴
-exports.deleteBadUser = async (req,res) => {
-  const {nickname} = req.params;
+exports.deleteBadUser = async (req, res) => {
+  const { nickname } = req.params;
   const deleted = await User.destroy({
-    where:{
-      nickname: nickname
-    }
-  })
+    where: {
+      nickname: nickname,
+    },
+  });
 };
 
 // =============== HOME =================
@@ -1247,6 +1247,7 @@ exports.home = async (req, res) => {
       where: {
         club_id: myclubList,
       },
+      limit: 3,
     });
 
     const clubPosts = await Club_post.findAll({
@@ -1359,41 +1360,40 @@ exports.getChatList = async (req, res) => {
   }
 
   const getMyClub = await Club.findAll({
-    attributes: ["club_name","club_id"],
-    where:{
-      club_id : myclubList
-    }
+    attributes: ["club_name", "club_id"],
+    where: {
+      club_id: myclubList,
+    },
   });
 
   res.render("chatList", { findMyChat, getMyClub, myname });
 };
 
 // DELETE /chatList/:room
-exports.deleteChat = async (req,res) => {
-  const {room} = req.params;
+exports.deleteChat = async (req, res) => {
+  const { room } = req.params;
   console.log(room);
-const { userid, userid_num } = jwt.verify(
-  req.cookies.jwt,
-  process.env.JWT_SECRET
-);
+  const { userid, userid_num } = jwt.verify(
+    req.cookies.jwt,
+    process.env.JWT_SECRET
+  );
 
-const myname = await User.findOne({
-  attributes: ["nickname"],
-  where: {
-    userid_num: userid_num,
-  },
-});
+  const myname = await User.findOne({
+    attributes: ["nickname"],
+    where: {
+      userid_num: userid_num,
+    },
+  });
 
-const deleteMyChatList = await Dm.destroy({
-  where:{
-    room_name: room,
+  const deleteMyChatList = await Dm.destroy({
+    where: {
+      room_name: room,
+    },
+  });
+
+  if (deleteMyChatList) {
+    res.send({ isDeleted: true });
+  } else {
+    res.send({ isDeleted: false });
   }
-});
-
-if (deleteMyChatList) {
-  res.send({ isDeleted: true });
-} else {
-  res.send({ isDeleted: false });
-}
-
 };

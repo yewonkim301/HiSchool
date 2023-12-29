@@ -151,32 +151,35 @@
               <% } %>
 
                 <h2>회원 목록</h2>
-                <% for(i=0; i < foundMember.length; i++) { %>
-                  <div class="list">
-                    <div class="list-title">
-                      <%= foundMember[i] %>
+                <div class="list-container">
+                  <% for(i=0; i < foundMember.length; i++) { %>
+                    <div class="list" onclick="showProfile('<%= foundMember[i].nickname %>','<%=foundMember[i].userid_num %>')">
+                      <div class="list-title">
+                        <%= foundMember[i].name %>
+                      </div>
+                      <div class="list-content">
+                        <%= school[i] %>
+                      </div>
                     </div>
-
-                    <div class="list-content">
-                      <%= school[i] %>
-                    </div>
-                  </div>
+                    <% } %>
+                </div>
 
 
-                  <% } %>
-
+                  <% if (isLeader) { %>
+                    <div class="btnCenter"><button class="btn-sm btn-ghost" style="margin-top: 150px;" disabled>탈퇴하기</button></div>
+              
+                    <% }else{ %>
+                      <div class="btnCenter"><button class="btn-sm btn-ghost" style="margin-top: 150px;" onclick="withdraw()">탈퇴하기</button></div>
+                      <%}%>
     </div>
 
-    <% if (isLeader) { %>
-      <div class="btnCenter"><button class="btn-sm btn-ghost" disabled>탈퇴하기</button></div>
-
-      <% }else{ %>
-        <div class="btnCenter"><button class="btn-sm btn-ghost" onclick="withdraw()">탈퇴하기</button></div>
-        <%}%>
 
           <%- include('../component/upbtn') %>
 
             <script>
+
+
+
               // 동아리 관리자만 동아리 관리 링크 활성화
               const admin = document.querySelector("#admin");
               if ("<%=isLeader%>" === "true") {
@@ -215,6 +218,15 @@
                 } else {
                   return;
                 }
+              }
+
+              function showProfile(nickname,userid_num){
+                if(userid_num=='<%=userid_num%>'){
+                  window.location.href=`/mypageMain`
+                }else{
+                  window.location.href=`/mypageProfile/${nickname}`
+                }
+                
               }
             </script>
 </body>

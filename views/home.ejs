@@ -13,13 +13,24 @@
       max-width: 1000px !important;
     }
 
+    .hero {
+      position: absolute;
+      top: 60px;
+      left: 0;
+      right: 0;
+      z-index: -1;
+      height: 260px;
+      width: 100vw;
+      background: linear-gradient(#ffffff, #ffffff53);
+    }
+
     .background-image {
       position: absolute;
-      top: 0;
+      top: 60px;
       left: 0;
       right: 0;
       z-index: -2;
-      height: 300px;
+      height: 260px;
       border-radius: 0;
       width: 100vw;
     }
@@ -194,11 +205,13 @@
 
 
   <%- include('./component/header-main') %>
-    <img class="background-image" src="/blue-bg.png" alt="">
-    <main class="container">
+  <!-- <img class="background-image" src="/blue-bg.png" alt=""> -->
+  <div class="hero"></div>
+  <img class="background-image" src="https://images.unsplash.com/photo-1597200381847-30ec200eeb9a?q=80&w=4032&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="">
+  <main class="container">
       <div class="main-container"></div>
 
-      <h2 style="color: white;">내 동아리</h2>
+      <h2 style="color: var(--color-gray-600)">내 동아리</h2>
       <div class="club-container">
         <% if(typeof getMyClubs !==undefined && getMyClubs) { %>
           <% if(getMyClubs.length==0) { %>
