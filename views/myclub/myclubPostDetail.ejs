@@ -108,6 +108,14 @@
          margin-bottom: 50px;
       }
 
+      .community-box {
+         width: 100%;
+         display: flex;
+         justify-content: space-between;
+         align-items: end;
+      }
+
+
       .no-comment {
          width: 100%;
          text-align: center;
@@ -124,14 +132,17 @@
             <div class="post-detail">
 
                <div class="name list">
-                  <span>
-                     <%= data.name %>
-                  </span>
+                  <div class="community-box">
+                     <h2>
+                        <%= data.title %>
+                     </h2>
+                     <p>
+                        <%= data.name %>
+                     </p>
+                  </div>
                </div>
 
-               <h2>
-                  <%= data.title %>
-               </h2>
+
 
 
                <p class="content">
