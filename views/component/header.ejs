@@ -39,6 +39,7 @@
         </div>
     
         <div class="nav-btn">
+          <a href="/chatList"><img width="28" height="28" src="https://img.icons8.com/color/96/chat--v1.png" alt="chat--v1" /></a>
           <div class="header-profile desktop" onclick="toPage('/mypageMain')">
             <% if(typeof isLoggedIn !== 'undefined' && isLoggedIn) { %>
               <span><%= foundUser.name %>님</span>
@@ -72,6 +73,10 @@
         <!-- <div class="right-icon icon">
           <i data-feather="send" class="icon"></i>
         </div> -->
+        <!-- <a href="/chatList"><img width="28" height="28" src="https://img.icons8.com/color/96/chat--v1.png" alt="chat--v1" /></a> -->
+        <div class="right-icon icon" onclick="toPage('/chatList')" style="cursor: pointer;">
+          <img width="28" height="28" src="https://img.icons8.com/color/96/chat--v1.png" alt="chat--v1" />
+        </div>
       </nav>
     </header>
     
