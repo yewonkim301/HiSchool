@@ -437,6 +437,13 @@ label {
   color: var(--color-gray-400);
   font-size: 0.9rem;
 }
+.helpText-warning{
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--color-red-500);
+  font-size: 0.9rem;
+}
 
 .textField {
   padding: 16px 20px;
