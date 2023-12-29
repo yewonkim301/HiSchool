@@ -9,12 +9,11 @@
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.0/dist/js.cookie.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <style>
-    body {
-      margin: 0 !important;
 
+    body {
+      max-width: 1000px !important;
     }
 
-    .container {}
 
     .slider {
       width: 100%;
@@ -34,11 +33,7 @@
       color: #333;
       text-align: center;
       padding: 20px 0;
-      font-size: 14px;
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      font-size: 0.9rem;
     }
 
     .footer-content {
@@ -55,6 +50,69 @@
       height: auto;
       margin-bottom: 10px;
     }
+
+
+    div.club-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+    }
+
+
+    a.club-list {
+      display: flex;
+      flex-direction: column;
+
+    }
+
+    div p.location {
+      width: fit-content;
+      padding: 8px 12px;
+      background-color: var(--color-primary-50);
+      color: var(--color-primary-400);
+      font-weight: 700;
+      font-size: 0.85rem;
+      border-radius: 4px;
+    }
+
+    div p.list-content.description.content {
+      margin: 0;
+      padding: 0;
+    }
+
+    a.club-list img {
+      object-fit: cover;
+      height: 160px;
+      border-radius: 0;
+      border-radius: 8px 8px 0 0;
+    }
+    
+
+    div.club-box {
+      display: grid;
+      flex-direction: column;
+      gap: 12px;
+      padding: 20px;
+      border: 1px solid var(--color-gray-200);
+      border-radius: 0 0 8px 8px;
+    }
+
+
+
+    h3.list-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      
+    }
+
+    
+
+
+    @media (max-width: 800px) {
+      div.club-container {
+      grid-template-columns: 1fr;
+    }
+    }
   </style>
 </head>
 
@@ -65,7 +123,7 @@
       <div class="main-container"></div>
 
       <h2>내 동아리</h2>
-      <div class="">
+      <div class="club-container">
         <% if(typeof getMyClubs !== undefined && getMyClubs) { %>
           <% if(getMyClubs.length == 0) { %>
             <span>가입한 동아리가 없어요</span>
@@ -77,20 +135,22 @@
                     src="<%= getMyClubs[i].club_img %>"
                     alt="Description of the image">
                   <div class="club-box">
+                    <p class="list-content description location">
+                      <%= getMyClubs[i].location %>
+                    </p>
                     <h3 class="list-title container-title">
                       <%= getMyClubs[i].club_name %>
                     </h3>
-                    <p class="list-content description">
-                      지역 : <%= getMyClubs[i].location %>
-                    </p>
-                    <p class="list-content description">
-                      동아리 설명 : <%= getMyClubs[i].description %>
+                    
+                    <p class="list-content description content">
+                      <%= getMyClubs[i].description %>
                     </p>
                   </div>
-      </div>
+      
       </a>
       <% } %>
         <% } %>
+      </div>
           <% } else { %>
             <span>불러오기 실패</span>
             <% } %>
@@ -107,6 +167,7 @@
 
               <div class="list-container">
                 <h2 class="label">내 동아리 인기글</h2>
+                
                 <div class="">
                   <% if(typeof clubPosts !== undefined && clubPosts) { %>
                     <% if(clubPosts.length == 0) { %>
@@ -160,36 +221,42 @@
               </div>
               </div>
 
-              <div class="list-container">
-                <h2 class="label"><%= name.name %>님을 위한 오늘의 추천 동아리</h2>
-                <div class="">
-                  <% if(typeof recommendClub !== undefined && recommendClub) { %>
-                    <% if(recommendClub.length == 0) { %>
-                      <span>아직 개설된 동아리가 없습니다.</span>
-                      <% } else { %>
-                        <% for(i=0; i < recommendClub.length; i++) { %>
-                          <a class="club-list" href="/clubDetail/<%= recommendClub[i].club_id %>">
-          
-                            <img
-                              src="<%= recommendClub[i].club_img %>"
-                              alt="Description of the image">
-                            <div class="club-box">
-                              <h3 class="list-title container-title">
-                                <%= recommendClub[i].club_name %>
-                              </h3>
-                              <p class="list-content description">
-                                동아리 설명 : <%= recommendClub[i].description %>
-                              </p>
-                            </div>
-                </div>
-                </a>
-                <% } %>
-                  <% } %>
+
+
+              <h2 class="label"><%= name.name %>님을 위한 오늘의 추천 동아리</h2>
+              <div class="club-container">
+                <% if(typeof getMyClubs !== undefined && getMyClubs) { %>
+                  <% if(getMyClubs.length == 0) { %>
+                    <span>가입한 동아리가 없어요</span>
                     <% } else { %>
-                      <span>불러오기 실패</span>
-                      <% } %>
-                        <br />
+                      <% for(i=0; i < getMyClubs.length; i++) { %>
+                        <a class="club-list" href="/myclubMain/<%= getMyClubs[i].club_id %>">
+        
+                          <img
+                            src="<%= getMyClubs[i].club_img %>"
+                            alt="Description of the image">
+                          <div class="club-box">
+                            <p class="list-content description location">
+                              <%= getMyClubs[i].location %>
+                            </p>
+                            <h3 class="list-title container-title">
+                              <%= getMyClubs[i].club_name %>
+                            </h3>
+                            
+                            <p class="list-content description content">
+                              <%= getMyClubs[i].description %>
+                            </p>
+                          </div>
+              
+              </a>
+              <% } %>
+                <% } %>
+                <% } %>
               </div>
+
+
+
+
 
               <div class="list-container">
                 <h2 class="label">자유 게시판</h2>
