@@ -1206,6 +1206,16 @@ exports.getMyPageProfile = async (req, res) => {
   }
 };
 
+// Delete /mypageProfile/:nickname 회원 강퇴
+exports.deleteBadUser = async (req,res) => {
+  const {nickname} = req.params;
+  const deleted = await User.destroy({
+    where:{
+      nickname: nickname
+    }
+  })
+};
+
 // =============== HOME =================
 // GET /home 전체 동아리, 유저아이디가 가입되어있는 동아리 정보 로드
 exports.home = async (req, res) => {
