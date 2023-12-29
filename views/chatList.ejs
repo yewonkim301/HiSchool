@@ -54,6 +54,9 @@
     <%- include('component/header')%>
     <main class="container">
     <h2>DM </h2>
+    <% if (findMyChat.length==0) { %>
+        <div class="emptyFull"><span>진행중인 채팅이 없습니다.</span></div>
+    <% }else{ %>
     <% for( let i = 0; i < findMyChat.length; i++ ) { %>
         
         <div class="Chatlist" >
@@ -78,9 +81,14 @@
         </div>
     
     <% } %>
+    <% } %>
 
 
     <h2>동아리 채팅</h2>
+    <% if (getMyClub.length==0) { %>
+        <div class="emptyFull"><span>진행중인 채팅이 없습니다.</span></div>
+    <% }else{ %>
+    
     <% for( let i = 0; i < getMyClub.length; i++ ) { %>
         <div class="Chatlist" onclick="showClubChat('<%=getMyClub[i].club_id%>')">
             
@@ -88,6 +96,7 @@
             <div class="list-content">채팅방 바로 가기</div>
         </div>
     
+    <% } %>
     <% } %>
 </main>
     <script>
