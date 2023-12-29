@@ -113,9 +113,8 @@
                         <div class="flex">
 
 
-                           <div class="listArea">
-                              <div class="list-title"
-                                 onclick="showDetail('<%= getSupport[i].qa_id %>','<%= getSupport[i].secret %>','<%= getSupport[i].userid_num %>',this,'<%=getSupport[i].qa_content%>')">
+                           <div class="listArea" onclick="showDetail('<%= getSupport[i].qa_id %>','<%= getSupport[i].secret %>','<%= getSupport[i].userid_num %>',this,'<%=getSupport[i].qa_content%>')">
+                              <div class="list-title">
                                  <% if (userid_num==getSupport[i].userid_num || userid_num=='1' ) { %>
                                     <%if(getSupport[i].qa_content.length> 20){%>
                                        <%= getSupport[i].qa_content.slice(0,20) %> . . .
