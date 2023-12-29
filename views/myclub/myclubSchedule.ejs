@@ -26,7 +26,7 @@
 
     .calendar-container {
       background: white;
-      margin: 150px auto;
+      margin: 120px auto;
       border-radius: 8px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
@@ -49,9 +49,11 @@
     .calendar {
       border-collapse: collapse;
       width: 100%;
+      margin-bottom: 40px;
     }
 
     .calendar th {
+      text-align: center;
       background-color: #f1f3f5;
       color: var(--color-gray-500);
       padding: 10px;
@@ -100,7 +102,7 @@
 
     /* 임시 스케줄 있는 날짜 표시 점 */
     .dot {
-      margin: 0 auto;
+      margin: 5px auto;
       border-radius: 50%;
       width: 5px;
       height: 5px;
@@ -321,8 +323,8 @@
     <!----------------------- 일정을 추가하는 모달 끝 ---------------------->
 
     <script>
-      let today=new Date();
-      let thisDate=`${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`
+      let today = new Date();
+      let thisDate = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}`;
 
       const addplus = document.getElementById('plus-button');
       // 서버로부터 받은 데이터를 JavaScript 변수에 할당
@@ -349,11 +351,11 @@
             const time = document.getElementById("modalTime").value;
             const title = document.getElementById("modalTitle").value;
             const content = document.getElementById("modalContent").value;
-            if(time==''|| title==''||content==''){
+            if (time == '' || title == '' || content == '') {
               return;
             }
 
-            
+
 
             // 서버에 POST 요청 전송
             axios
@@ -420,7 +422,7 @@
 
       // 날짜 클릭했을때 기능 추가
       function onDateClick(dateStr) {
-        thisDate=dateStr;
+        thisDate = dateStr;
         document.querySelectorAll(".calendar td").forEach((td) => {
           td.classList.remove("selected-date");
         });

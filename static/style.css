@@ -378,6 +378,7 @@ img {
   right: 20px;
   bottom: 130px;
   background-color: white;
+  z-index: 999;
 }
 
 /* .up-btn2 {
@@ -439,7 +440,7 @@ label {
   color: var(--color-gray-400);
   font-size: 0.9rem;
 }
-.helpText-warning{
+.helpText-warning {
   display: flex;
   align-items: center;
   gap: 4px;
@@ -1067,7 +1068,6 @@ input[type='checkbox']:checked + label:before {
 /* 수정ㅇㅇ */
 .myclub-box .container-title {
 }
-
 
 .description {
   padding-top: 15px;
