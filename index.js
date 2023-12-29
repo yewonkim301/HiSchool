@@ -31,7 +31,6 @@ app.set("views", "./views");
 
 app.use(express.static(path.join(__dirname, "static")));
 
-
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // app.use(cors());
@@ -93,19 +92,26 @@ app.get("/chat/:room", isLoggedIn, async (req, res) => {
     },
   });
 
-  let otherNick = room.replace(`${getName.nickname}`, "")
-  otherNick = otherNick.replace(`,`, "")
-  otherNick = otherNick.replace(` `, "")
-  console.log("otherNick >>>>> ", otherNick)
+  let otherNick = room.replace(`${getName.nickname}`, "");
+  otherNick = otherNick.replace(`,`, "");
+  otherNick = otherNick.replace(` `, "");
+  console.log("otherNick >>>>> ", otherNick);
 
   const chats = await Dm.findAll({
-    where: {room_name: room}
-  })
-console.log("index chats >>>>>>>>> ",chats);
-  res.render("chat", { room, myNickname: getName.nickname, userid_num , chats, otherNick})
+    where: { room_name: room },
+  });
+  console.log("index chats >>>>>>>>> ", chats);
+  res.render("chat", {
+    room,
+    myNickname: getName.nickname,
+    userid_num,
+    chats,
+    otherNick,
+  });
 });
 
 // Club
+/*
 app.get("/myclubChat/:club_id", isLoggedIn, async (req, res) => {
   const { club_id } = req.params;
   const { userid, userid_num } = jwt.verify(
@@ -140,6 +146,7 @@ app.get("/myclubChat/:club_id", isLoggedIn, async (req, res) => {
     chats,
   });
 });
+*/
 
 app.get("*", (req, res) => {
   res.render("404");
