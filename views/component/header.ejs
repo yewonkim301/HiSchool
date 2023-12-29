@@ -32,12 +32,14 @@
         <% } %>
 
         <div class="menu-bar">
+          <a href="/clubMain">전체 동아리</a>
           <a href="/publicPostMain">자유게시판</a>
           <!-- <a href="/mypageMain">마이페이지</a> -->
           <a href="/supportMain">고객센터</a>
         </div>
     
         <div class="nav-btn">
+          <a href="/chatList"><img width="28" height="28" src="https://img.icons8.com/color/96/chat--v1.png" alt="chat--v1" /></a>
           <div class="header-profile desktop" onclick="toPage('/mypageMain')">
             <% if(typeof isLoggedIn !== 'undefined' && isLoggedIn) { %>
               <span><%= foundUser.name %>님</span>
@@ -71,6 +73,10 @@
         <!-- <div class="right-icon icon">
           <i data-feather="send" class="icon"></i>
         </div> -->
+        <!-- <a href="/chatList"><img width="28" height="28" src="https://img.icons8.com/color/96/chat--v1.png" alt="chat--v1" /></a> -->
+        <div class="right-icon icon" onclick="toPage('/chatList')" style="cursor: pointer;">
+          <img width="28" height="28" src="https://img.icons8.com/color/96/chat--v1.png" alt="chat--v1" />
+        </div>
       </nav>
     </header>
     
@@ -78,6 +84,7 @@
       <!-- <div  onclick="toggleSidebar()">
       <i data-feather="menu"></i></div> -->
       <a href="/home">홈</a>
+      <a href="/clubMain">전체 동아리</a>
       <a href="/publicPostMain">전체게시판</a>
       <!-- <a href="/mypageMain">마이페이지</a> -->
       <a href="/supportMain">고객센터</a>

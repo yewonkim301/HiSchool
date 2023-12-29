@@ -12,6 +12,26 @@
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
   <style>
+    .container {
+      margin-top: 61.6px !important;
+      margin-bottom: 100.8px !important;
+    }
+
+
+    @media (max-width: 640px) {
+      .container {
+        margin: 0 !important;
+        padding: 0 !important;
+        margin-top: 56.8px !important;
+      margin-bottom: 100.8px !important;
+      }
+
+      #chat {
+        max-width: 600px !important;
+      }
+}
+
+
     #body {
       width: 100%;
       max-width: 600px;
@@ -29,11 +49,12 @@
       bottom: 0px;
       display: flex;
       justify-content: space-between;
-      width: calc(100% - 40pxs);
-      max-width: calc(600px - 40px);
+      max-width: 560px;
       box-sizing: border-box;
       background-color: var(--color-gray-50);
       padding: 20px;
+      flex-direction: row;
+      gap: 12px;
     }
 
     #chat input {
@@ -41,6 +62,15 @@
       padding: 20px;
       border: 1px solid var(--color-gray-100);
       box-sizing: border-box;
+      color: var(--color-gray-500);
+      background-color: var(--color-gray-100);
+      border-radius: 8px;
+      border: 1px solid var(--color-gray-200);
+      width: 100%;
+    }
+
+    #chat button {
+      width: 80px;
     }
 
 
@@ -58,8 +88,14 @@
       margin-right: 10px;
     }
 
+    .otherMsg {
+      display: flex;
+      flex-direction: row;
+    }
+
     .other-chat {
       display: flex;
+      flex-direction: column;
       justify-content: start;
       padding: 2px 0px;
     }
@@ -94,10 +130,18 @@
     p.mychatTime, p.otherchatTime {
       padding: 0;
       background: none;
+      display: flex;
+      align-self: self-end;
+      font-size: 0.8rem !important;
+      color: var(--color-gray-400) !important;
     }
 
     p.otherchatName {
       background: none;
+      margin: 0;
+      /* padding: 0; */
+
+      
     }
 
   </style>
@@ -140,17 +184,19 @@
         <% } else { %>
         <div class="other-chat">
           <p class="otherchatName"><%= chats[i].from_name %></p>
-          <p class="otherchatMsg"><%= chats[i].content %></p>
-          <p class="otherchatTime">
-            <% 
-              var createdAt = new Date(chats[i].createdAt);
-              var hours = createdAt.getHours().toString().padStart(2, '0');
-              var minutes = createdAt.getMinutes().toString().padStart(2, '0');
-              var seconds = createdAt.getSeconds().toString().padStart(2, '0');
-              var formattedTime = hours + '시' + minutes + '분' ;
-            %>
-            <%= formattedTime %>
-          </p>
+          <div class="otherMsg">
+            <p class="otherchatMsg"><%= chats[i].content %></p>
+            <p class="otherchatTime">
+              <%
+                var createdAt = new Date(chats[i].createdAt);
+                var hours = createdAt.getHours().toString().padStart(2, '0');
+                var minutes = createdAt.getMinutes().toString().padStart(2, '0');
+                var seconds = createdAt.getSeconds().toString().padStart(2, '0');
+                var formattedTime = hours + '시' + minutes + '분' ;
+              %>
+              <%= formattedTime %>
+            </p>
+          </div>
         </div>
         <% } %> <% } %>
       </div>

@@ -281,6 +281,33 @@ exports.getClubPost = async (req, res) => {
       req.cookies.jwt,
       process.env.JWT_SECRET
     );
+
+    let preClick = await Club_post.findOne({
+      attributes: ["click"],
+      where: {
+        club_id: club_id,
+        post_id: post_id,
+      },
+    });
+    // console.log("preClick", typeof preClick);
+    preClick = preClick.click;
+    preClick = JSON.stringify(preClick);
+    // console.log("preClick", typeof preClick);
+
+    const newClick = await Club_post.update(
+      {
+        click: Number(preClick) + 1,
+      },
+      {
+        where: {
+          club_id: club_id,
+          post_id: post_id,
+        },
+      }
+    );
+
+    // console.log("newClick > ", newClick);
+
     // 게시글
     const clubPost = await Club_post.findOne({
       attributes: [
@@ -292,6 +319,7 @@ exports.getClubPost = async (req, res) => {
         "updatedAt",
         "club_id",
         "name",
+        "click",
       ],
       where: {
         club_id: club_id,
@@ -634,6 +662,7 @@ exports.createClubPost = async (req, res) => {
       image: image,
       userid_num: userid_num,
       name: getName.dataValues.name,
+      click: 0,
     });
     // console.log("생성 완료");
     res.send(newPost);
