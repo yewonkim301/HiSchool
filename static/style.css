@@ -327,6 +327,7 @@ img {
 }
 
 .btn-create {
+  cursor: pointer;
   padding: 0;
   width: 60px;
   height: 60px;
@@ -363,6 +364,7 @@ img {
 }
 
 .up-btn {
+  cursor: pointer;
   padding: 0;
   width: 60px;
   height: 60px;
