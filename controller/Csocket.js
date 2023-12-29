@@ -4,8 +4,6 @@ const roomList = [];
 exports.connection = (io, socket) => {
   console.log("접속 :", socket.id);
 
-  const namespace1 = io.of(`/chat`);
-
   //채팅방 목록 보내기
   socket.emit("roomList", roomList);
 
@@ -23,7 +21,7 @@ exports.connection = (io, socket) => {
     if (!roomList.includes(roomName)) {
       roomList.push(roomName);
       //갱신된 목록은 전체가 봐야함 <=== 나와 상대방만 봐야해서 이제 바꿔야함
-      namespace1.emit("roomList", roomList);
+      io.emit("roomList", roomList);
     }
     // const usersInRoom = getUsersInRoom(roomName);
     // io.to(roomName).emit('userList', usersInRoom);
@@ -40,9 +38,11 @@ exports.connection = (io, socket) => {
       from_nick: message.from_nick,
     });
     console.log("NEW CHAT MESSAGE>>>>>>>>>>>>", NewChatMessage.dm_content);
-    namespace1
-      .to(socket.room)
-      .emit("newMessage", NewChatMessage, NewChatMessage.from_nick);
+    io.to(socket.room).emit(
+      "newMessage",
+      NewChatMessage,
+      NewChatMessage.from_nick
+    );
   });
 
   socket.on("disconnect", () => {

@@ -206,7 +206,7 @@
         myButton.click();
       };
 
-      const socket = io(`/chat/:room`, {
+      const socket = io({
         transports: ["websocket"],
         upgrade: false,
       });
