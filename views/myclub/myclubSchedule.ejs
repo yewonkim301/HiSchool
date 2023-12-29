@@ -184,8 +184,6 @@
 
   <%- include('../component/header')%>
     <main class="">
-
-
       <div class="calendar-container">
         <div class="calendar-controls">
           <button onclick="moveMonth(-1)">이전</button>
@@ -323,6 +321,8 @@
     <!----------------------- 일정을 추가하는 모달 끝 ---------------------->
 
     <script>
+      let today=new Date();
+      let thisDate=`${today.getFullYear()}-${today.getMonth()+1}-${today.getDate()}`
 
       const addplus = document.getElementById('plus-button');
       // 서버로부터 받은 데이터를 JavaScript 변수에 할당
@@ -402,6 +402,7 @@
         document.getElementById("scheduleModal").style.display = "block";
         document.getElementById("saveBtn").style.display = "block";
         document.getElementById("resaveBtn").style.display = "none";
+        document.getElementById("modalDate").value = thisDate;
 
       }
 
@@ -414,6 +415,7 @@
 
       // 날짜 클릭했을때 기능 추가
       function onDateClick(dateStr) {
+        thisDate=dateStr;
         document.querySelectorAll(".calendar td").forEach((td) => {
           td.classList.remove("selected-date");
         });

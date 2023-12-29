@@ -414,4 +414,7 @@ router.get('/chatList', isLoggedIn, controllerPublic.getChatList);
 // Delete /chatList
 router.delete('/chatList/:room', isLoggedIn, controllerPublic.deleteChat);
 
+// Delete /mypageProfile/:nickname 회원 강퇴
+router.delete('/mypageProfile/:nickname', isLoggedIn, controllerPublic.deleteBadUser);
+
 module.exports = router;

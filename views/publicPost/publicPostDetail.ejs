@@ -68,6 +68,10 @@
          justify-content: space-between;
       }
 
+      .list {
+         padding: 24px 8px 10px 8px !important;
+      }
+
 
       .list-time {
          width: 100%;
@@ -105,12 +109,24 @@
       .name {
          margin-bottom: 50px;
          cursor: pointer;
+         display: flex;
+      }
+
+      .community-box {
+         width: 100%;
+         display: flex;
+         justify-content: space-between;
+         align-items: end;
       }
 
       .no-comment {
          width: 100%;
          text-align: center;
          margin-top: 100px;
+      }
+
+      .back-toggle {
+         display: none;
       }
    </style>
 </head>
@@ -123,14 +139,17 @@
             <div class="post-detail">
 
                <div class="name list">
-                  <span onclick="handleProfileLink()">
-                     <%= getPost.nickname %>
-                  </span>
+                  <div class="community-box">
+                     <h2>
+                        <%= getPost.title %>
+                     </h2>
+                     <p onclick="handleProfileLink()">
+                        <%= getPost.nickname %>
+                     </p>
+                  </div>
                </div>
 
-               <h2>
-                  <%= getPost.title %>
-               </h2>
+
                <p class="content">
                   <%= getPost.content %>
                      <!-- <i class="like-btn" onclick="likeBtn()">좋아요</i> -->
@@ -257,16 +276,18 @@
                      </div>
                   </div>
                   <!-- for문 끝 -->
+                  <div id="editCommentSection-<%= getPostComment[i].comment_id %>" class="back-toggle">
+                     <input type="text" id="editCommentInput" class="textField placeholder=" 댓글 수정">
+                     <button class="btn-sm btn-primary" onclick="submitEdit()">수정 완료</button>
+                  </div>
                   <% } %>
 
-                     <div id="editCommentSection" style="display: none;">
-                        <input type="text" id="editCommentInput" class="textField placeholder=" 댓글 수정">
-                        <button class="btn-sm btn-primary" onclick="submitEdit()">수정 완료</button>
-                     </div>
+                     
 
          </div>
          </div>
 
+         <%- include('../component/upbtn')%>
       </main>
       <script>
 
@@ -431,7 +452,7 @@
             console.log(editInput.value);
 
             // 수정 영역 보이기
-            document.getElementById('editCommentSection').style.display = 'block';
+            document.getElementById(`editCommentSection-${comment_id}`).classList.toggle("back-toggle");
          }
          function submitEdit() {
             console.log(`currentEditingCommentId >>> ${currentEditingCommentId}`);
@@ -457,7 +478,7 @@
                         commentContentElement.textContent = editedContent;
                      }
                      // 수정 영역 숨기기
-                     document.getElementById('editCommentSection').style.display = 'none';
+                     // document.getElementById('editCommentSection').style.display = 'none';
 
                      // 페이지 새로고침
                      location.reload();

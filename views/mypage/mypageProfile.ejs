@@ -67,7 +67,9 @@
             </div>
             <% } %>
           
-        
+            <% if ( userid_num === 1) { %>
+        <button type="button" onclick="deleteUser()">강퇴</button>
+        <% } %>
       </main>
 
 
@@ -87,30 +89,23 @@
       }
       
     </script>
-    <script>feather.replace()</script>
+    <script>feather.replace()
+    
+    function deleteUser() {
+      if (confirm("사용자를 강퇴시키겠습니까?")) {
+      axios({
+        method:"delete",
+        url: "/mypageProfile/<%= nickname%>"
+      })}
+      alert("사용자 강퇴에 성공했습니다.");
+      window.location.href = "/home";
+    }
+    
+    </script>
 
 
 </body>
 
 </html>
-
-
-      <!--  임시 코드 입니다 ,,, 소켓 확인용 -->
-      <script>
-        // const nick = document.getElementsByClassName("profile-name").innerText;
-        
-        // async function move() {
-        //   console.log("nick >>>>> ", nick)
-        //   await axios({
-        //     method : "get",
-        //     url: `/chat`,
-        //     params: {
-        //       nickname: `<%= data.nickname %>`,
-              
-        //     }
-        //   })
-          
-        //   window.location.href = '/chat';
-        // }
     
 
