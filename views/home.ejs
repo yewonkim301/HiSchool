@@ -63,29 +63,27 @@
 
       <h2>내 동아리</h2>
       <div class="">
-
-        <% if(typeof myClubs !=='undefined' && myClubs) { %>
-          <% if(myClubs.length==0) { %>
-            <!-- <span>가입한 동아리가 없어요</span> -->
+        <% if(getMyClubs) { %>
+          <% if(getMyClubs.length == 0) { %>
+            <span>가입한 동아리가 없어요</span>
             <% } else { %>
-              <% for(i=0; i < myClubs.length; i++) { %>
-                <a class="club-list" href="/myclubMain/<%= myClubs[i].club_id %>">
+              <% for(i=0; i < getMyClubs.length; i++) { %>
+                <a class="club-list" href="/myclubMain/<%= getMyClubs[i].club_id %>">
 
                   <img
-                    src="https://media.istockphoto.com/id/1125924193/ko/%EC%82%AC%EC%A7%84/%EB%BD%80%EB%A1%9C%EB%A1%9C-%EC%9E%91%EC%9D%80-eudyptula-korora-%EB%A7%88-%EC%98%A4%EB%A6%AC%EC%97%90.jpg?s=1024x1024&w=is&k=20&c=zleEMlDUlF8bbvVN4V3AU9eAGqycmZL6SXwIipK3Uz8="
+                    src="<%= getMyClubs[i].club_img %>"
                     alt="Description of the image">
                   <div class="club-box">
                     <h3 class="list-title container-title">
-                      <%= myClubs[i].club_name %>
+                      <%= getMyClubs[i].club_name %>
                     </h3>
                     <p class="list-content description">
-                      지역 : <%= myClubs[i].location %>
+                      지역 : <%= getMyClubs[i].location %>
                     </p>
                     <p class="list-content description">
-                      동아리 설명 : <%= myClubs[i].description %>
+                      동아리 설명 : <%= getMyClubs[i].description %>
                     </p>
                   </div>
-
       </div>
       </a>
       <% } %>
@@ -105,32 +103,115 @@
               <br>
 
               <div class="list-container">
-                <h2 class="label">전체 동아리</h2>
-                <% if(typeof allClubs !=='undefined' && allClubs) { %>
-                  <% for(i=0; i < allClubs.length; i++) { %>
-                    <a class=" card-container" href="/clubDetail/<%= allClubs[i].club_id %>">
-                      <div class="card-image">
-                        <img
-                          src="https://media.istockphoto.com/id/1125924193/ko/%EC%82%AC%EC%A7%84/%EB%BD%80%EB%A1%9C%EB%A1%9C-%EC%9E%91%EC%9D%80-eudyptula-korora-%EB%A7%88-%EC%98%A4%EB%A6%AC%EC%97%90.jpg?s=1024x1024&w=is&k=20&c=zleEMlDUlF8bbvVN4V3AU9eAGqycmZL6SXwIipK3Uz8="
-                          alt="Description of the image">
-                      </div>
-                      <div class="card-content">
-                        <h3 class="list-title container-title">
-                          <%= allClubs[i].club_name %>
-                        </h3>
-                        <p class="list-content card-text">
-                          <%= allClubs[i].location %>
-                        </p>
-                        <p class="list-content card-text">
-                          <%= allClubs[i].description %>
-                        </p>
-                      </div>
-                    </a>
-                    <% } %>
+                <h2 class="label">내 동아리 인기글</h2>
+                <div class="">
+                  <% if(clubPosts) { %>
+                    <% if(clubPosts.length == 0) { %>
+                      <span>가입한 동아리가 없어요</span>
+                      <% } else { %>
+                        <% for(i=0; i < clubPosts.length; i++) { %>
+                          <a class="clubPost-list" href="/myclubPostDetail/<%= clubPosts[i].club_id %>/<%= clubPosts[i].post_id %>">
+                            <div class="club-box">
+                              <h3 class="list-title container-title">
+                                <%= clubPosts[i].title %>
+                              </h3>
+                              <p class="list-content description">
+                                <%= clubPosts[i].content %>
+                              </p>
+                            </div>
+                </div>
+                </a>
+                <% } %>
+                  <% } %>
+                    <% } else { %>
+                      <span>불러오기 실패</span>
                       <% } %>
+                        <br />
+          
               </div>
-              <div class="btnCenter"><button class="btn-sm btn-neutral" onclick="toLink('/clubMain')">전체보기</button>
+
+              <div class="list-container">
+                <h2 class="label">자유게시판 갤러리</h2>
+                <div class="">
+                  <% if(publicPostImg) { %>
+                    <% if(publicPostImg.length == 0) { %>
+                      <span>자유게시판에 업데이트된 사진이 없습니다.</span>
+                      <% } else { %>
+                        <% for(i=0; i < publicPostImg.length; i++) { %>
+                          <a class="clubPost-list" href="/publicPostDetail/<%= publicPostImg[i].post_id %>">
+                            <div class="club-box">
+                              <img
+                    src="<%= publicPostImg[i].image %>"
+                    alt="Description of the image">
+                            </div>
+                </div>
+                </a>
+                <% } %>
+                  <% } %>
+                    <% } else { %>
+                      <span>불러오기 실패</span>
+                      <% } %>
+                        <br />
+          
               </div>
+              </div>
+              </div>
+
+              <div class="list-container">
+                <h2 class="label"><%= name.name %>님을 위한 오늘의 추천 동아리</h2>
+                <div class="">
+                  <% if(recommendClub) { %>
+                    <% if(recommendClub.length == 0) { %>
+                      <span>아직 개설된 동아리가 없습니다.</span>
+                      <% } else { %>
+                        <% for(i=0; i < recommendClub.length; i++) { %>
+                          <a class="club-list" href="/clubDetail/<%= recommendClub[i].club_id %>">
+          
+                            <img
+                              src="<%= recommendClub[i].club_img %>"
+                              alt="Description of the image">
+                            <div class="club-box">
+                              <h3 class="list-title container-title">
+                                <%= recommendClub[i].club_name %>
+                              </h3>
+                              <p class="list-content description">
+                                동아리 설명 : <%= recommendClub[i].description %>
+                              </p>
+                            </div>
+                </div>
+                </a>
+                <% } %>
+                  <% } %>
+                    <% } else { %>
+                      <span>불러오기 실패</span>
+                      <% } %>
+                        <br />
+              </div>
+
+              <div class="list-container">
+                <h2 class="label">자유 게시판</h2>
+                <% if(publicPosts) { %>
+                  <% if(publicPosts.length == 0) { %>
+                    <span>자유게시판에 작성된 글이 없습니다.</span>
+                    <% } else { %>
+                      <% for(i=0; i < publicPosts.length; i++) { %>
+                        <a class="club-list" href="/publicPostDetail/<%= publicPosts[i].post_id %>">
+                          <div class="club-box">
+                            <h3 class="list-title container-title">
+                              <%= publicPosts[i].title %>
+                            </h3>
+                            <p class="list-content description">
+                             <%= publicPosts[i].content %>
+                            </p>
+                          </div>
+              </div>
+              </a>
+              <% } %>
+                <% } %>
+                  <% } else { %>
+                    <span>불러오기 실패</span>
+                    <% } %>
+                      <br />
               </div>
 
 
