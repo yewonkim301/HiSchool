@@ -1282,8 +1282,6 @@ exports.getChatList = async (req, res) => {
     },
   });
 
-  // console.log("Cpublic getChatList myname >>>>>>>>",myname);
-
   const findMyChat = await Dm.findAll({
     attributes: ["room_name"], // 중복을 제거하고자 하는 열 지정
     raw: true, // 결과를 plain objects로 가져오기
@@ -1292,14 +1290,28 @@ exports.getChatList = async (req, res) => {
       room_name :{[Sequelize.Op.like] : `%${myname.nickname}%`},
     },
   });
-  // if(findMyChat){
-  //   isFound = "true";
-  // } else{
-  //   isFound = "true";
-  // }
-  // const chatList = [];
-  // for(element of findMy)
-  console.log("Cpublic getChatList findMyChat >>>>>>>>",findMyChat);
 
-  res.render("chatList", findMyChat);
+  // 내가 속한 클럽 찾기
+  // club 이름 가져오기
+  const myclubs = await Club_members.findAll({
+    where: {
+      userid_num: userid_num,
+      isMember: "true",
+    },
+  });
+  let myclubList = [];
+  for (let i = 0; i < myclubs.length; i++) {
+    myclubList.push(myclubs[i].club_id);
+  }
+
+  const getMyClub = await Club.findAll({
+    attributes: ["club_name"],
+    where:{
+      club_id : myclubList
+    }
+  });
+
+  res.render("chatList", {findMyChat, getMyClub, myname});
 };
+
+// DELETE /myChatList
