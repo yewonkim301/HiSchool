@@ -183,8 +183,6 @@
         display: flex;
         flex-direction: column;
       }
-
-
     </style>
   </head>
 
@@ -219,7 +217,7 @@
             value="<%= userid_num %>"
             style="display: none"
           />
-          <button type="submit" id="btn">만들기</button>
+          <button type="submit" id="btn" style="display: none">만들기</button>
         </form>
         <!-- <ul id="lists"></ul> -->
       </div>
@@ -299,7 +297,9 @@
             <p class="otherchatName">${newClubChat.from_name}</p>
             <p class="otherchatMsg">${newClubChat.content}</p>
           </div>
-          <p class="otherchatTime">${convertToFormattedTime(newClubChat.createdAt)}</p>`;
+          <p class="otherchatTime">${convertToFormattedTime(
+            newClubChat.createdAt
+          )}</p>`;
         }
         // console.log("div >>>>", div);
 
