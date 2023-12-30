@@ -217,11 +217,9 @@
                            <div>
 
                               <% if (getPostComment[i].userid_num===userid_num) { %>
-                                 <button onclick="deletePostComment('<%= getPostComment[i].comment_id %>')"><i
-                                       data-feather="trash-2"></i></button>
+                                 <button onclick="deletePostComment('<%= getPostComment[i].comment_id %>')"><img width="24" height="24" src="https://img.icons8.com/fluency/48/filled-trash.png" alt="filled-trash"/></button>
                                  <button
-                                    onclick="showEditField('<%= getPostComment[i].comment_id %>', '<%= getPostComment[i].comment %>')"><i
-                                       data-feather="edit"></i></button>
+                                    onclick="showEditField('<%= getPostComment[i].comment_id %>', '<%= getPostComment[i].comment %>')"><img width="24" height="24" src="https://img.icons8.com/fluency/48/create-new.png" alt="create-new"/></button>
                                  <% } %>
                            </div>
                      </div>
