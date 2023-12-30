@@ -194,6 +194,7 @@ input[type='number'] {
   p {
     font-size: 1rem;
     font-weight: 400;
+    line-height: 1.5;
     color: var(--color-gray-500);
   }
 }
@@ -414,6 +415,9 @@ label {
 }
 
 .keyword {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
   padding: 8px 0;
 }
 
@@ -798,11 +802,13 @@ input[type='checkbox']:checked + label:before {
 }
 .list-title {
   font-size: 1rem;
+  line-height: 1.5;
   font-weight: 600;
   color: var(--color-gray-600);
 }
 .list-content {
   font-size: 0.9rem;
+  line-height: 1.5;
   color: var(--color-gray-400);
 }
 
@@ -1029,7 +1035,6 @@ input[type='checkbox']:checked + label:before {
 /* test용 코드(수정 필요)---------------------------------------------- */
 .hashtag {
   padding: 8px 12px;
-  margin-right: 8px;
   border-radius: 4px;
   background-color: var(--color-primary-50);
   font-size: 0.95rem;
