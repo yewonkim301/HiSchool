@@ -184,7 +184,7 @@
     <!-- <div class="bg"></div> -->
 
     <div class="bg"></div>
-    <div class="container">
+    <div class="container" style="background-color: var(--color-primary-100)">
       <!-- <h1>동아리 채팅</h1> -->
 
       <div id="main">
@@ -194,18 +194,21 @@
             id="roomName"
             placeholder="채팅방 만들기"
             value="<%= club_id %>"
+            style="display: none"
           />
           <input
             type="text"
             id="userName"
             placeholder="사용자 이름 입력"
             value="<%= name %>"
+            style="display: none"
           />
           <input
             type="text"
             id="userid_num"
             placeholder="사용자 이름 입력"
             value="<%= userid_num %>"
+            style="display: none"
           />
           <button type="submit" id="btn">만들기</button>
         </form>
@@ -214,35 +217,24 @@
       <div id="body" hidden>
         <div id="msg">
           <div id="notice"></div>
-          <%
-function formatTime(dateString) {
-  var date = new Date(dateString);
-  var hours = date.getHours().toString().padStart(2, '0');
-  var minutes = date.getMinutes().toString().padStart(2, '0');
-  return hours + '시 ' + minutes + '분';
-}
-%>
-
-<% for (i = 0; i < chats.length; i++) { %>
-  <% if (chats[i].userid_num === userid_num) { %>
-    <div class="my-chat">
-      <p class="mychatTime">
-        <%= formatTime(chats[i].createdAt) %>
-      </p>
-      <p class="mychatMsg"><%= chats[i].content %></p>
-    </div>
-  <% } else { %>
-    <div class="other-chat">
-      <p class="otherchatName"><%= chats[i].from_name %></p>
-      <div class="otherMsg">
-        <p class="otherchatMsg"><%= chats[i].content %></p>
-        <p class="otherchatTime">
-          <%= formatTime(chats[i].createdAt) %>
-        </p>
-      </div>
-    </div>
-  <% } %>
-<% } %>
+          <% function formatTime(dateString) { var date = new Date(dateString);
+          var hours = date.getHours().toString().padStart(2, '0'); var minutes =
+          date.getMinutes().toString().padStart(2, '0'); return hours + '시 ' +
+          minutes + '분'; } %> <% for (i = 0; i < chats.length; i++) { %> <% if
+          (chats[i].userid_num === userid_num) { %>
+          <div class="my-chat">
+            <p class="mychatTime"><%= formatTime(chats[i].createdAt) %></p>
+            <p class="mychatMsg"><%= chats[i].content %></p>
+          </div>
+          <% } else { %>
+          <div class="other-chat">
+            <p class="otherchatName"><%= chats[i].from_name %></p>
+            <div class="otherMsg">
+              <p class="otherchatMsg"><%= chats[i].content %></p>
+              <p class="otherchatTime"><%= formatTime(chats[i].createdAt) %></p>
+            </div>
+          </div>
+          <% } %> <% } %>
         </div>
         <form id="chat">
           <input
@@ -283,13 +275,15 @@ function formatTime(dateString) {
         console.log("newMessage > ", newClubChat);
 
         const div = document.createElement("div");
-        div.classList.add("chatMsg")
+        div.classList.add("chatMsg");
         //   const p = document.createElement("p");
         if (myName === newClubChat.from_name) {
           //내가입력한 텍스트
           div.classList.add("my-chat");
-          
-          div.innerHTML = `<p class="mychatTime">${convertToFormattedTime(newClubChat.createdAt)}</p><p class="mychatMsg">${newClubChat.content}</p>`;
+
+          div.innerHTML = `<p class="mychatTime">${convertToFormattedTime(
+            newClubChat.createdAt
+          )}</p><p class="mychatMsg">${newClubChat.content}</p>`;
         } else {
           div.classList.add("other-chat");
           div.innerHTML = `<p class="otherchatName">${newClubChat.from_name}</p><p class="otherchatMsg">${newClubChat.content}</p><p class="mychatTime">${newClubChat.createdAt}</p>`;
@@ -302,10 +296,7 @@ function formatTime(dateString) {
         msg.appendChild(div);
         // msg.scrollTop = msg.scrollHeight;
         scrollToBottom();
-            
       });
-
-
 
       //입장 메세지 이벤트
       socket.on("notice", (message) => {
@@ -387,14 +378,12 @@ function formatTime(dateString) {
         message.value = "";
         scrollToBottom();
       });
-
-      
     </script>
 
     <script>
       window.onload = function () {
         document.getElementById("btn").click();
-        setTimeout(scrollToBottom(), 200)
+        setTimeout(scrollToBottom(), 200);
         scrollToBottom();
       };
 
@@ -409,28 +398,17 @@ function formatTime(dateString) {
         }
       }
 
+      function convertToFormattedTime(isoString) {
+        var date = new Date(isoString);
+        var hours = date.getHours().toString().padStart(2, "0");
+        var minutes = date.getMinutes().toString().padStart(2, "0");
+        return hours + "시 " + minutes + "분";
+      }
 
-
-
-
-
-
-
-function convertToFormattedTime(isoString) {
-    var date = new Date(isoString);
-    var hours = date.getHours().toString().padStart(2, '0');
-    var minutes = date.getMinutes().toString().padStart(2, '0');
-    return hours + '시 ' + minutes + '분';
-}
-
-
-function scrollToBottom() {
-    const chatContainer = document.querySelector("#msg");
-    chatContainer.scrollTop = chatContainer.scrollHeight;
-  }
-
-
-
+      function scrollToBottom() {
+        const chatContainer = document.querySelector("#msg");
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
     </script>
   </body>
 </html>
