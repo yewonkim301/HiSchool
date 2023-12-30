@@ -125,12 +125,14 @@
 
       .other-chat {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         justify-content: start;
         padding: 2px 0px;
       }
 
       .other-chat p {
+        display: flex;
+        flex-direction: row;
         margin: 0;
         padding: 10px;
         background: white;
@@ -176,6 +178,13 @@
         margin: 0;
         /* padding: 0; */
       }
+
+      .chatGroup {
+        display: flex;
+        flex-direction: column;
+      }
+
+
     </style>
   </head>
 
@@ -292,7 +301,11 @@ function formatTime(dateString) {
           div.innerHTML = `<p class="mychatTime">${convertToFormattedTime(newClubChat.createdAt)}</p><p class="mychatMsg">${newClubChat.content}</p>`;
         } else {
           div.classList.add("other-chat");
-          div.innerHTML = `<p class="otherchatName">${newClubChat.from_name}</p><p class="otherchatMsg">${newClubChat.content}</p><p class="otherchatTime">${convertToFormattedTime(newClubChat.createdAt)}</p>`;
+          div.innerHTML = `<div class="chatGroup">
+            <p class="otherchatName">${newClubChat.from_name}</p>
+            <p class="otherchatMsg">${newClubChat.content}</p>
+          </div>
+          <p class="otherchatTime">${convertToFormattedTime(newClubChat.createdAt)}</p>`;
         }
         // console.log("div >>>>", div);
 
