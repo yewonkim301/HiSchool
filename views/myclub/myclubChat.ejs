@@ -262,14 +262,11 @@
         myButton.click();
         scrollToBottom();
       };
-      const socket = io.connect(
-        `http://<%=process.env.AWS_ADDRESS%>:<%=process.env.PORT%>/namespace2`,
-        {
-          path: "/socket.io",
-          transports: ["websocket"],
-          upgrade: false,
-        }
-      );
+      const socket = io.connect(`<%=process.env.AWS_ADDRESS%>/namespace2`, {
+        path: "/socket.io",
+        transports: ["websocket"],
+        upgrade: false,
+      });
       const roomForm = document.querySelector("#room");
       const chatForm = document.querySelector("#chat");
       const msg = document.querySelector("#msg");
