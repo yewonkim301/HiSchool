@@ -1,9 +1,9 @@
 const controller = require("../controller/Csocket");
 const Ccontroller = require("../controller/CclubSocket");
 
-exports.startSocket = (io) => {
-  io.on("connection", (socket) => {
-    controller.connection(io, socket);
+exports.startSocket = (io2) => {
+  io2.on("connection", (socket) => {
+    controller.connection(io2, socket);
   });
 };
 
