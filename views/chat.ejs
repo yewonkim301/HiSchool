@@ -206,7 +206,7 @@
         myButton.click();
       };
 
-      const socket = io.connect(`<%=process.env.AWS_ADDRESS%>/namespace1`, {
+      const socket = io.connect(`ws:<%=process.env.AWS_ADDRESS%>/namespace1`, {
         path: "/socket.io",
         transports: ["websocket"],
         upgrade: false,
