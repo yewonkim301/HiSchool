@@ -262,7 +262,7 @@
         myButton.click();
         scrollToBottom();
       };
-      const socket = io.connect(`<%=process.env.AWS_ADDRESS%>/namespace2`, {
+      const socket = io.connect(`<%=process.env.AWS_ADDRESS2%>/namespace2`, {
         path: "/socket.io",
         transports: ["websocket"],
         upgrade: false,
