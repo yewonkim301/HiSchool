@@ -11,7 +11,7 @@ exports.connection = (namespace1, socket) => {
   socket.on("create", async (roomName2, userName, cb) => {
     //join(방이름) 해당 방이름으로 없다면 생성. 존재하면 입장
     //socket.rooms에 socket.id값과 방이름 확인가능
-    socket.to(roomName2).emit("notice2", `${userName}님이 입장하셨습니다`);
+    socket.to(roomName2).emit("notice", `${userName}님이 입장하셨습니다`);
     socket.join(roomName2);
     //socket은 객체이며 원하는 값을 할당할 수 있음
     socket.room = roomName2;
@@ -28,7 +28,7 @@ exports.connection = (namespace1, socket) => {
     cb();
   });
   //================ 위 까지 방만들기 =======================
-  socket.on("sendMessage2", async (message) => {
+  socket.on("sendMessage", async (message) => {
     console.log(">>>>>>>>>>>", message);
     console.log("Csocket Message From Nick >>>>", message.from_nick);
     const NewChatMessage = await Dm.create({
@@ -40,10 +40,10 @@ exports.connection = (namespace1, socket) => {
     console.log("NEW CHAT MESSAGE>>>>>>>>>>>>", NewChatMessage.dm_content);
     namespace1
       .to(socket.room)
-      .emit("newMessage2", NewChatMessage, NewChatMessage.from_nick);
+      .emit("newMessage", NewChatMessage, NewChatMessage.from_nick);
   });
 
-  socket.on("disconnect2", () => {
+  socket.on("disconnect", () => {
     if (socket.room) {
       socket.leave(socket.room);
       console.log("연결 해제");

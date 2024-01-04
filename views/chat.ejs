@@ -220,7 +220,7 @@
       let enter;
 
       //메세지 띄우기
-      socket.on("newMessage2", (message, nick) => {
+      socket.on("newMessage", (message, nick) => {
         const div = document.createElement("div");
         const p = document.createElement("p");
         if (myName === nick) {
@@ -279,7 +279,7 @@
         });
       });
       //입장 메세지 이벤트
-      socket.on("notice2", (message) => {
+      socket.on("notice", (message) => {
         // 한번 입장 했었으면 다시 안뜨게
         if (enter !== message) {
           enter = message;
@@ -315,7 +315,7 @@
           userid_num: `<%= userid_num %>`,
         };
         console.log("chat msg from nick >>>>>>", msg.from_nick);
-        socket.emit("sendMessage2", msg, myName);
+        socket.emit("sendMessage", msg, myName);
         message.value = "";
       });
     </script>
