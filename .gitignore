@@ -1,6 +1,1 @@
 node_modules
-.DS_Store
-.env
-swagger-output.json
-DMchatList.ejs
-DMmypageProfile.ejs
