@@ -3,7 +3,7 @@ const SocketIO = require("socket.io");
 const express = require("express");
 const app = express();
 const server = http.createServer(app);
-const server2 = http.createServer(app);
+// const server2 = http.createServer(app);
 const path = require("path");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
@@ -24,14 +24,14 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const PORT = process.env.PORT;
-const PORT2 = process.env.PORT2;
+// const PORT2 = process.env.PORT2;
 
 const io = SocketIO(server, { path: "/socket.io" });
-const io2 = SocketIO(server2, { path: "/socket.io" });
+// const io2 = SocketIO(server2, { path: "/socket.io" });
 // const io2 = SocketIO(server2);
 
 const namespace1 = io.of("/namespace1");
-const namespace2 = io2.of("/namespace2");
+const namespace2 = io.of("/namespace2");
 
 app.set("view engine", "ejs");
 app.set("views", "./views");
@@ -163,7 +163,7 @@ db.sequelize.sync({ force: false }).then(() => {
   server.listen(PORT, () => {
     console.log(`${PORT}번 포트에서 실행중`);
   });
-  server2.listen(PORT2, () => {
-    console.log(`${PORT2}번 포트에서 실행중`);
-  });
+  // server2.listen(PORT2, () => {
+  //   console.log(`${PORT2}번 포트에서 실행중`);
+  // });
 });
