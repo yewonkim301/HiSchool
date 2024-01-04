@@ -200,16 +200,21 @@
     </div>
 
     <script>
+      const dotenv = require("dotenv");
+      dotenv.config();
       window.onload = async function () {
         // 버튼 요소를 찾아서 클릭 이벤트 발생
         var myButton = document.getElementById("btn");
         myButton.click();
       };
 
-      const socket = io({
-        transports: ["websocket"],
-        upgrade: false,
-      });
+      const socket = io(
+        `http://<%= process.env.AWS_ADDRESS %>:<%= process.env.PORT2 %>`,
+        {
+          transports: ["websocket"],
+          upgrade: false,
+        }
+      );
       const roomForm = document.querySelector("#room");
       const chatForm = document.querySelector("#chat");
       const msg = document.querySelector("#msg");

@@ -217,9 +217,13 @@
                            <div>
 
                               <% if (getPostComment[i].userid_num===userid_num) { %>
-                                 <button onclick="deletePostComment('<%= getPostComment[i].comment_id %>')"><img width="24" height="24" src="https://img.icons8.com/fluency/48/filled-trash.png" alt="filled-trash"/></button>
+                                 <button onclick="deletePostComment('<%= getPostComment[i].comment_id %>')"><img
+                                       width="24" height="24" src="https://img.icons8.com/fluency/48/filled-trash.png"
+                                       alt="filled-trash" /></button>
                                  <button
-                                    onclick="showEditField('<%= getPostComment[i].comment_id %>', '<%= getPostComment[i].comment %>')"><img width="24" height="24" src="https://img.icons8.com/fluency/48/create-new.png" alt="create-new"/></button>
+                                    onclick="showEditField('<%= getPostComment[i].comment_id %>', '<%= getPostComment[i].comment %>')"><img
+                                       width="24" height="24" src="https://img.icons8.com/fluency/48/create-new.png"
+                                       alt="create-new" /></button>
                                  <% } %>
                            </div>
                      </div>
@@ -280,7 +284,7 @@
                   </div>
                   <% } %>
 
-                     
+
 
          </div>
          </div>
@@ -290,7 +294,6 @@
       <script>
 
          const abc = JSON.parse(JSON.stringify('<%=getPostCommentLike%>'));
-         console.log('<%=getPostCommentLike%>');
          const comment = document.getElementById('comment');
 
          const post_id = "<%=getPost.post_id%>";
@@ -470,8 +473,6 @@
 
                      // 댓글 내용만 업데이트
                      const commentContentElement = document.querySelector(`.comment-${currentEditingCommentId}`);
-                     console.log(commentContentElement);
-                     console.log('<%=getPostComment%>');
                      if (commentContentElement) {
                         commentContentElement.textContent = editedContent;
                      }
