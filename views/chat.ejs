@@ -149,7 +149,7 @@
       <form id="room">
         <input
           type="text"
-          id="roomName"
+          id="roomName2"
           placeholder="채팅방 만들기"
           value="<%= room %>"
         />
@@ -200,21 +200,17 @@
     </div>
 
     <script>
-      const dotenv = require("dotenv");
-      dotenv.config();
       window.onload = async function () {
         // 버튼 요소를 찾아서 클릭 이벤트 발생
         var myButton = document.getElementById("btn");
         myButton.click();
       };
 
-      const socket = io(
-        `http://<%= process.env.AWS_ADDRESS %>:<%= process.env.PORT2 %>`,
-        {
-          transports: ["websocket"],
-          upgrade: false,
-        }
-      );
+      const socket = io.connect("http://localhost:8000/namespace1", {
+        path: "/socket.io",
+        transports: ["websocket"],
+        upgrade: false,
+      });
       const roomForm = document.querySelector("#room");
       const chatForm = document.querySelector("#chat");
       const msg = document.querySelector("#msg");
@@ -224,7 +220,7 @@
       let enter;
 
       //메세지 띄우기
-      socket.on("newMessage", (message, nick) => {
+      socket.on("newMessage2", (message, nick) => {
         const div = document.createElement("div");
         const p = document.createElement("p");
         if (myName === nick) {
@@ -283,7 +279,7 @@
         });
       });
       //입장 메세지 이벤트
-      socket.on("notice", (message) => {
+      socket.on("notice2", (message) => {
         // 한번 입장 했었으면 다시 안뜨게
         if (enter !== message) {
           enter = message;
@@ -298,7 +294,7 @@
       ///폼 이벤트
       roomForm.addEventListener("submit", (e) => {
         e.preventDefault();
-        socket.emit("create", roomName.value, userName.value, () => {
+        socket.emit("create", roomName2.value, userName.value, () => {
           const main = document.querySelector("#main");
           const body = document.querySelector("#body");
           main.hidden = true;
@@ -319,7 +315,7 @@
           userid_num: `<%= userid_num %>`,
         };
         console.log("chat msg from nick >>>>>>", msg.from_nick);
-        socket.emit("sendMessage", msg, myName);
+        socket.emit("sendMessage2", msg, myName);
         message.value = "";
       });
     </script>
