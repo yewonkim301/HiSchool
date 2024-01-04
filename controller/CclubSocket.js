@@ -24,7 +24,7 @@ let chats;
 //   }
 // };
 
-exports.connection = async (io, socket) => {
+exports.connection = async (namespace2, socket) => {
   console.log("접속 :", socket.id);
 
   //채팅방 목록 보내기
@@ -87,7 +87,7 @@ exports.connection = async (io, socket) => {
     // const time = Club_chat
     console.log("newClubChat", newClubChat);
     // io.to(socket.room).emit("newMessage", message.message, message.nick, false);
-    io.to(socket.room).emit("newMessage", newClubChat, false);
+    namespace2.to(socket.room).emit("newMessage", newClubChat, false);
   });
 
   socket.on("disconnect", () => {
@@ -95,22 +95,4 @@ exports.connection = async (io, socket) => {
       socket.leave(socket.room);
     }
   });
-
-  // function getUsersInRoom(room) { <== 귓속말 기능은 필요 없기 때문에 제거
-  //     const users = [];
-  //     //채팅룸에 접속한 socket.id값을 찾아야함
-  //     const clients = io.sockets.adapter.rooms.get(room);
-  //     //console.log(clients);
-  //     if (clients) {
-  //         clients.forEach((socketId) => {
-  //             //io.sockets.sockets: socket.id가 할당한 변수들의 객체값
-  //             const userSocket = io.sockets.sockets.get(socketId);
-  //             //개별 사용자에게 메세지를 보내기 위해서 객체형태로 변경
-  //             //key: 소켓아이디, name:이름
-  //             const info = { name: userSocket.user, key: socketId };
-  //             users.push(info);
-  //         });
-  //     }
-  //     return users;
-  // }
 };
