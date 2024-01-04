@@ -3,6 +3,7 @@ const SocketIO = require("socket.io");
 const express = require("express");
 const app = express();
 const server = http.createServer(app);
+const server2 = http.createServer(app);
 const path = require("path");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
@@ -23,8 +24,10 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const PORT = process.env.PORT;
+const PORT2 = process.env.PORT2;
 
 const io = SocketIO(server);
+const io2 = SocketIO(server2);
 
 app.set("view engine", "ejs");
 app.set("views", "./views");
@@ -73,11 +76,10 @@ app.use("/", indexRouter);
 let flag = true;
 
 // DM
-/*
 app.get("/chat/:room", isLoggedIn, async (req, res) => {
   if (flag) {
     flag = false;
-    socketRouter.startSocket(io);
+    socketRouter.startSocket(io2);
   }
   // 상대방 닉네임
   // const {nickname} = req.query;
@@ -110,7 +112,6 @@ app.get("/chat/:room", isLoggedIn, async (req, res) => {
     otherNick,
   });
 });
-*/
 
 // Club
 
@@ -156,5 +157,8 @@ app.get("*", (req, res) => {
 db.sequelize.sync({ force: false }).then(() => {
   server.listen(PORT, () => {
     console.log(`${PORT}번 포트에서 실행중`);
+  });
+  server2.listen(PORT2, () => {
+    console.log(`${PORT2}번 포트에서 실행중`);
   });
 });

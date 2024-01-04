@@ -183,8 +183,6 @@
         display: flex;
         flex-direction: column;
       }
-
-
     </style>
   </head>
 
@@ -264,10 +262,13 @@
         myButton.click();
         scrollToBottom();
       };
-      const socket = io({
-        transports: ["websocket"],
-        upgrade: false,
-      });
+      const socket = io(
+        `http://<%= process.env.AWS_ADDRESS %>:<%= process.env.PORT %>`,
+        {
+          transports: ["websocket"],
+          upgrade: false,
+        }
+      );
       const roomForm = document.querySelector("#room");
       const chatForm = document.querySelector("#chat");
       const msg = document.querySelector("#msg");
@@ -299,7 +300,9 @@
             <p class="otherchatName">${newClubChat.from_name}</p>
             <p class="otherchatMsg">${newClubChat.content}</p>
           </div>
-          <p class="otherchatTime">${convertToFormattedTime(newClubChat.createdAt)}</p>`;
+          <p class="otherchatTime">${convertToFormattedTime(
+            newClubChat.createdAt
+          )}</p>`;
         }
         // console.log("div >>>>", div);
 
