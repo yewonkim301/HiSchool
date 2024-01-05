@@ -220,7 +220,7 @@
       let enter;
 
       //메세지 띄우기
-      socket.on("newMessage", (message, nick) => {
+      socket.on("newMessage2", (message, nick) => {
         const div = document.createElement("div");
         const p = document.createElement("p");
         if (myName === nick) {
@@ -279,7 +279,7 @@
         });
       });
       //입장 메세지 이벤트
-      socket.on("notice", (message) => {
+      socket.on("notice2", (message) => {
         // 한번 입장 했었으면 다시 안뜨게
         if (enter !== message) {
           enter = message;
@@ -294,6 +294,7 @@
       ///폼 이벤트
       roomForm.addEventListener("submit", (e) => {
         e.preventDefault();
+        console.log(socket);
         socket.emit("create", roomName2.value, userName.value, () => {
           const main = document.querySelector("#main");
           const body = document.querySelector("#body");
@@ -315,8 +316,18 @@
           userid_num: `<%= userid_num %>`,
         };
         console.log("chat msg from nick >>>>>>", msg.from_nick);
-        socket.emit("sendMessage", msg, myName);
+        socket.emit("sendMessage2", msg, myName);
         message.value = "";
+      });
+
+      window.addEventListener("beforeunload", function () {
+        // socket.disconnect();
+        // console.log("서버와의 연결이 해제되었습니다.");
+        socket.on("disconnect", () => {
+          // 연결이 해제되었을 때 수행할 작업을 여기에 작성
+          console.log("서버와의 연결이 해제되었습니다.");
+          // 추가적인 작업 수행 가능
+        });
       });
     </script>
   </body>
