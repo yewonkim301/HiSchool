@@ -262,13 +262,11 @@
         myButton.click();
         scrollToBottom();
       };
-      const socket = io(
-        `http://<%= process.env.AWS_ADDRESS %>:<%= process.env.PORT %>`,
-        {
-          transports: ["websocket"],
-          upgrade: false,
-        }
-      );
+      const socket = io.connect(`<%=process.env.AWS_ADDRESS2%>/namespace2`, {
+        path: "/socket.io",
+        transports: ["websocket"],
+        upgrade: false,
+      });
       const roomForm = document.querySelector("#room");
       const chatForm = document.querySelector("#chat");
       const msg = document.querySelector("#msg");
@@ -337,6 +335,7 @@
         console.log(roomName.value, userName.value);
 
         socket.emit("create", roomName.value, userName.value, () => {
+          console.log("create");
           const main = document.querySelector("#main");
           const body = document.querySelector("#body");
           main.hidden = true;
@@ -393,6 +392,16 @@
         socket.emit("sendMessage", msg);
         message.value = "";
         scrollToBottom();
+      });
+
+      window.addEventListener("popstate", function () {
+        socket.disconnect();
+        console.log("서버와의 연결이 해제되었습니다.");
+        // socket.on("disconnect", () => {
+        //   // 연결이 해제되었을 때 수행할 작업을 여기에 작성
+        //   console.log("서버와의 연결이 해제되었습니다.");
+        //   // 추가적인 작업 수행 가능
+        // });
       });
     </script>
 
