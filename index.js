@@ -89,7 +89,7 @@ app.get("/myclubChat/:club_id", isLoggedIn, async (req, res) => {
 
   if (flag) {
     flag = false;
-    socketRouter.startClubSocket(io);
+    socketRouter.startClubSocket(namespace2);
   }
 
   const chats = await Club_chat.findAll({

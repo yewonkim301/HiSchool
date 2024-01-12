@@ -14,6 +14,7 @@ exports.connection = async (io, socket) => {
 
   //채팅방 만들기 생성
   socket.on("create", async (roomName, userName, cb) => {
+    console.log("group socket create >", socket);
     //join(방이름) 해당 방이름으로 없다면 생성. 존재하면 입장
     //socket.rooms에 socket.id값과 방이름 확인가능
     socket.to(roomName).emit("notice", `${userName}님이 입장하셨습니다`);
