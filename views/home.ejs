@@ -343,7 +343,7 @@
         <span>가입한 동아리가 없어요</span>
         <% } else { %>
         <% for(i=0; i < recommendClub.length; i++) { %>
-        <a class="club-list2" href="/myclubMain/<%= recommendClub[i].club_id %>">
+        <a class="club-list2" href="/clubDetail/<%= recommendClub[i].club_id %>">
           <img src="<%= recommendClub[i].club_img %>" alt="Description of the image">
           <div class="club-box">
             <p class="list-content description location">
