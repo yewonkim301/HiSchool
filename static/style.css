@@ -350,7 +350,7 @@ img {
   cursor: pointer;
 }
 .btn-create[disabled] {
-  background-color: var(--color-gray-100);
+  background-color: var(--color-gray-300);
   cursor: pointer;
 }
 
