@@ -1049,27 +1049,37 @@ exports.deleteMyID = async (req, res) => {
       },
       attributes: ["profile_img"],
     });
-
+    console.log(">>>>>>>>>>콘솔 확인")
     console.log("Cpublic 969 profileImg", profileImg.profile_img);
 
     if (profileImg.profile_img !== "") {
       const isDeleted = await deleteFile(profileImg.profile_img);
-    }
 
-    if (isDeleted) {
+      if (isDeleted) {
+        const destroyMyID = await User.destroy({
+          where: {
+            userid_num: userid_num,
+          },
+        });
+
+        if (destroyMyID) {
+          res.send({ isDeleted: true });
+        } else {
+          res.send({ isDeleted: false });
+        }
+
+    }
+    } else {
       const destroyMyID = await User.destroy({
         where: {
           userid_num: userid_num,
-        },
-      });
-
+        }
+      })
       if (destroyMyID) {
         res.send({ isDeleted: true });
       } else {
         res.send({ isDeleted: false });
       }
-    } else {
-      console.error("S3 이미지 삭제 실패");
     }
   } catch (err) {
     console.error(err);
