@@ -257,6 +257,7 @@
         myButton.click();
         scrollToBottom();
       };
+
       const socket = io({ transports: ["websocket"], upgrade: false });
       const roomForm = document.querySelector("#room");
       const chatForm = document.querySelector("#chat");
