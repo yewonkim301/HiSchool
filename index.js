@@ -34,7 +34,7 @@ app.use(express.static(path.join(__dirname, "static")));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-// app.use(cors());
+app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(cookieParser(process.env.COOKIE_SECRET));
