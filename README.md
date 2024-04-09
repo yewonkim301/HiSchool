@@ -125,7 +125,9 @@
 
 <br>
 
-| 개체 관계 모델 (ERD) | <img width="1175" alt="하이스쿨_ERD" src="https://github.com/yewonkim301/II/assets/148741796/4e8431e8-faff-4466-839f-90303361fa73">
+| 개체 관계 모델 (ERD) |
+| --- |
+| <img width="1175" alt="하이스쿨_ERD" src="https://github.com/yewonkim301/II/assets/148741796/4e8431e8-faff-4466-839f-90303361fa73"> |
 
 <br>
 
