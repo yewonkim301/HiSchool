@@ -178,11 +178,11 @@ client
 
 | 이름 | 역할 | 개발 내용 |
 | :---: | :---: | --- |
-| 김예원 | Back-end, 팀장 | - DB 설계<br>- Express로 RESTful API 작성<br>&nbsp;&nbsp;&nbsp;- 동아리 생성 및 수정, 삭제 개발<br>&nbsp;&nbsp;&nbsp;- 동아리 내 게시글 생성 및 수정,삭제 개발<br>&nbsp;&nbsp;&nbsp;- 동아리 내 게시글에 대한 댓글과 좋아요 생성 및 수정, 삭제 개발<br>&nbsp;&nbsp;&nbsp;- 동아리 일정 생성 및 수정, 삭제 개발<br>&nbsp;&nbsp;&nbsp;- 동아리 내 채팅 내역 생성 및 삭제 개발<br>- socket.io를 이용한 채팅 서비스 구현|
+| 김예원 | Back-end,<br>팀장 | - DB 설계<br>- Express로 RESTful API 작성<br>&nbsp;&nbsp;&nbsp;- 동아리 생성 및 수정, 삭제 개발<br>&nbsp;&nbsp;&nbsp;- 동아리 내 게시글 생성 및 수정,삭제 개발<br>&nbsp;&nbsp;&nbsp;- 동아리 내 게시글에 대한 댓글과 좋아요 생성 및 수정, 삭제 개발<br>&nbsp;&nbsp;&nbsp;- 동아리 일정 생성 및 수정, 삭제 개발<br>&nbsp;&nbsp;&nbsp;- 동아리 내 채팅 내역 생성 및 삭제 개발<br>- socket.io를 이용한 채팅 서비스 구현|
 | 김시진 | Back-end | - S3 presigned URL middleware 구현<br>- passport.js local/jwt strategy middleware 구현<br>- AWS 서버 구현 담당<br>- 전국 고등학교 정보 open api 활용<br>- UI 디자인<br>- 메인 페이지 구현<br>- 로그인 및 회원가입 구현 |
-| 김예원 | Back-end | - DB 설계<br>- Spring Boot로 RESTful API 작성<br>&nbsp;&nbsp;&nbsp;- 로그인 도메인 개발<br>&nbsp;&nbsp;&nbsp;- 회원가입 도메인 개발<br>&nbsp;&nbsp;&nbsp;- 비밀번호 재설정 도메인 개발<br>&nbsp;&nbsp;&nbsp;- 회원 정보 조회 및 수정 도메인 개발<br>- SMTP Server 를 이용한 이메일 인증 기능 구현<br>- Spring Security, JWT, Redis 를 이용한 인증 구현<br>- Lambda, ECR, Langchain RAG 을 이용한 챗봇 구현 |
-| 성룡 | Front-end | - 랜딩 페이지 구현<br>- 노드뷰 페이지 구현<br>&nbsp;&nbsp;&nbsp;- 데이터 시각화를 위한 D3.js 라이브러리 사용<br>&nbsp;&nbsp;&nbsp;- 데이터 연결 시각화 구현<br>&nbsp;&nbsp;&nbsp;- 스크랩 횟수를 이용한 인공위성 UI 구현<br>&nbsp;&nbsp;&nbsp;- 스크랩 포스트와 일반 포스트를 구별하여 구현<br>- 망각 곡선을 이용한 노드별 색상 변경<br>&nbsp;&nbsp;&nbsp;- 망각 곡선을 사용하여 각각의 노드별 조회날짜 마다 색상 변경 (오래된 게시글은 흐리게)<br>- React-hook-form, zod를 이용한 유효성 검사<br>- 게시글 전체 검색 기능 |
-| 정민수 | Back-end | - DB 설계<br>- Spring Boot로 RESTful API 작성<br>&nbsp;&nbsp;&nbsp;- 포스트 도메인 개발<br>&nbsp;&nbsp;&nbsp;- 포스트 임시저장 및 불러오기 도메인 개발<br>&nbsp;&nbsp;&nbsp;- 망각곡선 기능 관련 도메인 개발<br>- Docker와 Jenkins를 이용한 CI/CD 개발<br>- AWS EC2 관리 |
+| 정민수 | Back-end | - DB 설계<br>- Express로 Restful API 작성<br>&nbsp;&nbsp;&nbsp;- 익명 게시판 글 생성, 삭제, 수정 개발<br>&nbsp;&nbsp;&nbsp;- 익명 게시글 댓글 생성, 삭제 , 개발<br>&nbsp;&nbsp;&nbsp;- 동아리 탈퇴, 위임 개발<br>&nbsp;&nbsp;&nbsp;- 동아리 신청, 수락, 거절 개발<br>&nbsp;&nbsp;&nbsp;- 개인 정보 수정 및 유저 탈퇴 개발<br> |
+| 성룡 | Front-end | - 동아리 일정<br>&nbsp;&nbsp;&nbsp;- 동아리 일정 추가, 수정, 삭제<br>- 게시글 댓글CRUD 개발<br>&nbsp;&nbsp;&nbsp;- 댓글 추가, 수정, 삭제<br>- 게시글 좋아요 기능 추가 |
+| 권구휘 | Front-end | - 동아리 관리자 기능<br>&nbsp;&nbsp;&nbsp;- 동아리 회원 관리<br>&nbsp;&nbsp;&nbsp;- 동아리 정보 수정, 삭제<br>&nbsp;&nbsp;&nbsp;- 동아리장 위임<br>- 전체 동아리 목록 검색<br>&nbsp;&nbsp;&nbsp;- 지역별, 이름별 검색<br>- 동아리 가입 신청 페이지<br>&nbsp;&nbsp;&nbsp;- 글자수 제한 기능개발<br>- 고객센터 글, 답변 작성<br>&nbsp;&nbsp;&nbsp;- 답변 작성, 글 조회 권한 확인<br>&nbsp;&nbsp;&nbsp;- 비밀글 작성 |
 
 
 <br><br><br>
@@ -191,7 +191,6 @@ client
 
 ## 💻 실행 방법
 
-### Client 실행
 
 1. **원격 저장소 복제**
 
@@ -214,7 +213,7 @@ $ nodemon index.js
 
 <br>
 
-3. **프로젝트 실행을 위한 env 설정**
+3. **프로젝트 실행을 위한 env 설정**
 
 ```
 AWS_HOST=[yourRDSEndpoint]
