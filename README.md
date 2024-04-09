@@ -87,7 +87,7 @@
 
 ### # Cooperation Tools
 
-<img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white"> <img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white"> 
+<img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white"> <img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white"> <img src="https://img.shields.io/badge/gather-4358D8.svg?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNjMiIHZpZXdCb3g9IjAgMCA0OCA2MyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTkuMzk5OSAyLjVMMTMuOTk5OSA5LjlNMTMuOTk5OSA5LjlMMTEuMTk5OSAxOS43TTEzLjk5OTkgOS45TDIzLjU5OTkgMTIuMyIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSI0LjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8Y2lyY2xlIGN4PSIzOC44MDAyIiBjeT0iMTcuMjk5MiIgcj0iNS42IiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjMuNiIvPgo8Y2lyY2xlIGN4PSIyMy42IiBjeT0iMjYuMSIgcj0iNS42IiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjMuNiIvPgo8Y2lyY2xlIGN4PSI3LjYiIGN5PSIzNS4yOTkyIiByPSI1LjYiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMy42Ii8+CjxjaXJjbGUgY3g9IjI0LjM5OTgiIGN5PSI0NS4yOTkyIiByPSI1LjYiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMy42Ii8+CjxjaXJjbGUgY3g9IjQwLjM5OTgiIGN5PSIzNi4xIiByPSI1LjYiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMy42Ii8+CjxjaXJjbGUgY3g9IjQwLjM5OTgiIGN5PSI1NC45MDA4IiByPSI1LjYiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMy42Ii8+Cjwvc3ZnPgo=">
 
 <br><br><br>
 
