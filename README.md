@@ -1,6 +1,12 @@
-# HISCHOLL
+<div align="center">
+  <br />
+  <img src="https://cdn.discordapp.com/attachments/1213762370522841119/1227297552395800586/hischool_logo_1.png?ex=6627e4ea&is=66156fea&hm=2fb2ec3a9a8ee03604f8509cb41b1a83e4e14041c8a3b2b80b4164ab1380d2cb&" width=150px height=150px / >
+  <br />
+  <h1>하이!스쿨 (HiSchool)</h1>
+  <br />
+</div>
 
-<br><br><br>
+<br><br>
 
 ## 목차
   1. [**프로젝트 소개**](#1) <br>
@@ -18,7 +24,7 @@
 <div id="1"></div>
 
 ## 💁🏻‍♀️ 프로젝트 소개
-| 프로젝트 명 | 하이!스쿨(HISCHOLL) |
+| 프로젝트 명 | 하이!스쿨(HiSchool) |
 | --- | --- |
 | 진행 기간 | 2023. 12. 14 ~ 2023. 12. 30 (17일) |
 | 팀명 / 팀원 | II / 5명 ( 프론트 2명, 백 3명) |
@@ -31,7 +37,7 @@
 
 <div id="2"></div>
 
-**HISCHOLL** **고등학생들에게 보다 풍부하고 의미있는 활동의 기회를 제공할 동아리 서비스** 
+**HiSchool** **고등학생들에게 보다 풍부하고 의미있는 활동의 기회를 제공할 동아리 서비스** 
 
 동아리를 직접 생성하거나 이미 생성된 동아리에 가입 신청서를 제출하여 동아리 관리자의 승인을 받으면 동아리 부원이 될 수 있습니다.
 
@@ -43,7 +49,7 @@
 
 <br>
 
-📍 'HISCHOLL' 게스트 계정 정보
+📍 'HiSchool' 게스트 계정 정보
 <table>
   <tr><td>아이디</td><td>user001@naver.com</td></tr>
   <tr><td>비밀번호</td><td>1q2w3e4r!</td></tr>
@@ -80,8 +86,8 @@
 
 **- DevOps** <br>
 
-<img src="https://img.shields.io/badge/Amazon%20EC2-FF9900?style=for-the-badge&logo=Amazon%20EC2&logoColor=white"> <img src="https://img.shields.io/badge/amazonrds-527FFF?style=for-the-badge&logo=amazonrds&logoColor=white">
-<img src="https://img.shields.io/badge/amazons3-569A31?style=for-the-badge&logo=amazons3&logoColor=white">
+<img src="https://img.shields.io/badge/Amazon%20EC2-FF9900?style=for-the-badge&logo=Amazon%20EC2&logoColor=white"> <img src="https://img.shields.io/badge/Amazon%20RDS-527FFF?style=for-the-badge&logo=amazonrds&logoColor=white">
+<img src="https://img.shields.io/badge/Amazon%20s3-569A31?style=for-the-badge&logo=amazons3&logoColor=white">
 
 <br><br>
 
@@ -121,9 +127,6 @@
 
 | 개체 관계 모델 (ERD) | <img width="1175" alt="하이스쿨_ERD" src="https://github.com/yewonkim301/II/assets/148741796/4e8431e8-faff-4466-839f-90303361fa73">
 
-| --- |
-|  |
-
 <br>
 
 #### 폴더 구조 
@@ -132,8 +135,7 @@ client
 ├─ config
 ├─ controller
 ├─ middleware
-├─ models<img width="1175" alt="Untitled" src="https://github.com/yewonkim301/II/assets/148741796/d7bd1d1f-2e9b-43d7-b401-819b3edb8af1">
-
+├─ models
 ├─ passport
 ├─ routes
 ├─ static
@@ -172,14 +174,14 @@ client
 
 | <img src="https://avatars.githubusercontent.com/u/148730840?v=4" width=100px height=100px> | <img src="https://avatars.githubusercontent.com/u/44645578?v=4" width=100px height=100px> | <img src="https://avatars.githubusercontent.com/u/128135999?v=4" width=100px height=100px> | <img src="https://avatars.githubusercontent.com/u/148741796?v=4" width=100px height=100px> | <img src="https://avatars.githubusercontent.com/u/148730848?v=4" width=100px height=100px> |
 | :---: | :---: | :---: | :---: | :---: |
-| [권구휘<br>(Front-end, 팀장)](https://github.com/KwonKuwhi) | [김시진<br>(Back-end)](https://github.com/seejnn) | [김예원<br>(Back-end)](https://github.com/yewonkim301) | [성룡<br>(Front-end)](https://github.com/ryong123) | [정민수<br>(Back-end)](https://github.com/minsuje) |
+| [권구휘<br>(Front-end, 팀장)](https://github.com/KwonKuwhi) | [김시진<br>(Full-stack)](https://github.com/seejnn) | [김예원<br>(Back-end)](https://github.com/yewonkim301) | [성룡<br>(Front-end)](https://github.com/ryong123) | [정민수<br>(Back-end)](https://github.com/minsuje) |
 
 <br>
 
 | 이름 | 역할 | 개발 내용 |
 | :---: | :---: | --- |
 | 김예원 | Back-end,<br>팀장 | - DB 설계<br>- Express로 RESTful API 작성<br>&nbsp;&nbsp;&nbsp;- 동아리 생성 및 수정, 삭제 개발<br>&nbsp;&nbsp;&nbsp;- 동아리 내 게시글 생성 및 수정,삭제 개발<br>&nbsp;&nbsp;&nbsp;- 동아리 내 게시글에 대한 댓글과 좋아요 생성 및 수정, 삭제 개발<br>&nbsp;&nbsp;&nbsp;- 동아리 일정 생성 및 수정, 삭제 개발<br>&nbsp;&nbsp;&nbsp;- 동아리 내 채팅 내역 생성 및 삭제 개발<br>- socket.io를 이용한 채팅 서비스 구현|
-| 김시진 | Back-end | - S3 presigned URL middleware 구현<br>- passport.js local/jwt strategy middleware 구현<br>- AWS 서버 구현 담당<br>- 전국 고등학교 정보 open api 활용<br>- UI 디자인<br>- 메인 페이지 구현<br>- 로그인 및 회원가입 구현 |
+| 김시진 | Full-stack | - S3 presigned URL middleware 구현<br>- passport.js local/jwt strategy middleware 구현<br>- AWS 서버 구현 담당<br>- 전국 고등학교 정보 open api 활용<br>- UI 디자인<br>- 메인 페이지 구현<br>- 로그인 및 회원가입 구현 |
 | 정민수 | Back-end | - DB 설계<br>- Express로 Restful API 작성<br>&nbsp;&nbsp;&nbsp;- 익명 게시판 글 생성, 삭제, 수정 개발<br>&nbsp;&nbsp;&nbsp;- 익명 게시글 댓글 생성, 삭제 , 개발<br>&nbsp;&nbsp;&nbsp;- 동아리 탈퇴, 위임 개발<br>&nbsp;&nbsp;&nbsp;- 동아리 신청, 수락, 거절 개발<br>&nbsp;&nbsp;&nbsp;- 개인 정보 수정 및 유저 탈퇴 개발<br> |
 | 성룡 | Front-end | - 동아리 일정<br>&nbsp;&nbsp;&nbsp;- 동아리 일정 추가, 수정, 삭제<br>- 게시글 댓글CRUD 개발<br>&nbsp;&nbsp;&nbsp;- 댓글 추가, 수정, 삭제<br>- 게시글 좋아요 기능 추가 |
 | 권구휘 | Front-end | - 동아리 관리자 기능<br>&nbsp;&nbsp;&nbsp;- 동아리 회원 관리<br>&nbsp;&nbsp;&nbsp;- 동아리 정보 수정, 삭제<br>&nbsp;&nbsp;&nbsp;- 동아리장 위임<br>- 전체 동아리 목록 검색<br>&nbsp;&nbsp;&nbsp;- 지역별, 이름별 검색<br>- 동아리 가입 신청 페이지<br>&nbsp;&nbsp;&nbsp;- 글자수 제한 기능개발<br>- 고객센터 글, 답변 작성<br>&nbsp;&nbsp;&nbsp;- 답변 작성, 글 조회 권한 확인<br>&nbsp;&nbsp;&nbsp;- 비밀글 작성 |
@@ -218,7 +220,7 @@ $ nodemon index.js
 ```
 AWS_HOST=[yourRDSEndpoint]
 AWS_DB_PW=[password]
-AWS_DB_USERNAM=admin
+AWS_DB_USERNAME=admin
 AWS_DB_NAME=[yourDBname]
 PORT=8000
 PORT2=3000
