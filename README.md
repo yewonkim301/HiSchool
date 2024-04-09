@@ -1,4 +1,3 @@
-<img width="1175" alt="Untitled" src="https://github.com/yewonkim301/II/assets/148741796/c424ce89-4a51-4434-86e2-fc442d417458"># HISCHOLL
 
 <br><br><br>
 
