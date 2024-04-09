@@ -1,4 +1,4 @@
-# HISCHOLL
+<img width="1175" alt="Untitled" src="https://github.com/yewonkim301/II/assets/148741796/c424ce89-4a51-4434-86e2-fc442d417458"># HISCHOLL
 
 <br><br><br>
 
@@ -11,8 +11,7 @@
   6. 프로젝트 구성도
   7. 데모 영상
   8. 개발 팀 소개
-  9. 개발 기간 및 일정
-  10. 실행 방법
+  9. 실행 방법
 
 <br><br><br>
 
@@ -88,16 +87,15 @@
 
 | 기능 | 내용 |
 | --- | --- |
-| 블록 기반 편집 및 백링크 기능 제공 | 텍스트, 링크, 리스트  등 다양한 유형의 콘텐츠를 개별 블록으로 추가,삭제 가능하며 @기호를 이용하여 자신의 문서를 연결하도록 기능을 제공합니다. |
-| 문서 데이터 시각화 | 복잡한 문서 데이터를 한눈에 보기 편하도록 데이터를 시각화 시키며, 사용자는 이를 통해 정보의 흐름, 데이터의 구조를 직관적으로 파악할 수 있으며, 줌인/줌아웃, 드래그등 기능을 제공합니다. |
-| AI기반 문서 검색 | 사용자가 보유한 문서 데이터가 대량일 경우 관련성이 높은 문서를 신속하게 찾아드리는 AI기반 문서 검색 서비스 기능 제공합니다. |
-| 문서간 연결 시각화 | 글 생성시 @기호를 입력하면 내 워크 스페이스의 모든 글 중에서 연결할 글을 선택할 수 있습니다. 글 조회시 해당 부분을 클릭하면 연결된 글로 이동합니다. |
-| 카테고리 생성/수정/삭제 | 카테고리를 생성하여 글을 분류해놓을 수 있습니다. 카테고리는 생성 후에도 수정과 삭제가 가능합니다. |
-| 게시글 생성 | 특정 카테고리 안에서 사용자는 자신의 생각을 작성할 수 있는 기능을 제공합니다. |
-| 스크랩 기능 | 다른 사용자의 게시글을 내 카테고리로 가져오는 기능을 제공하여 유저간 글을 공유 할 수 있는 기능을 제공합니다. 유저의 지적 재산권을 보장하기 위해 스크랩해온 글들은 노란색 별 모양으로 표시했으며, 스크랩을 제공한 유저의 글은 노란색 원형의 공을 스크랩 제공한 만큼 생성해 줍니다. |
-| 일반 검색 | 자신의 카테고리 안에서 검색 기능 제공하여 해당하는 글들에 반짝이는 애니메이션을 제공하여 사용자가 작성한 글을 좀더 쉽게 파악할 수 있는 기능을 제공합니다 |
-| 전체 검색 | 전체 검색을 통한 다양한 유저들의 게시글을 검색할 수 있습니다. 이러한 검색을 통해 모든사람의 게시글을 쉽게 찾으며 스크랩을 할 수 있도록 기능을 제공합니다. |
-| 리마인드 기능 | 망각곡선의 자료를 이용하여 게시글을 오랫동안 조회를 안하게 되면 별이 점점 흐릿해 집니다. 조회날짜가 최근일자로 변경되면 별의 색상은 다시 밝게 빛나도록 사용자들에게 UI를 제공합니다. 이를통하여 사용자들에게 리마인드를 할 수 있는 기능을 제공합니다. |
+| 동아리 생성, 수정, 삭제 | 사용자는 새로운 동아리를 생성하고, 기존의 동아리 정보를 수정하거나, 필요에 따라 동아리를 삭제할 수 있도록 기능을 제공합니다. |
+| 동아리장 위임| 동아리장 권한을 다른 부원에게 위임할 수 있습니다. 특히 동아리장이 동아리 탈퇴를 원할 때는 필수적으로 동아리장 권한을 위임해야합니다. |
+| 동아리 일정 관리| 동아리원들은 서로 자신의 일정을 동아리 캘린더에 추가할수 있으며, 언제든 수정 및 삭제가 가능합니다. 캘린더에는 일정이 있는 날이면 파란색점으로 표시되며, 이를통해 동아리원들의 일정을 쉽게 파악할 수 있습니다. |
+| 동아리 게시판 | 동아리에 가입한 유저들만 접근할 수 있으며, 동아리 부원끼리 정보를 공유하거나 활동 등을 게시판에 작성할 수 있는 기능을 제공합니다. |
+| 관리자 페이지 | 동아리장만 접근할 수 있는 페이지로 동아리 부원 정보 조회, 강퇴, 동아리 정보 수정, 동아리장 위임을 수행할 수 있습니다. 또한 동아리에 가입 신청한 사람들의 목록과 신청서를 조회하고 승인, 거절 여부를 선택할 수 있습니다. |
+| 익명 게시판 | 동아리에 가입하지 않아도 익명 게시판을 통해 유저들과 소통할 수 있는 공간을 제공하고 있습니다. |
+| 고객센터 | 사이트에 대한 질문 및 제보 등을 고객센터를 통해 제공, 비밀 글 작성 가능 (본인 및 관리자만 확인 가능) |
+| 댓글 및 좋아요 | 동아리 게시글이나 익명 게시글에 댓글을 작성할 수 있으며, 특정 게시글에 좋아요를 통해 의견을 표출할수 있는 기능을 제공하고 있습니다. |
+
 
 <br><br><br>
 
@@ -105,123 +103,45 @@
 
 | 아키텍처 (Architecture) | 
 | --- |
-| ![스타라이트 아키텍처](https://github.com/KwonKuwhi/starwrite/assets/128135999/e9eb69dc-f9aa-497b-affc-f30e440f64fd) |
+| ![하이스쿨 아키텍처](https://github.com/yewonkim301/II/assets/148741796/e6cf083a-18c8-4ea1-9b7e-93163b713351) |
 
 <br>
 
-| 개체 관계 모델 (ERD) | 
+| 개체 관계 모델 (ERD) | <img width="1175" alt="하이스쿨_ERD" src="https://github.com/yewonkim301/II/assets/148741796/4e8431e8-faff-4466-839f-90303361fa73">
+
 | --- |
-| <img width="1197" alt="starwrite erd" src="https://github.com/KwonKuwhi/starwrite/assets/128135999/80f1a86f-5baf-4b3b-b2d2-a2710d514d52"> |
+|  |
 
 <br>
 
-#### 폴더 구조 (client)
-```jsx
+#### 폴더 구조 
+```
 client
-├─ node_modules
-├─ public
-├─ src
-│   ├─ app
-│   ├─ features
-│   │     ├─ CategorySearchFeat
-│   │     │         └─ model
-│   │     ├─ CategoryViewFeat
-│   │     │         ├─ api
-│   │     │         └─ model
-│   │     ├─ InterGratedSearchIconFeat
-│   │     │         └─ api
-│   │     ├─────── ListView
-│   │     │         ├─ api
-│   │     │         ├─ lib
-│   │     │         ├─ model
-│   │     │         └─ ui
-│   │     │             ├─ Comment
-│   │     │             ├─ ListViewDetail
-│   │     │             └─ ListViewMain
-│   │     ├─────── Login
-│   │     ├─────── MainPageFeat
-│   │     │           └─ ui
-│   │     ├─────── MyPage
-│   │     ├─────── NewPost
-│   │     │           ├─ api
-│   │     │           ├─ lib
-│   │     │           ├─ model
-│   │     │           └─ ui
-│   │     ├─────── NodeSearchFeat
-│   │     │           └─ model
-│   │     ├─────── NodeViewFeat
-│   │     │           ├─ api
-│   │     │           └─ model
-│   │     ├─────── Register
-│   │     └─────── Title
-│   ├── pages
-│   │     ├─ CategoryView
-│   │     ├─ ListView
-│   │     ├─ Login
-│   │     ├─ Main
-│   │     ├─ Mypage
-│   │     ├─ NewPost
-│   │     ├─ NodeView
-│   │     └─ Register
-│   ├── shared
-│   │     ├─ api
-│   │     ├─ Modal
-│   │     └─ Model
-│   ├── types
-│   └── widgets
-│         ├─ CategoryView
-│         ├─ Chat
-│         ├─ Header
-│         ├─ ListView
-│         ├─ MainPageD3
-│         ├─ MyPageWid
-│         └─ nodeView
-│               └─ model
+├─ config
+├─ controller
+├─ middleware
+├─ models<img width="1175" alt="Untitled" src="https://github.com/yewonkim301/II/assets/148741796/d7bd1d1f-2e9b-43d7-b401-819b3edb8af1">
+
+├─ passport
+├─ routes
+├─ static
+│   ├─ icons
+├─ views
+│   ├─ club
+│   ├─ clubAdmin
+│   ├─ component
+│   ├─ myclub
+│   ├─ mypage
+│   ├─ publicPost
+│   ├─ support
+├─ .eslintrc.js.test	
 ├─ .gitignore
-└─ package.json
+├─ package.json
+└── README.md
 
 ```
 
 <br>
-
-#### 폴더 구조 (server)
-
-```jsx
-ai_server
-│   ├─ chat
-│   ├─ chatAI
-│   ├─ Iambda_function
-│   ├─ post
-│   ├─ recommend_post
-│   └─ recommend_update
-│		
-│
-server
-├─ gradle/wrapper
-├─ src
-│   ├─ main
-│   │   ├─ generated
-│   │   ├─ java/starwrite/server
-│   │   │          ├─ auth
-│   │   │          ├─ config
-│   │   │          ├─ controller
-│   │   │          ├─ dto
-│   │   │          ├─ entity
-│   │   │          ├─ enums
-│   │   │          ├─ relationship
-│   │   │          ├─ respository
-│   │   │          ├─ request
-│   │   │          ├─ response
-│   │   │          ├─ service
-│   │   │          └─ utils
-│   │   └─ resources
-│   └─ test/java/starwrite/server
-│
-├─ build.gradle
-├─ Dockerfile
-├─ .gitignore
-└─ package.json
-```
 
 <br><br><br>
 
@@ -258,87 +178,41 @@ server
 1. **원격 저장소 복제**
 
 ```
-$ git clone https://github.com/KwonKuwhi/starwrite.git
+$ git clone https://github.com/yewonkim301/II.git
 ```
 
-2. **프로젝트 폴더로 이동**
-
-```
-$ cd client
-```
-
-3. **필요한 node_modules 설치**
+2. **필요한 node_modules 설치**
 
 ```
 $ npm install
 ```
 
-4. **개발 서버 실행**
+
+3. **개발 서버 실행**
 
 ```
-$ npm run dev
+$ nodemon index.js
 ```
 
 <br>
 
-### Main Server 실행
-
-1. **원격 저장소 복제**
+3. **프로젝트 실행을 위한 env 설정**
 
 ```
-$ git clone https://github.com/KwonKuwhi/starwrite.git
+AWS_HOST=[yourRDSEndpoint]
+AWS_DB_PW=[password]
+AWS_DB_USERNAM=admin
+AWS_DB_NAME=[yourDBname]
+PORT=8000
+PORT2=3000
+COOKIE_SECRET=[SecretKey]
+JWT_SECRET=[jwtSecretKey]
+AWS_S3_ACCESS_KEY=[yourS3AccessKey]
+AWS_S3_KEY_ID=[yourS3KeyID]
+AWS_S3_REGION=ap-northeast-2
+AWS_S3_BUCKET=[yourBUCKET]
+AWS_ADDRESS=http://[youraddress]
+AWS_ADDRESS2=http://[youraddress]
 ```
 
-2. **프로젝터 폴더 > src > main > resources 이동**
 
-```
-$ cd server
-$ cd src
-$ cd main
-$ cd resources
-```
-
-3. **프로젝트 실행을 위한 properties 파일 작성**
-
-```
-# neo4j
-spring.ai.openai.api-key=[비밀키]
-db.temporal.timezone=+09:00
-spring.neo4j.uri=[neo4j aura 주소]
-spring.neo4j.authentication.username=[아이디]
-spring.neo4j.authentication.password=[비밀번호]
-
-# mail authenticate
-spring.mail.host=[메일 호스트]
-spring.mail.port=[포트번호]
-spring.mail.username=[발신자 이메일]
-spring.mail.password=[비밀번호]
-spring.mail.properties.mail.smtp.auth=true
-spring.mail.properties.mail.smtp.timeout=5000
-spring.mail.properties.mail.smtp.starttls.enable=true
-
-# JWT
-jwt.secret.key=[비밀키]
-
-#Redis설정
-spring.cache.type=redis
-spring.data.redis.host=[호스트 주소]
-spring.data.redis.port=[포트 번호]
-spring.data.redis.password=[비밀번호]
-```
-
-4. **프로젝트 폴더 루트 경로로 이동**
-
-```
-$ cd server
-```
-
-5. **프로젝트 빌드**
-
-```
-$ ./gradlew build
-```
-
-6. build.gradle 이 있는 폴더에서 serverApplication 실행
-
-`$ ./gradlew bootRun`
