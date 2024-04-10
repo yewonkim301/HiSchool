@@ -28,8 +28,8 @@
 | --- | --- |
 | 진행 기간 | 2023. 12. 14 ~ 2023. 12. 30 (17일) |
 | 팀명 / 팀원 | II / 5명 ( 프론트 2명, 백 3명) |
-| github 주소 | https://github.com/yewonkim301/II.git |
-| 배포 주소 | |
+| github 주소 | https://github.com/yewonkim301/HiSchool |
+| 배포 주소 | http://34.64.61.219/ |
 
 <br><br><br>
 
