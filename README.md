@@ -1,10 +1,16 @@
 <div align="center">
   <br />
-  <img src="https://cdn.discordapp.com/attachments/1213762370522841119/1227297552395800586/hischool_logo_1.png?ex=6627e4ea&is=66156fea&hm=2fb2ec3a9a8ee03604f8509cb41b1a83e4e14041c8a3b2b80b4164ab1380d2cb&" width=150px height=150px / >
+<!--   <img src="https://cdn.discordapp.com/attachments/1213762370522841119/1227297552395800586/hischool_logo_1.png?ex=6627e4ea&is=66156fea&hm=2fb2ec3a9a8ee03604f8509cb41b1a83e4e14041c8a3b2b80b4164ab1380d2cb&" width=150px height=150px / > -->
   <br />
   <h1>하이!스쿨 (HiSchool)</h1>
   <br />
+  
+
 </div>
+
+![hischool-cover](https://github.com/yewonkim301/HiSchool/assets/44645578/17489345-7bb2-4754-a370-805eaa42c2de)
+
+
 
 <br><br>
 
