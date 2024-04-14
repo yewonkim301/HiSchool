@@ -112,6 +112,20 @@
 | 고객센터 | 사이트에 대한 질문 및 제보 등을 고객센터를 통해 제공, 비밀 글 작성 가능 (본인 및 관리자만 확인 가능) |
 | 댓글 및 좋아요 | 동아리 게시글이나 익명 게시글에 댓글을 작성할 수 있으며, 특정 게시글에 좋아요를 통해 의견을 표출할수 있는 기능을 제공하고 있습니다. |
 
+<br><br>
+
+| 기능 | 영상 |
+| --- | --- |
+| 동아리 생성 | <video src="https://github.com/yewonkim301/HiSchool/assets/44645578/7d0f1e4f-81a9-480e-b0fe-19c576cc5edc"> |
+| 동아리장 위임 | <video src="https://github.com/yewonkim301/HiSchool/assets/44645578/04a36592-9c46-438a-a03c-3fdb5a7e2127"> |
+| 동아리 일저 관리 | <video src="https://github.com/yewonkim301/HiSchool/assets/44645578/2b11793c-cb51-4806-8e82-23fea3ecd52b"> |
+| 동아리 게시판 | <video src="https://github.com/yewonkim301/HiSchool/assets/44645578/04de1b8f-fef9-428b-bec3-9e013932ed97"> |
+| 관리자 페이지 | <video src="https://github.com/yewonkim301/HiSchool/assets/44645578/e600310f-f233-470c-bcca-420285f6857d"> |
+| 익명 게시판 | <video src="https://github.com/yewonkim301/HiSchool/assets/44645578/5a19d19c-ab0b-49b2-a0c9-1364e297737e"> |
+| 고객센터 | <video src="https://github.com/yewonkim301/HiSchool/assets/44645578/a398068e-f426-4112-bd84-12be05943ef0"> |
+| 댓글 및 좋아요 | <video src="https://github.com/yewonkim301/HiSchool/assets/44645578/fff21939-3284-49e6-8f56-33645a9960a6"> |
+
+
 
 <br><br><br>
 
