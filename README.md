@@ -99,32 +99,7 @@
 
 ### # Cooperation Tools
 
-<img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white"> <img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white"> <img src="https://img.shields.io/badge/gather-4358D8.svg?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNjMiIHZpZXdCb3g9IjAgMCA0OCA2MyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTkuMzk5OSAyLjVMMTMuOTk5OSA5LjlNMTMuOTk5OSA5LjlMMTEuMTk5OSAxOS43TTEzLjk5OTkgOS45TDIzLjU5OTkgMTIuMyIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSI0LjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8Y2lyY2xlIGN4PSIzOC44MDAyIiBjeT0iMTcuMjk5MiIgcj0iNS42IiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjMuNiIvPgo8Y2lyY2xlIGN4PSIyMy42IiBjeT0iMjYuMSIgcj0iNS42IiBzdHJva2U9IndoaXRlIiBzdHJva2Utd2lkdGg9IjMuNiIvPgo8Y2lyY2xlIGN4PSI3LjYiIGN5PSIzNS4yOTkyIiByPSI1LjYiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMy42Ii8+CjxjaXJjbGUgY3g9IjI0LjM5OTgiIGN5PSI0NS4yOTkyIiByPSI1LjYiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMy42Ii8+CjxjaXJjbGUgY3g9IjQwLjM5OTgiIGN5PSIzNi4xIiByPSI1LjYiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMy42Ii8+CjxjaXJjbGUgY3g9IjQwLjM5OTgiIGN5PSI1NC45MDA4IiByPSI1LjYiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS13aWR0aD0iMy42Ii8+Cjwvc3ZnPgo=">
-
-<br><br><br>
-
-<div id="5"></div>
-
-## 💡 주요 기능
-
-| 기능 | 내용 |
-| --- | --- |
-| 동아리 생성, 수정, 삭제 | 사용자는 새로운 동아리를 생성하고, 기존의 동아리 정보를 수정하거나, 필요에 따라 동아리를 삭제할 수 있도록 기능을 제공합니다. |
-| 동아리장 위임| 동아리장 권한을 다른 부원에게 위임할 수 있습니다. 특히 동아리장이 동아리 탈퇴를 원할 때는 필수적으로 동아리장 권한을 위임해야합니다. |
-| 동아리 일정 관리| 동아리원들은 서로 자신의 일정을 동아리 캘린더에 추가할수 있으며, 언제든 수정 및 삭제가 가능합니다. 캘린더에는 일정이 있는 날이면 파란색점으로 표시되며, 이를통해 동아리원들의 일정을 쉽게 파악할 수 있습니다. |
-| 동아리 게시판 | 동아리에 가입한 유저들만 접근할 수 있으며, 동아리 부원끼리 정보를 공유하거나 활동 등을 게시판에 작성할 수 있는 기능을 제공합니다. |
-| 관리자 페이지 | 동아리장만 접근할 수 있는 페이지로 동아리 부원 정보 조회, 강퇴, 동아리 정보 수정, 동아리장 위임을 수행할 수 있습니다. 또한 동아리에 가입 신청한 사람들의 목록과 신청서를 조회하고 승인, 거절 여부를 선택할 수 있습니다. |
-| 익명 게시판 | 동아리에 가입하지 않아도 익명 게시판을 통해 유저들과 소통할 수 있는 공간을 제공하고 있습니다. |
-| 고객센터 | 사이트에 대한 질문 및 제보 등을 고객센터를 통해 제공, 비밀 글 작성 가능 (본인 및 관리자만 확인 가능) |
-| 댓글 및 좋아요 | 동아리 게시글이나 익명 게시글에 댓글을 작성할 수 있으며, 특정 게시글에 좋아요를 통해 의견을 표출할수 있는 기능을 제공하고 있습니다. |
-
-<br><br>
-
-| 기능 | 영상 |
-| --- | --- |
-| 동아리 생성 | <video muted autoplay playsinline loop src="https://github.com/yewonkim301/HiSchool/assets/44645578/cfaf5fb6-d260-41c4-a93b-492398fc913f"> |
-| 동아리장 위임 | <video muted autoplay playsinline loop src="https://github.com/yewonkim301/HiSchool/assets/44645578/04a36592-9c46-438a-a03c-3fdb5a7e2127"> |
-| 동아리 일저 관리 | <video muted autoplay playsinline loop src="https://github.com/yewonkim301/HiSchool/assets/44645578/2b11793c-cb51-4806-8e82-23fea3ecd52b"> |
+<img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white"> <img src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white"> <img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white"> <img src="https://img.shields.io/badge/gather-4358D8.svg?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB3aWR0aD0iNDgiIGhlaWdodD0iNjMiIHZpZXdCb3g9IjAgMCA0OCA2MyIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cud정 관리 | <video muted autoplay playsinline loop src="https://github.com/yewonkim301/HiSchool/assets/44645578/2b11793c-cb51-4806-8e82-23fea3ecd52b"> |
 | 동아리 게시판 | <video muted autoplay playsinline loop src="https://github.com/yewonkim301/HiSchool/assets/44645578/04de1b8f-fef9-428b-bec3-9e013932ed97"> |
 | 관리자 페이지 | <video muted autoplay playsinline loop src="https://github.com/yewonkim301/HiSchool/assets/44645578/e600310f-f233-470c-bcca-420285f6857d"> |
 | 익명 게시판 | <video muted autoplay playsinline loop src="https://github.com/yewonkim301/HiSchool/assets/44645578/5a19d19c-ab0b-49b2-a0c9-1364e297737e"> |
